@@ -1,0 +1,27 @@
+# 開発用 Docker Compose（dev/CI 用、配布用ではない）
+#
+# 使い方:
+#   docker compose run --rm app                 # 既定 CMD = pnpm verify を実行
+#   docker compose run --rm app pnpm verify     # 明示的に verify
+#   docker compose run --rm app sh              # 対話シェル（node -v / pnpm -v 確認など）
+#
+# カレントをマウントして即時反映、pnpm-store をボリュームにキャッシュして再取得を抑える。
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # カレントディレクトリをマウントしてホストの変更を即反映。
+    # node_modules はコンテナ側（イメージ内の install 結果）を優先し、ホストのもので
+    # 上書きされないよう匿名ボリュームで保護する。
+    volumes:
+      - .:/app
+      - /app/node_modules
+      # pnpm の content-addressable store を永続化してインストールを高速化。
+      - pnpm-store:/root/.local/share/pnpm/store
+    # 既定は verify。対話シェルが欲しい場合は run の引数で上書きする。
+    command: pnpm verify
+
+volumes:
+  pnpm-store:
