@@ -29,6 +29,7 @@
   - [ ] `0008-kpt-retrospective-loop`（PR ごと KPT レトロ→ハーネス書き戻しループ採用、Phase 2）
   - [ ] `0009-cross-agent-shared-harness`（AGENTS.md=指示 SoT + `@import` / スキル symlink 共有 / Git hooks ゲート / skill-creator 準拠。Claude+Codex 両対応）
   - [ ] `0010-semantic-code-review-skills`（PR merge 前の意味的レビューを `code-review`/`harness-review` の 2 skill に分割 + CI 緑＋承認で auto-merge。Phase 3）
+  - [ ] `0011-implementation-workflow-orchestrator`（実装ライフサイクルを多段フェーズで統合する `implementation-workflow` skill。既存 skill を再利用、マージは Phase 3 の auto-merge と整合、worktree で並走を物理分離。Phase 11）
 
 ## 受け入れ基準
 
