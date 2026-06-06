@@ -23,7 +23,7 @@
 2. **Linter = Biome**（formatter 一体・設定 1ファイル）。
 3. **PokeAPI データは vendor 方式**（ビルド時取得→整形→`data/generated/` をコミット）。**MVP 時点で全国図鑑の全種族分を生成**しておく（オフライン・決定論的・CI 高速）。
 4. **テストカバレッジ閾値は最初から 100%**（lines/branches/functions/statements すべて 100）。コーディングエージェントによる実装前提のため、最初から最高基準を強制する。
-5. **レビューは機械ゲートと意味的レビューの二層**。型/カバレッジ/Biome は Git hooks + CI の機械ゲートで強制し、その上に **PR マージ前の意味的レビュー**を `code-review`（ソース用）/ `harness-review`（ハーネス資産用）の 2 skill で重ねる（観点が本質的に異なるため分割）。機械ゲート緑 ＋ レビュー承認で auto-merge する。詳細はハーネス計画 [00-harness-setup Phase 3](../00-harness-setup/phase-3-code-review.md) / ADR `0010-semantic-code-review-skills`。
+5. **レビューは機械ゲートと意味的レビューの二層**。型/カバレッジ/Biome は Git hooks + CI の機械ゲートで強制し、その上に **PR マージ前の意味的レビュー**を `code-review`（ソース用）/ `harness-review`（ハーネス資産用）の 2 skill で重ねる（観点が本質的に異なるため分割）。機械ゲート緑 ＋ レビュー承認で auto-merge する。詳細はハーネス計画 [00-harness-setup Phase 3](../00-harness-setup/phase-03-code-review.md) / ADR `0010-semantic-code-review-skills`。
 
 ---
 

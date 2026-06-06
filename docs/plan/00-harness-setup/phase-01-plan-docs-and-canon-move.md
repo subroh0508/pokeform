@@ -22,20 +22,20 @@
 - [ ] **正本の移動**: `git mv plan.md docs/plan/01-mvp/architecture.md`（**内容は維持・記述は変更しない**）。
 - [ ] `docs/plan/README.md` を作成:
   - [ ] **採番/slug 規約**: 計画ディレクトリは `NN-<slug>/` 形式（ゼロ埋め連番 + kebab スラッグ）。`00-harness-setup`・`01-mvp` は確定。`02-<slug>/` 以降は MVP 後の作業が出るたびにテーマから slug を**都度生成**（事前スタブは作らない）。
-  - [ ] **進捗チェックリスト**（`- [ ] 01-mvp / phase-0 …`）。
+  - [ ] **進捗チェックリスト**（`- [ ] 01-mvp / phase-00 …`）。
   - [ ] **Phase doc 共通テンプレート**（目的 / 前提 / タスク / この Phase で育てる rule・skill / 受け入れ基準 / 検証手順 / リスク）。
   - [ ] **MVP の範囲 = phase 0〜3 すべて**、MVP 完了で「個体・パーティ検証 + 一貫性/技範囲チェック + ステータス調整」が揃うことを明記。
 - [ ] `docs/plan/01-mvp/` に phase スタブ（目的と受け入れ基準の見出しのみ）:
-  - [ ] `phase-0-scaffold.md`（足場 + calc-stats）
-  - [ ] `phase-1-data-and-coverage.md`（データ生成 + check:party + analyze:coverage）
-  - [ ] `phase-2-individual-typecheck.md`（個体 tsc 検証層）
-  - [ ] `phase-3-stat-tuning.md`（ステータス調整壁打ち）
+  - [ ] `phase-00-scaffold.md`（足場 + calc-stats）
+  - [ ] `phase-01-data-and-coverage.md`（データ生成 + check:party + analyze:coverage）
+  - [ ] `phase-02-individual-typecheck.md`（個体 tsc 検証層）
+  - [ ] `phase-03-stat-tuning.md`（ステータス調整壁打ち）
 
 ## 受け入れ基準
 
 - `plan.md` が `docs/plan/01-mvp/architecture.md` に移動され、git 履歴上はリネームとして追跡される（内容差分なし）。
 - `docs/plan/README.md` に採番/slug 規約・進捗・テンプレートが存在。
-- `docs/plan/01-mvp/` に phase-0〜3 のスタブが置かれている。
+- `docs/plan/01-mvp/` に phase-00〜03 のスタブが置かれている。
 
 ## 検証手順
 
