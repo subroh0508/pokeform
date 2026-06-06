@@ -4,6 +4,19 @@
 
 機能実装・ハーネス追加/修正の **Pull Request ごとに KPT（Keep / Problem / Try）レトロスペクティブ**を行い、得た学びを **ハーネス（rules / skills / templates / ADR）へ書き戻す自己改良ループ**を設置する。`pr-retrospective`（1 PR = 1 learning 生成）→ `harness-meta`（複数 learning 集約→採用判定→ハーネス改修）の二段構えを pokeform 規模で構築する。
 
+```mermaid
+flowchart LR
+    PR["マージ済 PR"] --> RETRO["pr-retrospective<br/>KPT learning 生成"]
+    RETRO --> L["docs/harness/learnings/<br/>YYYY-MM-DD-pr-N.md"]
+    L --> META["harness-meta<br/>集約→採用/見送り/撤去 判定"]
+    META -->|採用| FIX["改修 PR<br/>rule / skill / template"]
+    META -->|採用・アーキ決定| ADR["adr-new"]
+    META -->|見送り| FB["learning の 📝 feedback 追記"]
+    FIX --> H["ハーネス改良"]
+    ADR --> H
+    H -.改善された土台で次の PR.-> PR
+```
+
 **位置づけ（重要）**: 本フェーズは**ループの「仕掛け」を設置**するもの。実際に回り始めるのは MVP 実装で最初の PR が出てから（その時点で全ハーネスが揃っている）。そのため gh 権限（Phase 8）/ ADR（Phase 3）/ 型・カバレッジゲート（Phase 4）への**前方参照**を許容する（設置 ≠ 即時稼働）。
 
 ## 前提（依存）

@@ -30,13 +30,16 @@
 
 ### 検証の単一ゲート: YAML/MD → codegen → tsc
 
-```
-個体 *.yaml ─┐                      ┌─▶ pikachu.individual.generated.ts ─┐
-             ├─ pokeform compile ──┤                                     ├─▶ tsc --noEmit ─▶ 合否
-パーティ *.md ┘  (gray-matter/yaml) └─▶ team-a.party.generated.ts ───────┘        │
-                                                                                  └─▶ CLI が診断を
-                                                                                       YAML/MD 行へ
-                                                                                       マッピングして整形出力
+```mermaid
+flowchart LR
+    Y["個体 *.yaml"] --> C["pokeform compile<br/>(gray-matter / yaml)"]
+    M["パーティ *.md"] --> C
+    C --> GI["pikachu.individual.generated.ts"]
+    C --> GP["team-a.party.generated.ts"]
+    GI --> T["tsc --noEmit"]
+    GP --> T
+    T --> R{"合否"}
+    T --> D["CLI が診断を YAML/MD 行へ<br/>マッピングして整形出力"]
 ```
 
 - codegen は常に成功してファイルを吐く。**不正は tsc が型エラーとして検出**する（要求「TS の型チェック機能で弾く」を文字通り充足）。
@@ -211,14 +214,20 @@ export function defineIndividual<S extends SpeciesId>(species: S, spec: Individu
 
 ### データ生成パイプライン（vendor）
 
+```mermaid
+flowchart LR
+    F["scripts/fetch-pokeapi.ts"] --> RAW["data/raw/<br/>(.gitignore・PokeAPI キャッシュ)"]
+    subgraph CH["data/champions/ (コミット・手動管理)"]
+        R["rules.yaml<br/>能力ポイント 66/32・計算式定数"]
+        REG["regulation.yaml<br/>各レギュの解禁許可リスト"]
+        OV["overrides.yaml<br/>習得技/特性の世代差・上書き"]
+    end
+    RAW --> GEN["scripts/generate.ts"]
+    CH --> GEN
+    GEN --> OUT["data/generated/ (コミット)<br/>species.ts(型) + species.data.ts(値)"]
 ```
-scripts/fetch-pokeapi.ts ─▶ data/raw/ (.gitignore, PokeAPI キャッシュ)
-data/champions/*.yaml     ─ コミット・手動管理（PokeAPI に無い情報の唯一のソース）
-                              ├ rules.yaml        : 能力ポイント 66/32・計算式定数
-                              ├ regulation.yaml   : 各レギュの解禁ポケモン許可リスト
-                              └ overrides.yaml    : 習得技/特性の世代差・特殊種族の上書き
-scripts/generate.ts ─▶ data/generated/ (コミット): species.ts(型) + species.data.ts(値: タイプ相性/計算用)
-```
+
+> `data/champions/*.yaml` は PokeAPI に無い情報（能力ポイント・解禁レギュ等）の唯一のソース。`generate.ts` が raw と champions を合成して `data/generated/` を出力する。
 
 PokeAPI→要求項目の対応:
 
