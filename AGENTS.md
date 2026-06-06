@@ -61,7 +61,7 @@ docs/harness/   自己改良ループ（learnings）+ rules-index.md（生成）
 
 ## skill（手順・チェックリスト・最小概要）
 
-skill は両ツール共有（canonical `.claude/skills/<name>/` + `.agents/skills/<name>` symlink）。**新規作成・改修は `skill-creator` skill を使う**（手書きしない）。→ `skill-authoring.md` / ADR `0012`
+skill は両ツール共有（canonical `.claude/skills/<name>/` + `.agents/skills/<name>` symlink）。**新規作成・改修は `skill-creator` skill を使う**（手書きしない）。→ `skill-authoring.md`
 
 現行 skill:
 

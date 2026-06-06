@@ -29,8 +29,8 @@
   - [ ] `0008-kpt-retrospective-loop`（PR ごと KPT レトロ→ハーネス書き戻しループ採用、Phase 2）
   - [ ] `0009-cross-agent-shared-harness`（AGENTS.md=指示 SoT + `@import` / スキル symlink 共有 / Git hooks ゲート。Claude+Codex 両対応）
   - [ ] `0010-semantic-code-review-skills`（PR merge 前の意味的レビューを `code-review`/`harness-review` の 2 skill に分割 + CI 緑＋承認で auto-merge。Phase 3）
-  - [ ] `0011-implementation-workflow-orchestrator`（実装ライフサイクルを多段フェーズで統合する `implementation-workflow` skill。既存 skill を再利用、マージは Phase 3 の auto-merge と整合、worktree で並走を物理分離。Phase 11）
-  - [ ] `0012-skill-creation-via-skill-creator`（skill の新規作成・改修は `skill-creator` skill を利用することを必須化。手書きで SKILL.md を起こさず標準構成・description=trigger・≤500 行を担保。Phase 7 `skill-authoring.md` が SoT）
+  - [ ] `0011-implementation-workflow-orchestrator`（実装は原則 `implementation-workflow` skill 経由で駆動する。既存 skill を再利用、マージは Phase 3 の auto-merge と整合、worktree で並走を物理分離。Phase 11）
+  - （撤回）`0012-skill-creation-via-skill-creator`: skill-creator 必須化の規約は `.claude/rules/skill-authoring.md` で完結するため ADR 化を撤回。番号 `0012` は未参照のまま撤回したため後続が再利用可。
 
 ## 受け入れ基準
 

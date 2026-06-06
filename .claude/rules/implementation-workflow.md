@@ -14,6 +14,13 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 > 役割分担・受け入れ基準は [`docs/plan/00-harness-setup/phase-11-implementation-workflow.md`](../../docs/plan/00-harness-setup/phase-11-implementation-workflow.md) と
 > [README](../../docs/plan/00-harness-setup/README.md)。本 rule はそれらと**二重記述しない**（手順の SoT に専念）。
 
+## 大原則: 実装は原則このワークフロー経由
+
+**確定した Plan / Phase の実装は、原則すべて本 skill 経由で駆動する**。本 skill は単に「用意された部品」ではなく、
+**実装の標準エントリポイント**。エージェントが着手〜マージの繋ぎ方を都度判断することを避け、定型化された
+ワークフローに統一する（[ADR 0011](../../docs/adr/0011-implementation-workflow-orchestrator.md)）。
+例外は trivial な単発編集や会話的応答のみで、フェーズ単位の実装ではこれを既定とする。
+
 ## 設計の核（なぜこの形か）
 
 この skill は**既存 skill を束ねるオーケストレーター**であり、新規ロジックは最小に保つ。理由は、
