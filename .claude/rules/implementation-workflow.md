@@ -101,7 +101,8 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 - **手順**: `Agent` ツールでレビュー skill を**独立サブエージェントとして起動**する。
   `src/**` / `scripts/**` の変更は [`code-review`](../skills/code-review/SKILL.md)、ハーネス資産
   （`.claude/**` / `AGENTS.md` / `CLAUDE.md` / `.githooks` / `docs/**`）は
-  [`harness-review`](../skills/harness-review/SKILL.md)。両方含む PR は分担する。
+  [`harness-review`](../skills/harness-review/SKILL.md)。両方含む PR は分担する。各レビュー skill は
+  結果を **PR コメントとして残す**（`gh pr comment`）ので、指摘は PR 上で辿れる。
 - **成功条件**: ブロッキング（`blocking`）指摘が 0 件。
 - **fallback（不変条件）**: ブロッキング指摘があれば Phase 3 へ戻って修正（**レビュー fix loop も上限 3 回**）。
   累計超過で `blocked` 記録 + 人間通知。`non-blocking` / `nit` のみならマージを妨げない（健全性の純改善基準、
