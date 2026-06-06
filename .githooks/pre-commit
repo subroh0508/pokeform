@@ -1,0 +1,24 @@
+#!/bin/sh
+#
+# pre-commit — 高速ゲート（ツール非依存・全コミッターに強制）
+#
+# 強制ゲートは Git ネイティブフックに集約する（ADR 0005-git-hooks-over-claude-hooks）。
+# これは Claude / Codex / 素の git / CI すべてに効く。`core.hooksPath=.githooks` は
+# package.json の `prepare` スクリプト（Phase 5）で設定され、新規 clone でも
+# `pnpm install` で自動有効化される。
+#
+# コミット境界は「軽く」保つ: ここでは型チェックと Lint のみ。重い検証（テスト・
+# カバレッジ）は pre-push へ集約する。
+#
+# TODO(MVP Phase 2 以降): pokeform 本体の CLI が入ったら `pnpm pokeform typecheck`
+# をこのゲートに追記する。
+
+set -e
+
+echo "[pre-commit] pnpm typecheck"
+pnpm typecheck
+
+echo "[pre-commit] pnpm lint"
+pnpm lint
+
+echo "[pre-commit] OK"
