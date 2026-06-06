@@ -8,7 +8,7 @@ date: 2026-06-07
 
 ## Context
 
-ツールチェーン（言語 [ADR 0003] / ランタイム [ADR 0004] / パッケージ管理 [ADR 0005] / テスト [ADR 0006] / Linter [ADR 0007]）の**具体バージョン**を、ADR・README・Dockerfile・skill など**複数箇所に再掲**すると、更新のたびに全箇所を同期する必要が生じ、ドリフトと「迅速なアップデートの妨げ」を招く。旧 [ADR 0002](./archive/0002-pin-toolchain-and-dockerize.md)（archive）はメジャー固定 + 多要素混載でこの問題を抱えていた。バージョンを「どこで宣言し、どう更新するか」を一本化する必要がある。
+ツールチェーン（言語 ADR 0003 / ランタイム ADR 0004 / パッケージ管理 ADR 0005 / テスト ADR 0006 / Linter ADR 0007）の**具体バージョン**を、ADR・README・Dockerfile・skill など**複数箇所に再掲**すると、更新のたびに全箇所を同期する必要が生じ、ドリフトと「迅速なアップデートの妨げ」を招く。旧 [ADR 0002](./archive/0002-pin-toolchain-and-dockerize.md)（archive）はメジャー固定 + 多要素混載でこの問題を抱えていた。バージョンを「どこで宣言し、どう更新するか」を一本化する必要がある。
 
 ## Decision
 
@@ -16,9 +16,9 @@ date: 2026-06-07
 
 - **依存パッケージ**（TypeScript / Vitest / Biome 等）: `package.json` の `devDependencies`（exact pin）+ `pnpm-lock.yaml`。
 - **Node.js**: `.node-version`（+ `engines.node` は soft floor）。Dockerfile のベースタグもこれに整合させる。
-- **pnpm（パッケージマネージャ本体）**: **版を固定しない**（SoT を持たない）。corepack / `packageManager` を使わず（[ADR 0005]）、各環境で**最新を直接インストール**する（CI/コンテナは `npm install -g pnpm`、ローカルは各自の pnpm）。**依存解決の再現性は `pnpm-lock.yaml` のコミットで担保**し、pnpm CLI の版自体には依存させない。これは「迅速なアップデート」を優先した意図的な非固定であり、欠落ではない。
+- **pnpm（パッケージマネージャ本体）**: **版を固定しない**（SoT を持たない）。corepack / `packageManager` を使わず（ADR 0005）、各環境で**最新を直接インストール**する（CI/コンテナは `npm install -g pnpm`、ローカルは各自の pnpm）。**依存解決の再現性は `pnpm-lock.yaml` のコミットで担保**し、pnpm CLI の版自体には依存させない。これは「迅速なアップデート」を優先した意図的な非固定であり、欠落ではない。
 
-更新方針は **「メジャー含め最新追従」**。Dependabot が更新 PR を作り、`dep-update` skill が `pnpm verify` / CI 緑を確認して取り込む。メジャー更新も原則固定せず追従する（破壊的変更のリスクは verify / CI と人手レビューで吸収し、方針として事前にブロックしない）。再現性は lockfile のコミットで担保する（ツール本体の版固定や corepack には依存しない、[ADR 0005]）。
+更新方針は **「メジャー含め最新追従」**。Dependabot が更新 PR を作り、`dep-update` skill が `pnpm verify` / CI 緑を確認して取り込む。メジャー更新も原則固定せず追従する（破壊的変更のリスクは verify / CI と人手レビューで吸収し、方針として事前にブロックしない）。再現性は lockfile のコミットで担保する（ツール本体の版固定や corepack には依存しない、ADR 0005）。
 
 ## Consequences
 

@@ -12,7 +12,7 @@
 
 ## タスク
 
-- [ ] `docs/adr/template.md`: 見出し `# NNNN. <タイトル>` / **Status**（Proposed | Accepted | Deprecated | Superseded by ADR-NNNN）/ **Context** / **Decision** / **Consequences**（良い点・悪い点・トレードオフ）/（任意）**Considered Options**
+- [ ] `docs/adr/template.md`: frontmatter（**id** / **status**: Proposed | Accepted | Deprecated | Superseded by ADR-NNNN / **date**）/ 見出し `# NNNN. <タイトル>` / **Context** / **Decision** / **Consequences**（良い点・悪い点・トレードオフ）/（任意）**Alternatives Considered**
 - [ ] `docs/adr/README.md`: 運用ガイド（いつ書くか・採番・supersede 手順）と ADR 一覧
 - [ ] **rule `.claude/rules/adr.md`**（paths なし=常時ロード）: 「**技術選定・パターン・不可逆なトレードオフ**を伴う決定をしたら ADR を残す」方針・採番/supersede 手順・`adr-new` skill 案内。※ Phase 7（rules）はこの adr.md を**再作成しない**（本フェーズが正）。
 - [ ] `.claude/skills/adr-new/SKILL.md`（canonical・引数: タイトル）+ `.agents/skills/adr-new` symlink（クロスエージェント共有・`skill-creator` skill を使って作成、`skill-authoring.md`／`cross-agent.md`／Phase 7）:

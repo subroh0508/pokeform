@@ -1,7 +1,7 @@
 ---
 name: adr-new
 description: 新しい ADR（アーキテクチャ決定記録）を docs/adr/ に採番して作成する。技術選定・パターン採用・不可逆なトレードオフを伴う決定をしたとき、あるいは既存 ADR を覆す（supersede する）ときに使う。ユーザーが「ADR を書きたい / 残したい」「この決定を記録して」「○○の ADR を起こして」と言ったり、明示せずともアーキ決定を確定させた文脈で必ず使う。
-allowed-tools: Read Write Bash(ls *)
+allowed-tools: Read Write Bash(ls *) Bash(git mv *)
 ---
 
 # adr-new — ADR を採番して作成する
