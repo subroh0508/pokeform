@@ -1,0 +1,62 @@
+# Dependabot — 依存の自動更新（npm / github-actions / docker）
+#
+# 目的: ツールチェーン（Node 24 / pnpm / TypeScript / Vitest / Biome 等）と
+#       GitHub Actions・Docker ベースイメージの更新を PR 化し、`dep-update` skill で
+#       レビュー → マージ可否判断 → 実行まで安全に回せるようにする。
+# 方針: メジャーは確定版を固定（README「確定バージョン」表）、マイナー/パッチは追従。
+#       PR 乱立を防ぐため groups でまとめ、open-pull-requests-limit を絞る。
+# 連携: 生成された PR は `dep-update <PR>` skill が破壊的変更・verify・CI を確認して判定する。
+version: 2
+
+updates:
+  # --- npm（pnpm ワークスペースのルート） ---
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+    groups:
+      # 本番依存のマイナー/パッチをまとめる（メジャーは個別 PR で慎重に）。
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "minor"
+          - "patch"
+      # dev 依存（TypeScript / Vitest / Biome 等）のマイナー/パッチをまとめる。
+      dev-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+
+  # --- GitHub Actions（ワークフローで使う action のバージョン） ---
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      github-actions:
+        update-types:
+          - "minor"
+          - "patch"
+
+  # --- Docker（Dockerfile の Node ベースイメージ node:24-slim 等） ---
+  # Phase 6 の Dockerfile（ルート）が対象。Node メジャー更新は LTS 方針と整合を取って人手判断。
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      docker:
+        update-types:
+          - "minor"
+          - "patch"
