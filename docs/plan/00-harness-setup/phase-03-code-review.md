@@ -57,8 +57,8 @@ flowchart LR
 ### B. skills（canonical + `.agents` symlink・`skill-creator` を使って作成）
 
 - [ ] `.claude/skills/code-review/SKILL.md` + `references/code-review-checklist.md` + `.agents/skills/code-review` symlink。
-  - frontmatter: `description`（「`src/**`・`scripts/**` を変更した PR / diff をレビューしたいとき。ハーネス設定の変更は `harness-review` を使う」=トリガと SKIP を明示）、`allowed-tools: Bash(git *) Bash(gh pr *) Read Grep`（**指摘のみ・書込なし**）。
-  - 手順: 対象 diff を収集（`gh pr diff` or `git diff`）→ paths から観点を選択 → checklist で評価 → 重大度付き指摘を要約。
+  - frontmatter: `description`（「`src/**`・`scripts/**` を変更した PR / diff をレビューしたいとき。ハーネス設定の変更は `harness-review` を使う」=トリガと SKIP を明示）、`allowed-tools: Bash(git *) Bash(gh pr *) Read Grep`（**指摘を PR コメントとして残す。コードの修正・auto-merge はしない**）。
+  - 手順: 対象 diff を収集（`gh pr diff` or `git diff`）→ paths から観点を選択 → checklist で評価 → 重大度付き指摘を要約 → `gh pr comment` で PR に投稿。
 - [ ] `.claude/skills/harness-review/SKILL.md` + `references/harness-review-checklist.md` + `.agents/skills/harness-review` symlink。
   - frontmatter: `description`（「`.claude/rules`・`.claude/skills`・`AGENTS.md`・`CLAUDE.md`・`.githooks`・`docs/plan`・`docs/adr` を変更した PR をレビューしたいとき。ソース変更は `code-review` を使う」）、`allowed-tools` は同上。
 - [ ] **既存組み込み `code-review` skill との名前衝突確認**（衝突するなら `src-review` 等へ改名し、本 doc / README の表記も合わせる）。

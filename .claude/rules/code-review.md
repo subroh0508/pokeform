@@ -36,6 +36,15 @@ description: PR マージ前の意味的レビュー（code-review / harness-rev
 
 出力は冒頭に総括（`✅ ブロッキングなし` or `❌ blocking N 件`）を置き、重大度順（blocking → non-blocking → nit）に列挙する。
 
+## 出力先（PR コメントに残す）
+
+レビュー結果は**該当 PR のコメントとして残す**（`gh pr comment <N> --body-file <file>`）。理由は、指摘を PR 上に残すことでレビュー履歴が辿れ、`pr-retrospective` が PR コメントから learning を収集でき、auto-merge 判断の根拠が可視化されるため。
+
+- **PR 番号があるとき**: 上記フォーマットの総括 + 指摘を **1 つの要約コメント**として投稿する（`gh pr comment`）。ブロッキングなしでも「✅ ブロッキングなし」のコメントを残す（レビュー実施の記録）。
+- **ローカルブランチのみ（PR 未作成）でレビューするとき**: 投稿先が無いためチャット出力に留める。
+- コメントは GitHub への書き出しなので、投稿**前**に [[redaction]] を適用する（Secrets / 最小 PII を `[REDACTED-*]` へ）。
+- **コメントを残す = レビュー結果の記録**であり、**コードの修正コミットや auto-merge の実行とは別**。レビュー skill はコメント投稿までで、修正・マージはしない（auto-merge の発火条件は各 checklist の「auto-merge ゲート」節）。
+
 ## effort 段階
 
 呼び出し時の effort で指摘の網羅度と確度を調整する。理由は、小さな PR に過剰な指摘を浴びせると本質が埋もれ、大きな PR に高確度だけだと見落とすため。
@@ -45,7 +54,7 @@ description: PR マージ前の意味的レビュー（code-review / harness-rev
 
 ## redaction
 
-レビュー出力や再発指摘を `docs/harness/` 配下（learning 等）へ書き出す場合は、書き出し**前**に [[redaction]] を適用する（Secrets / 最小 PII を `[REDACTED-*]` へ）。レビューのチャット出力自体は対象外だが、ファイル化する瞬間に適用する。
+レビュー出力や再発指摘を `docs/harness/` 配下（learning 等）へ書き出す場合や、**PR コメントとして投稿する**場合は、書き出し**前**に [[redaction]] を適用する（Secrets / 最小 PII を `[REDACTED-*]` へ）。レビューのチャット出力自体は対象外だが、ファイル化・PR コメント投稿の瞬間に適用する。
 
 ## 連携（一方向）
 
