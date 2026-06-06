@@ -9,7 +9,7 @@
 ハーネスは **Claude Code と Codex の両方**で使う。二重管理を避けるため、以降の全フェーズで次を守る（詳細は Phase 7 の `cross-agent.md` rule / ADR `0009`）:
 
 - **指示の SoT = `AGENTS.md`**（Codex ネイティブ読込）。`CLAUDE.md` は `@AGENTS.md` の薄いアダプタ（公式 Pattern 0）。
-- **スキルは canonical を `.claude/skills/<name>/` 実体に置き、`.agents/skills/<name>` を symlink** で共有（編集 1 箇所）。skill-creator 準拠で作成。
+- **スキルは canonical を `.claude/skills/<name>/` 実体に置き、`.agents/skills/<name>` を symlink** で共有（編集 1 箇所）。**作成には `skill-creator` skill を利用する**（`skill-authoring.md`）。
 - **強制ゲートは Git ネイティブフック（`.githooks/`）**＝ツール非依存で両対応。Claude hooks は補助のみ。
 - Claude が自動取得する情報（path-scoped rules / skill frontmatter）は `AGENTS.md` にインラインせず**ポインタ化**（path↔rule 表は `docs/harness/rules-index.md` に分離・生成）。
 

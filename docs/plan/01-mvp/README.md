@@ -31,6 +31,6 @@
 
 ## クロスエージェント / ハーネス連携
 
-- 本計画で追加する利用者向けスキル（`review-party` / `author-individual` / `stat`）は、ハーネスの共有方針に従い **canonical `.claude/skills/<name>/` + `.agents/skills/<name>` symlink**（skill-creator 準拠）で作成。
+- 本計画で追加する利用者向けスキル（`review-party` / `author-individual` / `stat`）は、ハーネスの共有方針に従い **canonical `.claude/skills/<name>/` + `.agents/skills/<name>` symlink** で、**`skill-creator` skill を使って作成**（`skill-authoring.md`）。
 - 各フェーズは対応する rule（`testing` / `data-pipeline` / `cli-and-io` / `type-conventions` / `tsc-verification` / `game-spec`）を確定させながら進める。
 - 完了条件は共通して「`pnpm verify` 緑 + 該当 rule/skill の確定」。

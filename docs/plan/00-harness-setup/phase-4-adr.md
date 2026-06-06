@@ -15,7 +15,7 @@
 - [ ] `docs/adr/template.md`: 見出し `# NNNN. <タイトル>` / **Status**（Proposed | Accepted | Deprecated | Superseded by ADR-NNNN）/ **Context** / **Decision** / **Consequences**（良い点・悪い点・トレードオフ）/（任意）**Considered Options**
 - [ ] `docs/adr/README.md`: 運用ガイド（いつ書くか・採番・supersede 手順）と ADR 一覧
 - [ ] **rule `.claude/rules/adr.md`**（paths なし=常時ロード）: 「**技術選定・パターン・不可逆なトレードオフ**を伴う決定をしたら ADR を残す」方針・採番/supersede 手順・`adr-new` skill 案内。※ Phase 7（rules）はこの adr.md を**再作成しない**（本フェーズが正）。
-- [ ] `.claude/skills/adr-new/SKILL.md`（canonical・引数: タイトル）+ `.agents/skills/adr-new` symlink（クロスエージェント共有・skill-creator 準拠、`cross-agent.md`／Phase 7）:
+- [ ] `.claude/skills/adr-new/SKILL.md`（canonical・引数: タイトル）+ `.agents/skills/adr-new` symlink（クロスエージェント共有・`skill-creator` skill を使って作成、`skill-authoring.md`／`cross-agent.md`／Phase 7）:
   - frontmatter: `description`（trigger 明示）、`allowed-tools: Read Write Bash(ls *)`
   - 手順: `docs/adr/` の最大連番+1 を採番 → `template.md` から `NNNN-<slug>.md` を生成 → Context/Decision/Consequences を対話で記入 → Status 設定。supersede 時は旧 ADR の Status を `Superseded by ADR-NNNN` に更新（旧本文は書き換えず追記のみ）
 - [ ] **初期 ADR のバックフィル**（本文は `architecture.md` の決定を要約・参照し二重記述を避ける）:
@@ -27,9 +27,10 @@
   - [ ] `0006-pin-toolchain-and-dockerize`（Node24/pnpm11.5.1/TS6 ピン留め + Docker）
   - [ ] `0007-yaml-lang-per-file`（YAML の言語をファイル単位 `lang` 宣言）
   - [ ] `0008-kpt-retrospective-loop`（PR ごと KPT レトロ→ハーネス書き戻しループ採用、Phase 2）
-  - [ ] `0009-cross-agent-shared-harness`（AGENTS.md=指示 SoT + `@import` / スキル symlink 共有 / Git hooks ゲート / skill-creator 準拠。Claude+Codex 両対応）
+  - [ ] `0009-cross-agent-shared-harness`（AGENTS.md=指示 SoT + `@import` / スキル symlink 共有 / Git hooks ゲート。Claude+Codex 両対応）
   - [ ] `0010-semantic-code-review-skills`（PR merge 前の意味的レビューを `code-review`/`harness-review` の 2 skill に分割 + CI 緑＋承認で auto-merge。Phase 3）
   - [ ] `0011-implementation-workflow-orchestrator`（実装ライフサイクルを多段フェーズで統合する `implementation-workflow` skill。既存 skill を再利用、マージは Phase 3 の auto-merge と整合、worktree で並走を物理分離。Phase 11）
+  - [ ] `0012-skill-creation-via-skill-creator`（skill の新規作成・改修は `skill-creator` skill を利用することを必須化。手書きで SKILL.md を起こさず標準構成・description=trigger・≤500 行を担保。Phase 7 `skill-authoring.md` が SoT）
 
 ## 受け入れ基準
 

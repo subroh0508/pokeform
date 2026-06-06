@@ -15,7 +15,7 @@
   - [ ] `schedule.interval: weekly`
   - [ ] マイナー/パッチをまとめる `groups`（例 `dev-dependencies`）で PR 数を抑制、`open-pull-requests-limit` を適度に
   - [ ] `commit-message.prefix: "chore(deps)"`（Conventional Commits）
-- [ ] `.claude/skills/dep-update/SKILL.md`（canonical・引数: PR 番号 または 依存名）+ `.agents/skills/dep-update` symlink（クロスエージェント共有・skill-creator 準拠、`cross-agent.md`／Phase 7）:
+- [ ] `.claude/skills/dep-update/SKILL.md`（canonical・引数: PR 番号 または 依存名）+ `.agents/skills/dep-update` symlink（クロスエージェント共有・`skill-creator` skill を使って作成、`skill-authoring.md`／`cross-agent.md`／Phase 7）:
   - frontmatter: `description`（trigger 明示）、`allowed-tools: Bash(gh *) Bash(pnpm *) Read Grep WebFetch`
   - 手順:
     1. **対象特定**: `gh pr view <PR>` で更新パッケージと from→to を取得（依存名なら `gh pr list` で該当 Dependabot PR を検索）

@@ -43,7 +43,7 @@ flowchart LR
 
 ## タスク
 
-> **クロスエージェント共有（全スキル共通）**: 各スキルは skill-creator 準拠で `.claude/skills/<name>/SKILL.md` に canonical（実体）を作成し、`.agents/skills/<name>` を `../../.claude/skills/<name>` への symlink にして Codex と共有する。`description` は trigger（いつ起動するか）を明示。symlink 不可環境は copy 同期にフォールバック（`cross-agent.md`／Phase 7）。
+> **クロスエージェント共有（全スキル共通）**: 各スキルは **`skill-creator` skill を使って** `.claude/skills/<name>/SKILL.md` に canonical（実体）を作成し、`.agents/skills/<name>` を `../../.claude/skills/<name>` への symlink にして Codex と共有する。`description` は trigger（いつ起動するか）を明示。symlink 不可環境は copy 同期にフォールバック（`skill-authoring.md`／`cross-agent.md`／Phase 7）。
 
 ### A. rule（共通 SoT）
 
@@ -54,7 +54,7 @@ flowchart LR
   - effort 段階の意味（low/medium=高確度の少数指摘、high=広め）。
   - redaction は `redaction.md`（Phase 2）を参照。
 
-### B. skills（canonical + `.agents` symlink・skill-creator 準拠）
+### B. skills（canonical + `.agents` symlink・`skill-creator` を使って作成）
 
 - [ ] `.claude/skills/code-review/SKILL.md` + `references/code-review-checklist.md` + `.agents/skills/code-review` symlink。
   - frontmatter: `description`（「`src/**`・`scripts/**` を変更した PR / diff をレビューしたいとき。ハーネス設定の変更は `harness-review` を使う」=トリガと SKIP を明示）、`allowed-tools: Bash(git *) Bash(gh pr *) Read Grep`（**指摘のみ・書込なし**）。
