@@ -24,7 +24,7 @@
   - [ ] `0003-species-dex-pattern`（`XxxBase`+`XxxDex` 統一・種族粒度）
   - [ ] `0004-vendor-pokeapi-data`（生成データの vendor）
   - [ ] `0005-git-hooks-over-claude-hooks`（強制ゲートを Git ネイティブに）
-  - [ ] `0006-pin-toolchain-and-dockerize`（Node24/pnpm11.5.1/TS6 ピン留め + Docker）
+  - （分割・archive）`0006-pin-toolchain-and-dockerize`: ツールチェーン固定 + Docker を 1 つに混載していたため、要素別 ADR（`0012`〜`0018`）へ**分割し supersede**、`docs/adr/archive/` へ退避。具体バージョンは ADR に書かず SoT（package.json/.node-version）に集約（`0017`）、メジャー含め追従。corepack 依存も撤去（`0014`）。
   - [ ] `0007-yaml-lang-per-file`（YAML の言語をファイル単位 `lang` 宣言）
   - [ ] `0008-kpt-retrospective-loop`（PR ごと KPT レトロ→ハーネス書き戻しループ採用、Phase 2）
   - [ ] `0009-cross-agent-shared-harness`（AGENTS.md=指示 SoT + `@import` / スキル symlink 共有 / Git hooks ゲート。Claude+Codex 両対応）

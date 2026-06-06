@@ -1,14 +1,18 @@
 ---
 id: 0006
-status: Accepted
+status: Superseded by ADR-0012〜0018
 date: 2026-06-07
 ---
 
 # 0006. ツールチェーンのバージョンをピン留めし、dev/CI 用に Docker 化する
 
+> **このADRはアーカイブ済み（superseded）。** 複数要素のバージョン固定と Docker 化を 1 つに混載していたため、要素別の独立 ADR に分割し、具体バージョンの直書きを廃止した。後継:
+> [ADR 0012 TypeScript](../0012-typescript-language.md) / [0013 Node.js](../0013-nodejs-runtime.md) / [0014 pnpm](../0014-pnpm-package-manager.md) / [0015 Vitest](../0015-vitest-test-runner.md) / [0016 Biome](../0016-biome-linter.md) / [0017 バージョン SoT・最新追従](../0017-toolchain-version-source-of-truth.md) / [0018 Docker 化](../0018-dockerize-dev-ci.md)。
+> 本文は当時の記録として不変のまま残す。
+
 ## Context
 
-コーディングエージェント・ローカル・CI が**同一環境**で `pnpm verify` を回せないと、「自分の環境では緑」問題が起き、検証ゲート（[ADR 0005](./0005-git-hooks-over-claude-hooks.md)）の信頼性が損なわれる。Node / pnpm / TypeScript のバージョン差で結果が変わるのを防ぎ、再現性を確保する必要がある。
+コーディングエージェント・ローカル・CI が**同一環境**で `pnpm verify` を回せないと、「自分の環境では緑」問題が起き、検証ゲート（[ADR 0005](../0005-git-hooks-over-claude-hooks.md)）の信頼性が損なわれる。Node / pnpm / TypeScript のバージョン差で結果が変わるのを防ぎ、再現性を確保する必要がある。
 
 ## Decision
 

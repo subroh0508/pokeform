@@ -1,11 +1,11 @@
 # pokeform — dev/CI 用 Docker イメージ（配布用ではない）
 #
 # 目的: ローカル / CI / コーディングエージェント（Claude Code・Codex）が同一環境で
-#       `pnpm verify`（型 / テスト100% / lint）を回せるようにツールチェーンを固定する。
-# 決定: ADR 0006-pin-toolchain-and-dockerize。
+#       `pnpm verify`（型 / テスト100% / lint）を回せるようにする。
+# 決定: ADR 0018-dockerize-dev-ci（Docker 化） / 0014-pnpm-package-manager（pnpm・corepack 非依存）。
 #
-# バージョン整合: Node は .node-version / engines.node、pnpm は package.json の
-#                 packageManager（= corepack で固定）と一致させること。
+# バージョンの SoT は package.json / pnpm-lock.yaml / .node-version（ADR 0017）。
+# Node 版は .node-version に整合させ、pnpm は版を固定せず直接インストールする。
 #
 # 将来のマルチステージ化（build/publish 用）の指針:
 #   - 下記 `base` を共有ステージとして使い、
@@ -14,23 +14,20 @@
 #     のように deps/build/runtime を分離できる構造にしている。
 #   ライブラリ用途のため現時点では dev/CI 用の単一ステージのみ実装。
 
-# ベースは LTS の Node 24（Debian slim）をピン留め。
-# slim はネイティブ依存の互換性が alpine（musl）より高い。
-# ベースイメージ更新は Phase 10 の Dependabot（docker エコシステム）で追従する。
+# ベースは Node の Debian slim イメージ。slim はネイティブ依存の互換性が alpine（musl）より高い。
+# タグの Node メジャーは .node-version（Node の SoT）に整合させ、更新は Dependabot（docker エコシステム）で追従する。
 FROM node:24-slim AS base
 
-# corepack で pnpm を packageManager 指定（11.5.2）に固定。
-# バージョンを Dockerfile に直書きせず packageManager から読ませることで多重管理を避ける。
-RUN corepack enable
+# pnpm は corepack を使わず直接インストールする（ADR 0014）。版は固定せず最新を取り、
+# 依存の再現性は pnpm-lock.yaml で担保する（ADR 0017）。
+RUN npm install -g pnpm
 WORKDIR /app
 
 # 依存解決のメタデータのみ先にコピーし、レイヤキャッシュを効かせる。
-# packageManager フィールドから pnpm のバージョンを activate する。
 COPY package.json pnpm-lock.yaml ./
 # --ignore-scripts: `prepare`（git hooks 設定）はホスト dev 環境専用でコンテナでは不要かつ
 #   git 不在で失敗するため、ライフサイクルスクリプトを無効化して依存のみ取得する。
-RUN corepack prepare pnpm@11.5.2 --activate \
-    && pnpm install --frozen-lockfile --ignore-scripts
+RUN pnpm install --frozen-lockfile --ignore-scripts
 
 # ソースをコピー（依存に変化が無ければ上のレイヤはキャッシュされる）。
 COPY . .
