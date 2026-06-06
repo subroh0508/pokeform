@@ -79,7 +79,7 @@ SKILL.md 本体は手順とトリガに絞り、長い観点リストは `refere
 - [ ] **依存の明記**: GitHub の auto-merge は **server-side の required status check** が必須。現状 CI（GitHub Actions）は未整備（Phase 6 Docker に想定コメント、Phase 10 dependabot は github-actions ecosystem 登録のみ）。本フェーズの前提タスクとして以下を記載:
   - [ ] `.github/workflows/ci.yml`: コンテナ内で `pnpm verify` を実行（Phase 6 の `Dockerfile` を再利用）。**ローカル Git hooks は GitHub の merge を gate しない**ため、server-side チェックを別途用意する。
   - [ ] branch protection: `ci` を required check に設定 + 承認 1 を要求。
-- [ ] **auto-merge フロー**: PR open → CI `pnpm verify`（server 機械ゲート）→ エージェントが `code-review` / `harness-review` を実行し指摘 or 承認 → **CI 緑 ＆ ブロッキング指摘なし**なら `gh pr merge --auto --squash`。
+- [ ] **auto-merge フロー**: PR open → CI `pnpm verify`（server 機械ゲート）→ エージェントが `code-review` / `harness-review` を実行し指摘 or 承認 → **CI 緑 ＆ ブロッキング指摘なし**なら `gh pr merge --auto --merge`（通常マージ＝merge commit）。
 - [ ] 承認条件と approve 主体（人間 or 明示ルール）を doc 内で明文化。レビューは提案的であり、最終 approve をどこに置くかを定義する。
 
 ### E. 連携
