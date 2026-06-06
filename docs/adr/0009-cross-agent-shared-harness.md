@@ -1,7 +1,10 @@
-# 0009. ハーネスを Claude Code / Codex 両対応で共有する（AGENTS.md SoT + skill symlink + Git hooks）
+---
+id: 0009
+status: Accepted
+date: 2026-06-07
+---
 
-- **Status**: Accepted
-- **Date**: 2026-06-07
+# 0009. ハーネスを Claude Code / Codex 両対応で共有する（AGENTS.md SoT + skill symlink + Git hooks）
 
 ## Context
 
@@ -23,3 +26,7 @@ pokeform は Claude Code と Codex の両方で実装される前提。指示・
 - **良い点**: skill 本文・指示の 1 箇所修正が両ツールに反映され、二重管理が消える。ゲートも両対応。
 - **悪い点 / コスト**: symlink 前提のため、symlink 不可環境では copy 同期のフォールバック運用が要る。`rules-index.md` の生成ドリフト防止が要る（`prepare`/CI で再生成）。
 - **トレードオフ / 留意点**: Claude が自動取得する情報（path-scoped rules / skill frontmatter）を `AGENTS.md` にインラインせず、ポインタに徹してコンテキスト肥大を避ける。canonical + symlink のパリティはレビュー観点（[ADR 0010](./0010-semantic-code-review-skills.md)）でも確認する。
+
+## Alternatives Considered
+
+- **ツールごとに固有の場所で指示・skill を二重管理**: 各ツールに最適化できるが、同じ規約が複数箇所に分散しドリフト（食い違い）が必ず生じる。AGENTS.md を指示 SoT、skill は canonical + symlink、ゲートは Git hooks に一本化し、1 箇所修正で両ツールへ反映する共有方式を採用。

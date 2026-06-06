@@ -1,7 +1,10 @@
-# 0001. アーキテクチャ決定を ADR として記録する
+---
+id: 0001
+status: Accepted
+date: 2026-06-07
+---
 
-- **Status**: Accepted
-- **Date**: 2026-06-07
+# 0001. アーキテクチャ決定を ADR として記録する
 
 ## Context
 

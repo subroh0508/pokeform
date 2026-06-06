@@ -1,7 +1,10 @@
-# 0007. YAML / Markdown 入力の記述言語をファイル単位の `lang` 宣言で固定する
+---
+id: 0007
+status: Accepted
+date: 2026-06-07
+---
 
-- **Status**: Accepted
-- **Date**: 2026-06-07
+# 0007. YAML / Markdown 入力の記述言語をファイル単位の `lang` 宣言で固定する
 
 ## Context
 

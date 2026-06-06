@@ -17,6 +17,9 @@ allowed-tools: Bash(git *) Bash(gh *) Bash(pnpm *) Read Grep Write Agent
 オーケストレーター skill。これまでの Phase で揃えたハーネスの部品（rules / skills / Git hooks / ADR /
 レビュー / レトロ / 依存更新）を、**1 本の PR の実装ライフサイクルとして束ねる**。
 
+> **大原則**: フェーズ単位の実装は**原則すべてこの skill 経由で駆動する**（実装の標準エントリポイント）。
+> trivial な単発編集や会話的応答のみ例外。背景は [ADR 0011](../../../docs/adr/0011-implementation-workflow-orchestrator.md)。
+
 > **手順の詳細 SoT は [`.claude/rules/implementation-workflow.md`](../../rules/implementation-workflow.md)**
 > （Phase 0〜9 の入出力・成功条件・失敗 fallback・不変条件）。決定の「なぜ」は
 > [ADR 0011](../../../docs/adr/0011-implementation-workflow-orchestrator.md)。本 SKILL.md は概要に留める。

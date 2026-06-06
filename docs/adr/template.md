@@ -1,8 +1,15 @@
-# NNNN. <タイトル>
+---
+id: XXXX
+status: Proposed
+date: YYYY-MM-DD
+---
 
-- **Status**: Proposed
-  <!-- Proposed | Accepted | Deprecated | Superseded by ADR-NNNN -->
-- **Date**: YYYY-MM-DD
+<!-- frontmatter:
+     id     — 4 桁ゼロ詰めの ADR 番号。ファイル名 NNNN-<slug>.md の NNNN と一致させる。
+     status — Proposed | Accepted | Deprecated | Superseded by ADR-NNNN
+     date   — YYYY-MM-DD（作成日） -->
+
+# NNNN. <タイトル>
 
 ## Context
 
@@ -26,9 +33,9 @@
 - **トレードオフ / 留意点**:
   -
 
-## Considered Options
+## Alternatives Considered
 
-<!-- 任意。比較検討した代替案と、なぜ採らなかったかを簡潔に。
-     検討が自明な場合はこの節ごと省略してよい。 -->
+<!-- 比較検討した代替案と、なぜ採らなかったかを簡潔に。表 / 節どちらの形式でもよい。
+     真の代替案が無ければ「なし」と書くか、この節ごと省略してよい。 -->
 
 -
