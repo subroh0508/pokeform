@@ -1,0 +1,7 @@
+# ビルドコンテキストから除外（イメージ肥大化・キャッシュ無効化・秘匿情報混入を防ぐ）
+node_modules
+dist
+coverage
+data/raw
+.git
+*.log
