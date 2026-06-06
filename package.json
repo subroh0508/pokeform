@@ -15,7 +15,8 @@
     "lint": "biome check .",
     "format": "biome check --write .",
     "verify": "pnpm typecheck && pnpm test:cov && pnpm lint",
-    "prepare": "git config core.hooksPath .githooks"
+    "gen:rules-index": "node scripts/gen-rules-index.ts",
+    "prepare": "git config core.hooksPath .githooks && node scripts/gen-rules-index.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.16",
