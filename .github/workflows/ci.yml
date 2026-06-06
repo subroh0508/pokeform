@@ -1,0 +1,39 @@
+# CI — server-side 機械ゲート（auto-merge の required status check）
+#
+# 目的: GitHub 上の PR を `pnpm verify`（型 / テスト100% / Biome）で gate する。
+#       ローカル Git hooks（.githooks/）は GitHub の merge を gate しないため、
+#       auto-merge には server-side のチェックが別途必要（ADR 0010 / phase-03-code-review）。
+# 環境: Phase 6 の Dockerfile を再利用し、ローカル / CI / エージェントで同一ツールチェーンを使う
+#       （ADR 0006）。Dockerfile が CMD ["pnpm", "verify"] を実行する。
+#
+# branch protection で本ワークフローの `verify` job を required status check に設定すると、
+# 「CI 緑 + レビュー承認」で auto-merge（gh pr merge --auto）が回る。
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+# 同一 ref の古い実行はキャンセルして無駄を省く。
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: pnpm verify (型 / テスト100% / Biome)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Phase 6 の Dockerfile を build してコンテナ内で `pnpm verify` を実行する。
+      # ツールチェーン（Node 24 / pnpm 11.5.2）は Dockerfile が packageManager から固定するため、
+      # ワークフロー側でバージョンを多重管理しない。
+      - name: Build CI image
+        run: docker build -t pokeform-ci .
+
+      - name: Run pnpm verify in container
+        run: docker run --rm pokeform-ci
