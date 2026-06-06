@@ -2,7 +2,7 @@
 
 ## 目的 / スコープ
 
-機能実装・ハーネス追加/修正の **Pull Request ごとに KPT（Keep / Problem / Try）レトロスペクティブ**を行い、得た学びを **ハーネス（rules / skills / templates / ADR）へ書き戻す自己改良ループ**を設置する。`subroh0508/colormaster` に構築済みの仕組み（`pr-retrospective` → `harness-meta` の二段構え）を pokeform 規模に簡素化して移植する。
+機能実装・ハーネス追加/修正の **Pull Request ごとに KPT（Keep / Problem / Try）レトロスペクティブ**を行い、得た学びを **ハーネス（rules / skills / templates / ADR）へ書き戻す自己改良ループ**を設置する。`pr-retrospective`（1 PR = 1 learning 生成）→ `harness-meta`（複数 learning 集約→採用判定→ハーネス改修）の二段構えを pokeform 規模で構築する。
 
 **位置づけ（重要）**: 本フェーズは**ループの「仕掛け」を設置**するもの。実際に回り始めるのは MVP 実装で最初の PR が出てから（その時点で全ハーネスが揃っている）。そのため gh 権限（Phase 8）/ ADR（Phase 3）/ 型・カバレッジゲート（Phase 4）への**前方参照**を許容する（設置 ≠ 即時稼働）。
 
@@ -11,20 +11,22 @@
 - Phase 1（`docs/` 構造）。本フェーズで `docs/harness/` 配下と専用 rule/skill を新設する。
 - 稼働時（実装 PR 以降）に Phase 3（ADR）/ Phase 4（型・カバレッジゲート）/ Phase 8（gh 権限）を利用する（設置時点では未完でも可）。
 
-## colormaster からの「採用」と「簡素化」
+## 構成方針（採用 / 簡素化）
 
-| 観点 | colormaster | pokeform（本フェーズ） |
-|---|---|---|
-| PR 単位 KPT learning | `pr-retrospective` + `docs/harness/learnings/` | 採用（同構造・日本語 KPT） |
-| 書き戻し | `harness-meta` + `harness-meta-criteria` | 採用（簡素化した採用/見送り/撤去基準） |
-| learning フォーマット SoT | `retrospective-format` | 採用（指標欄を pokeform ゲートへ置換） |
-| 改善提案プレフィックス | `[rule]`/`[skill]`/`[template]`/`[remove]` | 採用 + `[adr]` 追加 |
-| 指標 | 三層（Kover/Konsist/PITest） | 置換: 型 OK / カバレッジ% / Biome 違反 / CI / 差分行数 |
-| redaction | `pii.md` + `secrets.md` | 簡素化: `redaction.md` 1 本 |
-| 自動起動 | `pr-poller`（cron/閾値）+ orchestrator | 不採用（将来送り）: 手動 or `finish-phase` 促し |
-| dry-run | 3 軸定量（golden-set, N≥10） | 簡素化: リスキー変更のみ軽量メモ |
-| batch 集約 | `harness/learnings-batch-YYYY-WW` 週次/件数 PR | 採用（簡素） |
-| 外部研究駆動 | `harness-evolution` | 将来送り（対象外） |
+pokeform 規模に合わせ、KPT ループの中核のみ採用し重量級の自動化は簡素化／将来送りにする。
+
+| 要素 | pokeform（本フェーズ）の方針 |
+|---|---|
+| PR 単位 KPT learning | 採用（`docs/harness/learnings/` に 1 PR = 1 ファイル・日本語 KPT） |
+| 書き戻し | 採用（`harness-meta` + 簡素化した採用/見送り/撤去基準） |
+| learning フォーマット SoT | 採用（`retrospective-format`・指標は pokeform ゲートに置換） |
+| 改善提案プレフィックス | `[rule]`/`[skill]`/`[template]`/`[remove]` + `[adr]` |
+| 指標 | 型 OK / カバレッジ% / Biome 違反 / CI / 差分行数（重量級メトリクスは不採用） |
+| redaction | `redaction.md` 1 本（Secrets 中心 + 最小 PII） |
+| 自動起動 | 不採用（将来送り）: 手動 or `finish-phase` 促し |
+| dry-run | 簡素化: リスキー変更のみ軽量メモ（定量 dry-run は不採用） |
+| batch 集約 | 採用（簡素）: `harness/learnings-batch-YYYY-WW` 週次/件数 PR |
+| 外部研究駆動の改善 | 将来送り（対象外） |
 
 ## タスク
 
@@ -56,7 +58,7 @@
 
 - [ ] branch 命名 `harness/learnings-batch-YYYY-WW` / `harness/<purpose>`（必要なら `branch-naming.md` を Phase 6 rules に追加）。
 - [ ] `finish-phase` skill（Phase 7）末尾に「PR merge 後に `pr-retrospective` を起動」促しを組み込む（本フェーズではメモのみ、実装は Phase 7）。
-- [ ] ADR 連携: 🚀 Try のアーキ決定は `[adr]` → Phase 3 の `adr-new`。本ループ導入自体を ADR バックフィル（`00NN-kpt-retrospective-loop`、出典に colormaster）に追加（Phase 3 で起票）。
+- [ ] ADR 連携: 🚀 Try のアーキ決定は `[adr]` → Phase 3 の `adr-new`。本ループ導入自体を ADR バックフィル（`00NN-kpt-retrospective-loop`）に追加（Phase 3 で起票）。
 - [ ] CLAUDE.md にループ要約を追記（Phase 6 で反映）。
 
 ## learning ファイル構造（`retrospective-format.md` の SoT）
@@ -142,4 +144,4 @@ generator: pr-retrospective skill | 手動
 
 ## 参考
 
-- 出典: `subroh0508/colormaster` の `.claude/skills/{pr-retrospective,harness-meta}` / `.claude/rules/{retrospective-format,harness-meta-criteria}`（本人リポジトリ。pokeform 向けに簡素化して移植）。
+- KPT レトロスペクティブ + `pr-retrospective` → `harness-meta` の二段構えによるハーネス自己改良ループ（pokeform 規模に簡素化して構築）。

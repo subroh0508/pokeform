@@ -26,7 +26,7 @@
   - [ ] `0005-git-hooks-over-claude-hooks`（強制ゲートを Git ネイティブに）
   - [ ] `0006-pin-toolchain-and-dockerize`（Node24/pnpm11.5.1/TS6 ピン留め + Docker）
   - [ ] `0007-yaml-lang-per-file`（YAML の言語をファイル単位 `lang` 宣言）
-  - [ ] `0008-kpt-retrospective-loop`（PR ごと KPT レトロ→ハーネス書き戻しループ採用。出典 colormaster、Phase 2）
+  - [ ] `0008-kpt-retrospective-loop`（PR ごと KPT レトロ→ハーネス書き戻しループ採用、Phase 2）
   - [ ] `0009-cross-agent-shared-harness`（AGENTS.md=指示 SoT + `@import` / スキル symlink 共有 / Git hooks ゲート / skill-creator 準拠。Claude+Codex 両対応）
 
 ## 受け入れ基準
