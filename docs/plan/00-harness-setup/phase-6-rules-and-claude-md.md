@@ -21,7 +21,7 @@
 | `game-spec.md` | `data/**`, `src/domain/**` | HP/非HP 計算式（二重 floor）・能力ポイント 66/32・性格 ±10%・Lv50/個体値31 固定・レギュ M系（メガ可/テラス・ダイマ不可） |
 | `type-conventions.md` | `src/types/**`, `data/generated/**` | `XxxBase`+`XxxDex`+`XxxId=keyof XxxDex` 統一パターン・種族粒度（種族値一意=1種族）・日英 `name` と逆引きマップ |
 | `tsc-verification.md` | `src/codegen/**`, `src/types/**` | 「tsc のみ検証」方針・YAML→codegen→`tsc --noEmit`・ブランドエラー型命名（`MoveNotLearnedBy<...>` 等）・合計66 は codegen 算出 |
-| `testing.md` | `**/*.test.ts` | Vitest・カバレッジ100%・境界重点（二重 floor / ポイント 0・32）・`tests/fixtures` 規約 |
+| `testing.md` | `**/*.test.ts` | Vitest・カバレッジ100%・境界重点（二重 floor / ポイント 0・32）・**テストはプロダクションコードと同階層に `<name>.test.ts` コロケーション**（`tests/` ディレクトリは作らない）・fixture は近傍 `__fixtures__/` |
 | `data-pipeline.md` | `scripts/**`, `data/**` | raw=gitignore / champions=手動 / generated=commit・PokeAPI 項目対応・overrides・vendor 方針 |
 | `cli-and-io.md` | `src/cli/**`, `src/io/**` | `lang: ja\|en` のファイル単位宣言・`--lang` 表示言語・終了コード(0/非0)・ディレクトリ再帰 glob |
 

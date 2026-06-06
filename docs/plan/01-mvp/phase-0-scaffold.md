@@ -7,7 +7,7 @@
 ## 前提（依存）
 
 - ハーネス整備（`docs/plan/00-harness-setup/`）完了＝ `pnpm verify`（型 / Vitest カバレッジ100% / Biome）が実在。
-- 規約 `testing.md`（カバレッジ100%・境界重点・`tests/fixtures`）。
+- 規約 `testing.md`（カバレッジ100%・境界重点・テストはコロケーション `<name>.test.ts`・fixture は近傍 `__fixtures__/`）。
 
 ## タスク
 
@@ -18,7 +18,7 @@
   - `calcHp(base, point) = floor((base*2 + 31 + point*2) * 50/100 + 60)`
   - `calcStat(base, point, natureMod: 0.9|1.0|1.1) = floor(floor((base*2 + 31 + point*2) * 50/100 + 5) * natureMod)`（**二重 floor** に注意）
   - `calcRealStats(entry, spec)`: 6 能力を一括算出。
-- [ ] `tests/calc-stats.test.ts`: 既知個体（攻撃31振り等）の実数値を fixture 照合。**二重 floor の端数境界**・ポイント 0/32 境界を重点。
+- [ ] `src/domain/calc-stats.test.ts`（コロケーション）: 既知個体（攻撃31振り等）の実数値を fixture 照合。**二重 floor の端数境界**・ポイント 0/32 境界を重点。fixture は `src/domain/__fixtures__/`。
 - [ ] ポイント合計 66 / 各 ≤32 の検証ヘルパ（実行時 or 型）も calc 層に用意。
 
 ## この Phase で育てるハーネス

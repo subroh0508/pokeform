@@ -253,11 +253,12 @@ pokeform/
 │  │  ├─ species.ts             # 生成 SpeciesId/SpeciesDex の re-export
 │  │  ├─ individual.ts          # IndividualSpec<S>, Individual, ブランドエラー型
 │  │  └─ party.ts               # PartySpec, Party, UniqueSpecies/NotLegal 制約
-│  ├─ domain/
-│  │  ├─ calc-stats.ts          # 実数値計算（二重 floor）。テスト最重要
-│  │  ├─ type-effectiveness.ts  # 単/複合タイプ倍率
-│  │  ├─ coverage.ts            # 技範囲・弱点集計（MVP の価値の核）
-│  │  └─ legality.ts            # （型で表現しきれない補助ルールがあれば）
+│  ├─ domain/                   # 各 .ts と同階層に <name>.test.ts をコロケーション
+│  │  ├─ calc-stats.ts / calc-stats.test.ts          # 実数値計算（二重 floor）。テスト最重要
+│  │  ├─ type-effectiveness.ts / type-effectiveness.test.ts  # 単/複合タイプ倍率
+│  │  ├─ coverage.ts / coverage.test.ts              # 技範囲・弱点集計（MVP の価値の核）
+│  │  ├─ legality.ts / legality.test.ts              # （型で表現しきれない補助ルールがあれば）
+│  │  └─ __fixtures__/          # 共有 fixture（既知個体・パーティ）をテスト近傍に配置
 │  ├─ io/
 │  │  ├─ load-individual.ts     # yaml パース（コメント保持）
 │  │  ├─ load-party.ts          # gray-matter で frontmatter + 本文
@@ -276,13 +277,12 @@ pokeform/
 │  ├─ raw/                      # .gitignore
 │  ├─ champions/                # コミット: rules.yaml / regulation.yaml / overrides.yaml
 │  └─ generated/               # コミット: species.ts / species.data.ts
-├─ team/                        # サンプル兼ユーザー置き場
-│  ├─ individuals/*.yaml
-│  └─ parties/*.md
-└─ tests/
-   ├─ calc-stats.test.ts / type-effectiveness.test.ts / coverage.test.ts
-   └─ fixtures/
+└─ team/                        # サンプル兼ユーザー置き場
+   ├─ individuals/*.yaml
+   └─ parties/*.md
 ```
+
+> **テスト配置**: 専用 `tests/` ディレクトリは作らず、**プロダクションコードと同じ場所に `<name>.test.ts` をコロケーション**する（例: `src/domain/calc-stats.ts` ↔ `src/domain/calc-stats.test.ts`）。共有 fixture は近傍の `__fixtures__/` に置く。`vitest.config.ts` の `include` は `src/**/*.test.ts`、`coverage.exclude` に `**/*.test.ts` / `**/__fixtures__/**` を指定。
 
 ### 入力フォーマット例（言語はファイル単位で宣言）
 

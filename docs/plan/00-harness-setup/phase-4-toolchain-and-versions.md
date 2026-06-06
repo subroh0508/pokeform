@@ -26,7 +26,7 @@
 - [ ] `tsconfig.json`（`strict: true`, `moduleResolution: "bundler"`, `noEmit` 既定, `module: ESNext`, `target` は Node 24 相当）
 - [ ] `tsconfig.generated.json`（雛形。`include: ["**/*.generated.ts"]`。本格運用は MVP Phase 2）
 - [ ] `biome.json`（推奨ルール + フォーマッタ設定）
-- [ ] `vitest.config.ts`: `coverage.provider: "v8"`, `coverage.thresholds: { lines:100, branches:100, functions:100, statements:100 }`, `coverage.exclude` は後続で薄い層を除外する想定で用意（現時点は空可）
+- [ ] `vitest.config.ts`: `include: ["src/**/*.test.ts"]`（**テストはプロダクションコードと同階層にコロケーション**・`tests/` ディレクトリは作らない）, `coverage.provider: "v8"`, `coverage.thresholds: { lines:100, branches:100, functions:100, statements:100 }`, `coverage.exclude` に `**/*.test.ts` / `**/__fixtures__/**` ＋後続で薄い層を除外
 - [ ] `.gitignore`: `node_modules` / `dist` / `coverage` / `data/raw`
 - [ ] `.node-version`（または `.nvmrc`）: `24`
 - [ ] 空でも `pnpm verify` が緑に通ることを保証（テスト 0 件で通らない場合は placeholder テストを 1 件置く）
