@@ -123,4 +123,5 @@ gh pr list --state merged --limit 20 --json number,title,mergedAt
 - 検証: [`verify`](../verify/SKILL.md)。
 - ADR: [`adr-new`](../adr-new/SKILL.md) / 方針 `.claude/rules/adr.md`。
 - レトロ: [`pr-retrospective`](../pr-retrospective/SKILL.md) / `docs/harness/README.md`。
+- マージ前レビュー: PR open 時は [`code-review`](../code-review/SKILL.md)（ソース）/ [`harness-review`](../harness-review/SKILL.md)（ハーネス資産）で意味的レビューしてから merge する（CI 緑 + ブロッキング指摘なしで auto-merge）。
 - フェーズ一覧 / 受け入れ基準: `docs/plan/00-harness-setup/README.md`。
