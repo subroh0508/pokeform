@@ -1,8 +1,8 @@
-# Phase 4 — ツールチェーンとバージョン固定
+# Phase 5 — ツールチェーンとバージョン固定
 
 ## 目的 / スコープ
 
-検証コマンド（`pnpm verify`）を**実在させる**ための最小ツールチェーンを用意し、Node / pnpm / 各パッケージのバージョンを固定する。ライブラリのロジックは書かない。バージョンピン留めの決定は Phase 3 で `0006-pin-toolchain-and-dockerize` として ADR 化済み。
+検証コマンド（`pnpm verify`）を**実在させる**ための最小ツールチェーンを用意し、Node / pnpm / 各パッケージのバージョンを固定する。ライブラリのロジックは書かない。バージョンピン留めの決定は Phase 4 で `0006-pin-toolchain-and-dockerize` として ADR 化済み。
 
 ## 前提（依存）
 
@@ -21,7 +21,7 @@
     - `"lint": "biome check ."`
     - `"format": "biome check --write ."`
     - `"verify": "pnpm typecheck && pnpm test:cov && pnpm lint"`
-    - `"prepare": "git config core.hooksPath .githooks"`（Phase 8 で使う Git hooks を有効化）
+    - `"prepare": "git config core.hooksPath .githooks"`（Phase 9 で使う Git hooks を有効化）
 - [ ] `devDependencies`（メジャー固定）をインストール: `typescript@6` / `@biomejs/biome@2` / `vitest@4` / `@vitest/coverage-v8@4`
 - [ ] `tsconfig.json`（`strict: true`, `moduleResolution: "bundler"`, `noEmit` 既定, `module: ESNext`, `target` は Node 24 相当）
 - [ ] `tsconfig.generated.json`（雛形。`include: ["**/*.generated.ts"]`。本格運用は MVP Phase 2）
@@ -45,4 +45,4 @@
 ## リスク・備考
 
 - バージョンは着手時点の最新を再確認（このフェーズ doc の数値は 2026-06 時点）。メジャーは固定、マイナー/パッチは最新で可。
-- `prepare` の `core.hooksPath` 設定は Phase 8 で `.githooks/` を作るまで実害なし（参照先が空でもエラーにならない）。
+- `prepare` の `core.hooksPath` 設定は Phase 9 で `.githooks/` を作るまで実害なし（参照先が空でもエラーにならない）。

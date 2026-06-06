@@ -1,4 +1,4 @@
-# Phase 3 — ADR（アーキテクチャ決定記録）の仕組み
+# Phase 4 — ADR（アーキテクチャ決定記録）の仕組み
 
 ## 目的 / スコープ
 
@@ -8,14 +8,14 @@
 
 ## 前提（依存）
 
-- Phase 1（`docs/` 構造 + `architecture.md` の場所）。本フェーズで `adr.md` rule も作成するため、rules フェーズ（Phase 6）には依存しない。
+- Phase 1（`docs/` 構造 + `architecture.md` の場所）。本フェーズで `adr.md` rule も作成するため、rules フェーズ（Phase 7）には依存しない。
 
 ## タスク
 
 - [ ] `docs/adr/template.md`: 見出し `# NNNN. <タイトル>` / **Status**（Proposed | Accepted | Deprecated | Superseded by ADR-NNNN）/ **Context** / **Decision** / **Consequences**（良い点・悪い点・トレードオフ）/（任意）**Considered Options**
 - [ ] `docs/adr/README.md`: 運用ガイド（いつ書くか・採番・supersede 手順）と ADR 一覧
-- [ ] **rule `.claude/rules/adr.md`**（paths なし=常時ロード）: 「**技術選定・パターン・不可逆なトレードオフ**を伴う決定をしたら ADR を残す」方針・採番/supersede 手順・`adr-new` skill 案内。※ Phase 6（rules）はこの adr.md を**再作成しない**（本フェーズが正）。
-- [ ] `.claude/skills/adr-new/SKILL.md`（canonical・引数: タイトル）+ `.agents/skills/adr-new` symlink（クロスエージェント共有・skill-creator 準拠、`cross-agent.md`／Phase 6）:
+- [ ] **rule `.claude/rules/adr.md`**（paths なし=常時ロード）: 「**技術選定・パターン・不可逆なトレードオフ**を伴う決定をしたら ADR を残す」方針・採番/supersede 手順・`adr-new` skill 案内。※ Phase 7（rules）はこの adr.md を**再作成しない**（本フェーズが正）。
+- [ ] `.claude/skills/adr-new/SKILL.md`（canonical・引数: タイトル）+ `.agents/skills/adr-new` symlink（クロスエージェント共有・skill-creator 準拠、`cross-agent.md`／Phase 7）:
   - frontmatter: `description`（trigger 明示）、`allowed-tools: Read Write Bash(ls *)`
   - 手順: `docs/adr/` の最大連番+1 を採番 → `template.md` から `NNNN-<slug>.md` を生成 → Context/Decision/Consequences を対話で記入 → Status 設定。supersede 時は旧 ADR の Status を `Superseded by ADR-NNNN` に更新（旧本文は書き換えず追記のみ）
 - [ ] **初期 ADR のバックフィル**（本文は `architecture.md` の決定を要約・参照し二重記述を避ける）:
@@ -28,6 +28,7 @@
   - [ ] `0007-yaml-lang-per-file`（YAML の言語をファイル単位 `lang` 宣言）
   - [ ] `0008-kpt-retrospective-loop`（PR ごと KPT レトロ→ハーネス書き戻しループ採用、Phase 2）
   - [ ] `0009-cross-agent-shared-harness`（AGENTS.md=指示 SoT + `@import` / スキル symlink 共有 / Git hooks ゲート / skill-creator 準拠。Claude+Codex 両対応）
+  - [ ] `0010-semantic-code-review-skills`（PR merge 前の意味的レビューを `code-review`/`harness-review` の 2 skill に分割 + CI 緑＋承認で auto-merge。Phase 3）
 
 ## 受け入れ基準
 

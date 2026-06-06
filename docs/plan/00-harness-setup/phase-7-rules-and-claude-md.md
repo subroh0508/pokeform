@@ -1,4 +1,4 @@
-# Phase 6 — AGENTS.md / CLAUDE.md / rules（クロスエージェント共有 SoT）
+# Phase 7 — AGENTS.md / CLAUDE.md / rules（クロスエージェント共有 SoT）
 
 ## 目的 / スコープ
 
@@ -9,12 +9,12 @@
 ## 前提（依存）
 
 - Phase 1（`architecture.md` の移動完了。rules はこの新パスを参照）。
-- Phase 3（`adr.md` rule は既に作成済み）。Phase 2（`retrospective-format.md` / `harness-meta-criteria.md` / `redaction.md` も作成済み）。本フェーズではこれらを**再作成しない**。
-- クロスエージェント共有方針は ADR `0009-cross-agent-shared-harness`（Phase 3）として記録。
+- Phase 4（`adr.md` rule は既に作成済み）。Phase 2（`retrospective-format.md` / `harness-meta-criteria.md` / `redaction.md` も作成済み）。本フェーズではこれらを**再作成しない**。
+- クロスエージェント共有方針は ADR `0009-cross-agent-shared-harness`（Phase 4）として記録。
 
 ## タスク
 
-- [ ] `.claude/rules/` を作成（各ファイル冒頭に paths frontmatter。要点を簡潔に再記述し「詳細は `docs/plan/01-mvp/architecture.md` 参照」と明記。二重記述は最小化）。※ `adr.md`（Phase 3）/ `retrospective-format.md`・`harness-meta-criteria.md`・`redaction.md`（Phase 2）は作成済みのため本フェーズの対象外:
+- [ ] `.claude/rules/` を作成（各ファイル冒頭に paths frontmatter。要点を簡潔に再記述し「詳細は `docs/plan/01-mvp/architecture.md` 参照」と明記。二重記述は最小化）。※ `adr.md`（Phase 4）/ `retrospective-format.md`・`harness-meta-criteria.md`・`redaction.md`（Phase 2）は作成済みのため本フェーズの対象外:
 
 | rule | paths | 要点 |
 |---|---|---|

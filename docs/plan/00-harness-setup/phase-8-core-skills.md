@@ -1,12 +1,12 @@
-# Phase 7 — 中核 Skills
+# Phase 8 — 中核 Skills
 
 ## 目的 / スコープ
 
-開発ループの骨格となる 3 つの Skill を用意する。フェーズの着手・完了・検証を定型化し、エージェントが繰り返し正しく実行できるようにする。（`adr-new` は Phase 3、`dep-update` は Phase 9、`pr-retrospective`/`harness-meta` は Phase 2 で作成）
+開発ループの骨格となる 3 つの Skill を用意する。フェーズの着手・完了・検証を定型化し、エージェントが繰り返し正しく実行できるようにする。（`adr-new` は Phase 4、`dep-update` は Phase 10、`pr-retrospective`/`harness-meta` は Phase 2 で作成）
 
 ## 前提（依存）
 
-- Phase 4（`pnpm verify` が実在）/ Phase 1（`docs/plan/` 構造）/ Phase 3（`finish-phase` が促す `adr-new` が存在）/ Phase 2（`finish-phase` が促す `pr-retrospective` が存在）。
+- Phase 5（`pnpm verify` が実在）/ Phase 1（`docs/plan/` 構造）/ Phase 4（`finish-phase` が促す `adr-new` が存在）/ Phase 2（`finish-phase` が促す `pr-retrospective` が存在）。
 
 ## タスク
 

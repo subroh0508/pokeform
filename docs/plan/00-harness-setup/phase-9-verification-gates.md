@@ -1,21 +1,21 @@
-# Phase 8 — 検証ゲート（Git hooks を主・Claude 補助 hooks）
+# Phase 9 — 検証ゲート（Git hooks を主・Claude 補助 hooks）
 
 ## 目的 / スコープ
 
-**強制ゲートを Git ネイティブフックに寄せ**、Codex・人間・CI 含む全コミッターに効くツール非依存の検証を敷く。Claude 限定の即時フィードバックは補助として併設。Git hooks 採用の決定は Phase 3 で `0005-git-hooks-over-claude-hooks` として ADR 化済み。
+**強制ゲートを Git ネイティブフックに寄せ**、Codex・人間・CI 含む全コミッターに効くツール非依存の検証を敷く。Claude 限定の即時フィードバックは補助として併設。Git hooks 採用の決定は Phase 4 で `0005-git-hooks-over-claude-hooks` として ADR 化済み。
 
 ## 前提（依存）
 
-- Phase 4（`prepare: git config core.hooksPath .githooks` と verify 系 scripts）。
+- Phase 5（`prepare: git config core.hooksPath .githooks` と verify 系 scripts）。
 
 ## タスク
 
 - [ ] `.githooks/pre-commit`（`#!/bin/sh`・実行権限付与）: 高速ゲート = `pnpm typecheck` → `pnpm lint`。失敗で `exit 1`。
   - MVP Phase 2 以降に `pokeform typecheck` を追記する旨をコメントで明示。
 - [ ] `.githooks/pre-push`（`#!/bin/sh`・実行権限付与）: 重ゲート = `pnpm test:cov`（カバレッジ100%）。失敗で `exit 1`。
-- [ ] `core.hooksPath=.githooks` が `prepare`（Phase 4）で設定されることを確認。新規 clone でも `pnpm install` で有効化される。
+- [ ] `core.hooksPath=.githooks` が `prepare`（Phase 5）で設定されることを確認。新規 clone でも `pnpm install` で有効化される。
 - [ ] `.claude/settings.json`:
-  - [ ] `permissions.allow`: `Bash(pnpm *)` / `Bash(npx tsc*)` / `Bash(npx biome*)` / `Bash(git status|add|commit|push *)` / `Bash(gh pr *)`（Phase 9 の dep-update / Phase 2 の pr-retrospective 用）
+  - [ ] `permissions.allow`: `Bash(pnpm *)` / `Bash(npx tsc*)` / `Bash(npx biome*)` / `Bash(git status|add|commit|push *)` / `Bash(gh pr *)`（Phase 10 の dep-update / Phase 2 の pr-retrospective 用）
   - [ ] **PostToolUse** `Edit` if `Edit(src/**/*.ts)` → `.claude/hooks/post-edit-biome.sh`（編集直後の該当 1 ファイルに `biome check`。**任意の即時フィードバック**）
   - [ ] **SessionStart** → `git log --oneline -5`（最小コンテキスト）
   - [ ] commit ブロックの PreToolUse は**置かない**（Git の pre-commit と二重化しない）

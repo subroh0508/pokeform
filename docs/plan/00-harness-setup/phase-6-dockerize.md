@@ -1,12 +1,12 @@
-# Phase 5 — Docker 化（再現可能な dev/CI 環境）
+# Phase 6 — Docker 化（再現可能な dev/CI 環境）
 
 ## 目的 / スコープ
 
-ツールチェーンをコンテナに固定し、ローカル・CI・コーディングエージェント（Codex 含む）が**同一環境**で `verify` を回せるようにする。ライブラリ用途のため**配布用ではなく dev/CI 用**。Docker 化の決定は Phase 3 で `0006-pin-toolchain-and-dockerize` として ADR 化済み。
+ツールチェーンをコンテナに固定し、ローカル・CI・コーディングエージェント（Codex 含む）が**同一環境**で `verify` を回せるようにする。ライブラリ用途のため**配布用ではなく dev/CI 用**。Docker 化の決定は Phase 4 で `0006-pin-toolchain-and-dockerize` として ADR 化済み。
 
 ## 前提（依存）
 
-- Phase 4（`package.json` の scripts / `packageManager` / lockfile が存在）。
+- Phase 5（`package.json` の scripts / `packageManager` / lockfile が存在）。
 
 ## タスク
 
@@ -37,4 +37,4 @@
 
 - `node:24-slim`（Debian slim）はネイティブ依存の互換性が alpine より高め。alpine 採用時は musl 由来の差異に注意。
 - CI（GitHub Actions）で同 `Dockerfile` を使い `verify` する想定はコメントで残す（ワークフロー実装は後続でも可）。
-- ベースイメージ更新は Phase 9 の Dependabot（docker エコシステム）で追従。
+- ベースイメージ更新は Phase 10 の Dependabot（docker エコシステム）で追従。
