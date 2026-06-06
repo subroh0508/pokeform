@@ -32,7 +32,7 @@
   - [ ] 先頭に `@AGENTS.md`。続けて Claude 固有の注記のみ（rules は `paths` 自動ロード / skills は `.claude/skills`（`.agents/skills` は symlink）/ hooks は `.claude/settings.json` / 強制ゲートは `.githooks`）。Claude 固有の上書きは import 行の**下**に置く。
   - [ ] 規約・アーキ詳細は `AGENTS.md` と `@docs/plan/01-mvp/architecture.md` に委譲（本文へ再掲しない）。
 - [ ] **`docs/harness/rules-index.md` を生成**: `scripts/gen-rules-index.ts`（小スクリプト）で `.claude/rules/*.md` の `paths` frontmatter を走査し glob→rule 表を生成。`prepare`/CI で再生成して**ドリフト防止**。手書きしない。
-- [ ] **`.claude/rules/skill-authoring.md`** を作成（paths: `.claude/skills/**`, `.agents/skills/**`）: skill-creator 準拠（description=trigger・≤500 行・説明型・標準構成 役割/入力/出力/Gotchas/関連）+ 「canonical を `.claude/skills/<name>/` 実体に置き `.agents/skills/<name>` を symlink」配置を明文化。
+- [ ] **`.claude/rules/skill-authoring.md`** を作成（paths: `.claude/skills/**`, `.agents/skills/**`）: **skill の新規作成・改修は `skill-creator` skill を利用する**ことを必須として明記（手書きで SKILL.md を起こさず、`skill-creator` に description=trigger・≤500 行・説明型・標準構成（役割/入力/出力/Gotchas/関連）を担保させる）+ 「canonical を `.claude/skills/<name>/` 実体に置き `.agents/skills/<name>` を symlink」配置を明文化。
 - [ ] **`.claude/rules/cross-agent.md`** を作成（常時ロード）: 共有方針の SoT（AGENTS.md=指示 SoT / CLAUDE.md=`@AGENTS.md` / スキル symlink 共有と copy フォールバック手順 / `rules-index.md` 生成 / Git hooks=ゲート SoT）。
 
 ## 受け入れ基準
@@ -41,7 +41,7 @@
 - `CLAUDE.md` は `@AGENTS.md` + Claude 固有注記のみ（≤50 行目安）。`@AGENTS.md` import が解決する。
 - `docs/harness/rules-index.md` が `paths` から生成され、Claude の `@AGENTS.md` 取込には**含まれない**（Codex 等のみが参照）。
 - `src/types/**` を読むと `type-conventions.md` が、`data/**` を読むと `data-pipeline.md`/`game-spec.md` が paths スコープで遅延ロードされる。
-- `skill-authoring.md` / `cross-agent.md` rule が存在し、skill-creator 準拠 + symlink 共有 + copy フォールバックを規定。
+- `skill-authoring.md` / `cross-agent.md` rule が存在し、**skill 作成時の `skill-creator` 利用を必須化** + symlink 共有 + copy フォールバックを規定。
 
 ## 検証手順
 

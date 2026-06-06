@@ -15,14 +15,14 @@
   - [ ] `schedule.interval: weekly`
   - [ ] マイナー/パッチをまとめる `groups`（例 `dev-dependencies`）で PR 数を抑制、`open-pull-requests-limit` を適度に
   - [ ] `commit-message.prefix: "chore(deps)"`（Conventional Commits）
-- [ ] `.claude/skills/dep-update/SKILL.md`（canonical・引数: PR 番号 または 依存名）+ `.agents/skills/dep-update` symlink（クロスエージェント共有・skill-creator 準拠、`cross-agent.md`／Phase 7）:
+- [ ] `.claude/skills/dep-update/SKILL.md`（canonical・引数: PR 番号 または 依存名）+ `.agents/skills/dep-update` symlink（クロスエージェント共有・`skill-creator` skill を使って作成、`skill-authoring.md`／`cross-agent.md`／Phase 7）:
   - frontmatter: `description`（trigger 明示）、`allowed-tools: Bash(gh *) Bash(pnpm *) Read Grep WebFetch`
   - 手順:
     1. **対象特定**: `gh pr view <PR>` で更新パッケージと from→to を取得（依存名なら `gh pr list` で該当 Dependabot PR を検索）
     2. **リリースノート/影響確認**: `gh api`（Releases）/ WebFetch で `from..to` の CHANGELOG・リリースノートを取得し、破壊的変更・非推奨・挙動変更を抽出。`Grep` で当該 API の使用箇所を洗い影響範囲を特定
     3. **検証**: `gh pr checkout` → `pnpm install` → `pnpm verify`。`gh pr checks` で CI も確認
     4. **マージ可否判断（明文化）**: 〈可〉= patch/minor かつ `verify` 緑 かつ 破壊的変更が使用箇所に無い かつ CI 緑。〈要人手〉= major / 破壊的変更が該当 / `verify` 失敗 / CI 赤
-    5. **アクション**: 〈可〉→ 影響サマリを `gh pr comment` で残し `gh pr merge --squash --delete-branch`。〈要人手〉→ リスク要約と推奨対応をコメントしマージせず停止
+    5. **アクション**: 〈可〉→ 影響サマリを `gh pr comment` で残し `gh pr merge --merge --delete-branch`（通常マージ＝merge commit）。〈要人手〉→ リスク要約と推奨対応をコメントしマージせず停止
   - **安全策**: マージは不可逆・外部影響のある操作。〈可〉基準を**すべて**満たす場合のみ自動実行し、1 つでも欠ければ停止して人手へエスカレーション。判定根拠（バージョン差分・該当/非該当の使用箇所・verify 結果）を必ず明示。
 
 ## 受け入れ基準

@@ -10,7 +10,7 @@
 
 ## タスク
 
-> **クロスエージェント共有（全スキル共通）**: 各スキルは **skill-creator 準拠**で `.claude/skills/<name>/SKILL.md` に canonical（実体）を作成し、**`.agents/skills/<name>` を `../../.claude/skills/<name>` への symlink** にして Codex と共有する（`ln -s`）。`description` は trigger（いつ起動するか）を明示。symlink 不可環境は copy 同期にフォールバック（`cross-agent.md`）。
+> **クロスエージェント共有（全スキル共通）**: 各スキルは **`skill-creator` skill を使って** `.claude/skills/<name>/SKILL.md` に canonical（実体）を作成し、**`.agents/skills/<name>` を `../../.claude/skills/<name>` への symlink** にして Codex と共有する（`ln -s`）。`description` は trigger（いつ起動するか）を明示。symlink 不可環境は copy 同期にフォールバック（`skill-authoring.md`／`cross-agent.md`）。
 
 - [ ] `.claude/skills/verify/SKILL.md`:
   - frontmatter: `description`（「検証ゲートを実行して結果を要約。型/テスト/カバレッジ/Lint を確認したいとき」）、`allowed-tools: Bash(pnpm *)`

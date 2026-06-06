@@ -43,7 +43,7 @@ flowchart LR
 
 ## タスク
 
-> **クロスエージェント共有（全スキル共通）**: 各スキルは skill-creator 準拠で `.claude/skills/<name>/SKILL.md` に canonical（実体）を作成し、`.agents/skills/<name>` を `../../.claude/skills/<name>` への symlink にして Codex と共有する。`description` は trigger（いつ起動するか）を明示。symlink 不可環境は copy 同期にフォールバック（`cross-agent.md`／Phase 7）。
+> **クロスエージェント共有（全スキル共通）**: 各スキルは **`skill-creator` skill を使って** `.claude/skills/<name>/SKILL.md` に canonical（実体）を作成し、`.agents/skills/<name>` を `../../.claude/skills/<name>` への symlink にして Codex と共有する。`description` は trigger（いつ起動するか）を明示。symlink 不可環境は copy 同期にフォールバック（`skill-authoring.md`／`cross-agent.md`／Phase 7）。
 
 ### A. rule（共通 SoT）
 
@@ -54,7 +54,7 @@ flowchart LR
   - effort 段階の意味（low/medium=高確度の少数指摘、high=広め）。
   - redaction は `redaction.md`（Phase 2）を参照。
 
-### B. skills（canonical + `.agents` symlink・skill-creator 準拠）
+### B. skills（canonical + `.agents` symlink・`skill-creator` を使って作成）
 
 - [ ] `.claude/skills/code-review/SKILL.md` + `references/code-review-checklist.md` + `.agents/skills/code-review` symlink。
   - frontmatter: `description`（「`src/**`・`scripts/**` を変更した PR / diff をレビューしたいとき。ハーネス設定の変更は `harness-review` を使う」=トリガと SKIP を明示）、`allowed-tools: Bash(git *) Bash(gh pr *) Read Grep`（**指摘のみ・書込なし**）。
@@ -79,7 +79,7 @@ SKILL.md 本体は手順とトリガに絞り、長い観点リストは `refere
 - [ ] **依存の明記**: GitHub の auto-merge は **server-side の required status check** が必須。現状 CI（GitHub Actions）は未整備（Phase 6 Docker に想定コメント、Phase 10 dependabot は github-actions ecosystem 登録のみ）。本フェーズの前提タスクとして以下を記載:
   - [ ] `.github/workflows/ci.yml`: コンテナ内で `pnpm verify` を実行（Phase 6 の `Dockerfile` を再利用）。**ローカル Git hooks は GitHub の merge を gate しない**ため、server-side チェックを別途用意する。
   - [ ] branch protection: `ci` を required check に設定 + 承認 1 を要求。
-- [ ] **auto-merge フロー**: PR open → CI `pnpm verify`（server 機械ゲート）→ エージェントが `code-review` / `harness-review` を実行し指摘 or 承認 → **CI 緑 ＆ ブロッキング指摘なし**なら `gh pr merge --auto --squash`。
+- [ ] **auto-merge フロー**: PR open → CI `pnpm verify`（server 機械ゲート）→ エージェントが `code-review` / `harness-review` を実行し指摘 or 承認 → **CI 緑 ＆ ブロッキング指摘なし**なら `gh pr merge --auto --merge`（通常マージ＝merge commit）。
 - [ ] 承認条件と approve 主体（人間 or 明示ルール）を doc 内で明文化。レビューは提案的であり、最終 approve をどこに置くかを定義する。
 
 ### E. 連携
