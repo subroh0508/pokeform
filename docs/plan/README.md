@@ -19,17 +19,17 @@ pokeform の実装計画は **計画ディレクトリ単位**で分割し、各
 
 ### 00-harness-setup（ハーネス整備）
 
-- [ ] 00-harness-setup / phase-01 — 計画ドキュメント基盤と正本移動
-- [ ] 00-harness-setup / phase-02 — レトロスペクティブ & ハーネス改良ループ
-- [ ] 00-harness-setup / phase-03 — コードレビュー Skill
-- [ ] 00-harness-setup / phase-04 — ADR の仕組み
-- [ ] 00-harness-setup / phase-05 — ツールチェーンとバージョン固定
-- [ ] 00-harness-setup / phase-06 — Docker 化
-- [ ] 00-harness-setup / phase-07 — rules と CLAUDE.md
-- [ ] 00-harness-setup / phase-08 — 中核 Skills
-- [ ] 00-harness-setup / phase-09 — 検証ゲート（Git hooks + Claude 補助 hooks）
-- [ ] 00-harness-setup / phase-10 — Dependabot と dep-update skill
-- [ ] 00-harness-setup / phase-11 — 実装ワークフロー Skill
+- [x] 00-harness-setup / phase-01 — 計画ドキュメント基盤と正本移動
+- [x] 00-harness-setup / phase-02 — レトロスペクティブ & ハーネス改良ループ
+- [x] 00-harness-setup / phase-03 — コードレビュー Skill
+- [x] 00-harness-setup / phase-04 — ADR の仕組み
+- [x] 00-harness-setup / phase-05 — ツールチェーンとバージョン固定
+- [x] 00-harness-setup / phase-06 — Docker 化
+- [x] 00-harness-setup / phase-07 — rules と CLAUDE.md
+- [x] 00-harness-setup / phase-08 — 中核 Skills
+- [x] 00-harness-setup / phase-09 — 検証ゲート（Git hooks + Claude 補助 hooks）
+- [x] 00-harness-setup / phase-10 — Dependabot と dep-update skill
+- [x] 00-harness-setup / phase-11 — 実装ワークフロー Skill
 
 ### 01-mvp（ライブラリ本体）
 
