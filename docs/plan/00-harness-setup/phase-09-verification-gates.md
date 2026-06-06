@@ -2,7 +2,7 @@
 
 ## 目的 / スコープ
 
-**強制ゲートを Git ネイティブフックに寄せ**、Codex・人間・CI 含む全コミッターに効くツール非依存の検証を敷く。Claude 限定の即時フィードバックは補助として併設。Git hooks 採用の決定は Phase 4 で `0005-git-hooks-over-claude-hooks` として ADR 化済み。
+**強制ゲートを Git ネイティブフックに寄せ**、Codex・人間・CI 含む全コミッターに効くツール非依存の検証を敷く。Claude 限定の即時フィードバックは補助として併設。Git hooks 採用の決定は Phase 4 で `0013-git-hooks-over-claude-hooks` として ADR 化済み。
 
 ## 前提（依存）
 

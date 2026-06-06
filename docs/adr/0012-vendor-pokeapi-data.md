@@ -1,10 +1,10 @@
 ---
-id: 0004
+id: 0012
 status: Accepted
 date: 2026-06-07
 ---
 
-# 0004. PokeAPI データは vendor 方式で生成・コミットする
+# 0012. PokeAPI データは vendor 方式で生成・コミットする
 
 ## Context
 

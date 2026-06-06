@@ -55,7 +55,7 @@ flowchart LR
 - **起動導線**: 自動起動は不採用（将来送り）。手動起動、または `finish-phase` skill（Phase 8）末尾の
   「PR merge 後に `pr-retrospective` を起動」促しに乗せる（実装は Phase 8）。
 - **ADR 連携**: `🚀 Try` のアーキ決定は `[adr]` 提案 → Phase 4 の `adr-new` で起票。
-  本ループ導入自体は ADR `0008-kpt-retrospective-loop` としてバックフィル（Phase 4 で起票）。
+  本ループ導入自体は ADR `0015-kpt-retrospective-loop` としてバックフィル（Phase 4 で起票）。
 - **CLAUDE.md**: 本ループの要約を Phase 7 で `CLAUDE.md` / `AGENTS.md` に追記する。
 - **集約 / dry-run**: batch 集約は週次 or 件数閾値（既定 10）。リスキー変更は軽量 dry-run メモのみ
   （定量 dry-run は不採用）。

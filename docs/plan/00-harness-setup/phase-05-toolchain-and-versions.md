@@ -2,7 +2,7 @@
 
 ## 目的 / スコープ
 
-検証コマンド（`pnpm verify`）を**実在させる**ための最小ツールチェーンを用意する。ライブラリのロジックは書かない。採用ツールの決定は ADR `0012`〜`0018`（旧 `0006` を要素別に分割・archive）。版は固定せず SoT（`package.json`/`pnpm-lock.yaml`/`.node-version`）に集約し、メジャー含め追従する（ADR `0017`）。
+検証コマンド（`pnpm verify`）を**実在させる**ための最小ツールチェーンを用意する。ライブラリのロジックは書かない。採用ツールの決定は ADR `0003`〜`0009`（旧 `0002` を要素別に分割・archive）。版は固定せず SoT（`package.json`/`pnpm-lock.yaml`/`.node-version`）に集約し、メジャー含め追従する（ADR `0008`）。
 
 ## 前提（依存）
 
@@ -12,7 +12,7 @@
 
 - [ ] `pnpm init`。`package.json` を編集:
   - [ ] `"type": "module"`
-  - [ ] `"engines": { "node": ">=24" }`（soft floor。pnpm は corepack/packageManager に依存しない＝ADR 0014）
+  - [ ] `"engines": { "node": ">=24" }`（soft floor。pnpm は corepack/packageManager に依存しない＝ADR 0005）
   - [ ] `"scripts"`:
     - `"typecheck": "tsc --noEmit"`
     - `"test": "vitest run"`
@@ -21,7 +21,7 @@
     - `"format": "biome check --write ."`
     - `"verify": "pnpm typecheck && pnpm test:cov && pnpm lint"`
     - `"prepare": "git config core.hooksPath .githooks"`（Phase 9 で使う Git hooks を有効化）
-- [ ] `devDependencies` をインストール: `typescript` / `@biomejs/biome` / `vitest` / `@vitest/coverage-v8`（版は SoT=package.json/lockfile に集約。メジャー含め追従＝ADR 0017）
+- [ ] `devDependencies` をインストール: `typescript` / `@biomejs/biome` / `vitest` / `@vitest/coverage-v8`（版は SoT=package.json/lockfile に集約。メジャー含め追従＝ADR 0008）
 - [ ] `tsconfig.json`（`strict: true`, `moduleResolution: "bundler"`, `noEmit` 既定, `module: ESNext`, `target` は Node 24 相当）
 - [ ] `tsconfig.generated.json`（雛形。`include: ["**/*.generated.ts"]`。本格運用は MVP Phase 2）
 - [ ] `biome.json`（推奨ルール + フォーマッタ設定）

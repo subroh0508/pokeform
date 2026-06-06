@@ -37,7 +37,7 @@ flowchart LR
 - Phase 7（`cross-agent.md` / `skill-authoring.md` rule・レビュー対象となる rules / `AGENTS.md` / `CLAUDE.md` の実在）。
 - Phase 8（skill 基盤・`finish-phase` の促し導線に乗せる先）。
 - Phase 9（機械ゲートとの責務境界の基準・`Bash(gh pr *)` 権限）。
-- Phase 4（本フェーズの決定を ADR `0010-semantic-code-review-skills` として記録）。
+- Phase 4（本フェーズの決定を ADR `0017-semantic-code-review-skills` として記録）。
 - Phase 2（再発性のあるレビュー指摘を learning の `🤖 改善提案` へ流す連携先）。
 - **bootstrap の注記**: レビュー skill は自身の依存（Phase 7/8/9）が揃って初めて後続フェーズ PR を実レビューできる。auto-merge は server-side CI と branch protection（後述・後続で導入）が前提のため、それらが整って以降の PR に適用される。
 
@@ -112,7 +112,7 @@ SKILL.md 本体は手順とトリガに絞り、長い観点リストは `refere
 - 既存の組み込み skill と名前が衝突しない（衝突時は改名済み）。
 - auto-merge が「CI 緑 ＋ レビュー承認」で動作し、どちらかが欠けると止まる。
 - README のフェーズ一覧・役割分担表・受け入れ基準に本フェーズが反映されている。
-- ADR `0010-semantic-code-review-skills` が存在し、`architecture.md` と二重記述になっていない。
+- ADR `0017-semantic-code-review-skills` が存在し、`architecture.md` と二重記述になっていない。
 
 ## 検証手順
 

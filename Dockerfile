@@ -2,9 +2,9 @@
 #
 # 目的: ローカル / CI / コーディングエージェント（Claude Code・Codex）が同一環境で
 #       `pnpm verify`（型 / テスト100% / lint）を回せるようにする。
-# 決定: ADR 0018-dockerize-dev-ci（Docker 化） / 0014-pnpm-package-manager（pnpm・corepack 非依存）。
+# 決定: ADR 0009-dockerize-dev-ci（Docker 化） / 0005-pnpm-package-manager（pnpm・corepack 非依存）。
 #
-# バージョンの SoT は package.json / pnpm-lock.yaml / .node-version（ADR 0017）。
+# バージョンの SoT は package.json / pnpm-lock.yaml / .node-version（ADR 0008）。
 # Node 版は .node-version に整合させ、pnpm は版を固定せず直接インストールする。
 #
 # 将来のマルチステージ化（build/publish 用）の指針:
@@ -18,8 +18,8 @@
 # タグの Node メジャーは .node-version（Node の SoT）に整合させ、更新は Dependabot（docker エコシステム）で追従する。
 FROM node:24-slim AS base
 
-# pnpm は corepack を使わず直接インストールする（ADR 0014）。版は固定せず最新を取り、
-# 依存の再現性は pnpm-lock.yaml で担保する（ADR 0017）。
+# pnpm は corepack を使わず直接インストールする（ADR 0005）。版は固定せず最新を取り、
+# 依存の再現性は pnpm-lock.yaml で担保する（ADR 0008）。
 RUN npm install -g pnpm
 WORKDIR /app
 

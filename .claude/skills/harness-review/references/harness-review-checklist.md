@@ -61,11 +61,11 @@ effort・redaction）の SoT は [`.claude/rules/code-review.md`](../../../rules
 
 - **クロスエージェント整合（canonical + symlink パリティ）**: skill は `.claude/skills/<name>/`（canonical 実体）+
   `.agents/skills/<name>`（相対 symlink `../../.claude/skills/<name>`）。symlink の指す先が正しいか、copy
-  フォールバック時は両側が一致するか。**最重要観点**（ずれると Codex 側だけ壊れる）。→ [[cross-agent]] / ADR 0009 / 0010。
+  フォールバック時は両側が一致するか。**最重要観点**（ずれると Codex 側だけ壊れる）。→ [[cross-agent]] / ADR 0016 / 0017。
 - **redaction**: `docs/harness/` 配下（learning 等）への書き出しで Secrets / 最小 PII が `[REDACTED-*]` 化されて
   いるか。生の token・個人メールが残っていないか。→ [[redaction]]。
 - **ゲート二重化チェック**: skill / hook / CI が機械ゲート（型 / テスト / lint）を**再実装**していないか。既存の
-  `pnpm verify` / `.githooks/` の再利用になっているか。→ ADR 0005。
+  `pnpm verify` / `.githooks/` の再利用になっているか。→ ADR 0013。
 - **設定値の妥当性・秘匿情報非混入**: `.claude/settings.json` / `.githooks/` の権限・実行前提・設定値が妥当で、
   秘匿情報がプレーンテキストで混ざっていないか。
 
@@ -82,7 +82,7 @@ effort・redaction）の SoT は [`.claude/rules/code-review.md`](../../../rules
 ## 6. auto-merge ゲート（発火条件）
 
 レビューは**提案的**。auto-merge は次の **2 条件がともに揃ったとき**のみ `gh pr merge --auto --merge` を予約する
-（[ADR 0010](../../../../docs/adr/0010-semantic-code-review-skills.md) / phase-03 doc）:
+（[ADR 0017](../../../../docs/adr/0017-semantic-code-review-skills.md) / phase-03 doc）:
 
 1. **server-side CI（`.github/workflows/ci.yml` の `pnpm verify`）が緑** — 機械ゲート（required status check）。
 2. **ブロッキング指摘なし** — 本レビューで `blocking` が 0 件。

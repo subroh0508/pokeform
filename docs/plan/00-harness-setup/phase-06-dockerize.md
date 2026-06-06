@@ -2,7 +2,7 @@
 
 ## 目的 / スコープ
 
-ツールチェーンをコンテナで揃え、ローカル・CI・コーディングエージェント（Codex 含む）が**同一環境**で `verify` を回せるようにする。ライブラリ用途のため**配布用ではなく dev/CI 用**。Docker 化の決定は ADR `0018-dockerize-dev-ci`（旧 `0006` を分割・archive）。
+ツールチェーンをコンテナで揃え、ローカル・CI・コーディングエージェント（Codex 含む）が**同一環境**で `verify` を回せるようにする。ライブラリ用途のため**配布用ではなく dev/CI 用**。Docker 化の決定は ADR `0009-dockerize-dev-ci`（旧 `0002` を分割・archive）。
 
 ## 前提（依存）
 
@@ -11,8 +11,8 @@
 ## タスク
 
 - [ ] `Dockerfile`:
-  - [ ] ベース `node:<slim>`（タグの Node メジャーは `.node-version` に整合。版は SoT に従い固定方針は持たない＝ADR 0017）
-  - [ ] pnpm は corepack を使わず直接インストール（`npm install -g pnpm`＝ADR 0014。版は固定しない）
+  - [ ] ベース `node:<slim>`（タグの Node メジャーは `.node-version` に整合。版は SoT に従い固定方針は持たない＝ADR 0008）
+  - [ ] pnpm は corepack を使わず直接インストール（`npm install -g pnpm`＝ADR 0005。版は固定しない）
   - [ ] `pnpm-lock.yaml` を先にコピー → `pnpm install --frozen-lockfile`（レイヤキャッシュ）→ ソースをコピー
   - [ ] デフォルト `CMD ["pnpm", "verify"]`
   - [ ] 将来の build/publish 用にマルチステージ化できる構造をコメントで明示

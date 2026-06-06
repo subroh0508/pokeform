@@ -1,14 +1,14 @@
 ---
-id: 0015
+id: 0006
 status: Accepted
 date: 2026-06-07
 ---
 
-# 0015. テストランナーに Vitest を採用する
+# 0006. テストランナーに Vitest を採用する
 
 ## Context
 
-検証ゲート（[ADR 0005](./0005-git-hooks-over-claude-hooks.md)）はテストとカバレッジ 100% を含む（`pnpm test:cov`）。TypeScript（[ADR 0012](./0012-typescript-language.md)）/ ESM で書くコードを、設定の手間少なく実行・計測できるテストランナーが要る。具体バージョンには言及しない（版の SoT は [ADR 0017](./0017-toolchain-version-source-of-truth.md)）。
+検証ゲート（[ADR 0013](./0013-git-hooks-over-claude-hooks.md)）はテストとカバレッジ 100% を含む（`pnpm test:cov`）。TypeScript（[ADR 0003](./0003-typescript-language.md)）/ ESM で書くコードを、設定の手間少なく実行・計測できるテストランナーが要る。具体バージョンには言及しない（版の SoT は [ADR 0008](./0008-toolchain-version-source-of-truth.md)）。
 
 ## Decision
 
@@ -18,7 +18,7 @@ date: 2026-06-07
 
 - **良い点**: TS/ESM をそのまま実行でき設定が軽い。カバレッジ(v8)込みで verify ゲートに直結。高速。
 - **悪い点 / コスト**: Jest ほどのプラグイン資産の蓄積は無い。
-- **トレードオフ / 留意点**: 機械ゲート（カバレッジ閾値）は Git hooks / CI 側で強制し、テストランナーの選択に依存させない（[ADR 0005]）。
+- **トレードオフ / 留意点**: 機械ゲート（カバレッジ閾値）は Git hooks / CI 側で強制し、テストランナーの選択に依存させない（[ADR 0013]）。
 
 ## Alternatives Considered
 
