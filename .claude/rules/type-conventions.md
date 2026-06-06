@@ -14,7 +14,9 @@ description: 型表現の統一パターン（`XxxBase` + `XxxDex` + `XxxId = ke
 エントリ種別ごとに**3 点セット**を定義する:
 
 - **親型 `XxxBase`**: 構造的に共通な形（`id` / `name: { en; ja }` / その他フィールド）。
-- **`XxxDex` インターフェース**: 各エントリを子型として specialize し、**ID をキーに集約**（`XxxDex[Id]` でルックアップ）。
+- **`XxxDex`**: 各エントリを ID キーに集約した型（`XxxDex[Id]` でルックアップ）。生成物では値
+  `export const xxxDex = {...} as const` から **`type XxxDex = typeof xxxDex` で派生**し、値と型を
+  単一ソース化する（手書き interface でなく derive・親型適合は `satisfies` / `Assignable` で検証）。
 - **`XxxId = keyof XxxDex`**: ID の union を `Dex` から導出する。
 
 対象は `SpeciesDex`/`SpeciesId`・`MoveDex`/`MoveId`・`TypeDex`/`PokemonType`・`AbilityDex`/`AbilityId`・`ItemDex`/`ItemId`。巨大 union の分配コストを避けるため、**制約は `SpeciesDex[S]` のプロパティアクセス主体**で行う（union を直接配らない）。
