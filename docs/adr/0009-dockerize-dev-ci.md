@@ -12,7 +12,7 @@ date: 2026-06-07
 
 ## Decision
 
-**dev / CI 用に Docker 化**する（配布用ではない）。Node 公式 slim イメージをベースに、pnpm は **corepack を使わず直接インストール**（`npm install -g pnpm`、ADR 0005）、`pnpm install --frozen-lockfile` で lockfile に従って依存を再現し、`CMD ["pnpm","verify"]` を既定にする。ベースイメージの Node 版は **`.node-version`（Node の SoT、ADR 0008）に整合**させ、更新は Dependabot（docker エコシステム）で追従する。CI（GitHub Actions）も同 Dockerfile を build して `pnpm verify` する。
+**dev / CI 用に Docker 化**する（配布用ではない）。Node 公式 slim イメージをベースに、pnpm は **corepack を使わず直接インストール**（`npm install -g pnpm`、[ADR 0005](./0005-pnpm-package-manager.md)）、`pnpm install --frozen-lockfile` で lockfile に従って依存を再現し、`CMD ["pnpm","verify"]` を既定にする。ベースイメージの Node 版は **`.node-version`（Node の SoT、[ADR 0008](./0008-toolchain-version-source-of-truth.md)）に整合**させ、更新は Dependabot（docker エコシステム）で追従する。CI（GitHub Actions）も同 Dockerfile を build して `pnpm verify` する。
 
 ## Consequences
 
