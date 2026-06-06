@@ -6,7 +6,7 @@
 
 ## クロスエージェント共有方針（全フェーズ共通の前提）
 
-ハーネスは **Claude Code と Codex の両方**で使う。二重管理を避けるため、以降の全フェーズで次を守る（詳細は Phase 6 の `cross-agent.md` rule / ADR `0009`）:
+ハーネスは **Claude Code と Codex の両方**で使う。二重管理を避けるため、以降の全フェーズで次を守る（詳細は Phase 7 の `cross-agent.md` rule / ADR `0009`）:
 
 - **指示の SoT = `AGENTS.md`**（Codex ネイティブ読込）。`CLAUDE.md` は `@AGENTS.md` の薄いアダプタ（公式 Pattern 0）。
 - **スキルは canonical を `.claude/skills/<name>/` 実体に置き、`.agents/skills/<name>` を symlink** で共有（編集 1 箇所）。skill-creator 準拠で作成。

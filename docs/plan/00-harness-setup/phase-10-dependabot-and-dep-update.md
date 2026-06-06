@@ -1,4 +1,4 @@
-# Phase 9 — Dependabot と dep-update skill
+# Phase 10 — Dependabot と dep-update skill
 
 ## 目的 / スコープ
 
@@ -6,7 +6,7 @@
 
 ## 前提（依存）
 
-- Phase 8（`.claude/settings.json` の `Bash(gh pr *)` 権限）/ Phase 4（`pnpm verify`）/ Phase 5（docker エコシステムの対象 `Dockerfile`）。
+- Phase 9（`.claude/settings.json` の `Bash(gh pr *)` 権限）/ Phase 5（`pnpm verify`）/ Phase 6（docker エコシステムの対象 `Dockerfile`）。
 
 ## タスク
 
@@ -15,7 +15,7 @@
   - [ ] `schedule.interval: weekly`
   - [ ] マイナー/パッチをまとめる `groups`（例 `dev-dependencies`）で PR 数を抑制、`open-pull-requests-limit` を適度に
   - [ ] `commit-message.prefix: "chore(deps)"`（Conventional Commits）
-- [ ] `.claude/skills/dep-update/SKILL.md`（canonical・引数: PR 番号 または 依存名）+ `.agents/skills/dep-update` symlink（クロスエージェント共有・skill-creator 準拠、`cross-agent.md`／Phase 6）:
+- [ ] `.claude/skills/dep-update/SKILL.md`（canonical・引数: PR 番号 または 依存名）+ `.agents/skills/dep-update` symlink（クロスエージェント共有・skill-creator 準拠、`cross-agent.md`／Phase 7）:
   - frontmatter: `description`（trigger 明示）、`allowed-tools: Bash(gh *) Bash(pnpm *) Read Grep WebFetch`
   - 手順:
     1. **対象特定**: `gh pr view <PR>` で更新パッケージと from→to を取得（依存名なら `gh pr list` で該当 Dependabot PR を検索）
@@ -38,4 +38,4 @@
 ## リスク・備考
 
 - 自動マージは〈可〉基準を厳格に満たす場合のみ。少しでも不確実なら人手へ。
-- docker エコシステムにより Node ベースイメージ更新も PR 化される（Phase 5 のバージョン整合チェックと連携）。
+- docker エコシステムにより Node ベースイメージ更新も PR 化される（Phase 6 のバージョン整合チェックと連携）。
