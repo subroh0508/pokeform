@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # Phase 6 の Dockerfile を build してコンテナ内で `pnpm verify` を実行する。
       # ツールチェーンの版は Dockerfile / package.json / .node-version が SoT（ADR 0008）。
