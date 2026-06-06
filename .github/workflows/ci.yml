@@ -32,8 +32,19 @@ jobs:
       # Phase 6 の Dockerfile を build してコンテナ内で `pnpm verify` を実行する。
       # ツールチェーンの版は Dockerfile / package.json / .node-version が SoT（ADR 0017）。
       # ワークフロー側でバージョンを多重管理しない。
+      # ベースイメージ取得（Docker Hub）は一過性の i/o timeout が起き得るため、build はリトライする。
       - name: Build CI image
-        run: docker build -t pokeform-ci .
+        run: |
+          for attempt in 1 2 3; do
+            echo "::group::docker build (attempt $attempt)"
+            if docker build -t pokeform-ci .; then
+              echo "::endgroup::"; exit 0
+            fi
+            echo "::endgroup::"
+            echo "build failed (attempt $attempt); retrying after backoff..."
+            sleep $((attempt * 15))
+          done
+          echo "docker build failed after 3 attempts"; exit 1
 
       - name: Run pnpm verify in container
         run: docker run --rm pokeform-ci
