@@ -10,7 +10,7 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 **詳細手順の唯一の正本**。skill 本体（SKILL.md）は ≤500 行に収めるため概要に留め、各フェーズの
 入出力・成功条件・失敗時 fallback・worktree 基盤の規律は本 rule に逃がす（progressive disclosure）。
 
-> 決定の「なぜ」は [ADR 0011](../../docs/adr/0011-implementation-workflow-orchestrator.md)、
+> 決定の「なぜ」は [ADR 0018](../../docs/adr/0018-implementation-workflow-orchestrator.md)、
 > 役割分担・受け入れ基準は [`docs/plan/00-harness-setup/phase-11-implementation-workflow.md`](../../docs/plan/00-harness-setup/phase-11-implementation-workflow.md) と
 > [README](../../docs/plan/00-harness-setup/README.md)。本 rule はそれらと**二重記述しない**（手順の SoT に専念）。
 
@@ -18,7 +18,7 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 
 **確定した Plan / Phase の実装は、原則すべて本 skill 経由で駆動する**。本 skill は単に「用意された部品」ではなく、
 **実装の標準エントリポイント**。エージェントが着手〜マージの繋ぎ方を都度判断することを避け、定型化された
-ワークフローに統一する（[ADR 0011](../../docs/adr/0011-implementation-workflow-orchestrator.md)）。
+ワークフローに統一する（[ADR 0018](../../docs/adr/0018-implementation-workflow-orchestrator.md)）。
 例外は trivial な単発編集や会話的応答のみで、フェーズ単位の実装ではこれを既定とする。
 
 ## 設計の核（なぜこの形か）
@@ -116,7 +116,7 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
   必要なら `git rebase origin/main`（競合解決）→ `gh pr ready`（Draft 解除）→
   **CI 緑 ＋ ブロッキング指摘なしで `gh pr merge --auto --merge`**（通常マージ = merge commit）。
 - **成功条件**: PR が auto-merge 予約済み / MERGED。
-- **不変条件（auto-merge 委譲）**: マージ可否ゲートは [ADR 0010](../../docs/adr/0010-semantic-code-review-skills.md)
+- **不変条件（auto-merge 委譲）**: マージ可否ゲートは [ADR 0017](../../docs/adr/0017-semantic-code-review-skills.md)
   / [[code-review]] の auto-merge に**委譲**する。本 skill は独自のマージ規約（独自の「auto-merge 禁止」や
   人間 approve 必須型）を**導入しない**。将来 Phase 3 のゲートを見直す場合は本 rule と Phase 3 を**同時更新**する。
 
@@ -149,7 +149,7 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
   heredoc 直送・`--template` と `--body-file` 同時指定を避ける。
 - **worktree 規律**: 絶対パス・Phase 0 冒頭で `git fetch origin main`・unstaged は `git stash push -u`・
   **Phase 0 と Phase 9 はペア**・未マージ時は強制削除しない。
-- **auto-merge 委譲**: マージゲートは Phase 3（ADR 0010）に委譲。独自マージ規約を導入しない。
+- **auto-merge 委譲**: マージゲートは Phase 3（ADR 0017）に委譲。独自マージ規約を導入しない。
 
 ## 取り込まないもの
 
@@ -164,6 +164,6 @@ README 進捗更新で代替し、学びは `pr-retrospective` が担う。
   [`code-review`](../skills/code-review/SKILL.md) / [`harness-review`](../skills/harness-review/SKILL.md) /
   [`finish-phase`](../skills/finish-phase/SKILL.md) / [`adr-new`](../skills/adr-new/SKILL.md) /
   [`pr-retrospective`](../skills/pr-retrospective/SKILL.md)。
-- 決定の「なぜ」: [ADR 0011](../../docs/adr/0011-implementation-workflow-orchestrator.md) /
-  マージゲート [ADR 0010](../../docs/adr/0010-semantic-code-review-skills.md)。
+- 決定の「なぜ」: [ADR 0018](../../docs/adr/0018-implementation-workflow-orchestrator.md) /
+  マージゲート [ADR 0017](../../docs/adr/0017-semantic-code-review-skills.md)。
 - 規約: [[skill-authoring]] / [[cross-agent]] / [[code-review]] / [[retrospective-format]] / [[redaction]]。

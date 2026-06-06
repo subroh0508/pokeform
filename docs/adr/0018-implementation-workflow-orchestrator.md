@@ -1,10 +1,10 @@
 ---
-id: 0011
+id: 0018
 status: Accepted
 date: 2026-06-07
 ---
 
-# 0011. 実装は原則 `implementation-workflow` skill 経由で駆動する
+# 0018. 実装は原則 `implementation-workflow` skill 経由で駆動する
 
 ## Context
 
@@ -12,7 +12,7 @@ date: 2026-06-07
 
 ## Decision
 
-**確定した Plan / Phase の実装は、原則として `implementation-workflow` skill 経由で駆動する**（オーケストレーターを「置く」だけでなく、実装の標準エントリポイントとして使うことを既定とする）。同 skill は Phase 0〜9（worktree 作成 + main fetch → `start-phase` で計画読込 → 整合性チェック → 実装 + `pnpm verify`（fix loop 上限 3）→ セルフ検証 → Draft PR → 独立レビュー（`code-review` / `harness-review` を `Agent` で起動）→ auto-merge → `finish-phase` + `pr-retrospective` → worktree 削除）を多段で駆動する。**既存 skill を再利用して束ねる**ことを主眼とし、機械ゲートやレビュー観点を再実装しない。マージ工程は [ADR 0010](./0010-semantic-code-review-skills.md) の auto-merge ゲートに委譲し、独自のマージ規約は導入しない。worktree で並走を物理分離する。例外（trivial な単発編集や会話的応答）は skill を介さなくてよいが、フェーズ単位の実装では原則これを使う。SKILL.md 本体 ≤500 行、詳細手順と「全実装を原則 skill 経由」の原則は `.claude/rules/implementation-workflow.md` に記す。詳細は `docs/plan/00-harness-setup/phase-11-implementation-workflow.md`。
+**確定した Plan / Phase の実装は、原則として `implementation-workflow` skill 経由で駆動する**（オーケストレーターを「置く」だけでなく、実装の標準エントリポイントとして使うことを既定とする）。同 skill は Phase 0〜9（worktree 作成 + main fetch → `start-phase` で計画読込 → 整合性チェック → 実装 + `pnpm verify`（fix loop 上限 3）→ セルフ検証 → Draft PR → 独立レビュー（`code-review` / `harness-review` を `Agent` で起動）→ auto-merge → `finish-phase` + `pr-retrospective` → worktree 削除）を多段で駆動する。**既存 skill を再利用して束ねる**ことを主眼とし、機械ゲートやレビュー観点を再実装しない。マージ工程は [ADR 0017](./0017-semantic-code-review-skills.md) の auto-merge ゲートに委譲し、独自のマージ規約は導入しない。worktree で並走を物理分離する。例外（trivial な単発編集や会話的応答）は skill を介さなくてよいが、フェーズ単位の実装では原則これを使う。SKILL.md 本体 ≤500 行、詳細手順と「全実装を原則 skill 経由」の原則は `.claude/rules/implementation-workflow.md` に記す。詳細は `docs/plan/00-harness-setup/phase-11-implementation-workflow.md`。
 
 ## Consequences
 

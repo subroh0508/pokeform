@@ -19,7 +19,7 @@ auto-merge の実行はしない（書込は PR コメントのみ）。
 
 > 共通基準（健全性の純改善・機械ゲート非再実行・指摘フォーマット・effort・redaction）の SoT は
 > [`.claude/rules/code-review.md`](../../rules/code-review.md)。観点チェックリストの実体は
-> [`references/code-review-checklist.md`](./references/code-review-checklist.md)。背景は [ADR 0010](../../../docs/adr/0010-semantic-code-review-skills.md)。
+> [`references/code-review-checklist.md`](./references/code-review-checklist.md)。背景は [ADR 0017](../../../docs/adr/0017-semantic-code-review-skills.md)。
 
 ## なぜこの skill があるか
 

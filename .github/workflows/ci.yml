@@ -2,9 +2,9 @@
 #
 # 目的: GitHub 上の PR を `pnpm verify`（型 / テスト100% / Biome）で gate する。
 #       ローカル Git hooks（.githooks/）は GitHub の merge を gate しないため、
-#       auto-merge には server-side のチェックが別途必要（ADR 0010 / phase-03-code-review）。
+#       auto-merge には server-side のチェックが別途必要（ADR 0017 / phase-03-code-review）。
 # 環境: Phase 6 の Dockerfile を再利用し、ローカル / CI / エージェントで同一ツールチェーンを使う
-#       （ADR 0006）。Dockerfile が CMD ["pnpm", "verify"] を実行する。
+#       （ADR 0009-dockerize-dev-ci）。Dockerfile が CMD ["pnpm", "verify"] を実行する。
 #
 # branch protection で本ワークフローの `verify` job を required status check に設定すると、
 # 「CI 緑 + レビュー承認」で auto-merge（gh pr merge --auto）が回る。
@@ -30,10 +30,21 @@ jobs:
         uses: actions/checkout@v4
 
       # Phase 6 の Dockerfile を build してコンテナ内で `pnpm verify` を実行する。
-      # ツールチェーン（Node 24 / pnpm 11.5.2）は Dockerfile が packageManager から固定するため、
+      # ツールチェーンの版は Dockerfile / package.json / .node-version が SoT（ADR 0008）。
       # ワークフロー側でバージョンを多重管理しない。
+      # ベースイメージ取得（Docker Hub）は一過性の i/o timeout が起き得るため、build はリトライする。
       - name: Build CI image
-        run: docker build -t pokeform-ci .
+        run: |
+          for attempt in 1 2 3; do
+            echo "::group::docker build (attempt $attempt)"
+            if docker build -t pokeform-ci .; then
+              echo "::endgroup::"; exit 0
+            fi
+            echo "::endgroup::"
+            echo "build failed (attempt $attempt); retrying after backoff..."
+            sleep $((attempt * 15))
+          done
+          echo "docker build failed after 3 attempts"; exit 1
 
       - name: Run pnpm verify in container
         run: docker run --rm pokeform-ci

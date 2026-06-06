@@ -2,30 +2,30 @@
 
 ## 目的 / スコープ
 
-ツールチェーンをコンテナに固定し、ローカル・CI・コーディングエージェント（Codex 含む）が**同一環境**で `verify` を回せるようにする。ライブラリ用途のため**配布用ではなく dev/CI 用**。Docker 化の決定は Phase 4 で `0006-pin-toolchain-and-dockerize` として ADR 化済み。
+ツールチェーンをコンテナで揃え、ローカル・CI・コーディングエージェント（Codex 含む）が**同一環境**で `verify` を回せるようにする。ライブラリ用途のため**配布用ではなく dev/CI 用**。Docker 化の決定は ADR `0009-dockerize-dev-ci`（旧 `0002` を分割・archive）。
 
 ## 前提（依存）
 
-- Phase 5（`package.json` の scripts / `packageManager` / lockfile が存在）。
+- Phase 5（`package.json` の scripts / lockfile が存在）。
 
 ## タスク
 
 - [ ] `Dockerfile`:
-  - [ ] ベース `node:24-slim`（LTS・ピン留め）
-  - [ ] `corepack enable` → `corepack prepare pnpm@11.5.1 --activate`（`packageManager` と一致）
+  - [ ] ベース `node:<slim>`（タグの Node メジャーは `.node-version` に整合。版は SoT に従い固定方針は持たない＝ADR 0008）
+  - [ ] pnpm は corepack を使わず直接インストール（`npm install -g pnpm`＝ADR 0005。版は固定しない）
   - [ ] `pnpm-lock.yaml` を先にコピー → `pnpm install --frozen-lockfile`（レイヤキャッシュ）→ ソースをコピー
   - [ ] デフォルト `CMD ["pnpm", "verify"]`
   - [ ] 将来の build/publish 用にマルチステージ化できる構造をコメントで明示
 - [ ] `.dockerignore`: `node_modules` / `dist` / `coverage` / `data/raw` / `.git` / `*.log`
 - [ ] `compose.yaml`: 開発用サービス（カレントをマウント、`pnpm-store` をボリュームキャッシュ、`command: pnpm verify` または対話シェル）
-- [ ] **バージョン整合**: `Dockerfile` の Node、`engines.node`、`.node-version`、`packageManager` の pnpm を**すべて一致**させる
+- [ ] **Node 版整合**: `Dockerfile` のタグ / `engines.node` / `.node-version` を整合させる（pnpm は版を固定しない）
 
 ## 受け入れ基準
 
 - `docker build -t pokeform .` が成功する。
 - `docker compose run --rm app pnpm verify` がコンテナ内で緑。
-- コンテナ内 `node -v`（v24）/ `pnpm -v`（11.5.1）が確認できる。
-- 4 箇所（Dockerfile / engines / .node-version / packageManager）のバージョンが一致している。
+- コンテナ内 `node -v` が `.node-version` に整合し、`pnpm -v` が取得できる。
+- Node 版が `Dockerfile` タグ / `engines.node` / `.node-version` で一致している。
 
 ## 検証手順
 

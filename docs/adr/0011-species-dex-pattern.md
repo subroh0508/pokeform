@@ -1,14 +1,14 @@
 ---
-id: 0003
+id: 0011
 status: Accepted
 date: 2026-06-07
 ---
 
-# 0003. 種族・技・タイプ・特性・持ち物を `XxxBase` + `XxxDex` パターンで統一し、種族粒度で表現する
+# 0011. 種族・技・タイプ・特性・持ち物を `XxxBase` + `XxxDex` パターンで統一し、種族粒度で表現する
 
 ## Context
 
-全国図鑑 1000+ 種スケールのポケモンデータを TypeScript の型で表現する必要がある。巨大 union（`VoltTackle | … 1000+`）は tsc の分配コストが重く、[ADR 0002](./0002-tsc-only-verification.md)（tsc のみ検証）の性能前提を壊しかねない。また、種族値が変わるフォルム/リージョン/メガ（`charizard` と `charizard-mega-x` 等）をどう同一視・区別するかの粒度も定める必要がある。英名（安定 ID）と日本語名の双方で記述できる入力も要件。
+全国図鑑 1000+ 種スケールのポケモンデータを TypeScript の型で表現する必要がある。巨大 union（`VoltTackle | … 1000+`）は tsc の分配コストが重く、[ADR 0010](./0010-tsc-only-verification.md)（tsc のみ検証）の性能前提を壊しかねない。また、種族値が変わるフォルム/リージョン/メガ（`charizard` と `charizard-mega-x` 等）をどう同一視・区別するかの粒度も定める必要がある。英名（安定 ID）と日本語名の双方で記述できる入力も要件。
 
 ## Decision
 

@@ -4,7 +4,7 @@
 `core.hooksPath=.githooks` は `package.json` の `prepare` スクリプト（Phase 5）で設定され、
 新規 clone でも `pnpm install` だけで自動有効化される（追加依存なし）。
 
-採用判断は ADR `0005-git-hooks-over-claude-hooks`。
+採用判断は ADR `0013-git-hooks-over-claude-hooks`。
 
 ## フック
 

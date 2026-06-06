@@ -11,7 +11,7 @@ description: PR マージ前の意味的レビュー（code-review / harness-rev
 
 # code-review — 意味的レビューの共通規約（SoT）
 
-機械ゲート（[ADR 0005](../../docs/adr/0005-git-hooks-over-claude-hooks.md) の Git hooks: 型 / カバレッジ100% / Biome）と merge **後**の KPT レトロ（[ADR 0008](../../docs/adr/0008-kpt-retrospective-loop.md)）の間に欠ける「**PR マージ前の、判断を要する意味的レビュー**」を担う。背景と決定は [ADR 0010](../../docs/adr/0010-semantic-code-review-skills.md)。
+機械ゲート（[ADR 0013](../../docs/adr/0013-git-hooks-over-claude-hooks.md) の Git hooks: 型 / カバレッジ100% / Biome）と merge **後**の KPT レトロ（[ADR 0015](../../docs/adr/0015-kpt-retrospective-loop.md)）の間に欠ける「**PR マージ前の、判断を要する意味的レビュー**」を担う。背景と決定は [ADR 0017](../../docs/adr/0017-semantic-code-review-skills.md)。
 
 レビューは対象によって観点が本質的に異なるため 2 skill に分割する。本 rule はその**共通基準**で、観点チェックリストの実体は各 skill の `references/` にある:
 
@@ -58,10 +58,10 @@ description: PR マージ前の意味的レビュー（code-review / harness-rev
 
 ## 連携（一方向）
 
-再発性のあるレビュー指摘は、[ADR 0008](../../docs/adr/0008-kpt-retrospective-loop.md) の KPT learning（`docs/harness/learnings/*`）の `🤖 ハーネス改善提案`（`[rule]` / `[skill]`）へ**一方向**に流す。`pr-retrospective` は PR review コメントを収集するため、指摘は自然に learning の素材になる。構造は [[retrospective-format]]。
+再発性のあるレビュー指摘は、[ADR 0015](../../docs/adr/0015-kpt-retrospective-loop.md) の KPT learning（`docs/harness/learnings/*`）の `🤖 ハーネス改善提案`（`[rule]` / `[skill]`）へ**一方向**に流す。`pr-retrospective` は PR review コメントを収集するため、指摘は自然に learning の素材になる。構造は [[retrospective-format]]。
 
 ## 関連
 
-- 決定の「なぜ」: [ADR 0010](../../docs/adr/0010-semantic-code-review-skills.md)。
+- 決定の「なぜ」: [ADR 0017](../../docs/adr/0017-semantic-code-review-skills.md)。
 - 機械ゲート: [`testing`](./testing.md) / [`tsc-verification`](./tsc-verification.md) / `.githooks/`。
 - skill 作成方針: [[skill-authoring]] / cross-agent 配置: [[cross-agent]]。

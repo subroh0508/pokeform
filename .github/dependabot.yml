@@ -1,9 +1,9 @@
 # Dependabot — 依存の自動更新（npm / github-actions / docker）
 #
-# 目的: ツールチェーン（Node 24 / pnpm / TypeScript / Vitest / Biome 等）と
+# 目的: ツールチェーン（Node / pnpm / TypeScript / Vitest / Biome 等）と
 #       GitHub Actions・Docker ベースイメージの更新を PR 化し、`dep-update` skill で
 #       レビュー → マージ可否判断 → 実行まで安全に回せるようにする。
-# 方針: メジャーは確定版を固定（README「確定バージョン」表）、マイナー/パッチは追従。
+# 方針: メジャー含め最新追従（ADR 0008）。版を固定せず、`pnpm verify` / CI 緑で取り込む。
 #       PR 乱立を防ぐため groups でまとめ、open-pull-requests-limit を絞る。
 # 連携: 生成された PR は `dep-update <PR>` skill が破壊的変更・verify・CI を確認して判定する。
 version: 2

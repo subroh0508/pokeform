@@ -10,7 +10,7 @@
 
 - Phase 1（`architecture.md` の移動完了。rules はこの新パスを参照）。
 - Phase 4（`adr.md` rule は既に作成済み）。Phase 2（`retrospective-format.md` / `harness-meta-criteria.md` / `redaction.md` も作成済み）。本フェーズではこれらを**再作成しない**。
-- クロスエージェント共有方針は ADR `0009-cross-agent-shared-harness`（Phase 4）として記録。
+- クロスエージェント共有方針は ADR `0016-cross-agent-shared-harness`（Phase 4）として記録。
 
 ## タスク
 
