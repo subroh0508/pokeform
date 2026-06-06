@@ -1,0 +1,25 @@
+# data/champions/regulation.yaml — 各レギュレーションの解禁種族許可リスト（PokeAPI に無い情報・手動）。
+# species は SpeciesId（kebab-case 安定キー）。生成時に各種族の regulations 配列へ逆引きされる。
+# 正本は .claude/rules/data-pipeline.md / docs/plan/01-mvp/architecture.md。
+regulations:
+  champions-m-a:
+    name: { en: "Champions Regulation M-A", ja: "チャンピオンズ レギュレーションM-A" }
+    allow:
+      - garchomp
+      - dragonite
+      - salamence
+      - metagross
+      - rotom-wash
+      - charizard
+      - charizard-mega-x
+  champions-m-b:
+    name: { en: "Champions Regulation M-B", ja: "チャンピオンズ レギュレーションM-B" }
+    allow:
+      - garchomp
+      - dragonite
+      - salamence
+      - metagross
+      - rotom-wash
+      - charizard
+      - charizard-mega-x
+      - mewtwo

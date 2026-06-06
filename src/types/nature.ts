@@ -1,4 +1,4 @@
-import type { StatKey } from "./stats";
+import type { StatKey } from "./stats.ts";
 
 /**
  * 性格補正の指定。上げ能力（×1.1）と下げ能力（×0.9）を 1 つずつ選ぶ。

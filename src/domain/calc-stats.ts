@@ -1,5 +1,5 @@
-import type { NatureSpec } from "../types/nature";
-import type { BaseStats, PointAllocation, RealStats, StatKey } from "../types/stats";
+import type { NatureSpec } from "../types/nature.ts";
+import type { BaseStats, PointAllocation, RealStats, StatKey } from "../types/stats.ts";
 
 /**
  * 実数値計算（純関数・I/O 非依存）。Lv50・個体値31 固定を代入済みの確定式を実装する。
