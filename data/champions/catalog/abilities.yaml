@@ -4,23 +4,52 @@
 # この id を参照する（カタログに無い id を種族が参照すると生成段でエラー = 整合担保）。
 #
 # 初期値は roster の代表種から自動収集していた特性集合を seed にしている（取りこぼし防止）。以後は
-# append-only: 新種族の追加で増える特性を手動追記し、没収されても消さない。
+# append-only: 新種族の追加で増える特性を手動追記し、没収されても消さない。種族追加時は
+# `data/raw/pokemon/<slug>.json` の abilities から機械的に集めると漏れない（survey-regulation skill）。
 #
 # abilities: PokeAPI の ability slug（sort 済み）。
 abilities:
+  - anger-point
   - blaze
   - clear-body
+  - competitive
   - cursed-body
+  - cute-charm
+  - flame-body
+  - flash-fire
+  - gale-wings
+  - guts
+  - heavy-metal
   - infiltrator
   - inner-focus
   - intimidate
+  - justified
   - levitate
   - light-metal
+  - long-reach
+  - magic-guard
+  - marvel-scale
+  - mirror-armor
+  - mold-breaker
   - moxie
   - multiscale
+  - overgrow
   - pressure
+  - protean
+  - purifying-salt
+  - rain-dish
+  - rock-head
   - rough-skin
+  - sand-force
+  - sand-rush
+  - sand-stream
   - sand-veil
   - solar-power
+  - steadfast
+  - sturdy
+  - swarm
+  - synchronize
+  - torrent
   - tough-claws
+  - unaware
   - unnerve
