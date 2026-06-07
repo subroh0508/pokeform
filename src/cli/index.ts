@@ -4,6 +4,7 @@ import type { Lang } from "../types/party.ts";
 import { runAnalyzeCoverage } from "./commands/analyze-coverage.ts";
 import { runCheckParty } from "./commands/check-party.ts";
 import { runCompile, runTypecheck } from "./commands/compile.ts";
+import { runStat } from "./commands/stat.ts";
 
 /**
  * pokeform CLI（cac ルータ・薄い配線層・カバレッジ対象外）。各コマンドの実体は
@@ -26,6 +27,13 @@ cli
   .option("--lang <lang>", "表示言語 (ja|en)", { default: "ja" })
   .action(async (path: string, options: { lang?: string }) => {
     process.exitCode = await runAnalyzeCoverage(path, toLang(options.lang));
+  });
+
+cli
+  .command("stat <path>", "個体の実数値 / 性格補正 / ポイント配分 / 耐久指数を表示（壁打ち補助）")
+  .option("--lang <lang>", "表示言語 (ja|en)", { default: "ja" })
+  .action(async (path: string, options: { lang?: string }) => {
+    process.exitCode = await runStat(path, toLang(options.lang));
   });
 
 cli
