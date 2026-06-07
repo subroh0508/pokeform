@@ -353,7 +353,7 @@ members:
 | `pokeform check:individual <path>` | 個体整合: 覚えない技・使えない特性・存在しないフォルム・性格 up=down・ポイント 66/32。codegen→tsc | Phase 2 |
 | `pokeform compile <path>` | YAML/MD → `*.generated.ts` 出力（検証の前処理） | Phase 2 |
 | `pokeform typecheck <path>` | compile → `tsc -p tsconfig.generated.json --noEmit` → 診断整形 | Phase 2 |
-| `pokeform stat <path>` | 個体の実数値計算表示（壁打ち補助） | 将来 |
+| `pokeform stat <path>` | 個体の実数値・性格補正・ポイント配分・耐久指数を表示（壁打ち補助・`--lang`） | **Phase 3** |
 
 `package.json` scripts に `check:party` / `check:individual` / `analyze:coverage` / `typecheck` / `generate:data` を割り当て。
 
@@ -370,7 +370,7 @@ members:
 - **Phase 0 — 足場**: pnpm init / tsconfig 2種 / biome / vitest / cac。`src/types/stats.ts`・`type-chart.ts` 静的型。`domain/calc-stats.ts` + テスト（後述の検証式を実装）。
 - **Phase 1 — データ生成 + MVP**: `scripts/fetch-pokeapi.ts` + `generate.ts` で `data/generated/` の Dex 群を生成（MVP は代表種サブセット + 全 18 タイプ。`roster.yaml` を広げれば全種族へ拡張可）。`io/load-party.ts` + `resolve-paths.ts`。`domain/coverage.ts` + `type-effectiveness.ts`。CLI `analyze:coverage`、`check:party`（参照解決・重複・未解禁・体数 = 一貫性チェック）。→ **要求 MVP 達成**。
 - **Phase 2 — 個体 tsc 検証層**: `codegen/emit-individual-ts.ts` / `emit-party-ts.ts` / `run-tsc.ts`。`tsconfig.generated.json`。ジェネリック種族制約 `SpeciesDex[S]` の本格運用。`check:individual` / `compile` / `typecheck`。ブランドエラー型で診断可読化。
-- **Phase 3 — 将来**: `pokeform stat`、耐久ライン逆算（「○○の××を確定耐え」からポイント逆算）等のステータス調整壁打ち。
+- **Phase 3 — ステータス調整の壁打ち**: `pokeform stat`（実数値・性格補正・ポイント配分・耐久指数表示）、耐久/火力指数（`domain/stat-indices.ts`）、ダメージ式（`domain/damage.ts`・確定数判定の範囲）、ポイント逆算（`domain/stat-tuning.ts`・「○○の××を確定耐え」「素早さ□□抜き」→ 合計66/各≤32 で解探索・実現不能は報告）と調整提案。耐久/火力指数・ダメージ式・逆算の定義は [[game-spec]] を参照。本格ダメージ計算（乱数16段の確定数表・急所・補正）は将来計画 `02-<slug>` へ。
 
 ---
 
