@@ -3,6 +3,7 @@ import {
   type ItemInfo,
   MAX_PARTY_SIZE,
   type MoveInfo,
+  type RegulationInfo,
   type ResolvedMember,
   type ResolvedParty,
   type SpeciesInfo,
@@ -11,15 +12,18 @@ import {
 } from "./party-analysis.ts";
 
 const speciesDex: Record<string, SpeciesInfo> = {
-  garchomp: { types: ["dragon", "ground"], regulations: ["champions-m-a", "champions-m-b"] },
-  mewtwo: { types: ["psychic"], regulations: ["champions-m-b"] },
+  garchomp: { types: ["dragon", "ground"] },
+  mewtwo: { types: ["psychic"] },
   charizard: {
     types: ["fire", "flying"],
-    regulations: ["champions-m-a"],
     megaEvolvesTo: "charizard-mega-x",
   },
-  "charizard-mega-x": { types: ["fire", "dragon"], regulations: ["champions-m-a"] },
-  badmega: { types: ["normal"], regulations: ["champions-m-a"], megaEvolvesTo: "ghost-x" },
+  "charizard-mega-x": { types: ["fire", "dragon"] },
+  badmega: { types: ["normal"], megaEvolvesTo: "ghost-x" },
+};
+// 解禁判定の正本は per-regulation（A案・ADR 0021）。M-A は garchomp / charizard を解禁・mewtwo は未解禁。
+const regulationDex: Record<string, RegulationInfo> = {
+  "champions-m-a": { species: ["garchomp", "charizard"] },
 };
 const moveDex: Record<string, MoveInfo> = {
   "flare-blitz": { type: "fire", damageClass: "physical" },
@@ -50,7 +54,7 @@ describe("validateParty", () => {
         mk({ path: "b", speciesId: "charizard" }),
       ],
     };
-    expect(validateParty(party, speciesDex)).toEqual([]);
+    expect(validateParty(party, speciesDex, regulationDex)).toEqual([]);
   });
 
   it("参照切れ / 未知種族 / 未解禁 / 同種族重複 を検出する", () => {
@@ -65,7 +69,7 @@ describe("validateParty", () => {
         mk({ path: "dup2", speciesId: "garchomp" }),
       ],
     };
-    const issues = validateParty(party, speciesDex);
+    const issues = validateParty(party, speciesDex, regulationDex);
     expect(issues).toContainEqual({ kind: "broken-ref", path: "broken" });
     expect(issues).toContainEqual({
       kind: "unknown-species",
@@ -93,9 +97,22 @@ describe("validateParty", () => {
         mk({ path: `m${i}`, speciesId: "charizard" }),
       ),
     };
-    expect(validateParty(party, speciesDex)).toContainEqual({
+    expect(validateParty(party, speciesDex, regulationDex)).toContainEqual({
       kind: "over-size",
       count: MAX_PARTY_SIZE + 1,
+    });
+  });
+
+  it("未知レギュレーション宣言は全メンバーを未解禁として検出する", () => {
+    const party: ResolvedParty = {
+      regulation: "champions-unknown",
+      members: [mk({ path: "a", speciesId: "garchomp" })],
+    };
+    expect(validateParty(party, speciesDex, regulationDex)).toContainEqual({
+      kind: "not-legal",
+      path: "a",
+      speciesId: "garchomp",
+      regulation: "champions-unknown",
     });
   });
 });

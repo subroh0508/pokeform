@@ -11,8 +11,11 @@ import type { CoverageMember } from "./coverage.ts";
 /** 検証 / 分析に必要な種族の最小情報。 */
 export interface SpeciesInfo {
   readonly types: readonly PokemonType[];
-  readonly regulations: readonly string[];
   readonly megaEvolvesTo?: string;
+}
+/** レギュレーションの最小情報（解禁判定に必要な解禁種族集合・[[regulation]] / ADR 0021）。 */
+export interface RegulationInfo {
+  readonly species: readonly string[];
 }
 /** 技の最小情報（攻撃範囲抽出に必要）。 */
 export interface MoveInfo {
@@ -74,6 +77,7 @@ export const MAX_PARTY_SIZE = 6;
 export const validateParty = (
   party: ResolvedParty,
   speciesDex: Readonly<Record<string, SpeciesInfo>>,
+  regulationDex: Readonly<Record<string, RegulationInfo>>,
 ): PartyIssue[] => {
   const issues: PartyIssue[] = [];
   if (party.members.length > MAX_PARTY_SIZE) {
@@ -90,7 +94,8 @@ export const validateParty = (
       issues.push({ kind: "unknown-species", path: m.path, name: m.speciesName });
       continue;
     }
-    if (!species.regulations.includes(party.regulation)) {
+    const regulation = regulationDex[party.regulation];
+    if (regulation === undefined || !regulation.species.includes(m.speciesId)) {
       issues.push({
         kind: "not-legal",
         path: m.path,

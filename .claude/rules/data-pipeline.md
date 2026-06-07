@@ -14,10 +14,10 @@ PokeAPI を vendor 方式で取り込み `data/generated/` を出力する流れ
 - **`data/raw/`** = `.gitignore`（PokeAPI 取得キャッシュ。`scripts/fetch-pokeapi.ts` が生成）。
 - **`data/champions/`** = **コミット・手動管理**。PokeAPI に無い情報の唯一のソース:
   - `rules.yaml`（能力ポイント 66/32・計算式定数）
-  - `regulation.yaml`（各レギュの解禁許可リスト）
+  - `regulations/<id>.yaml`（**1 レギュ = 1 ファイル**。`name` / `period`（`start` 必須・`end` は開催中なら空＝`null`）/ `allow`（`species` / `items` / `mega` / `moves`）。**解禁判定の正本**＝per-regulation 一本化（A案・ADR `0021`）。`allow` の id は catalog を参照し、未登録 id は生成段でエラー）
   - `overrides.yaml`（習得技 / 特性の世代差・上書き）
   - `catalog/{species,moves,items,abilities}.yaml`（vendor スコープのマニフェスト = 取得対象を**エンティティ種別ごと**に列挙する **append-only マスター**。`species.yaml` は `pokemon` + `megaLinks`、`items.yaml` は `items` + `itemMeta`、`abilities.yaml` は種族が参照する特性 id を持つ）。**append-only 方針**: 一度解禁されたものは後のレギュレーションで没収されても消さない（レギュレーションごとの解禁/非解禁の正本は別管理）。種族の `abilities` はカタログ id を参照し、カタログに無い id を参照すると `generate.ts` が**生成段でエラー**にして整合を担保する。
-- **`data/generated/`** = **コミット**。`scripts/generate.ts` が raw と champions を合成して Dex 単位の `.ts`（`types` / `moves` / `abilities` / `items` / `species` / `regulations` / `names`）を出力する。各ファイルは `export const xxxDex = {...} as const` の**値**から `type XxxDex = typeof xxxDex` / `XxxId = keyof XxxDex` で**型を派生**し、値と型を単一ソース化する（別ファイルに二重管理しない）。親型適合は `satisfies` / `Assignable`（[[type-conventions]] / [[tsc-verification]]）で検証し、出力後に Biome 整形して機械ゲートと一致させる。
+- **`data/generated/`** = **コミット**。`scripts/generate.ts` が raw と champions を合成して Dex 単位の `.ts`（`types` / `moves` / `abilities` / `items` / `species` / `names` と、`regulations/` ディレクトリ＝1 レギュ = 1 ファイル + `index.ts` が `regulationDex` に集約）を出力する。per-reg 型は species / items / mega のみ（技は YAML 記録のみ・型生成しない・ADR `0021`）。各ファイルは `export const xxxDex = {...} as const` の**値**から `type XxxDex = typeof xxxDex` / `XxxId = keyof XxxDex` で**型を派生**し、値と型を単一ソース化する（別ファイルに二重管理しない）。親型適合は `satisfies` / `Assignable`（[[type-conventions]] / [[tsc-verification]]）で検証し、出力後に Biome 整形して機械ゲートと一致させる。
 - 生成物は手書き編集しない。raw / champions を直し、再生成する（オフライン・決定論的・CI 高速のため vendor をコミットする）。
 
 ## PokeAPI 項目対応
@@ -29,6 +29,6 @@ PokeAPI を vendor 方式で取り込み `data/generated/` を出力する流れ
 | 種族値 | `pokemon.stats[].base_stat` |
 | 覚える技 | `pokemon.moves[]`（version_group で世代を絞り `overrides.yaml` で補正） |
 | タイプ / 特性 / 持ち物 | `pokemon.types[]` / `pokemon.abilities[]` / `item` エンドポイント |
-| **レギュレーション解禁** | **PokeAPI に無し → `data/champions/regulation.yaml`** |
+| **レギュレーション解禁** | **PokeAPI に無し → `data/champions/regulations/<id>.yaml`** |
 
 日本語名は PokeAPI の `names`（language=`ja`/`ja-Hrkt`）から生成段で自動付与する（手動データ不要）。MVP 時点で**全国図鑑の全種族分**を生成しておく。生成される型の形は [[type-conventions]]、検証は [[tsc-verification]] を参照。
