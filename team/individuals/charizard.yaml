@@ -1,6 +1,7 @@
 lang: en
 # リザードナイトX でメガシンカ（ほのお/ドラゴン）。素はブレイズ → メガでがんじょうあご。
 species: charizard
+regulations: [champions-m-a, champions-m-b]
 nature: { up: attack, down: spAttack }
 ability: blaze
 item: charizardite-x

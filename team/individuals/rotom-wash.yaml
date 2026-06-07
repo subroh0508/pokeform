@@ -1,6 +1,7 @@
 lang: ja
 # でんき/みずの起点作り。おにび + ボルトチェンジで対面操作。
 species: ウォッシュロトム
+regulations: [champions-m-a, champions-m-b]
 nature: { up: とくこう, down: こうげき }
 ability: ふゆう
 item: たべのこし

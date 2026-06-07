@@ -18,9 +18,11 @@ export interface EmittedFile {
   readonly code: string;
 }
 
-/** 個体の正規化済みデータ（emit-party がメンバー解決に再利用する）。 */
+/** 個体の正規化済みデータ（emit-party がメンバー解決・宣言レギュ整合に再利用する）。 */
 export interface NormalizedIndividual extends EmittedFile {
   readonly speciesId: string;
+  /** 個体が宣言した対象レギュレーション（0〜N）。 */
+  readonly regulations: readonly string[];
 }
 
 /** TS 識別子に使えるよう非英数を `_` に正規化する。 */
@@ -53,6 +55,8 @@ export const normalizeIndividual = (yamlPath: string, root: string): NormalizedI
   const abilityId = toAbilityId(ind.ability, lang) ?? ind.ability;
   const itemId = toItemId(ind.item, lang) ?? ind.item;
   const moveIds = (ind.moves ?? []).map((m) => toMoveId(m, lang) ?? m);
+  // 対象レギュレーション（id はそのまま・名称正規化しない）。空 = 無制約のデモ個体（fan-out なし）。
+  const regulations = ind.regulations ?? [];
 
   // 能力ポイントを StatKey へ正規化（解決不能キーは生値のまま埋めて tsc に弾かせる）。
   const points: Record<string, number> = {};
@@ -71,26 +75,42 @@ export const normalizeIndividual = (yamlPath: string, root: string): NormalizedI
   const movesTuple = `readonly [${moveIds.map(q).join(", ")}]`;
   const movesValue = `[${moveIds.map(q).join(", ")}]`;
 
+  // 宣言レギュごとに ability/item/moves の合法性を fan-out 検証する（宣言した全レギュで合法なら通る）。
+  const perReg = regulations
+    .map((r) => {
+      const rid = ident(r);
+      return `${at("ability")}
+const ${v}_ability_${rid}: ValidAbility<${q(r)}, ${q(speciesId)}, ${q(abilityId)}> = ${q(abilityId)};
+${at("item")}
+const ${v}_item_${rid}: ValidItem<${q(r)}, ${q(speciesId)}, ${q(itemId)}> = ${q(itemId)};
+${at("moves")}
+const ${v}_moves_${rid}: ValidMoves<${q(r)}, ${q(speciesId)}, ${movesTuple}> = ${movesValue};`;
+    })
+    .join("\n");
+  const regChecks = regulations
+    .flatMap((r) => {
+      const rid = ident(r);
+      return [`${v}_ability_${rid}`, `${v}_item_${rid}`, `${v}_moves_${rid}`];
+    })
+    .join(", ");
+  // 宣言レギュが空なら Valid* は未使用のため import を省く（PointTotalMustBe66 は常に使う）。
+  const validators = regulations.length > 0 ? ", ValidAbility, ValidItem, ValidMoves" : "";
+
   const code = `// 生成物（pokeform compile 出力・手書き編集しない）。
-import type { PointTotalMustBe66, ValidAbility, ValidItem, ValidMoves } from "../src/types/individual.ts";
+import type { PointTotalMustBe66${validators} } from "../src/types/individual.ts";
 import type { NatureSpec } from "../src/types/nature.ts";
 import type { PointAllocation } from "../src/types/stats.ts";
 
 ${at("nature")}
 const ${v}_nature = { up: ${q(natureUp)}, down: ${q(natureDown)} } satisfies NatureSpec;
-${at("ability")}
-const ${v}_ability: ValidAbility<${q(speciesId)}, ${q(abilityId)}> = ${q(abilityId)};
-${at("item")}
-const ${v}_item: ValidItem<${q(speciesId)}, ${q(itemId)}> = ${q(itemId)};
 ${at("points")}
 const ${v}_points = { ${pointsLit} } as const satisfies PointAllocation satisfies PointTotalMustBe66<${total}>;
-${at("moves")}
-const ${v}_moves: ValidMoves<${q(speciesId)}, ${movesTuple}> = ${movesValue};
+${perReg}
 
-export const ${v}Individual = { ${v}_nature, ${v}_ability, ${v}_item, ${v}_points, ${v}_moves };
+export const ${v}Individual = { ${v}_nature, ${v}_points${regChecks ? `, ${regChecks}` : ""} };
 `;
 
-  return { speciesId, outName: `${ident(rel)}.individual.generated.ts`, code };
+  return { speciesId, regulations, outName: `${ident(rel)}.individual.generated.ts`, code };
 };
 
 /** 個体 YAML から `EmittedFile` を生成する。 */

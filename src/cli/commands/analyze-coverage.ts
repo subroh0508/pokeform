@@ -1,6 +1,6 @@
 import { itemDex } from "../../../data/generated/items.ts";
 import { moveDex } from "../../../data/generated/moves.ts";
-import { speciesDex } from "../../../data/generated/species.ts";
+import { speciesBaseDex } from "../../../data/generated/species-base.ts";
 import { typeDex } from "../../../data/generated/types.ts";
 import { analyzeCoverage, type CoverageReport } from "../../domain/coverage.ts";
 import { toCoverageMembers } from "../../domain/party-analysis.ts";
@@ -43,7 +43,7 @@ export const runAnalyzeCoverage = async (path: string, lang: Lang): Promise<numb
   let vulnerable = false;
   for (const file of files) {
     const { name, party } = await loadParty(file);
-    const members = toCoverageMembers(party, speciesDex, moveDex, itemDex);
+    const members = toCoverageMembers(party, speciesBaseDex, moveDex, itemDex);
     const report = analyzeCoverage(members, chart);
     if (report.vulnerable) vulnerable = true;
     const head = report.vulnerable

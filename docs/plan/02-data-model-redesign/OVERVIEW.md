@@ -53,8 +53,8 @@ Phase 1〜3 は生成 `species.ts` を **全レギュ共通の単一 `speciesDex
 
 7. **種族定義を per-regulation 化し、習得技を per-reg 属性にする**: global 単一 `data/generated/species.ts` を
    **廃止**し、`data/generated/regulations/<id>/species.ts`（per-reg `speciesDex` / `SpeciesId`・そのレギュの
-   `moves` を含む）を**生成 species の正本**にする。`regulations/<id>.ts` から `RegulationDex[R].speciesDex` を
-   引ける。型機構は reg-aware（`SpeciesDexOf<R>` / `ValidMove<R,S,M>` / `IndividualSpec<R,S>`）にする。
+   `moves` を含む）を**生成 species の正本**にする。`regulations/<id>/index.ts` から `RegulationDex[R].speciesDex`
+   を引ける。型機構は reg-aware（`SpeciesDexOf<R>` / `ValidMove<R,S,M>` / `IndividualSpec<R,S>`）にする。
 8. **個体は対象レギュレーションを複数宣言できる（1 YAML → 複数型定義生成）**: 個体 YAML に
    `regulations: [<id>...]`（1〜N）を持たせ、codegen が宣言レギュごとに `ValidMoves<R,S,...>` 等の `satisfies`
    を fan-out 生成する。**宣言した全レギュで合法**な個体だけが通る（交差）。違反は該当レギュの行で

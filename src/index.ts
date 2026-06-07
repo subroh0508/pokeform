@@ -59,27 +59,38 @@ export { buildChart, type EffectivenessChart, effectiveness } from "./domain/typ
 export {
   type AbilityNotAvailable,
   defineIndividual,
+  type HoldableItems,
   type Individual,
   type IndividualSpec,
   type ItemNotHoldableBy,
   type MoveNotLearnedBy,
   type PointTotalMustBe66,
+  type SpeciesDexOf,
+  type SpeciesIdIn,
   type ValidAbility,
   type ValidItem,
   type ValidMove,
   type ValidMoves,
 } from "./types/individual.ts";
 export type {
+  AnySpeciesId,
   ConstrainParty,
   DuplicateSpeciesInParty,
+  MemberDeclaresRegulation,
   NotLegalInRegulation,
   PartySpec,
   PartyTooLarge,
+  RegulationNotDeclaredByMember,
   SpeciesNotFound,
   UniqueSpecies,
 } from "./types/party.ts";
 export type { RegulationBase, RegulationDex, RegulationId } from "./types/regulation.ts";
 export { regulationDex } from "./types/regulation.ts";
-export type { SpeciesBase, SpeciesDex, SpeciesId } from "./types/species.ts";
-export { speciesDex } from "./types/species.ts";
+export type {
+  SpeciesBase,
+  SpeciesBaseDex,
+  SpeciesBaseId,
+  SpeciesBaseInfo,
+} from "./types/species.ts";
+export { speciesBaseDex } from "./types/species.ts";
 export type { PokemonType, TypeMultiplier } from "./types/type-chart.ts";

@@ -39,6 +39,8 @@ export const emitParty = (mdPath: string, root: string): EmittedFile[] => {
   const memberFiles: EmittedFile[] = [];
   const seen = new Set<string>();
   const speciesIds: string[] = [];
+  // found メンバーの宣言レギュ整合チェック（パーティ reg をメンバーが宣言しているか）。
+  const found: { speciesId: string; regulations: readonly string[] }[] = [];
 
   for (const memberRel of fm.members ?? []) {
     const abs = resolve(baseDir, memberRel);
@@ -47,8 +49,9 @@ export const emitParty = (mdPath: string, root: string): EmittedFile[] => {
       speciesIds.push(memberRel);
       continue;
     }
-    const { speciesId, outName, code } = normalizeIndividual(abs, root);
+    const { speciesId, regulations, outName, code } = normalizeIndividual(abs, root);
     speciesIds.push(speciesId);
+    found.push({ speciesId, regulations });
     if (!seen.has(outName)) {
       seen.add(outName);
       memberFiles.push({ outName, code });
@@ -57,13 +60,25 @@ export const emitParty = (mdPath: string, root: string): EmittedFile[] => {
 
   const membersValue = `[${speciesIds.map(q).join(", ")}]`;
   const v = ident(rel);
+  // 各 found メンバーが party.regulation を宣言しているかを MemberDeclaresRegulation で検証する。
+  const memberDecls = found
+    .map((m, i) => {
+      const regsLit = `readonly [${m.regulations.map(q).join(", ")}]`;
+      return `// @source ${rel}:${memberLine}
+const ${v}_decl_${i}: MemberDeclaresRegulation<${q(regulation)}, ${regsLit}, ${q(m.speciesId)}> = ${q(regulation)};`;
+    })
+    .join("\n");
+  const declExports = found.map((_, i) => `${v}_decl_${i}`).join(", ");
+  const declImport = found.length > 0 ? ", MemberDeclaresRegulation" : "";
+
   const partyCode = `// 生成物（pokeform compile 出力・手書き編集しない）。
-import type { ConstrainParty } from "../src/types/party.ts";
+import type { ConstrainParty${declImport} } from "../src/types/party.ts";
 
 const ${v}_members = ${membersValue} as const;
 // @source ${rel}:${memberLine}
 const ${v}_check: ConstrainParty<typeof ${v}_members, ${q(regulation)}> = ${v}_members;
-export { ${v}_check as ${v}Party };
+${memberDecls}
+export { ${v}_check as ${v}Party${declExports ? `, ${declExports}` : ""} };
 `;
 
   return [{ outName: `${ident(rel)}.party.generated.ts`, code: partyCode }, ...memberFiles];

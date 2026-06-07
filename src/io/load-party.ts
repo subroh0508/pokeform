@@ -6,7 +6,7 @@ import { parse as parseYaml } from "yaml";
 import { itemDex } from "../../data/generated/items.ts";
 import { moveDex } from "../../data/generated/moves.ts";
 import { itemIdByJa, moveIdByJa, speciesIdByJa } from "../../data/generated/names.ts";
-import { speciesDex } from "../../data/generated/species.ts";
+import { speciesBaseDex } from "../../data/generated/species-base.ts";
 import type { ResolvedMember, ResolvedParty } from "../domain/party-analysis.ts";
 import { type NameMaps, resolveName } from "../domain/resolve-names.ts";
 import type { IndividualFile, Lang, PartyFrontmatter } from "../types/party.ts";
@@ -17,7 +17,7 @@ import type { IndividualFile, Lang, PartyFrontmatter } from "../types/party.ts";
  * domain/party-analysis が担う（[[cli-and-io]]）。生成済み逆引きマップで日英入力を ID へ寄せる。
  */
 
-const speciesMaps: NameMaps = { idByJa: speciesIdByJa, ids: new Set(Object.keys(speciesDex)) };
+const speciesMaps: NameMaps = { idByJa: speciesIdByJa, ids: new Set(Object.keys(speciesBaseDex)) };
 const moveMaps: NameMaps = { idByJa: moveIdByJa, ids: new Set(Object.keys(moveDex)) };
 const itemMaps: NameMaps = { idByJa: itemIdByJa, ids: new Set(Object.keys(itemDex)) };
 

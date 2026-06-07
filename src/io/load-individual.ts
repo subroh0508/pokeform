@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { parse as parseYaml } from "yaml";
-import { speciesDex } from "../../data/generated/species.ts";
+import { speciesBaseDex } from "../../data/generated/species-base.ts";
 import { toSpeciesId, toStatKey } from "../codegen/normalize.ts";
 import type { NatureSpec } from "../types/nature.ts";
 import type { IndividualFile, Lang } from "../types/party.ts";
@@ -10,7 +10,8 @@ import type { BaseStats, PointAllocation, StatKey } from "../types/stats.ts";
 /**
  * 1 体の個体 YAML を読み、種族値・性格・ポイント配分を ID 正規化済みで返す薄い I/O 層
  * （カバレッジ対象外）。名称解決は codegen/normalize（resolveName 越し・テスト済み）に委譲し、
- * 種族値は生成済み `speciesDex` から引く。`stat` コマンドが実数値・指数表示に使う（[[cli-and-io]]）。
+ * 種族値は reg 不変の `speciesBaseDex`（派生 base view）から引く。`stat` コマンドが実数値・指数表示に
+ * 使う（[[cli-and-io]]）。
  */
 
 /** 読み込んだ個体（表示名 + 種族値 + 性格 + ポイント配分）。 */
@@ -37,7 +38,8 @@ export const loadIndividual = async (path: string): Promise<LoadedIndividual> =>
   const ind = parseYaml(await readFile(abs, "utf8")) as IndividualFile;
   const lang: Lang = ind.lang ?? "ja";
   const speciesId = toSpeciesId(ind.species, lang);
-  const entry = speciesId === null ? undefined : (speciesDex as Record<string, unknown>)[speciesId];
+  const entry =
+    speciesId === null ? undefined : (speciesBaseDex as Record<string, unknown>)[speciesId];
   if (speciesId === null || entry === undefined) {
     throw new Error(`unknown species '${ind.species}' in ${path}`);
   }

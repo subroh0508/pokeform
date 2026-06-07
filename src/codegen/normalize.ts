@@ -7,7 +7,7 @@ import {
   moveIdByJa,
   speciesIdByJa,
 } from "../../data/generated/names.ts";
-import { speciesDex } from "../../data/generated/species.ts";
+import { speciesBaseDex } from "../../data/generated/species-base.ts";
 import { type NameMaps, resolveName } from "../domain/resolve-names.ts";
 import type { Lang } from "../types/party.ts";
 import type { StatKey } from "../types/stats.ts";
@@ -20,7 +20,7 @@ import type { StatKey } from "../types/stats.ts";
  * 不正値を埋めて tsc に弾かせる（[[tsc-verification]] の「codegen は常に成功し tsc が検出」）。
  */
 
-const speciesMaps: NameMaps = { idByJa: speciesIdByJa, ids: new Set(Object.keys(speciesDex)) };
+const speciesMaps: NameMaps = { idByJa: speciesIdByJa, ids: new Set(Object.keys(speciesBaseDex)) };
 const abilityMaps: NameMaps = { idByJa: abilityIdByJa, ids: new Set(Object.keys(abilityDex)) };
 const itemMaps: NameMaps = { idByJa: itemIdByJa, ids: new Set(Object.keys(itemDex)) };
 const moveMaps: NameMaps = { idByJa: moveIdByJa, ids: new Set(Object.keys(moveDex)) };

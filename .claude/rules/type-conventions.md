@@ -19,7 +19,16 @@ description: 型表現の統一パターン（`XxxBase` + `XxxDex` + `XxxId = ke
   単一ソース化する（手書き interface でなく derive・親型適合は `satisfies` / `Assignable` で検証）。
 - **`XxxId = keyof XxxDex`**: ID の union を `Dex` から導出する。
 
-対象は `SpeciesDex`/`SpeciesId`・`MoveDex`/`MoveId`・`TypeDex`/`PokemonType`・`AbilityDex`/`AbilityId`・`ItemDex`/`ItemId`。巨大 union の分配コストを避けるため、**制約は `SpeciesDex[S]` のプロパティアクセス主体**で行う（union を直接配らない）。
+対象は `MoveDex`/`MoveId`・`TypeDex`/`PokemonType`・`AbilityDex`/`AbilityId`・`ItemDex`/`ItemId`。巨大 union の分配コストを避けるため、**制約はプロパティアクセス主体**で行う（union を直接配らない）。
+
+## 種族型は per-regulation（reg-aware 制約・ADR `0021`）
+
+種族の習得技はレギュレーションごとに異なりうるため、**種族 dex は per-regulation** で生成する（global 単一 `SpeciesDex`/`SpeciesId` は廃止・[[data-pipeline]]）:
+
+- **per-reg 種族 dex**: `data/generated/regulations/<id>/species.ts` の `speciesDex`（`as const satisfies Record<string, SpeciesBase>`）/ `SpeciesId = keyof speciesDex`。`RegulationDex[R]["speciesDex"]` から引ける（レギュメタに同梱）。
+- **reg-aware アクセサ**（`src/types/individual.ts`）: `SpeciesDexOf<R> = RegulationDex[R]["speciesDex"]` / `SpeciesIdIn<R> = keyof SpeciesDexOf<R> & string`。エントリ参照は `SpeciesEntryOf<R,S> = SpeciesDexOf<R>[S] & SpeciesBase`（generic `R` での深い indexed access の限界回避。`& SpeciesBase` でキー存在を保証し narrow リテラルは交差で温存）。
+- **reg-aware 制約**: `ValidMove<R,S,M>` / `ValidMoves` / `ValidAbility<R,S,A>` / `ValidItem<R,S,I>` / `HoldableItems<R,S>` / `IndividualSpec<R,S>` は `R` 付き。ブランドエラー型（`MoveNotLearnedBy<R,S,M>` 等）に `R` を表示する。パーティ制約 `ConstrainParty<T,R>` は per-reg roster（`RegulationDex[R]["species"]`）を、メンバーの宣言レギュ整合は `MemberDeclaresRegulation<R,Regs,S>` を使う（[[cli-and-io]]）。
+- **reg 不変フィールド**（種族値 / タイプ / 日英名 / メガ先 = `SpeciesBaseInfo`）は派生 base view `speciesBaseDex`（`data/generated/species-base.ts`・全種族）に切り出し、実数値計算・名前表示・coverage はこれを引く。型の正本は per-reg のまま（base view は runtime ルックアップ専用）。`megaEvolvesTo` / `megaStoneFor` は per-reg dex 側で legality を見るため素の `string`（global `SpeciesId` への自己参照を避ける）。
 
 ## 種族の粒度
 

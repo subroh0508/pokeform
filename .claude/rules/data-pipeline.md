@@ -17,7 +17,11 @@ PokeAPI を vendor 方式で取り込み `data/generated/` を出力する流れ
   - `regulations/<id>.yaml`（**1 レギュ = 1 ファイル**。`name` / `period`（`start` 必須・`end` は開催中なら空＝`null`）/ `allow`（`species` / `items` / `mega` / `moves`）。**解禁判定の正本**＝per-regulation 一本化（A案・ADR `0021`）。`allow` の id は catalog を参照し、未登録 id は生成段でエラー）
   - `overrides.yaml`（習得技 / 特性の世代差・上書き）
   - `catalog/{species,moves,items,abilities}.yaml`（vendor スコープのマニフェスト = 取得対象を**エンティティ種別ごと**に列挙する **append-only マスター**。`species.yaml` は `pokemon` + `megaLinks`、`items.yaml` は `items` + `itemMeta`、`abilities.yaml` は種族が参照する特性 id を持つ）。**append-only 方針**: 一度解禁されたものは後のレギュレーションで没収されても消さない（レギュレーションごとの解禁/非解禁の正本は別管理）。種族の `abilities` はカタログ id を参照し、カタログに無い id を参照すると `generate.ts` が**生成段でエラー**にして整合を担保する。
-- **`data/generated/`** = **コミット**。`scripts/generate.ts` が raw と champions を合成して Dex 単位の `.ts`（`types` / `moves` / `abilities` / `items` / `species` / `names` と、`regulations/` ディレクトリ＝1 レギュ = 1 ファイル + `index.ts` が `regulationDex` に集約）を出力する。per-reg 型は species / items / mega のみ（技は YAML 記録のみ・型生成しない・ADR `0021`）。各ファイルは `export const xxxDex = {...} as const` の**値**から `type XxxDex = typeof xxxDex` / `XxxId = keyof XxxDex` で**型を派生**し、値と型を単一ソース化する（別ファイルに二重管理しない）。親型適合は `satisfies` / `Assignable`（[[type-conventions]] / [[tsc-verification]]）で検証し、出力後に Biome 整形して機械ゲートと一致させる。
+- **`data/generated/`** = **コミット**。`scripts/generate.ts` が raw と champions を合成して Dex 単位の `.ts` を出力する:
+  - `types` / `moves` / `abilities` / `items` / `names`。
+  - **`species-base.ts`**（`speciesBaseDex`・**全種族の reg 不変フィールドのみ**＝種族値 / タイプ / 日英名 / メガ先）。実数値計算・名前表示・coverage はレギュ非依存のためこの派生 base view を引く（per-reg 化・ADR `0021` 設計判断5）。
+  - **`regulations/<id>/`**（**1 レギュ = 1 ディレクトリ**）= `species.ts`（**per-reg 種族 dex**＝そのレギュの roster ∪ mega 先・**per-reg 習得技 `moves`** を含む legality の型正本）+ `index.ts`（レギュメタ＝`name`/`period`/解禁集合に `speciesDex` を同梱）。集約 `regulations/index.ts` が `regulationDex` に集める。**global 単一 `species.ts` は廃止**（統合 view へのフラット化は技プールが潰れ過剰許容になるため採らない・ADR `0021`）。
+  - 各ファイルは `export const xxxDex = {...} as const` の**値**から `type XxxDex = typeof xxxDex` / `XxxId = keyof XxxDex` で**型を派生**し、値と型を単一ソース化する（別ファイルに二重管理しない）。親型適合は `satisfies` / `Assignable`（[[type-conventions]] / [[tsc-verification]]）で検証し、出力後に Biome 整形して機械ゲートと一致させる。
 - 生成物は手書き編集しない。raw / champions を直し、再生成する（オフライン・決定論的・CI 高速のため vendor をコミットする）。
 
 ## PokeAPI 項目対応
