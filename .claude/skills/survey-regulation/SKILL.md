@@ -10,7 +10,7 @@ description: >-
   信頼性評価と矛盾解消・再現可能な記録を重視する。生成 / 検証は `generate:data` / `verify` に委譲し、
   機械ゲート（型 / カバレッジ / Biome）は再実装しない。利用者パーティの点検は `review-party`、生成データの
   妥当性レビューは `pokemon-data-reviewer` agent を使う（こちらは解禁データの取得・投入が責務）。
-allowed-tools: WebSearch, WebFetch, Bash(pnpm *), Bash(node src/cli/*)
+allowed-tools: WebSearch, WebFetch, Read, Write, Edit, Bash(pnpm *), Bash(node src/cli/*)
 ---
 
 # survey-regulation — レギュレーション解禁情報の調査と投入
