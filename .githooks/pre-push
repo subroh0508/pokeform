@@ -14,4 +14,9 @@ set -e
 echo "[pre-push] pnpm test:cov"
 pnpm test:cov
 
+# pokeform パーティ検証ゲート（Phase 2）: 妥当なサンプルパーティ全体（メンバー個体含む）を
+# codegen→tsc で end-to-end 検証する。broken.md は不正検出デモのため対象外（standard.md のみ）。
+echo "[pre-push] pokeform typecheck team/parties/standard.md"
+pnpm pokeform typecheck team/parties/standard.md
+
 echo "[pre-push] OK"

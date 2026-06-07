@@ -37,6 +37,28 @@ export {
 } from "./domain/party-analysis.ts";
 export { type NameMaps, type ResolveResult, resolveName } from "./domain/resolve-names.ts";
 export { buildChart, type EffectivenessChart, effectiveness } from "./domain/type-effectiveness.ts";
+export {
+  type AbilityNotAvailable,
+  defineIndividual,
+  type Individual,
+  type IndividualSpec,
+  type ItemNotHoldableBy,
+  type MoveNotLearnedBy,
+  type PointTotalMustBe66,
+  type ValidAbility,
+  type ValidItem,
+  type ValidMove,
+  type ValidMoves,
+} from "./types/individual.ts";
+export type {
+  ConstrainParty,
+  DuplicateSpeciesInParty,
+  NotLegalInRegulation,
+  PartySpec,
+  PartyTooLarge,
+  SpeciesNotFound,
+  UniqueSpecies,
+} from "./types/party.ts";
 export type { SpeciesBase, SpeciesDex, SpeciesId } from "./types/species.ts";
 export { speciesDex } from "./types/species.ts";
 export type { PokemonType, TypeMultiplier } from "./types/type-chart.ts";
