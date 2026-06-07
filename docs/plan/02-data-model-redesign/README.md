@@ -27,7 +27,7 @@ flowchart TD
 - [x] [Phase 1 — カタログ分離（種族 / 技 / 持ち物 / 特性の append-only マスター）](./phase-01-catalog-split.md)
 - [x] [Phase 2 — レギュレーションモデル再設計（per-reg YAML + period + per-reg 型 + A案型機構）](./phase-02-regulation-model.md)
 - [x] [Phase 3 — 情報源確定 + 20匹サンプル検証](./phase-03-source-and-sample.md)
-- [ ] [Phase 4 — per-regulation 種族/メガ構造化（global species.ts 廃止 → per-reg species.ts 正本 + 派生統合 view）](./phase-04-per-regulation-species.md)
+- [ ] [Phase 4 — per-regulation 種族型 + 個体の複数レギュレーション宣言（global species.ts 廃止 → per-reg species.ts 正本・per-reg 習得技 + reg-aware 型機構 + 個体 regulations:[] fan-out）](./phase-04-per-regulation-species.md)
 - [ ] [Phase 5 — M-A 全データ投入](./phase-05-ma-full-data.md)
 
 ## この計画群全体の受け入れ基準

@@ -46,18 +46,25 @@
 
 ### 設計方針の改訂（Phase 4 で導入）
 
-Phase 1〜3 は生成 `species.ts` を **全レギュ共通の単一 `speciesDex`** として実装した。しかし解禁種族・メガは
-レギュレーションごとに異なり、「種族定義が全レギュ共通の固定型」では実態を表現できない。Phase 4 で次へ改訂する:
+Phase 1〜3 は生成 `species.ts` を **全レギュ共通の単一 `speciesDex`** として実装した。しかし**種族の習得技は
+レギュレーションごとに異なる**（同じガブリアスでも M-A と M-B で覚える技が違いうる）。`SpeciesDex[S]["moves"]`
+は個体の技合法判定の根拠であり、reg 不変の単一 dex ではこの実態を表現できず、統合 view へフラット化すると
+技プールが潰れて過剰許容になる。Phase 4 で次へ改訂する:
 
-7. **生成 species を per-regulation 化**: global 単一 `data/generated/species.ts` を**廃止**し、
-   `data/generated/regulations/<id>/species.ts`（per-reg `speciesDex` / `SpeciesId`）を**生成 species の正本**に
-   する。`regulations/<id>.ts`（レギュメタ）は自分の `species.ts` を参照する。per-reg 化の対象は **species と
-   mega のみ**（items / abilities / moves はレギュ差分が要るまで global カタログ由来を維持）。
-8. **regulation 非依存の consumers は派生統合 view を参照**: 種族 base データ（種族値・タイプ・名前）は
-   レギュレーション不変。実数値計算・名前表示・coverage・個体定義は per-reg dex 群から **codegen が派生する
-   統合 view**（手書き global ではない和集合）を参照し、型シグネチャを保つ。解禁判定（`ConstrainParty` /
-   `validateParty`）は引き続き `RegulationDex[R].species`（ADR 0021）を見る。この改訂は ADR 0021 の「生成
-   species を global 単一 dex とする」部分を後続決定として改訂するもので、Phase 4 で ADR を起票する。
+7. **種族定義を per-regulation 化し、習得技を per-reg 属性にする**: global 単一 `data/generated/species.ts` を
+   **廃止**し、`data/generated/regulations/<id>/species.ts`（per-reg `speciesDex` / `SpeciesId`・そのレギュの
+   `moves` を含む）を**生成 species の正本**にする。`regulations/<id>.ts` から `RegulationDex[R].speciesDex` を
+   引ける。型機構は reg-aware（`SpeciesDexOf<R>` / `ValidMove<R,S,M>` / `IndividualSpec<R,S>`）にする。
+8. **個体は対象レギュレーションを複数宣言できる（1 YAML → 複数型定義生成）**: 個体 YAML に
+   `regulations: [<id>...]`（1〜N）を持たせ、codegen が宣言レギュごとに `ValidMoves<R,S,...>` 等の `satisfies`
+   を fan-out 生成する。**宣言した全レギュで合法**な個体だけが通る（交差）。違反は該当レギュの行で
+   `MoveNotLearnedBy<R,S,M>` 等として `@source` 逆引きで弾く。`ConstrainParty` の roster 判定は per-reg dex
+   由来になり、メンバー個体の宣言レギュとパーティ宣言レギュの整合を取る。
+9. **reg 不変の base データは別経路**: 種族値・タイプ・名前はレギュ不変なので、実数値計算・名前表示・coverage
+   はこれらだけを reg 不変の参照経路から引く（型の正本は per-reg のまま）。
+
+この改訂は ADR 0021 の「生成 species を global 単一 dex とし、技は per-reg 型生成しない」決定を後続決定として
+**supersede** するもので、Phase 4 で ADR を起票する（roster の per-reg 一本化という 0021 の主旨は踏襲）。
 
 ## 実装指針
 
@@ -84,18 +91,19 @@ data/champions/
 
 ```
 data/generated/
-  types.ts moves.ts abilities.ts items.ts names.ts              # カタログ由来（species.regulations[] は廃止）
+  types.ts moves.ts abilities.ts items.ts names.ts              # カタログ由来（ID 集合の universe・species.regulations[] は廃止）
   regulations/
     champions-m-a.ts            # per-reg メタ：name / period / 解禁 items・mega + 自分の species.ts 参照
-    champions-m-a/species.ts    # ← Phase 4：per-reg 種族定義の正本（roster に絞った speciesDex / SpeciesId）
+    champions-m-a/species.ts    # ← Phase 4：per-reg 種族定義の正本（roster + その reg の習得技 moves を含む）
     champions-m-b.ts
     champions-m-b/species.ts
-    index.ts                    # RegulationId 集約 + per-reg dex 群から派生する統合 species view
+    index.ts                    # RegulationId 集約・RegulationDex[R].speciesDex を引ける形
 ```
 
-`data/generated/species.ts`（global 単一 dex）は Phase 4 で**廃止**する。regulation 非依存の consumers
-（実数値計算・名前表示・coverage・個体定義）は `index.ts` 等が per-reg dex 群から**派生する統合 view**
-（手書き global ではなく和集合の派生物）を参照する。
+`data/generated/species.ts`（global 単一 dex）は Phase 4 で**廃止**する。型機構は reg-aware
+（`SpeciesDexOf<R>` / `ValidMove<R,S,M>` / `IndividualSpec<R,S>`）になり、個体は `regulations: [<id>...]` を
+複数宣言して宣言レギュごとに型検証が fan-out される。reg 不変の base データ（種族値・タイプ・名前）は
+reg 不変の参照経路から引く（実数値計算・名前表示・coverage 用）。
 
 ### データの流れ（vendor 方式は不変）
 
@@ -127,7 +135,7 @@ champions/regulations を合成 → `data/generated` を出力・Biome 整形）
 | **01 カタログ分離** | roster.yaml → 4 種別 catalog YAML（append-only）。生成出力は等価維持。 | 中 | 中 | ~300-400 | 機械的再編が中心 |
 | **02 レギュレーションモデル再設計** | per-reg YAML + period + per-reg 型生成 + A案型機構 + species.regulations[] 廃止。 | 高 | 高 | ~500-700 | 本計画の核・ADR 起票 |
 | **03 情報源確定 + 20匹サンプル検証** | 解禁情報取得 skill を作成し、WebSearch で M-A 信頼情報源を確定・全リスト doc 化。無作為20匹で end-to-end 検証。 | 中 | 低 | ~中（大半データ） | 新構造の妥当性確認・skill 化 |
-| **04 per-regulation 種族/メガ構造化** | global 生成 species.ts 廃止 → per-reg `regulations/<id>/species.ts` を正本化 + 派生統合 view + ADR。 | 高 | 高 | ~500-900 | 構造変更・データ量不変・diff 過大なら 2 PR 分割 |
+| **04 per-regulation 種族型 + 個体複数レギュ宣言** | global species.ts 廃止 → per-reg `regulations/<id>/species.ts`（per-reg 習得技）を正本化 + reg-aware 型機構 + 個体 `regulations:[]` fan-out + ADR(supersede 0021)。 | 高 | 高 | ~700-1200 | 構造 + 型機構・データ量不変・diff 過大なら 2 PR（型基盤 / 個体 fan-out）分割 |
 | **05 M-A 全データ投入** | M-A 解禁の種族・技・持ち物・メガを全量投入し完成。 | 低 | 低 | 大（データ例外） | データ投入 PR |
 
 - **01 → 02 → 03 → 04 → 05 の直列**。01/02/04 は共に `generate.ts` と生成構造を触り競合しやすいため直列。
