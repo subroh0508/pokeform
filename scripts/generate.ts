@@ -41,12 +41,19 @@ const TYPES = [
   "fairy",
 ];
 
-interface Roster {
+interface SpeciesCatalog {
   pokemon: string[];
-  moves: string[];
-  items: string[];
   megaLinks?: Record<string, string>;
+}
+interface MovesCatalog {
+  moves: string[];
+}
+interface ItemsCatalog {
+  items: string[];
   itemMeta?: Record<string, { megaStoneFor?: string }>;
+}
+interface AbilitiesCatalog {
+  abilities: string[];
 }
 interface RegulationFile {
   regulations: Record<string, { name: { en: string; ja: string }; allow: string[] }>;
@@ -73,7 +80,10 @@ const pickName = (names: NameEntry[], langs: string[]): string => {
 /** オブジェクトを TS リテラルとして直列化（Biome が後段で整形する）。 */
 const lit = (value: unknown): string => JSON.stringify(value, null, 2);
 
-const roster = ch<Roster>("roster.yaml");
+const speciesCat = ch<SpeciesCatalog>("catalog/species.yaml");
+const movesCat = ch<MovesCatalog>("catalog/moves.yaml");
+const itemsCat = ch<ItemsCatalog>("catalog/items.yaml");
+const abilitiesCat = ch<AbilitiesCatalog>("catalog/abilities.yaml");
 const regs = ch<RegulationFile>("regulation.yaml");
 
 // --- types（全 18・相性表） -------------------------------------------------
@@ -98,7 +108,7 @@ for (const t of TYPES) {
 
 // --- moves -----------------------------------------------------------------
 const moveEntries: Record<string, unknown> = {};
-for (const m of roster.moves) {
+for (const m of movesCat.moves) {
   const j = raw("move", m);
   moveEntries[m] = {
     id: m,
@@ -115,17 +125,24 @@ for (const m of roster.moves) {
   };
 }
 
-// --- abilities（roster pokemon の特性を芋づる式に集約） ----------------------
-const abilityNames = new Set<string>();
+// --- abilities（catalog/abilities.yaml を正本に生成・種族の特性はこの id を参照） ------
 const pokeJson: Record<string, Record<string, unknown>> = {};
-for (const slug of roster.pokemon) {
-  const poke = raw("pokemon", slug);
-  pokeJson[slug] = poke;
-  for (const a of poke.abilities as { ability: { name: string } }[])
-    abilityNames.add(a.ability.name);
+for (const slug of speciesCat.pokemon) {
+  pokeJson[slug] = raw("pokemon", slug);
+}
+// 参照整合: 各種族の特性が abilities カタログに存在することを検証（append-only マスターの担保）。
+const abilitySet = new Set(abilitiesCat.abilities);
+for (const slug of speciesCat.pokemon) {
+  for (const a of pokeJson[slug]?.abilities as { ability: { name: string } }[]) {
+    if (!abilitySet.has(a.ability.name)) {
+      throw new Error(
+        `ability '${a.ability.name}' of '${slug}' not in catalog/abilities.yaml (append-only catalog)`,
+      );
+    }
+  }
 }
 const abilityEntries: Record<string, unknown> = {};
-for (const a of [...abilityNames].sort()) {
+for (const a of [...abilitiesCat.abilities].sort()) {
   const j = raw("ability", a);
   abilityEntries[a] = {
     id: a,
@@ -138,9 +155,9 @@ for (const a of [...abilityNames].sort()) {
 
 // --- items -----------------------------------------------------------------
 const itemEntries: Record<string, unknown> = {};
-for (const i of roster.items) {
+for (const i of itemsCat.items) {
   const j = raw("item", i);
-  const meta = roster.itemMeta?.[i];
+  const meta = itemsCat.itemMeta?.[i];
   const entry: Record<string, unknown> = {
     id: i,
     name: {
@@ -166,9 +183,9 @@ for (const [id, reg] of Object.entries(regs.regulations)) {
 }
 
 // --- species ---------------------------------------------------------------
-const moveIdSet = new Set(roster.moves);
+const moveIdSet = new Set(movesCat.moves);
 const speciesEntries: Record<string, unknown> = {};
-for (const slug of roster.pokemon) {
+for (const slug of speciesCat.pokemon) {
   const poke = pokeJson[slug];
   if (!poke) throw new Error(`missing pokemon json: ${slug}`);
   const speciesName = (poke.species as { name: string }).name;
@@ -200,7 +217,7 @@ for (const slug of roster.pokemon) {
     if (key) base[key] = s.base_stat;
   }
   const learn = (poke.moves as { move: { name: string } }[]).map((m) => m.move.name);
-  const moves = roster.moves.filter((m) => moveIdSet.has(m) && learn.includes(m));
+  const moves = movesCat.moves.filter((m) => moveIdSet.has(m) && learn.includes(m));
   const entry: Record<string, unknown> = {
     dex: speciesJson.id,
     id: slug,
@@ -212,7 +229,7 @@ for (const slug of roster.pokemon) {
     items: "any",
     regulations: regOf[slug] ?? [],
   };
-  const mega = roster.megaLinks?.[slug];
+  const mega = speciesCat.megaLinks?.[slug];
   if (mega) entry.megaEvolvesTo = mega;
   speciesEntries[slug] = entry;
 }

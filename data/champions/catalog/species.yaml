@@ -1,0 +1,24 @@
+# data/champions/catalog/species.yaml — 種族カタログ（append-only マスター・手動・コミット）。
+# ポケモンチャンピオンズに**一度でも解禁された種族**の slug を列挙する vendor スコープ。
+# fetch-pokeapi.ts はここ（+ moves/items/abilities）の列挙のみ取得し data/raw にキャッシュ、
+# generate.ts が data/generated/species.ts を出力する。
+#
+# append-only 方針: 一度解禁された種族は、後のレギュレーションで没収されても**この一覧から消さない**
+# （解禁の正本はレギュレーションごとの別管理が持つ＝後続フェーズで導入。本ファイルは「存在した
+# ことのある種族」のマスター）。スコープを広げるときは列挙を足して再取得・再生成すればよい。
+#
+# pokemon: PokeAPI の pokemon slug（フォルム/メガは固有 slug）。
+# megaLinks: base SpeciesId -> メガ先 SpeciesId（種族の megaEvolvesTo を張る）。
+pokemon:
+  - garchomp
+  - dragonite
+  - salamence
+  - metagross
+  - rotom-wash
+  - charizard
+  - charizard-mega-x
+  - mewtwo
+  - dragapult
+  - hydreigon
+megaLinks:
+  charizard: charizard-mega-x

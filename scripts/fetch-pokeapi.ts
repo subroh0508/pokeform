@@ -1,13 +1,12 @@
 /**
  * fetch-pokeapi.ts — PokeAPI を取得し `data/raw/`（.gitignore）にキャッシュする。
  *
- * vendor 方式（ADR 0012）の取得段。`data/champions/roster.yaml` の列挙（pokemon / moves /
- * items）+ 全 18 タイプを取得し、リソース種別ごとに `data/raw/<category>/<name>.json` へ保存する。
- * 既にキャッシュ済みのファイルは再取得しない（決定論・オフライン再生のため）。abilities は
- * 取得した pokemon の abilities から芋づる式に集める。
+ * vendor 方式（ADR 0012）の取得段。`data/champions/catalog/*.yaml` の列挙（species / moves /
+ * items / abilities）+ 全 18 タイプを取得し、リソース種別ごとに `data/raw/<category>/<name>.json`
+ * へ保存する。既にキャッシュ済みのファイルは再取得しない（決定論・オフライン再生のため）。
  *
  * 実行: `pnpm fetch:data`（ネットワーク必須）。取得後は raw キャッシュ固定で generate.ts が
- * 決定論的に data/generated を出力する。スコープ（全種族 vs サブセット）は roster.yaml が制御する。
+ * 決定論的に data/generated を出力する。スコープ（全種族 vs サブセット）は catalog/*.yaml が制御する。
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -40,11 +39,9 @@ const TYPES = [
   "fairy",
 ];
 
-interface Roster {
-  pokemon: string[];
-  moves: string[];
-  items: string[];
-}
+/** catalog/*.yaml をまとめて読むための最小形（fetch は列挙だけ要る）。 */
+const readCatalog = <T>(root: string, file: string): T =>
+  parseYaml(readFileSync(join(root, "data", "champions", "catalog", file), "utf8")) as T;
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
@@ -73,28 +70,26 @@ async function fetchInto(category: string, name: string): Promise<Record<string,
 }
 
 async function main(): Promise<void> {
-  const roster = parseYaml(
-    readFileSync(join(ROOT, "data", "champions", "roster.yaml"), "utf8"),
-  ) as Roster;
+  const { pokemon } = readCatalog<{ pokemon: string[] }>(ROOT, "species.yaml");
+  const { moves } = readCatalog<{ moves: string[] }>(ROOT, "moves.yaml");
+  const { items } = readCatalog<{ items: string[] }>(ROOT, "items.yaml");
+  const { abilities } = readCatalog<{ abilities: string[] }>(ROOT, "abilities.yaml");
 
   // タイプ（全 18・相性表のソース）
   for (const t of TYPES) await fetchInto("type", t);
 
   // pokemon 本体 + 種族（ja 名・全国図鑑番号）+ フォルム（メガ/リージョンの ja 名）
-  const abilityNames = new Set<string>();
-  for (const slug of roster.pokemon) {
+  for (const slug of pokemon) {
     const poke = await fetchInto("pokemon", slug);
     const species = (poke.species as { name: string }).name;
     await fetchInto("pokemon-species", species);
     if (slug !== species) await fetchInto("pokemon-form", slug);
-    for (const a of poke.abilities as { ability: { name: string } }[]) {
-      abilityNames.add(a.ability.name);
-    }
   }
 
-  for (const name of abilityNames) await fetchInto("ability", name);
-  for (const m of roster.moves) await fetchInto("move", m);
-  for (const i of roster.items) await fetchInto("item", i);
+  // 特性は catalog/abilities.yaml を正本に取得（append-only マスター）。
+  for (const name of abilities) await fetchInto("ability", name);
+  for (const m of moves) await fetchInto("move", m);
+  for (const i of items) await fetchInto("item", i);
 
   console.log("[fetch] done");
 }

@@ -16,7 +16,7 @@ PokeAPI を vendor 方式で取り込み `data/generated/` を出力する流れ
   - `rules.yaml`（能力ポイント 66/32・計算式定数）
   - `regulation.yaml`（各レギュの解禁許可リスト）
   - `overrides.yaml`（習得技 / 特性の世代差・上書き）
-  - `roster.yaml`（vendor スコープのマニフェスト = 取得対象 pokemon / moves / items・メガ links）
+  - `catalog/{species,moves,items,abilities}.yaml`（vendor スコープのマニフェスト = 取得対象を**エンティティ種別ごと**に列挙する **append-only マスター**。`species.yaml` は `pokemon` + `megaLinks`、`items.yaml` は `items` + `itemMeta`、`abilities.yaml` は種族が参照する特性 id を持つ）。**append-only 方針**: 一度解禁されたものは後のレギュレーションで没収されても消さない（レギュレーションごとの解禁/非解禁の正本は別管理）。種族の `abilities` はカタログ id を参照し、カタログに無い id を参照すると `generate.ts` が**生成段でエラー**にして整合を担保する。
 - **`data/generated/`** = **コミット**。`scripts/generate.ts` が raw と champions を合成して Dex 単位の `.ts`（`types` / `moves` / `abilities` / `items` / `species` / `regulations` / `names`）を出力する。各ファイルは `export const xxxDex = {...} as const` の**値**から `type XxxDex = typeof xxxDex` / `XxxId = keyof XxxDex` で**型を派生**し、値と型を単一ソース化する（別ファイルに二重管理しない）。親型適合は `satisfies` / `Assignable`（[[type-conventions]] / [[tsc-verification]]）で検証し、出力後に Biome 整形して機械ゲートと一致させる。
 - 生成物は手書き編集しない。raw / champions を直し、再生成する（オフライン・決定論的・CI 高速のため vendor をコミットする）。
 

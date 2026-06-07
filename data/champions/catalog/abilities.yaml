@@ -1,0 +1,26 @@
+# data/champions/catalog/abilities.yaml — 特性カタログ（append-only マスター・手動・コミット）。
+# ポケモンチャンピオンズに**一度でも解禁された種族が持つ特性**の id を列挙する vendor スコープ。
+# generate.ts はここの特性を取得・整形し data/generated/abilities.ts を出力し、種族の abilities は
+# この id を参照する（カタログに無い id を種族が参照すると生成段でエラー = 整合担保）。
+#
+# 初期値は roster の代表種から自動収集していた特性集合を seed にしている（取りこぼし防止）。以後は
+# append-only: 新種族の追加で増える特性を手動追記し、没収されても消さない。
+#
+# abilities: PokeAPI の ability slug（sort 済み）。
+abilities:
+  - blaze
+  - clear-body
+  - cursed-body
+  - infiltrator
+  - inner-focus
+  - intimidate
+  - levitate
+  - light-metal
+  - moxie
+  - multiscale
+  - pressure
+  - rough-skin
+  - sand-veil
+  - solar-power
+  - tough-claws
+  - unnerve

@@ -287,7 +287,7 @@ pokeform/
 │  └─ generate.ts
 ├─ data/
 │  ├─ raw/                      # .gitignore
-│  ├─ champions/                # コミット: rules.yaml / regulation.yaml / overrides.yaml / roster.yaml
+│  ├─ champions/                # コミット: rules.yaml / regulation.yaml / overrides.yaml / catalog/{species,moves,items,abilities}.yaml
 │  └─ generated/               # コミット: Dex 単位 .ts（types/moves/abilities/items/species/regulations/names・値 as const → 型派生）
 └─ team/                        # サンプル兼ユーザー置き場
    ├─ individuals/*.yaml
@@ -368,7 +368,7 @@ members:
 ## 実装フェーズ
 
 - **Phase 0 — 足場**: pnpm init / tsconfig 2種 / biome / vitest / cac。`src/types/stats.ts`・`type-chart.ts` 静的型。`domain/calc-stats.ts` + テスト（後述の検証式を実装）。
-- **Phase 1 — データ生成 + MVP**: `scripts/fetch-pokeapi.ts` + `generate.ts` で `data/generated/` の Dex 群を生成（MVP は代表種サブセット + 全 18 タイプ。`roster.yaml` を広げれば全種族へ拡張可）。`io/load-party.ts` + `resolve-paths.ts`。`domain/coverage.ts` + `type-effectiveness.ts`。CLI `analyze:coverage`、`check:party`（参照解決・重複・未解禁・体数 = 一貫性チェック）。→ **要求 MVP 達成**。
+- **Phase 1 — データ生成 + MVP**: `scripts/fetch-pokeapi.ts` + `generate.ts` で `data/generated/` の Dex 群を生成（MVP は代表種サブセット + 全 18 タイプ。`catalog/*.yaml` を広げれば全種族へ拡張可）。`io/load-party.ts` + `resolve-paths.ts`。`domain/coverage.ts` + `type-effectiveness.ts`。CLI `analyze:coverage`、`check:party`（参照解決・重複・未解禁・体数 = 一貫性チェック）。→ **要求 MVP 達成**。
 - **Phase 2 — 個体 tsc 検証層**: `codegen/emit-individual-ts.ts` / `emit-party-ts.ts` / `run-tsc.ts`。`tsconfig.generated.json`。ジェネリック種族制約 `SpeciesDex[S]` の本格運用。`check:individual` / `compile` / `typecheck`。ブランドエラー型で診断可読化。
 - **Phase 3 — ステータス調整の壁打ち**: `pokeform stat`（実数値・性格補正・ポイント配分・耐久指数表示）、耐久/火力指数（`domain/stat-indices.ts`）、ダメージ式（`domain/damage.ts`・確定数判定の範囲）、ポイント逆算（`domain/stat-tuning.ts`・「○○の××を確定耐え」「素早さ□□抜き」→ 合計66/各≤32 で解探索・実現不能は報告）と調整提案。耐久/火力指数・ダメージ式・逆算の定義は [[game-spec]] を参照。本格ダメージ計算（乱数16段の確定数表・急所・補正）は将来計画 `02-<slug>` へ。
 

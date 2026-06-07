@@ -1,0 +1,34 @@
+# data/champions/catalog/moves.yaml — 技カタログ（append-only マスター・手動・コミット）。
+# ポケモンチャンピオンズに**一度でも解禁された技**の id を列挙する vendor スコープ。
+# generate.ts はここの技を取得・整形し data/generated/moves.ts を出力する。種族の learnable は
+# PokeAPI 由来でこのカタログとの積集合になる。
+#
+# append-only 方針: 一度解禁された技は、後のレギュレーションで没収されても**この一覧から消さない**
+# （レギュレーションごとの解禁/非解禁の正本は別管理が持つ＝後続フェーズで導入）。
+#
+# moves: PokeAPI の move slug。
+moves:
+  - earthquake
+  - dragon-claw
+  - stone-edge
+  - swords-dance
+  - outrage
+  - fire-punch
+  - extreme-speed
+  - draco-meteor
+  - fire-blast
+  - roost
+  - meteor-mash
+  - zen-headbutt
+  - bullet-punch
+  - hydro-pump
+  - thunderbolt
+  - volt-switch
+  - will-o-wisp
+  - flare-blitz
+  - psystrike
+  - ice-beam
+  # dragapult / hydreigon（M-A 解禁）の個体で参照する技。
+  - shadow-ball
+  - dark-pulse
+  - nasty-plot
