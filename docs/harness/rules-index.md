@@ -28,6 +28,7 @@
 | `docs/**` | `code-review.md` |
 | `docs/harness/**` | `redaction.md` |
 | `docs/harness/learnings/**` | `retrospective-format.md` |
+| `docs/plan/**` | `planning.md` |
 | `scripts/**` | `code-review.md`, `data-pipeline.md` |
 | `src/**` | `code-review.md` |
 | `src/cli/**` | `cli-and-io.md` |
@@ -55,6 +56,7 @@
 | `game-spec.md` | `data/**`<br>`src/domain/**` | ポケモンチャンピオンズの確定ゲーム仕様（実数値の二重 floor 計算式・能力ポイント 66/32・性格 ±10%・Lv50/個体値31 固定・レギュ M 系）。data/ や src/domain/ を扱うとき適用する。 |
 | `harness-meta-criteria.md` | `.claude/skills/harness-meta/**` | harness-meta skill が learning の改善提案を「採用 / 見送り / 撤去」へ振り分ける判定基準。 |
 | `implementation-workflow.md` | `.claude/skills/implementation-workflow/**` | implementation-workflow skill の詳細手順 SoT。1 本の PR の実装ライフサイクル（Phase 0〜9: worktree 作成 → 着手 → 実装+verify fix loop → セルフ検証 → Draft PR → 独立レビュー → auto-merge → レトロ → worktree 削除）の各フェーズの入出力・成功条件・失敗 fallback と不変条件（fix loop 上限3・Generator/Evaluator 独立・worktree Phase 0/9 ペア・auto-merge 委譲）を定める。implementation-workflow skill を読む / 動かすときに適用する。 |
+| `planning.md` | `docs/plan/**` | 実装指示を計画へ落とす手順の SoT。生の指示は必ず `plans-new` スキルを入口に通し、まず OVERVIEW（ゴール / 背景 / 設計方針 / 実装指針 / スコープ外）を作ってから 6 基準（意思決定の数 / 不可逆性 / スコープの広さ / 技術的難易度 / 想定 diff ~500行目安・>1000行は積極分割 / 並行実装のしやすさ）で 1 phase = 1 PR に分割する。1 PR 妥当なら GitHub issue + implementation-workflow、複数なら docs/plan/NN-{slug} 計画群を起こす。docs/plan/** を作る / 編集する・新しい計画群やテーマを起こすときに適用する。 |
 | `redaction.md` | `docs/harness/**` | docs/harness/ 配下（特に learnings）へ書き出す前に Secrets / 最小 PII を `[REDACTED-*]` へ置換する規約と正規表現。 |
 | `retrospective-format.md` | `docs/harness/learnings/**`<br>`.claude/skills/pr-retrospective/**`<br>`.claude/skills/harness-meta/**` | PR ごと KPT learning ファイルの構造 SoT。`pr-retrospective` が生成し `harness-meta` が parse する正規フォーマットを定義する。 |
 | `skill-authoring.md` | `.claude/skills/**`<br>`.agents/skills/**` | skill の新規作成・改修は `skill-creator` skill の利用を必須化する方針（手書きで SKILL.md を起こさない・description=trigger・≤500 行・標準構成・canonical + symlink 配置）。.claude/skills/ や .agents/skills/ を扱うとき適用する。 |
