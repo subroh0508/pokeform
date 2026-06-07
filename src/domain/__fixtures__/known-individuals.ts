@@ -1,5 +1,5 @@
-import type { NatureSpec } from "../../types/nature";
-import type { BaseStats, PointAllocation, RealStats } from "../../types/stats";
+import type { NatureSpec } from "../../types/nature.ts";
+import type { BaseStats, PointAllocation, RealStats } from "../../types/stats.ts";
 
 /**
  * 既知個体の実数値照合 fixture（Lv50・個体値31 固定）。

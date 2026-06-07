@@ -51,7 +51,9 @@ flowchart LR
 
 「**種族値が一意に定まる粒度 = 1種族**」を `SpeciesId`（kebab-case の安定キー）とする。フォルム/リージョン/メガで種族値が変わるものは別 `SpeciesId`（例 `charizard`, `charizard-mega-x`, `rotom-wash`, `tauros-paldea-aqua`）。
 
-巨大 union の分配コストを避けるため、**`interface SpeciesDex` のプロパティアクセス（`SpeciesDex[S]`）主体**で制約する。
+巨大 union の分配コストを避けるため、**`SpeciesDex[S]` のプロパティアクセス主体**で制約する。
+
+> **実装上の materialize（Phase 1 で確定）**: 以下の `interface SpeciesDex { ... }` / `interface MoveDex { ... }` 等のコード例は**型の形（shape）の図示**であり、生成物の実ファイル構成ではない。`data/generated/<dex>.ts` は値 `export const xxxDex = { ... } as const` を出力し、そこから **`type XxxDex = typeof xxxDex` / `type XxxId = keyof XxxDex` を派生**して**値と型を単一ソース化**する（型と値を別ファイルに二重管理しない）。親型 `XxxBase` への適合は `satisfies`（acyclic な types/moves/abilities）または `Assignable<Record<string, XxxBase>, XxxDex>`（`megaEvolvesTo`/`megaStoneFor` が派生 `SpeciesId` を自己参照する species/items）で検証する。詳細は [[type-conventions]] / [[data-pipeline]]。
 
 **英名/日本語名の両対応**: 種族名・タイプ・技・特性・持ち物はすべて**英名（kebab-case の安定 ID = 型キー）と日本語名の対応を型として持つ**。ID を型キーに使うのは安定性（PokeAPI 由来・改名されにくい・union キーに適する）のため。日本語名は ① 各エントリの `name` プロパティ ② 名前変換マップ型 `JaName<Id>` / `IdByJaName<"ピカチュウ">` の双方向リテラル型で引けるようにし、YAML を日本語名でも英名でも記述できるようにする（codegen が解決）。
 
@@ -225,7 +227,7 @@ flowchart LR
     end
     RAW --> GEN["scripts/generate.ts"]
     CH --> GEN
-    GEN --> OUT["data/generated/ (コミット)<br/>species.ts(型) + species.data.ts(値)"]
+    GEN --> OUT["data/generated/ (コミット)<br/>Dex 単位 .ts（値 as const → 型派生・単一ソース）"]
 ```
 
 > `data/champions/*.yaml` は PokeAPI に無い情報（能力ポイント・解禁レギュ等）の唯一のソース。`generate.ts` が raw と champions を合成して `data/generated/` を出力する。
@@ -285,8 +287,8 @@ pokeform/
 │  └─ generate.ts
 ├─ data/
 │  ├─ raw/                      # .gitignore
-│  ├─ champions/                # コミット: rules.yaml / regulation.yaml / overrides.yaml
-│  └─ generated/               # コミット: species.ts / species.data.ts
+│  ├─ champions/                # コミット: rules.yaml / regulation.yaml / overrides.yaml / roster.yaml
+│  └─ generated/               # コミット: Dex 単位 .ts（types/moves/abilities/items/species/regulations/names・値 as const → 型派生）
 └─ team/                        # サンプル兼ユーザー置き場
    ├─ individuals/*.yaml
    └─ parties/*.md
@@ -366,7 +368,7 @@ members:
 ## 実装フェーズ
 
 - **Phase 0 — 足場**: pnpm init / tsconfig 2種 / biome / vitest / cac。`src/types/stats.ts`・`type-chart.ts` 静的型。`domain/calc-stats.ts` + テスト（後述の検証式を実装）。
-- **Phase 1 — データ生成 + MVP**: `scripts/fetch-pokeapi.ts` + `generate.ts` で**全種族**の `species.ts`/`species.data.ts` 生成。`io/load-party.ts` + `resolve-paths.ts`。`domain/coverage.ts` + `type-effectiveness.ts`。CLI `analyze:coverage`、`check:party`（参照解決・重複・未解禁・体数 = 一貫性チェック）。→ **要求 MVP 達成**。
+- **Phase 1 — データ生成 + MVP**: `scripts/fetch-pokeapi.ts` + `generate.ts` で `data/generated/` の Dex 群を生成（MVP は代表種サブセット + 全 18 タイプ。`roster.yaml` を広げれば全種族へ拡張可）。`io/load-party.ts` + `resolve-paths.ts`。`domain/coverage.ts` + `type-effectiveness.ts`。CLI `analyze:coverage`、`check:party`（参照解決・重複・未解禁・体数 = 一貫性チェック）。→ **要求 MVP 達成**。
 - **Phase 2 — 個体 tsc 検証層**: `codegen/emit-individual-ts.ts` / `emit-party-ts.ts` / `run-tsc.ts`。`tsconfig.generated.json`。ジェネリック種族制約 `SpeciesDex[S]` の本格運用。`check:individual` / `compile` / `typecheck`。ブランドエラー型で診断可読化。
 - **Phase 3 — 将来**: `pokeform stat`、耐久ライン逆算（「○○の××を確定耐え」からポイント逆算）等のステータス調整壁打ち。
 

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
-import type { NatureSpec } from "../types/nature";
-import { garchomp, gardevoir, knownIndividuals } from "./__fixtures__/known-individuals";
+import type { NatureSpec } from "../types/nature.ts";
+import { garchomp, gardevoir, knownIndividuals } from "./__fixtures__/known-individuals.ts";
 import {
   calcHp,
   calcRealStats,
@@ -9,7 +9,7 @@ import {
   natureModFor,
   POINT_MAX_PER_STAT,
   POINT_TOTAL,
-} from "./calc-stats";
+} from "./calc-stats.ts";
 
 describe("calcHp", () => {
   test("ポイント 0 境界", () => {

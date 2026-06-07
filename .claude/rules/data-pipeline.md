@@ -16,7 +16,8 @@ PokeAPI を vendor 方式で取り込み `data/generated/` を出力する流れ
   - `rules.yaml`（能力ポイント 66/32・計算式定数）
   - `regulation.yaml`（各レギュの解禁許可リスト）
   - `overrides.yaml`（習得技 / 特性の世代差・上書き）
-- **`data/generated/`** = **コミット**（`species.ts`(型) + `species.data.ts`(値) 等）。`scripts/generate.ts` が raw と champions を合成して出力する。
+  - `roster.yaml`（vendor スコープのマニフェスト = 取得対象 pokemon / moves / items・メガ links）
+- **`data/generated/`** = **コミット**。`scripts/generate.ts` が raw と champions を合成して Dex 単位の `.ts`（`types` / `moves` / `abilities` / `items` / `species` / `regulations` / `names`）を出力する。各ファイルは `export const xxxDex = {...} as const` の**値**から `type XxxDex = typeof xxxDex` / `XxxId = keyof XxxDex` で**型を派生**し、値と型を単一ソース化する（別ファイルに二重管理しない）。親型適合は `satisfies` / `Assignable`（[[type-conventions]] / [[tsc-verification]]）で検証し、出力後に Biome 整形して機械ゲートと一致させる。
 - 生成物は手書き編集しない。raw / champions を直し、再生成する（オフライン・決定論的・CI 高速のため vendor をコミットする）。
 
 ## PokeAPI 項目対応
