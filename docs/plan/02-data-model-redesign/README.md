@@ -24,7 +24,7 @@ flowchart TD
 ## フェーズ一覧（この順で実施）
 
 - [x] [Phase 1 — カタログ分離（種族 / 技 / 持ち物 / 特性の append-only マスター）](./phase-01-catalog-split.md)
-- [ ] [Phase 2 — レギュレーションモデル再設計（per-reg YAML + period + per-reg 型 + A案型機構）](./phase-02-regulation-model.md)
+- [x] [Phase 2 — レギュレーションモデル再設計（per-reg YAML + period + per-reg 型 + A案型機構）](./phase-02-regulation-model.md)
 - [ ] [Phase 3 — 情報源確定 + 20匹サンプル検証](./phase-03-source-and-sample.md)
 - [ ] [Phase 4 — M-A 全データ投入](./phase-04-ma-full-data.md)
 

@@ -44,7 +44,7 @@ pokeform の実装計画は **計画ディレクトリ単位**で分割し、各
 ### 02-data-model-redesign（データ保持モデル再設計）
 
 - [x] 02-data-model-redesign / phase-01 — カタログ分離（種族 / 技 / 持ち物 / 特性の append-only マスター）
-- [ ] 02-data-model-redesign / phase-02 — レギュレーションモデル再設計（per-reg YAML + period + per-reg 型 + A案型機構）
+- [x] 02-data-model-redesign / phase-02 — レギュレーションモデル再設計（per-reg YAML + period + per-reg 型 + A案型機構）
 - [ ] 02-data-model-redesign / phase-03 — 情報源確定 + 20匹サンプル検証
 - [ ] 02-data-model-redesign / phase-04 — M-A 全データ投入
 
