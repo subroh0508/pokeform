@@ -18,6 +18,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #38 | 02-data-model-redesign 計画群を plans-new で起票 | 2026-06-07 | 02-data-model-redesign | draft | [2026-06-07-pr-38.md](./2026-06-07-pr-38.md) |
 | #40 | 02 Phase 1 カタログ分離（生成物バイト等価） | 2026-06-07 | 02-data-model-redesign/phase-01 | draft | [2026-06-07-pr-40.md](./2026-06-07-pr-40.md) |
 | #42 | 02 Phase 2 解禁の per-regulation 一本化（A案・ADR 0021） | 2026-06-07 | 02-data-model-redesign/phase-02 | draft | [2026-06-07-pr-42.md](./2026-06-07-pr-42.md) |
+| #44 | 02 Phase 3 M-A情報源確定 + survey-regulation skill + 20匹 | 2026-06-07 | 02-data-model-redesign/phase-03 | draft | [2026-06-07-pr-44.md](./2026-06-07-pr-44.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
