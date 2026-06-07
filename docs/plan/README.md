@@ -6,13 +6,14 @@ pokeform の実装計画は **計画ディレクトリ単位**で分割し、各
 
 - ハーネス整備計画 → [`00-harness-setup/README.md`](./00-harness-setup/)
 - ライブラリ本体（MVP）計画 → [`01-mvp/README.md`](./01-mvp/)
+- データ保持モデル再設計計画 → [`02-data-model-redesign/README.md`](./02-data-model-redesign/)
 - アーキ正本（旧 `plan.md`）→ [`01-mvp/architecture.md`](./01-mvp/architecture.md)
 
 ## 採番 / slug 規約
 
 - 計画ディレクトリは **`NN-<slug>/` 形式**（**ゼロ埋め 2 桁連番** + **kebab-case スラッグ**）。例: `00-harness-setup/`・`01-mvp/`。
-- **確定済み**: `00-harness-setup`（ハーネス）/ `01-mvp`（ライブラリ本体 MVP）。
-- **`02-<slug>/` 以降は事前スタブを作らない**。MVP 後の作業（テーマ）が出るたびに、その内容から slug を**都度生成**して採番する（例: 本格ダメージ計算なら `02-damage-calc/`）。
+- **確定済み**: `00-harness-setup`（ハーネス）/ `01-mvp`（ライブラリ本体 MVP）/ `02-data-model-redesign`（データ保持モデル再設計）。
+- **`03-<slug>/` 以降は事前スタブを作らない**。MVP 後の作業（テーマ）が出るたびに、その内容から slug を**都度生成**して採番する（例: 本格ダメージ計算なら `03-damage-calc/`）。
 - 各計画ディレクトリ配下の Phase doc も同様に **`phase-NN-<slug>.md`**（ゼロ埋め 2 桁）。ディレクトリ直下に当該計画の `README.md`（インデックス）を置く。
 
 ## 全体進捗
@@ -39,6 +40,13 @@ pokeform の実装計画は **計画ディレクトリ単位**で分割し、各
 - [ ] 01-mvp / phase-01 — データ生成 + 一貫性/技範囲チェック（MVP コア）
 - [ ] 01-mvp / phase-02 — 個体 tsc 検証層
 - [ ] 01-mvp / phase-03 — ステータス調整の壁打ち
+
+### 02-data-model-redesign（データ保持モデル再設計）
+
+- [ ] 02-data-model-redesign / phase-01 — カタログ分離（種族 / 技 / 持ち物 / 特性の append-only マスター）
+- [ ] 02-data-model-redesign / phase-02 — レギュレーションモデル再設計（per-reg YAML + period + per-reg 型 + A案型機構）
+- [ ] 02-data-model-redesign / phase-03 — 情報源確定 + 20匹サンプル検証
+- [ ] 02-data-model-redesign / phase-04 — M-A 全データ投入
 
 ## MVP の範囲
 
