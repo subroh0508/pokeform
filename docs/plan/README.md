@@ -46,7 +46,8 @@ pokeform の実装計画は **計画ディレクトリ単位**で分割し、各
 - [x] 02-data-model-redesign / phase-01 — カタログ分離（種族 / 技 / 持ち物 / 特性の append-only マスター）
 - [x] 02-data-model-redesign / phase-02 — レギュレーションモデル再設計（per-reg YAML + period + per-reg 型 + A案型機構）
 - [x] 02-data-model-redesign / phase-03 — 情報源確定 + 20匹サンプル検証
-- [ ] 02-data-model-redesign / phase-04 — M-A 全データ投入
+- [ ] 02-data-model-redesign / phase-04 — per-regulation 種族型 + 個体の複数レギュレーション宣言（global species.ts 廃止 → per-reg 正本・per-reg 習得技 + reg-aware 型機構 + 個体 regulations:[] fan-out）
+- [ ] 02-data-model-redesign / phase-05 — M-A 全データ投入
 
 ## MVP の範囲
 

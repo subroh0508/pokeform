@@ -1,4 +1,4 @@
-# Phase 4 — M-A 全データ投入
+# Phase 5 — M-A 全データ投入
 
 ## 目的 / スコープ
 
@@ -15,6 +15,8 @@ Phase 3 で確定した情報源と全リストに基づき、レギュレーシ
 
 - **Phase 3（情報源確定 + 20匹サンプル検証）完了**。情報源・全リスト・選定/投入手順が確立し、**解禁情報取得
   skill** が作成済みで、新構造が 20 匹で end-to-end に動くことが保証されていること。
+- **Phase 4（per-regulation 種族/メガ構造化）完了**。生成 species 構造が per-reg
+  （`data/generated/regulations/<id>/species.ts`）へ移行済みで、全量投入を**最終構造の上**で行えること。
 - 確定済み rule: [[data-pipeline]] / [[cli-and-io]] / [[type-conventions]] / [[testing]]。
 
 ## タスク
