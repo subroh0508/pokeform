@@ -3,6 +3,7 @@ import { cac } from "cac";
 import type { Lang } from "../types/party.ts";
 import { runAnalyzeCoverage } from "./commands/analyze-coverage.ts";
 import { runCheckParty } from "./commands/check-party.ts";
+import { runCompile, runTypecheck } from "./commands/compile.ts";
 
 /**
  * pokeform CLI（cac ルータ・薄い配線層・カバレッジ対象外）。各コマンドの実体は
@@ -25,6 +26,27 @@ cli
   .option("--lang <lang>", "表示言語 (ja|en)", { default: "ja" })
   .action(async (path: string, options: { lang?: string }) => {
     process.exitCode = await runAnalyzeCoverage(path, toLang(options.lang));
+  });
+
+cli
+  .command("compile <path>", "個体 YAML / パーティ MD を *.generated.ts へ変換（検証の前処理）")
+  .action(async (path: string) => {
+    process.exitCode = await runCompile(path, "all");
+  });
+
+cli
+  .command(
+    "check:individual <path>",
+    "個体整合: 覚えない技 / 使えない特性 / ポイント66 を tsc で検証",
+  )
+  .action(async (path: string) => {
+    process.exitCode = await runTypecheck(path, "individual");
+  });
+
+cli
+  .command("typecheck <path>", "個体 + パーティを compile → tsc 検証し診断を YAML/MD 行へ整形")
+  .action(async (path: string) => {
+    process.exitCode = await runTypecheck(path, "all");
   });
 
 cli.help();

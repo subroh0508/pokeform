@@ -7,11 +7,8 @@
 # package.json の `prepare` スクリプト（Phase 5）で設定され、新規 clone でも
 # `pnpm install` で自動有効化される。
 #
-# コミット境界は「軽く」保つ: ここでは型チェックと Lint のみ。重い検証（テスト・
-# カバレッジ）は pre-push へ集約する。
-#
-# TODO(MVP Phase 2 以降): pokeform 本体の CLI が入ったら `pnpm pokeform typecheck`
-# をこのゲートに追記する。
+# コミット境界は「軽く」保つ: ここでは型チェック・Lint・サンプル個体の tsc 検証のみ。
+# 重い検証（テスト・カバレッジ）は pre-push へ集約する。
 
 set -e
 
@@ -20,5 +17,10 @@ pnpm typecheck
 
 echo "[pre-commit] pnpm lint"
 pnpm lint
+
+# pokeform 個体検証ゲート（Phase 2）: サンプル個体 YAML を codegen→tsc で検証する。
+# team/individuals は全て妥当な個体のみ（不正デモは team/parties/broken.md・意図的に対象外）。
+echo "[pre-commit] pokeform check:individual team/individuals"
+pnpm pokeform check:individual team/individuals
 
 echo "[pre-commit] OK"
