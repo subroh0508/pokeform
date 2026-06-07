@@ -20,5 +20,26 @@ pokemon:
   - mewtwo
   - dragapult
   - hydreigon
+  # M-A 解禁・無作為20匹サンプル（Phase 3・docs/plan/02-data-model-redesign/ma-roster-source.md）。
+  - aggron
+  - alakazam
+  - arcanine
+  - blastoise
+  - chandelure
+  - corviknight
+  - decidueye
+  - excadrill
+  - garganacl
+  - gengar
+  - greninja
+  - heracross
+  - krookodile
+  - lucario
+  - meowscarada
+  - milotic
+  - quaquaval
+  - skeledirge
+  - talonflame
+  - tyranitar
 megaLinks:
   charizard: charizard-mega-x
