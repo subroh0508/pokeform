@@ -1,5 +1,9 @@
 // 生成物（scripts/generate.ts 出力）。手書き編集しない。raw/champions を直し再生成する。
-import type { RegulationBase } from "../../../src/types/regulation.ts";
+import type { RegulationBase } from "../../../../src/types/regulation.ts";
+import { speciesDex } from "./species.ts";
+
+export type { SpeciesDex, SpeciesId } from "./species.ts";
+export { speciesDex };
 
 export const championsMA = {
   id: "champions-m-a",
@@ -48,4 +52,5 @@ export const championsMA = {
     "choice-scarf",
   ],
   mega: ["charizard-mega-x"],
+  speciesDex,
 } as const satisfies RegulationBase;

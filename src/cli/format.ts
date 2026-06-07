@@ -1,4 +1,4 @@
-import { speciesDex } from "../../data/generated/species.ts";
+import { speciesBaseDex } from "../../data/generated/species-base.ts";
 import { typeDex } from "../../data/generated/types.ts";
 import type { Lang } from "../types/party.ts";
 import type { StatKey } from "../types/stats.ts";
@@ -14,7 +14,7 @@ export const typeName = (type: PokemonType, lang: Lang): string => typeDex[type]
 
 /** 種族の表示名（未知 ID はそのまま返す）。 */
 export const speciesName = (id: string, lang: Lang): string => {
-  const entry = (speciesDex as Record<string, { name: { ja: string; en: string } }>)[id];
+  const entry = (speciesBaseDex as Record<string, { name: { ja: string; en: string } }>)[id];
   return entry ? entry.name[lang] : id;
 };
 

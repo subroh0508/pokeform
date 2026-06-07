@@ -1,8 +1,7 @@
 // 生成物（scripts/generate.ts 出力）。手書き編集しない。raw/champions を直し再生成する。
-import type { Assignable } from "../../src/types/assert.ts";
-import type { SpeciesBase } from "../../src/types/species.ts";
+import type { SpeciesBaseInfo } from "../../src/types/species.ts";
 
-export const speciesDex = {
+export const speciesBaseDex = {
   garchomp: {
     dex: 445,
     id: "garchomp",
@@ -19,17 +18,6 @@ export const speciesDex = {
       spDefense: 85,
       speed: 102,
     },
-    abilities: ["sand-veil", "rough-skin"],
-    moves: [
-      "earthquake",
-      "dragon-claw",
-      "stone-edge",
-      "swords-dance",
-      "outrage",
-      "draco-meteor",
-      "fire-blast",
-    ],
-    items: "any",
   },
   dragonite: {
     dex: 149,
@@ -47,22 +35,6 @@ export const speciesDex = {
       spDefense: 100,
       speed: 80,
     },
-    abilities: ["inner-focus", "multiscale"],
-    moves: [
-      "earthquake",
-      "dragon-claw",
-      "stone-edge",
-      "outrage",
-      "fire-punch",
-      "extreme-speed",
-      "draco-meteor",
-      "fire-blast",
-      "roost",
-      "hydro-pump",
-      "thunderbolt",
-      "ice-beam",
-    ],
-    items: "any",
   },
   salamence: {
     dex: 373,
@@ -80,19 +52,6 @@ export const speciesDex = {
       spDefense: 80,
       speed: 100,
     },
-    abilities: ["intimidate", "moxie"],
-    moves: [
-      "earthquake",
-      "dragon-claw",
-      "stone-edge",
-      "outrage",
-      "draco-meteor",
-      "fire-blast",
-      "roost",
-      "zen-headbutt",
-      "hydro-pump",
-    ],
-    items: "any",
   },
   metagross: {
     dex: 376,
@@ -110,16 +69,6 @@ export const speciesDex = {
       spDefense: 90,
       speed: 70,
     },
-    abilities: ["clear-body", "light-metal"],
-    moves: [
-      "earthquake",
-      "stone-edge",
-      "meteor-mash",
-      "zen-headbutt",
-      "bullet-punch",
-      "shadow-ball",
-    ],
-    items: "any",
   },
   "rotom-wash": {
     dex: 479,
@@ -137,17 +86,6 @@ export const speciesDex = {
       spDefense: 107,
       speed: 86,
     },
-    abilities: ["levitate"],
-    moves: [
-      "hydro-pump",
-      "thunderbolt",
-      "volt-switch",
-      "will-o-wisp",
-      "shadow-ball",
-      "dark-pulse",
-      "nasty-plot",
-    ],
-    items: "any",
   },
   charizard: {
     dex: 6,
@@ -165,19 +103,6 @@ export const speciesDex = {
       spDefense: 85,
       speed: 100,
     },
-    abilities: ["blaze", "solar-power"],
-    moves: [
-      "earthquake",
-      "dragon-claw",
-      "swords-dance",
-      "outrage",
-      "fire-punch",
-      "fire-blast",
-      "roost",
-      "will-o-wisp",
-      "flare-blitz",
-    ],
-    items: "any",
     megaEvolvesTo: "charizard-mega-x",
   },
   "charizard-mega-x": {
@@ -196,19 +121,6 @@ export const speciesDex = {
       spDefense: 85,
       speed: 100,
     },
-    abilities: ["tough-claws"],
-    moves: [
-      "earthquake",
-      "dragon-claw",
-      "swords-dance",
-      "outrage",
-      "fire-punch",
-      "fire-blast",
-      "roost",
-      "will-o-wisp",
-      "flare-blitz",
-    ],
-    items: "any",
   },
   mewtwo: {
     dex: 150,
@@ -226,22 +138,6 @@ export const speciesDex = {
       spDefense: 90,
       speed: 130,
     },
-    abilities: ["pressure", "unnerve"],
-    moves: [
-      "earthquake",
-      "stone-edge",
-      "fire-punch",
-      "fire-blast",
-      "zen-headbutt",
-      "thunderbolt",
-      "will-o-wisp",
-      "psystrike",
-      "ice-beam",
-      "shadow-ball",
-      "dark-pulse",
-      "nasty-plot",
-    ],
-    items: "any",
   },
   dragapult: {
     dex: 887,
@@ -259,18 +155,6 @@ export const speciesDex = {
       spDefense: 75,
       speed: 142,
     },
-    abilities: ["clear-body", "infiltrator", "cursed-body"],
-    moves: [
-      "dragon-claw",
-      "outrage",
-      "draco-meteor",
-      "fire-blast",
-      "hydro-pump",
-      "thunderbolt",
-      "will-o-wisp",
-      "shadow-ball",
-    ],
-    items: "any",
   },
   hydreigon: {
     dex: 635,
@@ -288,20 +172,6 @@ export const speciesDex = {
       spDefense: 90,
       speed: 98,
     },
-    abilities: ["levitate"],
-    moves: [
-      "earthquake",
-      "stone-edge",
-      "outrage",
-      "draco-meteor",
-      "fire-blast",
-      "roost",
-      "zen-headbutt",
-      "hydro-pump",
-      "dark-pulse",
-      "nasty-plot",
-    ],
-    items: "any",
   },
   aggron: {
     dex: 306,
@@ -319,20 +189,6 @@ export const speciesDex = {
       spDefense: 60,
       speed: 50,
     },
-    abilities: ["sturdy", "rock-head", "heavy-metal"],
-    moves: [
-      "earthquake",
-      "dragon-claw",
-      "stone-edge",
-      "outrage",
-      "fire-punch",
-      "fire-blast",
-      "hydro-pump",
-      "thunderbolt",
-      "ice-beam",
-      "dark-pulse",
-    ],
-    items: "any",
   },
   alakazam: {
     dex: 65,
@@ -350,9 +206,6 @@ export const speciesDex = {
       spDefense: 95,
       speed: 120,
     },
-    abilities: ["synchronize", "inner-focus", "magic-guard"],
-    moves: ["fire-punch", "zen-headbutt", "shadow-ball", "nasty-plot"],
-    items: "any",
   },
   arcanine: {
     dex: 59,
@@ -370,9 +223,6 @@ export const speciesDex = {
       spDefense: 80,
       speed: 95,
     },
-    abilities: ["intimidate", "flash-fire", "justified"],
-    moves: ["outrage", "extreme-speed", "fire-blast", "will-o-wisp", "flare-blitz"],
-    items: "any",
   },
   blastoise: {
     dex: 9,
@@ -390,9 +240,6 @@ export const speciesDex = {
       spDefense: 105,
       speed: 78,
     },
-    abilities: ["torrent", "rain-dish"],
-    moves: ["earthquake", "outrage", "zen-headbutt", "hydro-pump", "ice-beam", "dark-pulse"],
-    items: "any",
   },
   chandelure: {
     dex: 609,
@@ -410,9 +257,6 @@ export const speciesDex = {
       spDefense: 90,
       speed: 80,
     },
-    abilities: ["flash-fire", "flame-body", "infiltrator"],
-    moves: ["fire-blast", "will-o-wisp", "flare-blitz", "shadow-ball", "dark-pulse"],
-    items: "any",
   },
   corviknight: {
     dex: 823,
@@ -430,9 +274,6 @@ export const speciesDex = {
       spDefense: 85,
       speed: 67,
     },
-    abilities: ["pressure", "unnerve", "mirror-armor"],
-    moves: ["roost", "nasty-plot"],
-    items: "any",
   },
   decidueye: {
     dex: 724,
@@ -450,9 +291,6 @@ export const speciesDex = {
       spDefense: 100,
       speed: 70,
     },
-    abilities: ["overgrow", "long-reach"],
-    moves: ["swords-dance", "roost", "shadow-ball", "nasty-plot"],
-    items: "any",
   },
   excadrill: {
     dex: 530,
@@ -470,9 +308,6 @@ export const speciesDex = {
       spDefense: 65,
       speed: 88,
     },
-    abilities: ["sand-rush", "sand-force", "mold-breaker"],
-    moves: ["earthquake", "swords-dance"],
-    items: "any",
   },
   garganacl: {
     dex: 934,
@@ -490,9 +325,6 @@ export const speciesDex = {
       spDefense: 90,
       speed: 35,
     },
-    abilities: ["purifying-salt", "sturdy", "clear-body"],
-    moves: ["earthquake", "stone-edge", "fire-punch", "zen-headbutt"],
-    items: "any",
   },
   gengar: {
     dex: 94,
@@ -510,9 +342,6 @@ export const speciesDex = {
       spDefense: 75,
       speed: 110,
     },
-    abilities: ["cursed-body"],
-    moves: ["fire-punch", "thunderbolt", "will-o-wisp", "shadow-ball", "dark-pulse", "nasty-plot"],
-    items: "any",
   },
   greninja: {
     dex: 658,
@@ -530,9 +359,6 @@ export const speciesDex = {
       spDefense: 71,
       speed: 122,
     },
-    abilities: ["torrent", "protean"],
-    moves: ["swords-dance", "hydro-pump", "ice-beam", "dark-pulse"],
-    items: "any",
   },
   heracross: {
     dex: 214,
@@ -550,9 +376,6 @@ export const speciesDex = {
       spDefense: 95,
       speed: 85,
     },
-    abilities: ["swarm", "guts", "moxie"],
-    moves: ["earthquake", "stone-edge", "swords-dance"],
-    items: "any",
   },
   krookodile: {
     dex: 553,
@@ -570,9 +393,6 @@ export const speciesDex = {
       spDefense: 70,
       speed: 92,
     },
-    abilities: ["intimidate", "moxie", "anger-point"],
-    moves: ["earthquake", "dragon-claw", "stone-edge", "outrage", "dark-pulse"],
-    items: "any",
   },
   lucario: {
     dex: 448,
@@ -590,20 +410,6 @@ export const speciesDex = {
       spDefense: 70,
       speed: 90,
     },
-    abilities: ["steadfast", "inner-focus", "justified"],
-    moves: [
-      "earthquake",
-      "stone-edge",
-      "swords-dance",
-      "extreme-speed",
-      "meteor-mash",
-      "zen-headbutt",
-      "bullet-punch",
-      "shadow-ball",
-      "dark-pulse",
-      "nasty-plot",
-    ],
-    items: "any",
   },
   meowscarada: {
     dex: 908,
@@ -621,9 +427,6 @@ export const speciesDex = {
       spDefense: 70,
       speed: 123,
     },
-    abilities: ["overgrow", "protean"],
-    moves: ["shadow-ball", "dark-pulse", "nasty-plot"],
-    items: "any",
   },
   milotic: {
     dex: 350,
@@ -641,9 +444,6 @@ export const speciesDex = {
       spDefense: 125,
       speed: 81,
     },
-    abilities: ["marvel-scale", "competitive", "cute-charm"],
-    moves: ["hydro-pump", "ice-beam"],
-    items: "any",
   },
   quaquaval: {
     dex: 914,
@@ -661,9 +461,6 @@ export const speciesDex = {
       spDefense: 75,
       speed: 85,
     },
-    abilities: ["torrent", "moxie"],
-    moves: ["swords-dance", "hydro-pump"],
-    items: "any",
   },
   skeledirge: {
     dex: 911,
@@ -681,17 +478,6 @@ export const speciesDex = {
       spDefense: 75,
       speed: 66,
     },
-    abilities: ["blaze", "unaware"],
-    moves: [
-      "earthquake",
-      "outrage",
-      "fire-blast",
-      "zen-headbutt",
-      "will-o-wisp",
-      "flare-blitz",
-      "shadow-ball",
-    ],
-    items: "any",
   },
   talonflame: {
     dex: 663,
@@ -709,9 +495,6 @@ export const speciesDex = {
       spDefense: 69,
       speed: 126,
     },
-    abilities: ["flame-body", "gale-wings"],
-    moves: ["swords-dance", "fire-blast", "roost", "will-o-wisp", "flare-blitz"],
-    items: "any",
   },
   tyranitar: {
     dex: 248,
@@ -729,25 +512,8 @@ export const speciesDex = {
       spDefense: 100,
       speed: 61,
     },
-    abilities: ["sand-stream", "unnerve"],
-    moves: [
-      "earthquake",
-      "dragon-claw",
-      "stone-edge",
-      "outrage",
-      "fire-punch",
-      "fire-blast",
-      "hydro-pump",
-      "thunderbolt",
-      "ice-beam",
-      "dark-pulse",
-    ],
-    items: "any",
   },
-} as const;
+} as const satisfies Record<string, SpeciesBaseInfo>;
 
-export type SpeciesDex = typeof speciesDex;
-export type SpeciesId = keyof SpeciesDex;
-
-// 適合検証（megaEvolvesTo が派生 SpeciesId を自己参照するため inline satisfies を避け分離する）。
-export type _SpeciesConforms = Assignable<Record<string, SpeciesBase>, SpeciesDex>;
+export type SpeciesBaseDex = typeof speciesBaseDex;
+export type SpeciesBaseId = keyof SpeciesBaseDex;

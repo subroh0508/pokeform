@@ -18,12 +18,12 @@ allowed-tools: WebSearch, WebFetch, Read, Write, Edit, Bash(pnpm *), Bash(node s
 ポケモンチャンピオンズはレギュレーションごとに解禁される**種族・技・持ち物・メガシンカ**が変化する。
 この情報は PokeAPI に無く（[[data-pipeline]]）、外部の対戦情報サイトにしか無い。本 skill は、その解禁情報を
 **WebSearch で複数ソースから集めて突き合わせ**、再現可能な形で doc 化し、`02-data-model-redesign` で定めた
-per-regulation データ構造（[ADR 0021](../../../docs/adr/0021-per-regulation-legality-model.md)）へ反映する
+per-regulation データ構造（[ADR 0021](../../../docs/adr/0021-per-regulation-species-and-legality.md)）へ反映する
 手順を定型化する。M-A だけでなく **M-B 以降や将来のレギュレーション更新で繰り返し使う**。
 
 > データ構造の正本は [[data-pipeline]]（catalog / per-reg の扱い）と
 > [`docs/plan/02-data-model-redesign/OVERVIEW.md`](../../../docs/plan/02-data-model-redesign/OVERVIEW.md)、
-> 解禁判定モデルの「なぜ」は [ADR 0021](../../../docs/adr/0021-per-regulation-legality-model.md)。
+> 解禁判定モデルの「なぜ」は [ADR 0021](../../../docs/adr/0021-per-regulation-species-and-legality.md)。
 > 本 SKILL.md は調査・投入手順に専念し、データ仕様を二重記述しない。
 
 ## なぜこの skill があるか
@@ -112,7 +112,7 @@ MetaVGC 等）を集める。各ソースの「総数・期間・メガ可能数
 ## 関連
 
 - データ構造正本: [[data-pipeline]] / [`02-data-model-redesign/OVERVIEW.md`](../../../docs/plan/02-data-model-redesign/OVERVIEW.md)。
-- 決定の「なぜ」: [ADR 0021](../../../docs/adr/0021-per-regulation-legality-model.md)。
+- 決定の「なぜ」: [ADR 0021](../../../docs/adr/0021-per-regulation-species-and-legality.md)。
 - 検証 / 生成: [`verify`](../verify/SKILL.md) / `pnpm generate:data`。
 - 利用者パーティ点検: [`review-party`](../review-party/SKILL.md) / 生成データ妥当性: `pokemon-data-reviewer` agent。
 - skill 作成方針・cross-agent: [[skill-authoring]] / [[cross-agent]] / [[redaction]]。

@@ -1,6 +1,8 @@
 lang: en
 # はがね/エスパーの物理受け兼アタッカー。とつげきチョッキ。
+# M-A / M-B いずれも未解禁（regulations: []）。fan-out なし = 無制約のデモ個体。
 species: metagross
+regulations: []
 nature: { up: attack, down: spAttack }
 ability: clear-body
 item: assault-vest

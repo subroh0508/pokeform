@@ -1,6 +1,7 @@
 lang: en
 # 高速特殊アタッカー。すばやさ全振りで上から幽霊/竜の二重打点（M-A 解禁）。
 species: dragapult
+regulations: [champions-m-a, champions-m-b]
 nature: { up: spAttack, down: attack }
 ability: infiltrator
 item: life-orb

@@ -1,6 +1,7 @@
 lang: en
 # 物理アタッカー。すばやさ全振りで上から削る（ようき相当）。
 species: garchomp
+regulations: [champions-m-a, champions-m-b]
 nature: { up: speed, down: spAttack }
 ability: rough-skin
 item: rocky-helmet

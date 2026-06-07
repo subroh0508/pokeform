@@ -10,7 +10,7 @@ import { defineIndividual } from "./individual.ts";
 describe("defineIndividual", () => {
   it("種族値・性格・ポイントから実数値を自動計算して格納する", () => {
     // garchomp fixture と同じ入力（攻撃↑/特攻↓・攻撃32・素早さ32・HP2）。
-    const individual = defineIndividual("garchomp", {
+    const individual = defineIndividual("champions-m-a", "garchomp", {
       nature: garchomp.nature,
       ability: "rough-skin",
       item: "rocky-helmet",
@@ -20,14 +20,15 @@ describe("defineIndividual", () => {
     expect(individual.realStats).toEqual(garchomp.expected);
   });
 
-  it("仕様フィールド（種族・特性・持ち物・技）をそのまま保持する", () => {
-    const individual = defineIndividual("garchomp", {
+  it("仕様フィールド（レギュ・種族・特性・持ち物・技）をそのまま保持する", () => {
+    const individual = defineIndividual("champions-m-a", "garchomp", {
       nature: garchomp.nature,
       ability: "sand-veil",
       item: "life-orb",
       points: garchomp.points,
       moves: ["outrage"],
     });
+    expect(individual.regulation).toBe("champions-m-a");
     expect(individual.species).toBe("garchomp");
     expect(individual.ability).toBe("sand-veil");
     expect(individual.item).toBe("life-orb");
@@ -36,7 +37,7 @@ describe("defineIndividual", () => {
 
   it("二重 floor の端数境界（gardevoir 相当の入力）でも一致する", () => {
     // gardevoir は roster 外のため種族値が一致する別個体で計算式の境界のみ確認する。
-    const real = defineIndividual("garchomp", {
+    const real = defineIndividual("champions-m-a", "garchomp", {
       nature: gardevoir.nature,
       ability: "rough-skin",
       item: "life-orb",

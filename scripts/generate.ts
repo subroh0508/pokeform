@@ -2,7 +2,8 @@
  * generate.ts — `data/raw/`（PokeAPI キャッシュ）と `data/champions/`（手動）を合成し
  * `data/generated/`（コミット）へ型 + 値を出力する。vendor 方式（ADR 0012）の生成段。
  *
- * 出力: types / moves / abilities / items / regulations / species / names。各 Dex は
+ * 出力: types / moves / abilities / items / species-base（reg 不変 base view）/ regulations（1 レギュ =
+ * 1 ディレクトリ・per-reg 種族 dex を同梱）/ names。各 Dex は
  * `as const satisfies Record<string, XxxBase>` から `type XxxDex = typeof xxxDex` /
  * `XxxId = keyof XxxDex` を派生（値と型を単一ソース化・[[type-conventions]]）。生成後に
  * Biome で整形して機械ゲート（biome check）と一致させる。手書き編集しない（raw/champions を直す）。
@@ -181,7 +182,8 @@ for (const i of itemsCat.items) {
   itemEntries[i] = entry;
 }
 
-// --- regulations（per-reg・別ファイル別型 + index 集約。解禁判定の正本・ADR 0021） ---------
+// --- regulations（per-reg・1 レギュ = 1 ディレクトリ + index 集約。解禁判定の正本・ADR 0021） -----
+// レギュメタ（regEntries）は name/period/解禁集合のみ。per-reg 習得技は別途 perRegSpecies（種族 dex）が持つ。
 // 参照整合: 解禁集合の id がカタログに存在することを生成段で検証する（append-only マスターの担保）。
 const speciesIdSet = new Set(speciesCat.pokemon);
 const itemIdSet = new Set(itemsCat.items);
@@ -201,7 +203,7 @@ for (const [id, reg] of Object.entries(regs)) {
   check("mega", reg.allow.mega, speciesIdSet);
   check("items", reg.allow.items, itemIdSet);
   check("moves", reg.allow.moves, moveCatSet);
-  // per-reg 型は species / items / mega のみ（技は YAML 記録のみ・型生成しない・ADR 0021）。
+  // メタは species / items / mega（解禁集合）のみ。per-reg 習得技は perRegSpecies が持つ（ADR 0021）。
   regEntries[id] = {
     id,
     name: reg.name,
@@ -269,6 +271,35 @@ for (const slug of speciesCat.pokemon) {
   speciesEntries[slug] = entry;
 }
 
+// --- species-base（reg 不変フィールドのみの派生 base view・全種族） -----------
+// 実数値計算・名前表示・coverage はレギュ非依存のためこの base view を引く（設計判断5・per-reg 化）。
+const speciesBaseEntries: Record<string, unknown> = {};
+for (const [id, e] of Object.entries(speciesEntries)) {
+  const s = e as Record<string, unknown>;
+  const base: Record<string, unknown> = {
+    dex: s.dex,
+    id: s.id,
+    name: s.name,
+    types: s.types,
+    baseStats: s.baseStats,
+  };
+  if (s.megaEvolvesTo) base.megaEvolvesTo = s.megaEvolvesTo;
+  speciesBaseEntries[id] = base;
+}
+
+// --- per-regulation species dex（roster ∪ mega 先・per-reg 習得技を含む legality 正本） ----------
+const perRegSpecies: Record<string, Record<string, unknown>> = {};
+for (const [id, reg] of Object.entries(regs)) {
+  const rosterIds = [...new Set([...reg.allow.species, ...reg.allow.mega])];
+  const dex: Record<string, unknown> = {};
+  for (const sid of rosterIds) {
+    const entry = speciesEntries[sid];
+    if (!entry) throw new Error(`regulation '${id}' roster species '${sid}' missing from catalog`);
+    dex[sid] = entry;
+  }
+  perRegSpecies[id] = dex;
+}
+
 // --- names（ja 名 -> id の逆引き・ランタイム正規化用） ----------------------
 const jaMap = (entries: Record<string, unknown>): Record<string, string> => {
   const out: Record<string, string> = {};
@@ -304,26 +335,35 @@ emit(
   "items.ts",
   `import type { Assignable } from "../../src/types/assert.ts";\nimport type { ItemBase } from "../../src/types/item.ts";\n\nexport const itemDex = ${lit(itemEntries)} as const;\n\nexport type ItemDex = typeof itemDex;\nexport type ItemId = keyof ItemDex;\n\n// 適合検証（megaStoneFor が派生 SpeciesId を指すため inline satisfies を避け分離する）。\nexport type _ItemConforms = Assignable<Record<string, ItemBase>, ItemDex>;\n`,
 );
-// regulations: 1 レギュ = 1 ファイル（別ファイル別型）+ index.ts で regulationDex に集約。
+// species-base: reg 不変 base view（全種族・派生）。
+emit(
+  "species-base.ts",
+  `import type { SpeciesBaseInfo } from "../../src/types/species.ts";\n\nexport const speciesBaseDex = ${lit(speciesBaseEntries)} as const satisfies Record<string, SpeciesBaseInfo>;\n\nexport type SpeciesBaseDex = typeof speciesBaseDex;\nexport type SpeciesBaseId = keyof SpeciesBaseDex;\n`,
+);
+// regulations: 1 レギュ = 1 ディレクトリ。<id>/species.ts（per-reg dex）+ <id>/index.ts（メタ）。
+// 集約 index.ts が regulationDex に集める。
 for (const [id, entry] of Object.entries(regEntries)) {
+  mkdirSync(join(OUT, "regulations", id), { recursive: true });
   emit(
-    join("regulations", `${id}.ts`),
-    `import type { RegulationBase } from "../../../src/types/regulation.ts";\n\nexport const ${camel(id)} = ${lit(entry)} as const satisfies RegulationBase;\n`,
+    join("regulations", id, "species.ts"),
+    `import type { SpeciesBase } from "../../../../src/types/species.ts";\n\nexport const speciesDex = ${lit(perRegSpecies[id])} as const satisfies Record<string, SpeciesBase>;\n\nexport type SpeciesDex = typeof speciesDex;\nexport type SpeciesId = keyof SpeciesDex;\n`,
+  );
+  // メタに speciesDex（import 参照）を同梱して RegulationDex[R]["speciesDex"] から引けるようにする。
+  const metaBody = lit(entry).replace(/\n\}$/, ",\n  speciesDex,\n}");
+  emit(
+    join("regulations", id, "index.ts"),
+    `import type { RegulationBase } from "../../../../src/types/regulation.ts";\nimport { speciesDex } from "./species.ts";\n\nexport { speciesDex };\nexport type { SpeciesDex, SpeciesId } from "./species.ts";\n\nexport const ${camel(id)} = ${metaBody} as const satisfies RegulationBase;\n`,
   );
 }
 {
   const ids = Object.keys(regEntries);
-  const imports = ids.map((id) => `import { ${camel(id)} } from "./${id}.ts";`).join("\n");
+  const imports = ids.map((id) => `import { ${camel(id)} } from "./${id}/index.ts";`).join("\n");
   const members = ids.map((id) => `  ${JSON.stringify(id)}: ${camel(id)},`).join("\n");
   emit(
     join("regulations", "index.ts"),
     `${imports}\n\nexport const regulationDex = {\n${members}\n} as const;\n\nexport type RegulationDex = typeof regulationDex;\nexport type RegulationId = keyof RegulationDex;\n`,
   );
 }
-emit(
-  "species.ts",
-  `import type { Assignable } from "../../src/types/assert.ts";\nimport type { SpeciesBase } from "../../src/types/species.ts";\n\nexport const speciesDex = ${lit(speciesEntries)} as const;\n\nexport type SpeciesDex = typeof speciesDex;\nexport type SpeciesId = keyof SpeciesDex;\n\n// 適合検証（megaEvolvesTo が派生 SpeciesId を自己参照するため inline satisfies を避け分離する）。\nexport type _SpeciesConforms = Assignable<Record<string, SpeciesBase>, SpeciesDex>;\n`,
-);
 emit(
   "names.ts",
   `// ja 表示名 -> 安定 ID の逆引きマップ（ランタイム正規化用・[[cli-and-io]]）。\n` +

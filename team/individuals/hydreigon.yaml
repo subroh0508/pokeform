@@ -1,6 +1,7 @@
 lang: en
 # わるだくみ起点の特殊アタッカー。浮遊で地面を透かす（M-A 解禁）。
 species: hydreigon
+regulations: [champions-m-a, champions-m-b]
 nature: { up: spAttack, down: attack }
 ability: levitate
 item: life-orb

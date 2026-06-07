@@ -38,6 +38,7 @@ const BRANDS = [
   "NotLegalInRegulation",
   "SpeciesNotFound",
   "PartyTooLarge",
+  "RegulationNotDeclaredByMember",
 ];
 
 /** 生成 TS を BUILD_DIR へ書き出す（毎回クリーンに作り直す）。 */

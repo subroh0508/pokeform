@@ -1,17 +1,20 @@
 /**
  * パーティ / 個体ファイルの**生（パース直後）** の形（軽量ランタイム型）と、パーティの
- * **型レベル制約**（同種族重複・タプル長 ≤6・レギュ整合）を提供する。名称はランタイム型では
- * まだ ID 正規化前の文字列で、正規化・検証は `src/io/load-party.ts` が行う（[[cli-and-io]]）。
- * 型レベル制約は codegen 生成 TS が `satisfies ConstrainParty<...>` で参照し、違反を tsc が弾く
- * （[[tsc-verification]]）。
+ * **型レベル制約**（同種族重複・タプル長 ≤6・per-reg roster 整合・メンバーの宣言レギュ整合）を
+ * 提供する。名称はランタイム型ではまだ ID 正規化前の文字列で、正規化・検証は
+ * `src/io/load-party.ts` が行う（[[cli-and-io]]）。型レベル制約は codegen 生成 TS が
+ * `satisfies ConstrainParty<...>` で参照し、違反を tsc が弾く（[[tsc-verification]]）。
  */
 
 import type { RegulationDex, RegulationId } from "../../data/generated/regulations/index.ts";
-import type { SpeciesId } from "../../data/generated/species.ts";
 import type { Invalid } from "./brand.ts";
+import type { SpeciesIdIn } from "./individual.ts";
 
 /** 入力ファイルの記述言語（ファイル単位宣言・未指定の既定は ja）。 */
 export type Lang = "ja" | "en";
+
+/** いずれかのレギュレーションで構築に使える種族 id の総和（per-reg dex キーの union）。 */
+export type AnySpeciesId = { [R in RegulationId]: SpeciesIdIn<R> }[RegulationId];
 
 // --- パーティのブランドエラー型（[[tsc-verification]]） -------------------------------------------
 
@@ -23,11 +26,16 @@ export type NotLegalInRegulation<
   S extends string,
   R extends string,
 > = Invalid<`species '${S}' is not legal in regulation '${R}'`>;
-/** 参照先が有効な種族 ID でない（存在しないフォルム・参照切れ等）。 */
+/** 参照先がどのレギュレーションでも有効な種族 ID でない（存在しないフォルム・参照切れ等）。 */
 export type SpeciesNotFound<S extends string> = Invalid<`'${S}' is not a known species`>;
 /** パーティが最大体数 6 を超過。`N` は実際の体数。 */
 export type PartyTooLarge<N extends number> =
   Invalid<`party has ${N} members but the maximum is 6`>;
+/** メンバー個体 `S` がパーティの宣言レギュ `R` を `regulations` に宣言していない。 */
+export type RegulationNotDeclaredByMember<
+  S extends string,
+  R extends string,
+> = Invalid<`member '${S}' does not declare regulation '${R}'`>;
 
 // --- 制約マップ（codegen 生成 TS が `satisfies ConstrainParty<T,R>` で参照する） -----------------
 
@@ -43,7 +51,7 @@ type ConstrainMember<
   Seen extends readonly string[],
 > = H extends Seen[number]
   ? DuplicateSpeciesInParty<H>
-  : H extends SpeciesId
+  : H extends AnySpeciesId
     ? H extends RegulationDex[R]["species"][number]
       ? H
       : NotLegalInRegulation<H, R>
@@ -61,6 +69,7 @@ type MapMembers<
 /**
  * パーティのメンバー列 `T`（種族 ID のタプル）をレギュレーション `R` の下で検証する制約型。
  * 体数超過なら全要素を `PartyTooLarge` へ、6 以下なら各メンバーを重複・未解禁・未知種族で写像する。
+ * 解禁判定は `R` の per-reg roster（`RegulationDex[R]["species"]`）を正本にする（ADR 0021）。
  * 生成 TS が `members satisfies ConstrainParty<typeof members, R>` と書くと、違反位置の素の文字列が
  * ブランド型へ代入不能になり tsc エラーになる。
  */
@@ -68,6 +77,18 @@ export type ConstrainParty<T extends readonly string[], R extends RegulationId> 
   IsAtMost6<T> extends true
     ? MapMembers<T, R>
     : { readonly [I in keyof T]: PartyTooLarge<T["length"] & number> };
+
+/**
+ * メンバー個体が宣言レギュ `Regs` にパーティの宣言レギュ `R` を含むかを検証する制約型。含めば `R`、
+ * 含まなければ `RegulationNotDeclaredByMember<S, R>` へ写像する。生成 TS が各メンバーで
+ * `satisfies MemberDeclaresRegulation<R, typeof memberRegs, S>` 相当を書き、メンバーが `R` で
+ * 型検証されていない（fan-out していない）不整合を tsc が弾く（[[tsc-verification]]）。
+ */
+export type MemberDeclaresRegulation<
+  R extends string,
+  Regs extends readonly string[],
+  S extends string,
+> = R extends Regs[number] ? R : RegulationNotDeclaredByMember<S, R>;
 
 /** メンバー列の同種族重複のみを検証する制約型（重複位置を `DuplicateSpeciesInParty` へ写像）。 */
 export type UniqueSpecies<
@@ -81,7 +102,7 @@ export type UniqueSpecies<
   : readonly [];
 
 /** パーティの型レベル仕様（宣言レギュ + 制約済みメンバー列）。 */
-export interface PartySpec<T extends readonly SpeciesId[], R extends RegulationId> {
+export interface PartySpec<T extends readonly string[], R extends RegulationId> {
   readonly regulation: R;
   readonly members: ConstrainParty<T, R>;
 }
@@ -90,6 +111,8 @@ export interface PartySpec<T extends readonly SpeciesId[], R extends RegulationI
 export interface IndividualFile {
   readonly lang?: Lang;
   readonly species: string;
+  /** 対象レギュレーション（0〜N）。空 = どのレギュでも未解禁（無制約のデモ個体）。 */
+  readonly regulations?: readonly string[];
   readonly nature: { readonly up: string; readonly down: string };
   readonly ability: string;
   readonly item: string;

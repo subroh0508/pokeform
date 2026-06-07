@@ -1,6 +1,6 @@
 # data/champions/regulations/champions-m-a.yaml — レギュレーション M-A の解禁情報（手動・コミット）。
 # 1 レギュ = 1 ファイル。解禁判定の正本（per-regulation 一本化・ADR 0021）。generate.ts が
-# data/generated/regulations/champions-m-a.ts（per-reg 型・name/period/解禁集合）を出力する。
+# data/generated/regulations/champions-m-a/（index.ts=メタ + species.ts=per-reg 種族 dex）を出力する。
 #
 # period: 開催期間。start 必須・end は空（開催中）を許容。
 # allow: このレギュで使える解禁集合。id は data/champions/catalog/*.yaml を参照する（参照切れは生成段でエラー）。
