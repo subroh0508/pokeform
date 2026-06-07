@@ -207,7 +207,7 @@ export function defineIndividual<S extends SpeciesId>(species: S, spec: Individu
 
 - **per-stat ≤32**: 生成した `type PointValue = 0|1|…|32`。
 - **合計66**: codegen が各個体の合計を算出し、生成 TS に `satisfies PointTotalMustBe66<computedSum>` を埋める。型レベルで `computedSum extends 66` を検証（型レベル算術の重さを codegen 側に逃がす）。
-- **パーティ**: メンバーをタプルで生成し、`UniqueSpecies<T>`（同種族重複）, タプル長 ≤6, `NotLegalInRegulation<S,R>`（各メンバーの `regulations` にパーティ宣言レギュが含まれるか）を型制約。
+- **パーティ**: メンバーをタプルで生成し、`UniqueSpecies<T>`（同種族重複）, タプル長 ≤6, `NotLegalInRegulation<S,R>`（メンバー base 種族 `S` がパーティ宣言レギュ `R` の解禁集合 `regulationDex[R].species` に含まれるか）を型制約（A案・ADR 0021）。
 
 ### 実装値の自動計算
 

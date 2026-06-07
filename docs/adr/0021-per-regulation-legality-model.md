@@ -37,7 +37,8 @@ MVP（[ADR 0012](./0012-vendor-pokeapi-data.md)）では暫定的に、各種族
 
 仕様の詳細は `docs/plan/02-data-model-redesign/OVERVIEW.md` と `.claude/rules/data-pipeline.md` /
 `.claude/rules/type-conventions.md` を正本とし、本 ADR は「なぜ」を記録する。catalog 分離は
-[ADR 0012](./0012-vendor-pokeapi-data.md) の vendor 方式を踏襲した拡張であり、本 ADR は 0012 / 0014 を
+[ADR 0012](./0012-vendor-pokeapi-data.md) の vendor 方式を踏襲した拡張であり、本 ADR は
+[ADR 0012](./0012-vendor-pokeapi-data.md) / [ADR 0014](./0014-yaml-lang-per-file.md) を
 **supersede しない**（vendor 方式・入力言語のファイル単位宣言は不変）。
 
 ## Consequences

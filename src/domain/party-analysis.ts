@@ -13,7 +13,7 @@ export interface SpeciesInfo {
   readonly types: readonly PokemonType[];
   readonly megaEvolvesTo?: string;
 }
-/** レギュレーションの最小情報（解禁判定に必要な解禁種族集合・[[regulation]] / ADR 0021）。 */
+/** レギュレーションの最小情報（解禁判定に必要な解禁種族集合・per-reg 一本化・ADR 0021）。 */
 export interface RegulationInfo {
   readonly species: readonly string[];
 }
