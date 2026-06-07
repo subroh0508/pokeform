@@ -7,7 +7,7 @@ description: 「検証は tsc のみ」方針（Zod 不採用）・YAML→codege
 
 # tsc のみ検証の規約
 
-不正入力を**型エラーとして弾く**検証方針の要点。正本は `docs/plan/01-mvp/architecture.md`（「検証の単一ゲート」節）と ADR `0010-tsc-only-verification`。
+不正入力を**型エラーとして弾く**検証方針の要点。正本は `docs/plan/01-mvp/architecture.md`（「検証の単一ゲート」節）と ADR `0010-tsc-only-verification`。診断可読化（ブランドエラー型 + `@source` 逆引き）の「なぜ」は ADR `0019-branded-error-types-and-source-mapping`。
 
 ## 単一ゲート: YAML/MD → codegen → tsc
 
