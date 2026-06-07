@@ -5,8 +5,9 @@ description: >-
   ポイント 66・各32）で tsc 検証して仕上げる手順 skill。「個体を作りたい」「ポケモンの育成データを書いて」
   「この個体 YAML を検証して」「author-individual <species>」「team/individuals に個体を追加して」
   「覚えない技が無いか確認して」と言われたとき、または個体ファイルを新規作成 / 修正してブラッシュアップ
-  したいときに使う。種族に応じて特性・技・持ち物を `SpeciesDex[S]` の許容値に絞り、合計66 を満たす雛形を
-  提示してから `check:individual` で弾く。パーティ全体の整合・弱点点検は `review-party` を使う。
+  したいときに使う。対象レギュレーションを `regulations: [<id>...]` で宣言し、種族に応じて特性・技・持ち物を
+  per-reg 種族 dex の許容値に絞り、合計66 を満たす雛形を提示してから `check:individual` で弾く。パーティ全体の
+  整合・弱点点検は `review-party` を使う。
 allowed-tools: Bash(pnpm *), Bash(node src/cli/*), Read, Write, Edit
 ---
 
