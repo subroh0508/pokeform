@@ -1,25 +1,30 @@
 # data/champions/regulation.yaml — 各レギュレーションの解禁種族許可リスト（PokeAPI に無い情報・手動）。
 # species は SpeciesId（kebab-case 安定キー）。生成時に各種族の regulations 配列へ逆引きされる。
 # 正本は .claude/rules/data-pipeline.md / docs/plan/01-mvp/architecture.md。
+#
+# 出典（2026-06 検証）: serebii.net/pokemonchampions/rankedbattle/regulationm-a.shtml /
+# game8.co/games/Pokemon-Champions/archives/601460 / bulbapedia「List of Pokémon in Pokémon Champions」。
+# M-A（2026-04-08〜06-17・186種・基本最終進化・メガ可/テラス&ダイマ不可・Restricted なし）では
+# salamence / metagross / mewtwo は roster 不在 = 未解禁。
 regulations:
   champions-m-a:
     name: { en: "Champions Regulation M-A", ja: "チャンピオンズ レギュレーションM-A" }
     allow:
       - garchomp
       - dragonite
-      - salamence
-      - metagross
       - rotom-wash
       - charizard
       - charizard-mega-x
+      - dragapult
+      - hydreigon
   champions-m-b:
     name: { en: "Champions Regulation M-B", ja: "チャンピオンズ レギュレーションM-B" }
+    # 詳細未公開（2026-06-17 開始）。M-A 解禁集合を暫定ベースに置く（公開後に要更新）。
     allow:
       - garchomp
       - dragonite
-      - salamence
-      - metagross
       - rotom-wash
       - charizard
       - charizard-mega-x
-      - mewtwo
+      - dragapult
+      - hydreigon

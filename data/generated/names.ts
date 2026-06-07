@@ -9,6 +9,8 @@ export const speciesIdByJa = {
   リザードン: "charizard",
   メガリザードンＸ: "charizard-mega-x",
   ミュウツー: "mewtwo",
+  ドラパルト: "dragapult",
+  サザンドラ: "hydreigon",
 } as const;
 export const moveIdByJa = {
   じしん: "earthquake",
@@ -31,10 +33,15 @@ export const moveIdByJa = {
   フレアドライブ: "flare-blitz",
   サイコブレイク: "psystrike",
   れいとうビーム: "ice-beam",
+  シャドーボール: "shadow-ball",
+  あくのはどう: "dark-pulse",
+  わるだくみ: "nasty-plot",
 } as const;
 export const abilityIdByJa = {
   もうか: "blaze",
   クリアボディ: "clear-body",
+  のろわれボディ: "cursed-body",
+  すりぬけ: "infiltrator",
   せいしんりょく: "inner-focus",
   いかく: "intimidate",
   ふゆう: "levitate",

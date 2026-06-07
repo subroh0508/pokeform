@@ -9,11 +9,11 @@ export const regulationDex = {
     allow: [
       "garchomp",
       "dragonite",
-      "salamence",
-      "metagross",
       "rotom-wash",
       "charizard",
       "charizard-mega-x",
+      "dragapult",
+      "hydreigon",
     ],
   },
   "champions-m-b": {
@@ -25,12 +25,11 @@ export const regulationDex = {
     allow: [
       "garchomp",
       "dragonite",
-      "salamence",
-      "metagross",
       "rotom-wash",
       "charizard",
       "charizard-mega-x",
-      "mewtwo",
+      "dragapult",
+      "hydreigon",
     ],
   },
 } as const;

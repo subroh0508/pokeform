@@ -16,6 +16,8 @@ pokemon:
   - charizard
   - charizard-mega-x
   - mewtwo
+  - dragapult
+  - hydreigon
 moves:
   - earthquake
   - dragon-claw
@@ -37,6 +39,10 @@ moves:
   - flare-blitz
   - psystrike
   - ice-beam
+  # dragapult / hydreigon（M-A 解禁）の個体で参照する技。
+  - shadow-ball
+  - dark-pulse
+  - nasty-plot
 items:
   - charizardite-x
   - rocky-helmet

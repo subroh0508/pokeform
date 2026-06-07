@@ -16,6 +16,20 @@ export const abilityDex = {
       ja: "クリアボディ",
     },
   },
+  "cursed-body": {
+    id: "cursed-body",
+    name: {
+      en: "Cursed Body",
+      ja: "のろわれボディ",
+    },
+  },
+  infiltrator: {
+    id: "infiltrator",
+    name: {
+      en: "Infiltrator",
+      ja: "すりぬけ",
+    },
+  },
   "inner-focus": {
     id: "inner-focus",
     name: {

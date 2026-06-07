@@ -262,6 +262,45 @@ export const moveDex = {
     pp: 10,
     priority: 0,
   },
+  "shadow-ball": {
+    id: "shadow-ball",
+    name: {
+      en: "Shadow Ball",
+      ja: "シャドーボール",
+    },
+    type: "ghost",
+    damageClass: "special",
+    power: 80,
+    accuracy: 100,
+    pp: 15,
+    priority: 0,
+  },
+  "dark-pulse": {
+    id: "dark-pulse",
+    name: {
+      en: "Dark Pulse",
+      ja: "あくのはどう",
+    },
+    type: "dark",
+    damageClass: "special",
+    power: 80,
+    accuracy: 100,
+    pp: 15,
+    priority: 0,
+  },
+  "nasty-plot": {
+    id: "nasty-plot",
+    name: {
+      en: "Nasty Plot",
+      ja: "わるだくみ",
+    },
+    type: "dark",
+    damageClass: "status",
+    power: null,
+    accuracy: null,
+    pp: 20,
+    priority: 0,
+  },
 } as const satisfies Record<string, MoveBase>;
 
 export type MoveDex = typeof moveDex;
