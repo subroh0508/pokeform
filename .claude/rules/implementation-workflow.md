@@ -51,6 +51,8 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 - **手順**: `git fetch origin main` → unstaged があれば `git stash push -u` →
   `git worktree add <abs-path> -b <branch> origin/main`。branch 名は命名規約（`<type>/<scope>-<purpose>`、
   [AGENTS.md](../../AGENTS.md) / [[cross-agent]]）に従う。worktree パスは**絶対パス**で扱う。
+  worktree 作成後は **`pnpm install` を実行**してから検証する（git worktree は node_modules を共有しないため、
+  各 worktree で依存を導入しないと `pnpm verify` が失敗する）。
 - **成功条件**: worktree が作成され、対象 branch が origin/main 起点で checkout 済み。
 - **fallback**: 既に同名 worktree / branch があれば再利用（再作成しない）。stash した変更は最終フェーズ後に
   `git stash pop` する余地を残す。
@@ -86,7 +88,9 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 
 - **手順**: redaction / secrets 混入なし（[[redaction]]）、cross-agent パリティ（canonical +
   symlink/copy 一致、[[cross-agent]]）、生成物（`data/generated/**` 等）への手編集なし、命名規約準拠、
-  受け入れ基準の充足を点検する。
+  受け入れ基準の充足を点検する。あわせて、**rule が `architecture.md` を正本と宣言しつつ数式・仕様を
+  追記する場合、同一 PR で `architecture.md` を同期しているか**を点検する（rule が正本に先行する doc-data
+  乖離の再発防止）。
 - **成功条件**: 規約違反ゼロ。
 - **fallback**: scope 縮小指示が出た場合は `git reset --soft` でコミットを巻き直し、scope を絞り直す。
 
@@ -114,6 +118,10 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
   [[code-review]]）。
 - **不変条件（Generator/Evaluator 独立）**: 本 skill（実装 = Generator）はレビュー観点を**再実装せず**、
   評価は必ず別 skill（Evaluator）を `Agent` で起動して得る。自己採点で代替しない。
+- **不変条件（worker/orchestrator マージ同期点）**: ワーカーとオーケストレーターを分業する運用では、
+  ワーカーは**レビュー fix を Draft 解除前に取り込んでから** `READY_FOR_MERGE` を報告し、その報告に
+  **fix 込みの最終 HEAD SHA** を含める。オーケストレーターは**マージ対象がその SHA であることを照合**して
+  からマージする（レビュー fix のマージ取りこぼし防止）。
 
 ### Phase 7 — マージ（auto-merge・Phase 3 のゲートに委譲）
 
@@ -134,6 +142,10 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 - **成功条件**: README 進捗が更新され、learning が生成済み。
 - **不変条件**: ADR 採番・レトロ生成・README 更新は各専任 skill の責務。本 skill は**起動・委譲のみ**で
   再実装しない（idempotent: 既に `- [x]` / learning 有りなら二重実行しない）。
+- **README 進捗・doc 同期の取り込み方**: 進捗・doc 同期コミットは**フィーチャー PR に同梱してからマージ**するか、
+  別 follow-up PR に切り出す（オーケストレーター主導マージで同期が main 未反映になるのを防ぐ）。ただし
+  **`docs/plan` の phase doc に紐づかない単発ハーネス PR は finish-phase の README 進捗更新をスキップ可**
+  （想定外パスの正規化）。
 
 ### Phase 9 — Worktree 削除（Phase 0 とペア）
 
