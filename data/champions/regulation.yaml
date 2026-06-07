@@ -20,6 +20,7 @@ regulations:
   champions-m-b:
     name: { en: "Champions Regulation M-B", ja: "チャンピオンズ レギュレーションM-B" }
     # 詳細未公開（2026-06-17 開始）。M-A 解禁集合を暫定ベースに置く（公開後に要更新）。
+    # mewtwo は Restricted で M-A 同様 M-B 暫定にも含めない（公開リストで要確認）。
     allow:
       - garchomp
       - dragonite
