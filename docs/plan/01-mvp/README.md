@@ -19,7 +19,7 @@
 
 - [x] [Phase 0 — 足場 + 実数値計算（calc-stats）](./phase-00-scaffold.md)
 - [x] [Phase 1 — データ生成 + 一貫性/技範囲チェック（MVP コア）](./phase-01-data-and-coverage.md)
-- [ ] [Phase 2 — 個体 tsc 検証層](./phase-02-individual-typecheck.md)
+- [x] [Phase 2 — 個体 tsc 検証層](./phase-02-individual-typecheck.md)
 - [ ] [Phase 3 — ステータス調整の壁打ち](./phase-03-stat-tuning.md)
 
 ## 全体の受け入れ基準
