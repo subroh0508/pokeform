@@ -1,0 +1,8 @@
+lang: en
+# 高速特殊アタッカー。すばやさ全振りで上から幽霊/竜の二重打点（M-A 解禁）。
+species: dragapult
+nature: { up: spAttack, down: attack }
+ability: infiltrator
+item: life-orb
+points: { hp: 2, attack: 0, defense: 0, spAttack: 32, spDefense: 0, speed: 32 }
+moves: [draco-meteor, shadow-ball, fire-blast, thunderbolt]
