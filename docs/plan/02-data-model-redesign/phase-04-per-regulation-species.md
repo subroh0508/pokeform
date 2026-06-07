@@ -14,8 +14,8 @@
   - global `data/generated/species.ts` を**廃止**し、`data/generated/regulations/<id>/species.ts`
     （per-reg `speciesDex` / `SpeciesId`）を**正本**として生成。各レギュの roster（`allow.species` + `mega` 先）に
     絞り、**そのレギュの習得技 `moves`**（および差分があれば `abilities` / `items`）を持つ。
-  - `regulations/<id>.ts`（レギュメタ）が自分の `species.ts` を参照し、`RegulationDex[R]` から
-    `speciesDex` を引けるようにする。
+  - レギュメタを `regulations/<id>/index.ts` へ寄せ（旧 `regulations/<id>.ts` を dir 化）、同ディレクトリの
+    `./species.ts` を参照して `RegulationDex[R]` から `speciesDex` を引けるようにする。
   - 型機構を **reg-aware** にする: `SpeciesDexOf<R>` / `SpeciesIdIn<R>` / `ValidMove<R,S,M>` /
     `ValidMoves<R,S,Ms>` / `ValidAbility<R,S,A>` / `ValidItem<R,S,I>` / `IndividualSpec<R,S>`。
   - 個体 YAML に `regulations: [<id>...]`（1〜N）を導入し、`emit-individual-ts.ts` が宣言レギュごとに
@@ -55,8 +55,10 @@
    `calcRealStats`）・名前表示・coverage はこれらだけを使うため、**reg 不変フィールドの参照経路**を用意する
    （例: 宣言レギュの 1 つの dex から base を引く / reg 不変フィールドのみの派生 base view）。実装方式は
    `start-phase` で確定（型の正本は per-reg のまま）。
-6. **ディレクトリは dir-per-reg**: `data/generated/regulations/champions-m-a/species.ts`。レギュメタ
-   `champions-m-a.ts` は維持（or `champions-m-a/index.ts` へ寄せる。import/Biome 整合で実装時確定）。
+6. **ディレクトリは dir-per-reg・メタは index.ts へ寄せる**: 1 レギュ = 1 ディレクトリ
+   `data/generated/regulations/<id>/` に `index.ts`（レギュメタ＝旧 `<id>.ts` の `championsXX` export を移設）と
+   `species.ts`（per-reg 種族 dex）を同居させる。旧 `regulations/<id>.ts`（フラット）は廃止し、`<id>/index.ts`
+   へ寄せる。集約 `regulations/index.ts` の import は `./<id>/index.ts` を指す。
 7. **ADR 0021 は supersede + archive せず削除して作り直す**: 0021 は本計画 Phase 2 で当日採番された新規 ADR で、
    「生成 species を global 単一 dex とし技は per-reg 型生成しない」前提を一度も ship しないまま本 Phase で覆る。
    よって supersede の連番ログを残さず**0021 を削除し、per-regulation の確定設計（period + 1 レギュ=1 YAML +
@@ -70,7 +72,8 @@
 
 - [ ] `scripts/generate.ts`: global `species.ts` 出力を廃し、roster に絞った per-reg
       `regulations/<id>/species.ts`（`speciesDex` + per-reg `moves`/`abilities`/`items` + `@source` + `satisfies`）を出力。
-- [ ] `regulations/<id>.ts` / `index.ts`: `RegulationDex[R]` から `speciesDex` を引ける形に集約。
+- [ ] `regulations/<id>/index.ts`（旧 `<id>.ts` を dir 化・メタ移設）/ 集約 `regulations/index.ts`:
+      `<id>/index.ts` が `./species.ts` を参照し、`RegulationDex[R]` から `speciesDex` を引ける形に集約。
       `RegulationBase` に `speciesDex` を持たせ（or per-reg 型側）、`species`/`mega` を派生。
 - [ ] `src/types/individual.ts`: `SpeciesDexOf<R>` / `SpeciesIdIn<R>` 起点に `Valid*` / `IndividualSpec<R,S>` /
       `defineIndividual` を reg-aware 化。ブランドエラー型へ `R` を追加。

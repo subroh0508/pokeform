@@ -95,11 +95,13 @@ data/champions/
 data/generated/
   types.ts moves.ts abilities.ts items.ts names.ts              # カタログ由来（ID 集合の universe・species.regulations[] は廃止）
   regulations/
-    champions-m-a.ts            # per-reg メタ：name / period / 解禁 items・mega + 自分の species.ts 参照
-    champions-m-a/species.ts    # ← Phase 4：per-reg 種族定義の正本（roster + その reg の習得技 moves を含む）
-    champions-m-b.ts
-    champions-m-b/species.ts
-    index.ts                    # RegulationId 集約・RegulationDex[R].speciesDex を引ける形
+    champions-m-a/
+      index.ts                  # per-reg メタ：name / period / 解禁 items・mega + ./species.ts 参照（旧 champions-m-a.ts を寄せる）
+      species.ts                # ← Phase 4：per-reg 種族定義の正本（roster + その reg の習得技 moves を含む）
+    champions-m-b/
+      index.ts
+      species.ts
+    index.ts                    # RegulationId 集約・RegulationDex[R].speciesDex を引ける形（各 ./<id>/index.ts を import）
 ```
 
 `data/generated/species.ts`（global 単一 dex）は Phase 4 で**廃止**する。型機構は reg-aware
