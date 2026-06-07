@@ -4,7 +4,7 @@
 # PokeAPI 由来でこのカタログとの積集合になる。
 #
 # append-only 方針: 一度解禁された技は、後のレギュレーションで没収されても**この一覧から消さない**
-# （レギュレーションごとの解禁/非解禁の正本は data/champions/regulations/*.yaml が持つ）。
+# （レギュレーションごとの解禁/非解禁の正本は別管理が持つ＝後続フェーズで導入）。
 #
 # moves: PokeAPI の move slug。
 moves:
