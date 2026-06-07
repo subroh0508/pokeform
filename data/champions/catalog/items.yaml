@@ -1,0 +1,19 @@
+# data/champions/catalog/items.yaml — 持ち物カタログ（append-only マスター・手動・コミット）。
+# ポケモンチャンピオンズに**一度でも解禁された持ち物**の id を列挙する vendor スコープ。
+# generate.ts はここの持ち物を取得・整形し data/generated/items.ts を出力する。
+#
+# append-only 方針: 一度解禁された持ち物は、後のレギュレーションで没収されても**この一覧から消さない**
+# （レギュレーションごとの解禁/非解禁の正本は data/champions/regulations/*.yaml が持つ）。
+#
+# items: PokeAPI の item slug。
+# itemMeta: メガストーン等のメタ情報（megaStoneFor = メガ先 base SpeciesId）。
+items:
+  - charizardite-x
+  - rocky-helmet
+  - life-orb
+  - leftovers
+  - assault-vest
+  - choice-scarf
+itemMeta:
+  charizardite-x:
+    megaStoneFor: charizard

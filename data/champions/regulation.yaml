@@ -5,7 +5,7 @@
 # 出典（2026-06 検証）: serebii.net/pokemonchampions/rankedbattle/regulationm-a.shtml /
 # game8.co/games/Pokemon-Champions/archives/601460 / bulbapedia「List of Pokémon in Pokémon Champions」。
 # M-A（2026-04-08〜06-17・186種・基本最終進化・メガ可/テラス&ダイマ不可・Restricted なし）では
-# salamence / metagross / mewtwo は roster 不在 = 未解禁。
+# salamence / metagross / mewtwo は catalog 在籍だが allow 不在 = 未解禁（demo 用に種族カタログへは残置）。
 regulations:
   champions-m-a:
     name: { en: "Champions Regulation M-A", ja: "チャンピオンズ レギュレーションM-A" }
