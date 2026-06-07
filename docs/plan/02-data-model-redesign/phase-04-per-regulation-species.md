@@ -59,14 +59,23 @@
    `data/generated/regulations/<id>/` に `index.ts`（レギュメタ＝旧 `<id>.ts` の `championsXX` export を移設）と
    `species.ts`（per-reg 種族 dex）を同居させる。旧 `regulations/<id>.ts`（フラット）は廃止し、`<id>/index.ts`
    へ寄せる。集約 `regulations/index.ts` の import は `./<id>/index.ts` を指す。
-7. **ADR 0021 は supersede + archive せず削除して作り直す**: 0021 は本計画 Phase 2 で当日採番された新規 ADR で、
-   「生成 species を global 単一 dex とし技は per-reg 型生成しない」前提を一度も ship しないまま本 Phase で覆る。
-   よって supersede の連番ログを残さず**0021 を削除し、per-regulation の確定設計（period + 1 レギュ=1 YAML +
-   per-reg 種族 dex〈per-reg 習得技を含む〉+ roster の per-reg 一本化 + reg-aware 型機構）で 0021 を作り直す**
-   （番号維持・archive しない）。Accepted ADR の不変則（[[adr]]）に対する**意図的な例外**である旨を ADR 本文に
-   明記し、0021 の有効な Context / Alternatives Considered（B案・単一ファイル案の却下理由）は引き継ぐ。
-   コード/rule（`species.ts` / `regulation.ts` / `party.ts` / [[data-pipeline]] 等）の ADR 0021 参照は再作成後の
-   内容に合わせて本 Phase で更新する（参照テーマは不変なので repoint は最小）。
+7. **ADR 0021 は supersede + archive せず削除して作り直す（番号再利用は意図的な例外）**: 0021 は本計画 Phase 2 で
+   当日採番された新規 ADR で、「生成 species を global 単一 dex とし技は per-reg 型生成しない」前提を一度も ship
+   しないまま本 Phase で覆る。よって supersede の連番ログを残さず**0021 を削除し、per-regulation の確定設計
+   （period + 1 レギュ=1 YAML + per-reg 種族 dex〈per-reg 習得技を含む〉+ roster の per-reg 一本化 + reg-aware
+   型機構）で 0021 を作り直す**（番号維持・archive しない）。
+
+   - **`adr.md` 番号再利用例外との関係（明示）**: [[adr]] の番号再利用例外は本来「ブートストラップ期に *未参照
+     のまま* 撤回した ADR」に限る。0021 は `species.ts` / `regulation.ts` / `party.ts` / [[data-pipeline]] 等から
+     **参照済み**で文面どおりには当たらない。本 Phase はこれを**意図的に拡張した例外**として扱う。根拠は
+     (a) 0021 は当日新規・前提を一度も ship していない、(b) 作り直し後も**同一テーマ（per-regulation 解禁の
+     一本化）**なので既存参照が意味的に有効なまま、(c) 参照を本 Phase 内で再作成後の内容へ更新するため
+     dangling を残さない、の 3 点。この例外運用の理由は **ADR 本文（再作成 0021）と削除・再作成を行う PR の説明
+     の両方に記録**する（[[adr]] の「撤回理由は撤回 PR に残す」に準じる）。
+   - Accepted ADR の不変則（[[adr]]）に対する例外である旨を ADR 本文に明記し、0021 の有効な Context /
+     Alternatives Considered（B案・単一ファイル案の却下理由）は引き継ぐ。
+   - コード/rule（`species.ts` / `regulation.ts` / `party.ts` / [[data-pipeline]] 等）の ADR 0021 参照は再作成後の
+     内容に合わせて本 Phase で更新する（参照テーマは不変なので repoint は最小）。
 
 ## タスク
 
@@ -134,7 +143,9 @@
   「per-reg 型は species/items/mega のみ・技は型生成しない／生成 species は global 単一 dex」という前提を
   一度も ship しないまま本 Phase で覆る。通常は supersede + archive（[[adr]]）だが、ユーザー判断により
   **0021 を削除し新設計で作り直す**（archive せず・番号維持）。Accepted ADR の不変則に対する意図的な例外で
-  あり、ADR 本文に理由を明記する。`docs/adr/README.md` の一覧も 0021 の説明を新内容へ更新する。
+  あり、`adr.md` の番号再利用例外（本来「未参照のまま撤回」限定）を**参照済みだが同テーマ・当日新規・未 ship・
+  参照を同 Phase で更新し dangling を残さない**という根拠で拡張する旨を、ADR 本文と削除・再作成 PR の両方に
+  記録する（設計判断7）。`docs/adr/README.md` の一覧も 0021 の説明を新内容へ更新する。
 - **データの初期値**: 本 Phase は構造変更。各レギュの per-reg `moves` は当面**現行カタログ値を materialize**
   （レギュ間同一でも可）。正確なレギュ別技プールの投入は M-A 全量（Phase 5）/ M-B 公開時に行う。
 - **メガの二重表現**: 種族 `megaEvolvesTo` / 持ち物 `megaStoneFor` / per-reg `mega` 集合の整合に注意。per-reg
