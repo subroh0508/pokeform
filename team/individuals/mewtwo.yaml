@@ -1,5 +1,5 @@
 lang: en
-# 伝説枠（レギュ M-B のみ解禁）。M-A 構築に混ぜると未解禁検出されるデモ用。
+# 伝説枠（Restricted）。M-A / M-B いずれも未解禁（regulations: []）。M-A 構築に混ぜると未解禁検出されるデモ用。
 species: mewtwo
 nature: { up: spAttack, down: attack }
 ability: pressure
