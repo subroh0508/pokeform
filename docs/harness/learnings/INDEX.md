@@ -16,6 +16,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #31 | チャンピオンズ M-A 解禁データ修正 | 2026-06-07 | — | draft | [2026-06-07-pr-31.md](./2026-06-07-pr-31.md) |
 | #34 | 実装の入口スキル plans-new を新設 | 2026-06-07 | — | draft | [2026-06-07-pr-34.md](./2026-06-07-pr-34.md) |
 | #38 | 02-data-model-redesign 計画群を plans-new で起票 | 2026-06-07 | 02-data-model-redesign | draft | [2026-06-07-pr-38.md](./2026-06-07-pr-38.md) |
+| #40 | 02 Phase 1 カタログ分離（生成物バイト等価） | 2026-06-07 | 02-data-model-redesign/phase-01 | draft | [2026-06-07-pr-40.md](./2026-06-07-pr-40.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
