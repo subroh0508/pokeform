@@ -33,3 +33,5 @@ description: 型表現の統一パターン（`XxxBase` + `XxxDex` + `XxxId = ke
 ## 整合（ID 単一ソース）
 
 種族の `moves` / `abilities` / `items` / `types` は**対応する `Dex` のキー（ID）参照**に統一し、詳細（倍率・日本語名・分類）は `Dex[Id]` ルックアップで取る。同一データを二重に持たない（codegen が両者を同一ソースから出力）。型と値の生成・検証方針は [[tsc-verification]] を参照。
+
+固定の能力キー配列（`STAT_KEYS` = 6 能力）も**`src/types/stats.ts` に一元化**し、各所（cli/stat・domain/stat-tuning・codegen/normalize 等）はそこから import する。同じ配列を複数箇所で定義するとドリフトの温床になるため、単一ソースに統一する。
