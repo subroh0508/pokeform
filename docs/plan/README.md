@@ -2,6 +2,8 @@
 
 pokeform の実装計画は **計画ディレクトリ単位**で分割し、各ディレクトリ配下を **Phase doc 単位（1 phase = 1 PR）** で進める。本 README は計画群の**採番/slug 規約・全体進捗・Phase doc 共通テンプレート**を定める入口。
 
+> **新しい計画群は [`plans-new`](../../.claude/skills/plans-new/SKILL.md) skill で起こす**（手動で OVERVIEW / phase doc を書かない）。`plans-new` が実装指示を OVERVIEW 化し、6 基準で 1 phase = 1 PR に分割する。**計画群は `OVERVIEW.md`（ゴール / 背景 / 設計方針 / 実装指針 / スコープ外）を標準の入口ドキュメントとする**。手順 SoT は [`planning.md`](../../.claude/rules/planning.md)、決定の「なぜ」は [ADR 0020](../adr/0020-plans-new-entry-point.md)。既存 `00` / `01` の OVERVIEW 後付け等の遡及改修はしない。
+
 - ハーネス整備計画 → [`00-harness-setup/README.md`](./00-harness-setup/)
 - ライブラリ本体（MVP）計画 → [`01-mvp/README.md`](./01-mvp/)
 - アーキ正本（旧 `plan.md`）→ [`01-mvp/architecture.md`](./01-mvp/architecture.md)

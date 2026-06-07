@@ -21,6 +21,11 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 ワークフローに統一する（[ADR 0018](../../docs/adr/0018-implementation-workflow-orchestrator.md)）。
 例外は trivial な単発編集や会話的応答のみで、フェーズ単位の実装ではこれを既定とする。
 
+> **入口は [`plans-new`](../skills/plans-new/SKILL.md)**（[[planning]]）。生の実装指示はまず `plans-new` が
+> OVERVIEW 化 → 6 基準で分割し、その**産出物（GitHub issue または `docs/plan/NN-{slug}/` の phase doc）を
+> 本ワークフローが消費**して Phase 0〜9 を駆動する。計画化（1→多）は `plans-new`、1 本の PR の実装ライフ
+> サイクルは本 skill、と役割を分ける（[ADR 0020](../../docs/adr/0020-plans-new-entry-point.md)）。
+
 ## 設計の核（なぜこの形か）
 
 この skill は**既存 skill を束ねるオーケストレーター**であり、新規ロジックは最小に保つ。理由は、
