@@ -13,12 +13,14 @@ Phase 3 で確定した情報源と全リストに基づき、レギュレーシ
 
 ## 前提（依存）
 
-- **Phase 3（情報源確定 + 20匹サンプル検証）完了**。情報源・全リスト・選定/投入手順が確立し、新構造が
-  20 匹で end-to-end に動くことが保証されていること。
+- **Phase 3（情報源確定 + 20匹サンプル検証）完了**。情報源・全リスト・選定/投入手順が確立し、**解禁情報取得
+  skill** が作成済みで、新構造が 20 匹で end-to-end に動くことが保証されていること。
 - 確定済み rule: [[data-pipeline]] / [[cli-and-io]] / [[type-conventions]] / [[testing]]。
 
 ## タスク
 
+- [ ] Phase 3 で作成した**解禁情報取得 skill を使って**全量投入を駆動する（取りこぼし・使い勝手の問題が
+      あれば `skill-creator` で改修）。
 - [ ] M-A 解禁の**全種族**を catalog/species.yaml へ追記（Phase 3 の全リスト doc を正本に）。
 - [ ] 各種族に紐づく**技 / 持ち物 / 特性 / メガ**を各 catalog へ追記（append-only）。
 - [ ] `fetch-pokeapi.ts` で追加 slug を取得・`data/raw` キャッシュ。
