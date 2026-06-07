@@ -1,0 +1,24 @@
+// 生成物（scripts/generate.ts 出力）。手書き編集しない。raw/champions を直し再生成する。
+import type { RegulationBase } from "../../../src/types/regulation.ts";
+
+export const championsMA = {
+  id: "champions-m-a",
+  name: {
+    en: "Champions Regulation M-A",
+    ja: "チャンピオンズ レギュレーションM-A",
+  },
+  period: {
+    start: "2026-04-08",
+    end: "2026-06-17",
+  },
+  species: ["garchomp", "dragonite", "rotom-wash", "charizard", "dragapult", "hydreigon"],
+  items: [
+    "charizardite-x",
+    "rocky-helmet",
+    "life-orb",
+    "leftovers",
+    "assault-vest",
+    "choice-scarf",
+  ],
+  mega: ["charizard-mega-x"],
+} as const satisfies RegulationBase;

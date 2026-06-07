@@ -78,6 +78,8 @@ export type {
   SpeciesNotFound,
   UniqueSpecies,
 } from "./types/party.ts";
+export type { RegulationBase, RegulationDex, RegulationId } from "./types/regulation.ts";
+export { regulationDex } from "./types/regulation.ts";
 export type { SpeciesBase, SpeciesDex, SpeciesId } from "./types/species.ts";
 export { speciesDex } from "./types/species.ts";
 export type { PokemonType, TypeMultiplier } from "./types/type-chart.ts";

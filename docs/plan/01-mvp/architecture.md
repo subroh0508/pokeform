@@ -77,7 +77,7 @@ export interface SpeciesBase {
   moves: readonly MoveId[];                       // MoveDex のキー
   items: "any" | readonly ItemId[];              // ItemDex のキー、または "any"
   megaEvolvesTo?: SpeciesId;
-  regulations: readonly RegulationId[];          // 解禁レギュレーション
+  // 解禁レギュレーションは種族側に持たない。per-regulation（regulationDex[R].species）が正本（A案・ADR 0021）。
 }
 
 // data/generated/species.ts — 各種族を子型として specialize し SpeciesDex に集約（生成）
@@ -90,7 +90,6 @@ export interface SpeciesDex {
     abilities: readonly ["static","lightning-rod"];
     moves: readonly ["volt-tackle","thunderbolt","iron-tail","quick-attack", /* ... */];
     items: "any";
-    regulations: readonly ["champions-m-a","champions-m-b"];
   };
   "charizard-mega-x": SpeciesBase & {
     dex: 6; id: "charizard-mega-x";
@@ -100,7 +99,6 @@ export interface SpeciesDex {
     abilities: readonly ["tough-claws"];
     moves: readonly ["flare-blitz","dragon-claw", /* ... */];
     items: "any";
-    regulations: readonly ["champions-m-a"];
   };
   // ... 全種族
 }
@@ -209,7 +207,7 @@ export function defineIndividual<S extends SpeciesId>(species: S, spec: Individu
 
 - **per-stat ≤32**: 生成した `type PointValue = 0|1|…|32`。
 - **合計66**: codegen が各個体の合計を算出し、生成 TS に `satisfies PointTotalMustBe66<computedSum>` を埋める。型レベルで `computedSum extends 66` を検証（型レベル算術の重さを codegen 側に逃がす）。
-- **パーティ**: メンバーをタプルで生成し、`UniqueSpecies<T>`（同種族重複）, タプル長 ≤6, `NotLegalInRegulation<S,R>`（各メンバーの `regulations` にパーティ宣言レギュが含まれるか）を型制約。
+- **パーティ**: メンバーをタプルで生成し、`UniqueSpecies<T>`（同種族重複）, タプル長 ≤6, `NotLegalInRegulation<S,R>`（メンバー base 種族 `S` がパーティ宣言レギュ `R` の解禁集合 `regulationDex[R].species` に含まれるか）を型制約（A案・ADR 0021）。
 
 ### 実装値の自動計算
 
@@ -222,7 +220,8 @@ flowchart LR
     F["scripts/fetch-pokeapi.ts"] --> RAW["data/raw/<br/>(.gitignore・PokeAPI キャッシュ)"]
     subgraph CH["data/champions/ (コミット・手動管理)"]
         R["rules.yaml<br/>能力ポイント 66/32・計算式定数"]
-        REG["regulation.yaml<br/>各レギュの解禁許可リスト"]
+        REG["regulations/&lt;id&gt;.yaml<br/>1レギュ=1ファイル・期間+解禁集合"]
+        CAT["catalog/*.yaml<br/>種族/技/持ち物/特性の append-only マスター"]
         OV["overrides.yaml<br/>習得技/特性の世代差・上書き"]
     end
     RAW --> GEN["scripts/generate.ts"]
@@ -243,7 +242,7 @@ PokeAPI→要求項目の対応:
 | タイプ | `pokemon.types[]` |
 | 特性 | `pokemon.abilities[]`（隠れ特性可否は champions 側フラグ） |
 | 持ち物 | `item` エンドポイント（メガストーン含む） |
-| **レギュレーション解禁** | **PokeAPI に無し → `data/champions/regulation.yaml`** |
+| **レギュレーション解禁** | **PokeAPI に無し → `data/champions/regulations/<id>.yaml`（per-reg 一本化・ADR 0021）** |
 
 ---
 
@@ -287,8 +286,8 @@ pokeform/
 │  └─ generate.ts
 ├─ data/
 │  ├─ raw/                      # .gitignore
-│  ├─ champions/                # コミット: rules.yaml / regulation.yaml / overrides.yaml / catalog/{species,moves,items,abilities}.yaml
-│  └─ generated/               # コミット: Dex 単位 .ts（types/moves/abilities/items/species/regulations/names・値 as const → 型派生）
+│  ├─ champions/                # コミット: rules.yaml / regulations/<id>.yaml / overrides.yaml / catalog/{species,moves,items,abilities}.yaml
+│  └─ generated/               # コミット: Dex 単位 .ts（types/moves/abilities/items/species/names + regulations/<id>.ts+index・値 as const → 型派生）
 └─ team/                        # サンプル兼ユーザー置き場
    ├─ individuals/*.yaml
    └─ parties/*.md

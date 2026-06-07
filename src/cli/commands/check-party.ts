@@ -1,3 +1,4 @@
+import { regulationDex } from "../../../data/generated/regulations/index.ts";
 import { speciesDex } from "../../../data/generated/species.ts";
 import { type PartyIssue, validateParty } from "../../domain/party-analysis.ts";
 import { loadParty } from "../../io/load-party.ts";
@@ -40,7 +41,7 @@ export const runCheckParty = async (path: string, lang: Lang): Promise<number> =
   let totalIssues = 0;
   for (const file of files) {
     const { name, party } = await loadParty(file);
-    const issues = validateParty(party, speciesDex);
+    const issues = validateParty(party, speciesDex, regulationDex);
     if (issues.length === 0) {
       console.log(lang === "ja" ? `✅ ${name}: 整合` : `✅ ${name}: OK`);
       continue;

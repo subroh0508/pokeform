@@ -30,7 +30,6 @@ export const speciesDex = {
       "fire-blast",
     ],
     items: "any",
-    regulations: ["champions-m-a", "champions-m-b"],
   },
   dragonite: {
     dex: 149,
@@ -64,7 +63,6 @@ export const speciesDex = {
       "ice-beam",
     ],
     items: "any",
-    regulations: ["champions-m-a", "champions-m-b"],
   },
   salamence: {
     dex: 373,
@@ -95,7 +93,6 @@ export const speciesDex = {
       "hydro-pump",
     ],
     items: "any",
-    regulations: [],
   },
   metagross: {
     dex: 376,
@@ -123,7 +120,6 @@ export const speciesDex = {
       "shadow-ball",
     ],
     items: "any",
-    regulations: [],
   },
   "rotom-wash": {
     dex: 479,
@@ -152,7 +148,6 @@ export const speciesDex = {
       "nasty-plot",
     ],
     items: "any",
-    regulations: ["champions-m-a", "champions-m-b"],
   },
   charizard: {
     dex: 6,
@@ -183,7 +178,6 @@ export const speciesDex = {
       "flare-blitz",
     ],
     items: "any",
-    regulations: ["champions-m-a", "champions-m-b"],
     megaEvolvesTo: "charizard-mega-x",
   },
   "charizard-mega-x": {
@@ -215,7 +209,6 @@ export const speciesDex = {
       "flare-blitz",
     ],
     items: "any",
-    regulations: ["champions-m-a", "champions-m-b"],
   },
   mewtwo: {
     dex: 150,
@@ -249,7 +242,6 @@ export const speciesDex = {
       "nasty-plot",
     ],
     items: "any",
-    regulations: [],
   },
   dragapult: {
     dex: 887,
@@ -279,7 +271,6 @@ export const speciesDex = {
       "shadow-ball",
     ],
     items: "any",
-    regulations: ["champions-m-a", "champions-m-b"],
   },
   hydreigon: {
     dex: 635,
@@ -311,7 +302,6 @@ export const speciesDex = {
       "nasty-plot",
     ],
     items: "any",
-    regulations: ["champions-m-a", "champions-m-b"],
   },
 } as const;
 

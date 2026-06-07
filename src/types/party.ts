@@ -6,8 +6,8 @@
  * （[[tsc-verification]]）。
  */
 
-import type { RegulationId } from "../../data/generated/regulations.ts";
-import type { SpeciesDex, SpeciesId } from "../../data/generated/species.ts";
+import type { RegulationDex, RegulationId } from "../../data/generated/regulations/index.ts";
+import type { SpeciesId } from "../../data/generated/species.ts";
 import type { Invalid } from "./brand.ts";
 
 /** 入力ファイルの記述言語（ファイル単位宣言・未指定の既定は ja）。 */
@@ -18,7 +18,7 @@ export type Lang = "ja" | "en";
 /** 同一種族 `S` がパーティ内で重複。2 体目以降の同種族で発生。 */
 export type DuplicateSpeciesInParty<S extends string> =
   Invalid<`species '${S}' appears more than once in the party`>;
-/** 種族 `S` がレギュレーション `R` で未解禁。`SpeciesDex[S]["regulations"]` に `R` を含まないとき発生。 */
+/** 種族 `S` がレギュレーション `R` で未解禁。`RegulationDex[R]["species"]` に `S` を含まないとき発生。 */
 export type NotLegalInRegulation<
   S extends string,
   R extends string,
@@ -44,7 +44,7 @@ type ConstrainMember<
 > = H extends Seen[number]
   ? DuplicateSpeciesInParty<H>
   : H extends SpeciesId
-    ? R extends SpeciesDex[H]["regulations"][number]
+    ? H extends RegulationDex[R]["species"][number]
       ? H
       : NotLegalInRegulation<H, R>
     : SpeciesNotFound<H>;

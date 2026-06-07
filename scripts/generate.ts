@@ -10,7 +10,7 @@
  * 実行: `pnpm generate:data`（fetch:data 後・ネットワーク不要・決定論的）。
  */
 import { execFileSync } from "node:child_process";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve as resolvePath } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
@@ -56,7 +56,9 @@ interface AbilitiesCatalog {
   abilities: string[];
 }
 interface RegulationFile {
-  regulations: Record<string, { name: { en: string; ja: string }; allow: string[] }>;
+  name: { en: string; ja: string };
+  period: { start: string; end: string | null };
+  allow: { species: string[]; items: string[]; mega: string[]; moves: string[] };
 }
 interface NameEntry {
   language: { name: string };
@@ -84,7 +86,16 @@ const speciesCat = ch<SpeciesCatalog>("catalog/species.yaml");
 const movesCat = ch<MovesCatalog>("catalog/moves.yaml");
 const itemsCat = ch<ItemsCatalog>("catalog/items.yaml");
 const abilitiesCat = ch<AbilitiesCatalog>("catalog/abilities.yaml");
-const regs = ch<RegulationFile>("regulation.yaml");
+
+// レギュレーションは 1 レギュ = 1 ファイル（data/champions/regulations/<id>.yaml）。
+const REG_DIR = join(CH, "regulations");
+const regs: Record<string, RegulationFile> = {};
+for (const file of readdirSync(REG_DIR)
+  .filter((f) => f.endsWith(".yaml"))
+  .sort()) {
+  const id = file.replace(/\.yaml$/, "");
+  regs[id] = parseYaml(readFileSync(join(REG_DIR, file), "utf8")) as RegulationFile;
+}
 
 // --- types（全 18・相性表） -------------------------------------------------
 const typeEntries: Record<string, unknown> = {};
@@ -170,17 +181,42 @@ for (const i of itemsCat.items) {
   itemEntries[i] = entry;
 }
 
-// --- regulations -----------------------------------------------------------
-const regEntries: Record<string, unknown> = {};
-const regOf: Record<string, string[]> = {};
-for (const [id, reg] of Object.entries(regs.regulations)) {
-  regEntries[id] = { id, name: reg.name, allow: reg.allow };
-  for (const s of reg.allow) {
-    const list = regOf[s] ?? [];
-    list.push(id);
-    regOf[s] = list;
-  }
+// --- regulations（per-reg・別ファイル別型 + index 集約。解禁判定の正本・ADR 0021） ---------
+// 参照整合: 解禁集合の id がカタログに存在することを生成段で検証する（append-only マスターの担保）。
+const speciesIdSet = new Set(speciesCat.pokemon);
+const itemIdSet = new Set(itemsCat.items);
+const moveCatSet = new Set(movesCat.moves);
+const regEntries: Record<string, Record<string, unknown>> = {};
+for (const [id, reg] of Object.entries(regs)) {
+  const check = (kind: string, ids: string[], pool: Set<string>): void => {
+    for (const v of ids) {
+      if (!pool.has(v)) {
+        throw new Error(
+          `regulation '${id}' allow.${kind} '${v}' not in catalog (append-only catalog)`,
+        );
+      }
+    }
+  };
+  check("species", reg.allow.species, speciesIdSet);
+  check("mega", reg.allow.mega, speciesIdSet);
+  check("items", reg.allow.items, itemIdSet);
+  check("moves", reg.allow.moves, moveCatSet);
+  // per-reg 型は species / items / mega のみ（技は YAML 記録のみ・型生成しない・ADR 0021）。
+  regEntries[id] = {
+    id,
+    name: reg.name,
+    period: { start: reg.period.start, end: reg.period.end ?? null },
+    species: reg.allow.species,
+    items: reg.allow.items,
+    mega: reg.allow.mega,
+  };
 }
+/** "champions-m-a" -> "championsMA"（per-reg const 名）。 */
+const camel = (id: string): string =>
+  id
+    .split("-")
+    .map((p, i) => (i === 0 ? p : p.charAt(0).toUpperCase() + p.slice(1)))
+    .join("");
 
 // --- species ---------------------------------------------------------------
 const moveIdSet = new Set(movesCat.moves);
@@ -227,7 +263,6 @@ for (const slug of speciesCat.pokemon) {
     abilities: (poke.abilities as { ability: { name: string } }[]).map((a) => a.ability.name),
     moves,
     items: "any",
-    regulations: regOf[slug] ?? [],
   };
   const mega = speciesCat.megaLinks?.[slug];
   if (mega) entry.megaEvolvesTo = mega;
@@ -245,6 +280,7 @@ const jaMap = (entries: Record<string, unknown>): Record<string, string> => {
 
 // --- emit ------------------------------------------------------------------
 mkdirSync(OUT, { recursive: true });
+mkdirSync(join(OUT, "regulations"), { recursive: true });
 const header =
   "// 生成物（scripts/generate.ts 出力）。手書き編集しない。raw/champions を直し再生成する。\n";
 
@@ -268,10 +304,22 @@ emit(
   "items.ts",
   `import type { Assignable } from "../../src/types/assert.ts";\nimport type { ItemBase } from "../../src/types/item.ts";\n\nexport const itemDex = ${lit(itemEntries)} as const;\n\nexport type ItemDex = typeof itemDex;\nexport type ItemId = keyof ItemDex;\n\n// 適合検証（megaStoneFor が派生 SpeciesId を指すため inline satisfies を避け分離する）。\nexport type _ItemConforms = Assignable<Record<string, ItemBase>, ItemDex>;\n`,
 );
-emit(
-  "regulations.ts",
-  `export const regulationDex = ${lit(regEntries)} as const;\n\nexport type RegulationDex = typeof regulationDex;\nexport type RegulationId = keyof RegulationDex;\n`,
-);
+// regulations: 1 レギュ = 1 ファイル（別ファイル別型）+ index.ts で regulationDex に集約。
+for (const [id, entry] of Object.entries(regEntries)) {
+  emit(
+    join("regulations", `${id}.ts`),
+    `import type { RegulationBase } from "../../../src/types/regulation.ts";\n\nexport const ${camel(id)} = ${lit(entry)} as const satisfies RegulationBase;\n`,
+  );
+}
+{
+  const ids = Object.keys(regEntries);
+  const imports = ids.map((id) => `import { ${camel(id)} } from "./${id}.ts";`).join("\n");
+  const members = ids.map((id) => `  ${JSON.stringify(id)}: ${camel(id)},`).join("\n");
+  emit(
+    join("regulations", "index.ts"),
+    `${imports}\n\nexport const regulationDex = {\n${members}\n} as const;\n\nexport type RegulationDex = typeof regulationDex;\nexport type RegulationId = keyof RegulationDex;\n`,
+  );
+}
 emit(
   "species.ts",
   `import type { Assignable } from "../../src/types/assert.ts";\nimport type { SpeciesBase } from "../../src/types/species.ts";\n\nexport const speciesDex = ${lit(speciesEntries)} as const;\n\nexport type SpeciesDex = typeof speciesDex;\nexport type SpeciesId = keyof SpeciesDex;\n\n// 適合検証（megaEvolvesTo が派生 SpeciesId を自己参照するため inline satisfies を避け分離する）。\nexport type _SpeciesConforms = Assignable<Record<string, SpeciesBase>, SpeciesDex>;\n`,
