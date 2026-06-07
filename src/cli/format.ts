@@ -1,6 +1,7 @@
 import { speciesDex } from "../../data/generated/species.ts";
 import { typeDex } from "../../data/generated/types.ts";
 import type { Lang } from "../types/party.ts";
+import type { StatKey } from "../types/stats.ts";
 import type { PokemonType } from "../types/type-chart.ts";
 
 /**
@@ -16,3 +17,26 @@ export const speciesName = (id: string, lang: Lang): string => {
   const entry = (speciesDex as Record<string, { name: { ja: string; en: string } }>)[id];
   return entry ? entry.name[lang] : id;
 };
+
+/** 6 能力の表示ラベル（`--lang` に応じて ja/en）。 */
+const STAT_LABELS: Readonly<Record<Lang, Readonly<Record<StatKey, string>>>> = {
+  ja: {
+    hp: "HP",
+    attack: "こうげき",
+    defense: "ぼうぎょ",
+    spAttack: "とくこう",
+    spDefense: "とくぼう",
+    speed: "すばやさ",
+  },
+  en: {
+    hp: "HP",
+    attack: "Attack",
+    defense: "Defense",
+    spAttack: "Sp.Atk",
+    spDefense: "Sp.Def",
+    speed: "Speed",
+  },
+};
+
+/** 能力名の表示ラベル。 */
+export const statName = (key: StatKey, lang: Lang): string => STAT_LABELS[lang][key];

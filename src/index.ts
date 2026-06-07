@@ -24,6 +24,7 @@ export {
   VULNERABLE_WEAK_COUNT,
   type WeaknessRow,
 } from "./domain/coverage.ts";
+export { baseDamage, type DamageInput, LEVEL, maxDamage, minDamage } from "./domain/damage.ts";
 export {
   type ItemInfo,
   MAX_PARTY_SIZE,
@@ -36,6 +37,24 @@ export {
   validateParty,
 } from "./domain/party-analysis.ts";
 export { type NameMaps, type ResolveResult, resolveName } from "./domain/resolve-names.ts";
+export {
+  bulkIndex,
+  offenseIndex,
+  physicalBulk,
+  physicalOffense,
+  specialBulk,
+  specialOffense,
+} from "./domain/stat-indices.ts";
+export {
+  buildTuningReport,
+  minPointForTarget,
+  type OutspeedResult,
+  type SurvivalInput,
+  type SurvivalSolution,
+  solveOutspeed,
+  solveSurvival,
+  type TuningReport,
+} from "./domain/stat-tuning.ts";
 export { buildChart, type EffectivenessChart, effectiveness } from "./domain/type-effectiveness.ts";
 export {
   type AbilityNotAvailable,
