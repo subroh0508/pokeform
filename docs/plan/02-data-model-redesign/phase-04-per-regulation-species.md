@@ -24,7 +24,7 @@
     宣言レギュ整合（メンバーは少なくともパーティの reg を宣言している）を担保。
   - 実数値計算など **reg 不変の処理**（種族値・タイプ）は、reg 間で同一の base データを引く（実装方式は
     下記「設計判断」5）。
-  - ADR を起票（per-reg 種族型 + 技の per-reg 型生成 → ADR 0021 の該当決定を supersede）。
+  - ADR 0021 を**削除して per-regulation の確定設計で作り直す**（archive せず・番号 0021 維持・下記「設計判断」7）。
 - スコープ外:
   - M-A 解禁データの**全量投入**（Phase 5）。本 Phase は構造 + 型機構で、データ量は現状（20 匹サンプル）等価。
   - レギュ間の `items` / `abilities` 差分の**データ投入**（型機構は受けられる形にするが、実データ差分は
@@ -57,6 +57,14 @@
    `start-phase` で確定（型の正本は per-reg のまま）。
 6. **ディレクトリは dir-per-reg**: `data/generated/regulations/champions-m-a/species.ts`。レギュメタ
    `champions-m-a.ts` は維持（or `champions-m-a/index.ts` へ寄せる。import/Biome 整合で実装時確定）。
+7. **ADR 0021 は supersede + archive せず削除して作り直す**: 0021 は本計画 Phase 2 で当日採番された新規 ADR で、
+   「生成 species を global 単一 dex とし技は per-reg 型生成しない」前提を一度も ship しないまま本 Phase で覆る。
+   よって supersede の連番ログを残さず**0021 を削除し、per-regulation の確定設計（period + 1 レギュ=1 YAML +
+   per-reg 種族 dex〈per-reg 習得技を含む〉+ roster の per-reg 一本化 + reg-aware 型機構）で 0021 を作り直す**
+   （番号維持・archive しない）。Accepted ADR の不変則（[[adr]]）に対する**意図的な例外**である旨を ADR 本文に
+   明記し、0021 の有効な Context / Alternatives Considered（B案・単一ファイル案の却下理由）は引き継ぐ。
+   コード/rule（`species.ts` / `regulation.ts` / `party.ts` / [[data-pipeline]] 等）の ADR 0021 参照は再作成後の
+   内容に合わせて本 Phase で更新する（参照テーマは不変なので repoint は最小）。
 
 ## タスク
 
@@ -74,8 +82,9 @@
       `speciesDex` 参照を reg 不変 base 参照経路へ付け替え。
 - [ ] 個体 YAML サンプル（`team/individuals`）に `regulations: []` を付与し新構造で緑にする。
 - [ ] `pnpm generate:data` 再生成・型テスト/ユニットテスト追従（カバレッジ 100% 維持）。
-- [ ] `adr-new` で ADR 起票（per-reg 種族型 + 技 per-reg 型生成）。ADR 0021 の該当決定を `Superseded by` で
-      整理し archive 退避要否を判断。
+- [ ] ADR 0021 を**削除して作り直す**（archive せず・番号維持）。per-regulation の確定設計（per-reg 種族 dex +
+      per-reg 習得技 + reg-aware 型機構）を本文に。不変則の例外である旨と、引き継いだ Context/Alternatives を明記。
+      コード/rule の 0021 参照を再作成後の内容へ更新。
 - [ ] rule 追従: [[type-conventions]]（per-reg SpeciesDex・reg-aware 制約）/ [[data-pipeline]]（生成構造図）/
       [[cli-and-io]]（個体 `regulations` 宣言と fan-out）/ OVERVIEW を更新。
 
@@ -94,7 +103,9 @@
   ある技が宣言レギュのいずれかで覚えない場合、その**レギュの行**で型エラーになり `@source` で YAML 行へ逆引く。
 - `ConstrainParty` の roster 判定が per-reg dex 由来になり、メンバー個体の宣言レギュ整合が取れる。
 - reg 不変の処理（実数値計算・名前・coverage）が破綻せず動く。
-- ADR が起票され、ADR 0021 との関係（生成 species の per-reg 化 / 技の per-reg 型生成）が整理されている。
+- ADR 0021 が削除・再作成され（archive せず・番号維持）、per-regulation の確定設計（per-reg 種族 dex /
+  per-reg 習得技 / reg-aware 型機構）を本文に持ち、不変則の例外である旨が明記されている。コード/rule の
+  0021 参照が dangling していない。
 
 ## 検証手順
 
@@ -104,7 +115,8 @@
    なる（fan-out の独立性）ことを確認。`@source` 逆引きで YAML 行が示されることを確認。
 3. パーティの宣言レギュとメンバー宣言レギュの不整合が検出されることを確認。
 4. `pnpm test`（個体・パーティ・coverage・stat）が新構造で緑、`pnpm verify` 緑。
-5. ADR が採番・起票され README 一覧に載っていることを確認。
+5. ADR 0021 が再作成され（archive ディレクトリに退避していない・README 一覧の 0021 が新内容を指す）、
+   `grep -rn "ADR 0021\|0021" src .claude docs/plan` の参照が再作成後の内容と矛盾しないことを確認。
 
 ## リスク・備考
 
@@ -115,9 +127,11 @@
     追従 + ADR（個体は単一レギュ宣言で緑にする最小形）。
   - (b) **個体 codegen fan-out**: 個体 `regulations: []` 複数宣言 + `emit-individual-ts` fan-out +
     `check:individual` per-reg + io/cli/domain 追従。
-- **ADR 0021 の改訂点**: 0021 は「per-reg 型は species/items/mega のみ・技は型生成しない／生成 species は
-  global 単一 dex」とした。本 Phase は **習得技を per-reg 種族 dex に取り込み型生成**し、**生成 species を
-  per-reg 化**する。新 ADR で該当決定を supersede し、roster の per-reg 一本化（0021 の主旨）は踏襲する。
+- **ADR 0021 の扱い（削除して作り直す・例外運用）**: 0021 は本計画 Phase 2 で当日採番された新規 ADR で、
+  「per-reg 型は species/items/mega のみ・技は型生成しない／生成 species は global 単一 dex」という前提を
+  一度も ship しないまま本 Phase で覆る。通常は supersede + archive（[[adr]]）だが、ユーザー判断により
+  **0021 を削除し新設計で作り直す**（archive せず・番号維持）。Accepted ADR の不変則に対する意図的な例外で
+  あり、ADR 本文に理由を明記する。`docs/adr/README.md` の一覧も 0021 の説明を新内容へ更新する。
 - **データの初期値**: 本 Phase は構造変更。各レギュの per-reg `moves` は当面**現行カタログ値を materialize**
   （レギュ間同一でも可）。正確なレギュ別技プールの投入は M-A 全量（Phase 5）/ M-B 公開時に行う。
 - **メガの二重表現**: 種族 `megaEvolvesTo` / 持ち物 `megaStoneFor` / per-reg `mega` 集合の整合に注意。per-reg

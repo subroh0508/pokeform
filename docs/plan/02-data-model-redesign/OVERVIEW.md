@@ -63,8 +63,10 @@ Phase 1〜3 は生成 `species.ts` を **全レギュ共通の単一 `speciesDex
 9. **reg 不変の base データは別経路**: 種族値・タイプ・名前はレギュ不変なので、実数値計算・名前表示・coverage
    はこれらだけを reg 不変の参照経路から引く（型の正本は per-reg のまま）。
 
-この改訂は ADR 0021 の「生成 species を global 単一 dex とし、技は per-reg 型生成しない」決定を後続決定として
-**supersede** するもので、Phase 4 で ADR を起票する（roster の per-reg 一本化という 0021 の主旨は踏襲）。
+この改訂は ADR 0021 の「生成 species を global 単一 dex とし、技は per-reg 型生成しない」決定を覆す。0021 は
+本計画 Phase 2 で当日採番された新規 ADR で、その前提を一度も ship しないまま覆るため、Phase 4 では supersede +
+archive せず**0021 を削除し per-regulation の確定設計で作り直す**（番号維持・archive しない・Accepted ADR の
+不変則に対する意図的な例外として ADR 本文に明記）。roster の per-reg 一本化という 0021 の主旨は踏襲する。
 
 ## 実装指針
 
@@ -135,7 +137,7 @@ champions/regulations を合成 → `data/generated` を出力・Biome 整形）
 | **01 カタログ分離** | roster.yaml → 4 種別 catalog YAML（append-only）。生成出力は等価維持。 | 中 | 中 | ~300-400 | 機械的再編が中心 |
 | **02 レギュレーションモデル再設計** | per-reg YAML + period + per-reg 型生成 + A案型機構 + species.regulations[] 廃止。 | 高 | 高 | ~500-700 | 本計画の核・ADR 起票 |
 | **03 情報源確定 + 20匹サンプル検証** | 解禁情報取得 skill を作成し、WebSearch で M-A 信頼情報源を確定・全リスト doc 化。無作為20匹で end-to-end 検証。 | 中 | 低 | ~中（大半データ） | 新構造の妥当性確認・skill 化 |
-| **04 per-regulation 種族型 + 個体複数レギュ宣言** | global species.ts 廃止 → per-reg `regulations/<id>/species.ts`（per-reg 習得技）を正本化 + reg-aware 型機構 + 個体 `regulations:[]` fan-out + ADR(supersede 0021)。 | 高 | 高 | ~700-1200 | 構造 + 型機構・データ量不変・diff 過大なら 2 PR（型基盤 / 個体 fan-out）分割 |
+| **04 per-regulation 種族型 + 個体複数レギュ宣言** | global species.ts 廃止 → per-reg `regulations/<id>/species.ts`（per-reg 習得技）を正本化 + reg-aware 型機構 + 個体 `regulations:[]` fan-out + ADR 0021 削除して作り直す。 | 高 | 高 | ~700-1200 | 構造 + 型機構・データ量不変・diff 過大なら 2 PR（型基盤 / 個体 fan-out）分割 |
 | **05 M-A 全データ投入** | M-A 解禁の種族・技・持ち物・メガを全量投入し完成。 | 低 | 低 | 大（データ例外） | データ投入 PR |
 
 - **01 → 02 → 03 → 04 → 05 の直列**。01/02/04 は共に `generate.ts` と生成構造を触り競合しやすいため直列。
