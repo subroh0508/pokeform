@@ -1,6 +1,6 @@
 ---
 name: plans-new
-description: 生の実装指示・機能要望・「〜を実装したい」「次はこれを作る」「この機能を追加して」を受けたら、着手の前に必ず最初に通す計画化の入口スキル。指示をブラッシュアップして `docs/plan/NN-{slug}/OVERVIEW.md` にまとめ、6 基準（意思決定の数 / 不可逆性 / スコープの広さ / 技術的難易度 / 想定 diff / 並行実装のしやすさ）で 1 phase = 1 PR に分割し、1 PR 妥当なら GitHub issue + implementation-workflow へ、複数 phase なら NN-{slug} 計画群を起こして start-phase / implementation-workflow へ繋ぐ。start-phase や implementation-workflow を直接呼ぶ前の前段として使い、いきなりコードを書き始めないこと。新規計画を起こす・テーマを phase 分割する・実装に取りかかる文脈で広く発火させる（under-trigger を避ける）。手動で OVERVIEW や phase doc を書かずにこのスキルを使う。
+description: 生の実装指示・機能要望・「〜を実装したい」「次はこれを作る」「この機能を追加して」を受けたら、着手の前に必ず最初に通す計画化の入口スキル。指示をブラッシュアップして `docs/plan/NN-{slug}/OVERVIEW.md` にまとめ、6 基準（意思決定の数 / 不可逆性 / スコープの広さ / 技術的難易度 / 想定 diff / 並行実装のしやすさ）で 1 phase = 1 PR に分割し、1 PR 妥当なら GitHub issue + implementation-workflow へ、複数 phase なら NN-{slug} 計画群を起こして start-phase / implementation-workflow へ繋ぐ。start-phase や implementation-workflow を直接呼ぶ前の前段として使い、いきなりコードを書き始めないこと。新規計画を起こす・テーマを phase 分割する・実装に取りかかる文脈で広く発火させる（under-trigger を避ける）。手動で OVERVIEW や phase doc を書かずにこのスキルを使う。ただし既に確定済みの phase doc（`docs/plan/NN-{slug}/phase-*.md`）に着手するだけなら本スキルは不要で start-phase / implementation-workflow を使う。
 allowed-tools: Read Write Bash(ls *) Bash(gh issue create *) Glob
 ---
 
