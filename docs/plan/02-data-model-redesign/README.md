@@ -18,7 +18,8 @@
 flowchart TD
     P1[phase-01 — カタログ分離] --> P2[phase-02 — レギュレーションモデル再設計]
     P2 --> P3[phase-03 — 情報源確定 + 20匹サンプル検証]
-    P3 --> P4[phase-04 — M-A 全データ投入]
+    P3 --> P4[phase-04 — per-regulation 種族/メガ構造化]
+    P4 --> P5[phase-05 — M-A 全データ投入]
 ```
 
 ## フェーズ一覧（この順で実施）
@@ -26,7 +27,8 @@ flowchart TD
 - [x] [Phase 1 — カタログ分離（種族 / 技 / 持ち物 / 特性の append-only マスター）](./phase-01-catalog-split.md)
 - [x] [Phase 2 — レギュレーションモデル再設計（per-reg YAML + period + per-reg 型 + A案型機構）](./phase-02-regulation-model.md)
 - [x] [Phase 3 — 情報源確定 + 20匹サンプル検証](./phase-03-source-and-sample.md)
-- [ ] [Phase 4 — M-A 全データ投入](./phase-04-ma-full-data.md)
+- [ ] [Phase 4 — per-regulation 種族/メガ構造化（global species.ts 廃止 → per-reg species.ts 正本 + 派生統合 view）](./phase-04-per-regulation-species.md)
+- [ ] [Phase 5 — M-A 全データ投入](./phase-05-ma-full-data.md)
 
 ## この計画群全体の受け入れ基準
 

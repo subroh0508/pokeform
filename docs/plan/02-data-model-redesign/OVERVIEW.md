@@ -42,7 +42,22 @@
    ADR 0012）、入力言語のファイル単位宣言（[[cli-and-io]] / ADR 0014）、型は `XxxBase + XxxDex + XxxId`
    統一（[[type-conventions]]）、カバレッジ 100%（[[testing]]）。
 6. **解禁情報の取得を skill 化**: レギュレーション解禁情報の WebSearch 調査 → 突き合わせ → doc 化 →
-   catalog/per-reg YAML 反映を再利用可能な手順 skill に切り出す（Phase 3 で作成、Phase 4 と M-B 以降が再利用）。
+   catalog/per-reg YAML 反映を再利用可能な手順 skill に切り出す（Phase 3 で作成、Phase 5 と M-B 以降が再利用）。
+
+### 設計方針の改訂（Phase 4 で導入）
+
+Phase 1〜3 は生成 `species.ts` を **全レギュ共通の単一 `speciesDex`** として実装した。しかし解禁種族・メガは
+レギュレーションごとに異なり、「種族定義が全レギュ共通の固定型」では実態を表現できない。Phase 4 で次へ改訂する:
+
+7. **生成 species を per-regulation 化**: global 単一 `data/generated/species.ts` を**廃止**し、
+   `data/generated/regulations/<id>/species.ts`（per-reg `speciesDex` / `SpeciesId`）を**生成 species の正本**に
+   する。`regulations/<id>.ts`（レギュメタ）は自分の `species.ts` を参照する。per-reg 化の対象は **species と
+   mega のみ**（items / abilities / moves はレギュ差分が要るまで global カタログ由来を維持）。
+8. **regulation 非依存の consumers は派生統合 view を参照**: 種族 base データ（種族値・タイプ・名前）は
+   レギュレーション不変。実数値計算・名前表示・coverage・個体定義は per-reg dex 群から **codegen が派生する
+   統合 view**（手書き global ではない和集合）を参照し、型シグネチャを保つ。解禁判定（`ConstrainParty` /
+   `validateParty`）は引き続き `RegulationDex[R].species`（ADR 0021）を見る。この改訂は ADR 0021 の「生成
+   species を global 単一 dex とする」部分を後続決定として改訂するもので、Phase 4 で ADR を起票する。
 
 ## 実装指針
 
@@ -64,14 +79,23 @@ data/champions/
 
 ### data/generated/（生成・コミット）の新構造
 
+> **Phase 4 で改訂**: 生成 `species.ts`（global 単一 dex）を廃止し、**per-regulation species 構造**へ移す。
+> 詳細は下記「設計方針の改訂（Phase 4）」。
+
 ```
 data/generated/
-  types.ts moves.ts abilities.ts items.ts species.ts names.ts   # カタログ由来（species.regulations[] は廃止）
+  types.ts moves.ts abilities.ts items.ts names.ts              # カタログ由来（species.regulations[] は廃止）
   regulations/
-    champions-m-a.ts            # per-reg：name / period / 解禁 species・items・mega の集合 + 派生型
+    champions-m-a.ts            # per-reg メタ：name / period / 解禁 items・mega + 自分の species.ts 参照
+    champions-m-a/species.ts    # ← Phase 4：per-reg 種族定義の正本（roster に絞った speciesDex / SpeciesId）
     champions-m-b.ts
-    index.ts                    # RegulationId 集約・re-export
+    champions-m-b/species.ts
+    index.ts                    # RegulationId 集約 + per-reg dex 群から派生する統合 species view
 ```
+
+`data/generated/species.ts`（global 単一 dex）は Phase 4 で**廃止**する。regulation 非依存の consumers
+（実数値計算・名前表示・coverage・個体定義）は `index.ts` 等が per-reg dex 群から**派生する統合 view**
+（手書き global ではなく和集合の派生物）を参照する。
 
 ### データの流れ（vendor 方式は不変）
 
@@ -103,8 +127,12 @@ champions/regulations を合成 → `data/generated` を出力・Biome 整形）
 | **01 カタログ分離** | roster.yaml → 4 種別 catalog YAML（append-only）。生成出力は等価維持。 | 中 | 中 | ~300-400 | 機械的再編が中心 |
 | **02 レギュレーションモデル再設計** | per-reg YAML + period + per-reg 型生成 + A案型機構 + species.regulations[] 廃止。 | 高 | 高 | ~500-700 | 本計画の核・ADR 起票 |
 | **03 情報源確定 + 20匹サンプル検証** | 解禁情報取得 skill を作成し、WebSearch で M-A 信頼情報源を確定・全リスト doc 化。無作為20匹で end-to-end 検証。 | 中 | 低 | ~中（大半データ） | 新構造の妥当性確認・skill 化 |
-| **04 M-A 全データ投入** | M-A 解禁の種族・技・持ち物・メガを全量投入し完成。 | 低 | 低 | 大（データ例外） | データ投入 PR |
+| **04 per-regulation 種族/メガ構造化** | global 生成 species.ts 廃止 → per-reg `regulations/<id>/species.ts` を正本化 + 派生統合 view + ADR。 | 高 | 高 | ~500-900 | 構造変更・データ量不変・diff 過大なら 2 PR 分割 |
+| **05 M-A 全データ投入** | M-A 解禁の種族・技・持ち物・メガを全量投入し完成。 | 低 | 低 | 大（データ例外） | データ投入 PR |
 
-- **01 → 02 → 03 → 04 の直列**。01/02 は共に `generate.ts` と `data/champions` を触り競合しやすいため直列。
-- **03 で情報源と全リストを確定**してから 04 で全量投入する（20匹で新構造が想定通り動くことを先に保証）。
-- 04 はデータセット追加で意味ある粒度分割が困難なため、1 PR（>1000 行）を許容する（[[planning]] の例外）。
+- **01 → 02 → 03 → 04 → 05 の直列**。01/02/04 は共に `generate.ts` と生成構造を触り競合しやすいため直列。
+- **03 で情報源と全リストを確定 → 04 で生成構造を per-reg へ確定 → 05 で全量投入**（最終構造の上で投入し
+  やり直しを避ける）。
+- **04 は構造変更**（データ量不変）。`SpeciesId` の波及が広く、想定 diff が >1000 行に膨らむ場合は
+  「per-reg 生成 + 統合 view 導入」と「consumers 付け替え / global 削除」へ 2 PR 分割する（[[planning]] の分割）。
+- 05 はデータセット追加で意味ある粒度分割が困難なため、1 PR（>1000 行）を許容する（[[planning]] の例外）。
