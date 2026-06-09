@@ -29,7 +29,7 @@ allowed-tools: Read Write Bash(ls *) Bash(gh issue create *) Glob
   - **1 PR 妥当**: `docs/plan/` にディレクトリを作らず、計画を **GitHub issue**（`gh issue create`）に
     書き出し、そのまま `implementation-workflow` をキック。
   - **複数 phase**: `docs/plan/NN-{slug}/`（`OVERVIEW.md` + `README.md` + `phase-NN-<slug>.md`×N）を作成し、
-    `docs/plan/README.md` の採番一覧・全体進捗に追記。最初の phase を `start-phase` /
+    `docs/plan/README.md` の採番一覧・全体進捗ロールアップ表に 1 行追加。最初の phase を `start-phase` /
     `implementation-workflow` へ繋ぐ。
 
 ## 手順
@@ -110,6 +110,7 @@ issue 本文は body-file 経由（heredoc 直送を避ける）。投稿は Git
 - 分割基準の詳細: [references/split-criteria.md](references/split-criteria.md)。
 - 計画テンプレート: [references/plan-templates.md](references/plan-templates.md)。
 - 着手・実装: [`start-phase`](../start-phase/SKILL.md) / [`implementation-workflow`](../implementation-workflow/SKILL.md)。
-- 計画インデックス・共通テンプレ: [`docs/plan/README.md`](../../../docs/plan/README.md)。
+- 計画インデックス・全体進捗ロールアップ: [`docs/plan/README.md`](../../../docs/plan/README.md)。
+- テンプレート正本（OVERVIEW / README / phase doc 見出し）: [references/plan-templates.md](references/plan-templates.md)。
 - 決定の「なぜ」: [ADR 0020](../../../docs/adr/0020-plans-new-entry-point.md)。
 - 規約: [[planning]] / [[skill-authoring]] / [[cross-agent]] / [[redaction]]。

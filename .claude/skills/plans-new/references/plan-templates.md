@@ -71,7 +71,7 @@ flowchart TD
 - [ ] [Phase 2 — <タイトル>](./phase-02-<slug>.md)
 
 ## 補足
-- 各 phase doc は本テンプレ（[plan-templates.md](../../.claude/skills/plans-new/references/plan-templates.md)
+- 各 phase doc は本テンプレ（[plan-templates.md](../../../.claude/skills/plans-new/references/plan-templates.md)
   の「phase-NN-<slug>.md」節）に従う。
 - スキル作成は `skill-creator`、ADR は `adr-new`（[[skill-authoring]] / [[adr]]）。
 ```

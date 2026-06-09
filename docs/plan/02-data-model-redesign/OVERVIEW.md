@@ -121,6 +121,13 @@ champions/regulations を合成 → `data/generated` を出力・Biome 整形）
 - `src/types/party.ts` の `ConstrainParty` / `NotLegalInRegulation` を per-regulation 解禁集合参照へ付け替え。
 - `SpeciesBase.regulations[]` を削除し、参照箇所（party.ts / CLI check-party / 型テスト）を追従。
 
+## スコープ外
+
+- **M-B 以降の正確な解禁データ投入**（M-B は未公開。本計画は M-A の全量投入までで、M-B は暫定プレースホルダ維持）。
+- ダメージ計算・ステータス調整など `01-mvp` の機能拡張（本計画はデータ保持モデルに限定）。
+- PokeAPI に無い独自補正の大幅拡張（既存 `overrides.yaml` の枠組みを踏襲）。
+- 全国図鑑の全種族 vendor（チャンピオンズ解禁済みに限定する方針）。
+
 ## 受け入れ基準
 
 この計画群全体の客観条件（計画完了の判定基準）:
@@ -131,13 +138,6 @@ champions/regulations を合成 → `data/generated` を出力・Biome 整形）
 4. 解禁情報の正本が per-regulation に一本化され（`SpeciesBase.regulations[]` 廃止）、型レベル解禁判定が
    per-reg 解禁集合を参照する。
 5. レギュレーション M-A の解禁種族・技・持ち物・メガが信頼できる情報源に基づき全量そろう。
-
-## スコープ外
-
-- **M-B 以降の正確な解禁データ投入**（M-B は未公開。本計画は M-A の全量投入までで、M-B は暫定プレースホルダ維持）。
-- ダメージ計算・ステータス調整など `01-mvp` の機能拡張（本計画はデータ保持モデルに限定）。
-- PokeAPI に無い独自補正の大幅拡張（既存 `overrides.yaml` の枠組みを踏襲）。
-- 全国図鑑の全種族 vendor（チャンピオンズ解禁済みに限定する方針）。
 
 ## phase 分割（6 基準の評価サマリ）
 
