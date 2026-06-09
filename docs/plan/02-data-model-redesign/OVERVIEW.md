@@ -121,6 +121,17 @@ champions/regulations を合成 → `data/generated` を出力・Biome 整形）
 - `src/types/party.ts` の `ConstrainParty` / `NotLegalInRegulation` を per-regulation 解禁集合参照へ付け替え。
 - `SpeciesBase.regulations[]` を削除し、参照箇所（party.ts / CLI check-party / 型テスト）を追従。
 
+## 受け入れ基準
+
+この計画群全体の客観条件（計画完了の判定基準）:
+
+1. 各フェーズ末で `pnpm verify`（型 / カバレッジ100% / Biome）が緑。
+2. レギュレーションが期間（開始必須・終了 nullable）付きで管理され TS 型として参照できる。
+3. 種族 / 技 / 持ち物 / 特性が独立カタログ YAML（append-only）で管理され、種族はその id を参照する。
+4. 解禁情報の正本が per-regulation に一本化され（`SpeciesBase.regulations[]` 廃止）、型レベル解禁判定が
+   per-reg 解禁集合を参照する。
+5. レギュレーション M-A の解禁種族・技・持ち物・メガが信頼できる情報源に基づき全量そろう。
+
 ## スコープ外
 
 - **M-B 以降の正確な解禁データ投入**（M-B は未公開。本計画は M-A の全量投入までで、M-B は暫定プレースホルダ維持）。

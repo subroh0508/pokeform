@@ -1,14 +1,16 @@
 # 計画ドキュメントのテンプレート
 
-`plans-new` が書き出す `OVERVIEW.md` / `README.md` / `phase-NN-<slug>.md` の雛形。既存の
+`plans-new` が書き出す `OVERVIEW.md` / `README.md` / `phase-NN-<slug>.md` の雛形。**本ファイルが
+phase doc / OVERVIEW / README テンプレの正本（SoT）**で、ずれたらこちらに合わせる。既存の
 [`docs/plan/00-harness-setup`](../../../../docs/plan/00-harness-setup/README.md) /
 [`docs/plan/01-mvp`](../../../../docs/plan/01-mvp/README.md) と
-[`docs/plan/README.md`](../../../../docs/plan/README.md) の共通テンプレに揃えてある。Phase doc の見出し構成の
-**正本は `docs/plan/README.md`「Phase doc 共通テンプレート」節**なので、ずれたらそちらに合わせる。
+[`docs/plan/README.md`](../../../../docs/plan/README.md) はこのテンプレに揃える（`docs/plan/README.md` は
+採番 / 全体進捗ロールアップの入口で、テンプレ本体は持たず本ファイルへポインタする）。
 
 ## OVERVIEW.md
 
-計画群の入口。「**何を実現するか**」を先に固める（分割より前に作る）。
+計画群の入口。「**何を実現するか**」を先に固める（分割より前に作る）。**ゴール・計画群全体の受け入れ基準は
+OVERVIEW が持つ**（README には再掲せず OVERVIEW へポインタする）。
 
 ```markdown
 # NN-{slug} — <計画群タイトル> OVERVIEW
@@ -28,21 +30,29 @@
 ## スコープ外
 <この計画群で扱わないこと。将来計画への送り>
 
+## 受け入れ基準
+<この計画群全体の客観条件（計画完了の判定基準）。原則「各フェーズ末で `pnpm verify` 緑」を含む>
+1. 各フェーズ末で `pnpm verify`（型 / カバレッジ100% / Biome）が緑。
+2. <計画群固有の客観条件>
+
 ## phase 分割（6 基準の評価サマリ）
 <6 基準で評価した結果と、分割した phase の一覧・狙い。1 PR 妥当ならその判断根拠>
 ```
 
 ## README.md（計画群インデックス）
 
-進捗チェックリスト + **Mermaid 依存グラフ** + phase 一覧。
+**薄索引**に徹する: 導入 + OVERVIEW ポインタ + **Mermaid 依存グラフ** + phase 一覧（進捗チェック）。
+ゴール・計画群全体の受け入れ基準は OVERVIEW が持つので**ここに再掲しない**（OVERVIEW へポインタ）。
+per-phase の進捗チェックは**サブ README のみ**が SoT（トップ `docs/plan/README.md` は計画単位の status
+ロールアップのみ）。
 
 ```markdown
 # NN-{slug} — <計画群タイトル>（実装計画インデックス）
 
-<1〜2 段落の概要。OVERVIEW.md / architecture.md など正本へのポインタ>
+<1〜2 段落の概要。設計の正本は OVERVIEW.md / architecture.md など正本へポインタする>
 
-## ゴール / アウトカム
-<OVERVIEW のゴールを 1〜2 行で。詳細は OVERVIEW.md を参照>
+> 設計の正本は [`OVERVIEW.md`](./OVERVIEW.md)（ゴール / 背景 / 設計方針 / 実装指針 / スコープ外 /
+> 計画群全体の受け入れ基準）。
 
 ## フェーズ依存グラフ
 
@@ -60,13 +70,9 @@ flowchart TD
 - [ ] [Phase 1 — <タイトル>](./phase-01-<slug>.md)
 - [ ] [Phase 2 — <タイトル>](./phase-02-<slug>.md)
 
-## この計画群全体の受け入れ基準
-
-1. 各フェーズ末で `pnpm verify`（型 / カバレッジ100% / Biome）が緑。
-2. <計画群固有の客観条件>
-
 ## 補足
-- 各 phase doc は `docs/plan/README.md` の Phase doc 共通テンプレートに従う。
+- 各 phase doc は本テンプレ（[plan-templates.md](../../.claude/skills/plans-new/references/plan-templates.md)
+  の「phase-NN-<slug>.md」節）に従う。
 - スキル作成は `skill-creator`、ADR は `adr-new`（[[skill-authoring]] / [[adr]]）。
 ```
 
@@ -75,7 +81,7 @@ flowchart TD
 
 ## phase-NN-<slug>.md（個別 phase doc）
 
-`docs/plan/README.md`「Phase doc 共通テンプレート」と同一構成。不要な節は省かず「なし」と明記する。
+**phase doc 見出し構成の正本は本節**。不要な節は省かず「なし」と明記する。
 
 ```markdown
 # Phase N — <タイトル>
@@ -107,3 +113,5 @@ flowchart TD
 - 計画ディレクトリ = `NN-<slug>/`（ゼロ埋め 2 桁連番 + kebab-case）。`NN` は既存最大 + 1。
 - phase doc = `phase-NN-<slug>.md`（ゼロ埋め 2 桁）。
 - 事前スタブは作らない。テーマが出るたびに内容から slug を都度生成して採番する。
+- 計画群を新規に起こしたら、トップ [`docs/plan/README.md`](../../../../docs/plan/README.md) の**全体進捗
+  ロールアップ表**に 1 行追加する（計画 → 状況）。

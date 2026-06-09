@@ -75,12 +75,14 @@ issue 本文は body-file 経由（heredoc 直送を避ける）。投稿は Git
 `docs/plan/NN-{slug}/` を作成し、共通テンプレ（[references/plan-templates.md](references/plan-templates.md)）で
 次を書く:
 
-- `OVERVIEW.md` — ゴール / 背景 / 設計方針 / 実装指針 / スコープ外（手順 1 の成果）。
-- `README.md` — 進捗チェックリスト + **Mermaid のフェーズ依存グラフ** + phase 一覧。
-- `phase-NN-<slug>.md` × N — `docs/plan/README.md` の Phase doc 共通テンプレートに従う。
+- `OVERVIEW.md` — ゴール / 背景 / 設計方針 / 実装指針 / スコープ外 / **計画群全体の受け入れ基準**（手順 1 の成果）。
+- `README.md` — 薄索引（導入 + OVERVIEW ポインタ + **Mermaid のフェーズ依存グラフ** + phase 一覧の進捗チェック）。
+- `phase-NN-<slug>.md` × N — テンプレ正本 [references/plan-templates.md](references/plan-templates.md) の
+  「phase-NN-<slug>.md」節に従う。
 
-さらに `docs/plan/README.md` の**採番 / slug 一覧・全体進捗**に新計画群を追記する（既存 `00` / `01` の
-遡及改修はしない）。
+さらに トップ `docs/plan/README.md` の**採番 / slug 一覧**と**全体進捗ロールアップ表**（計画 → 状況。
+新計画は `⬜ 未着手` で 1 行追加・per-phase の分数は付けない）に新計画群を追記する。既存計画の OVERVIEW
+遡及付与は任意（00 は付与済み・01 は当面据え置き）。
 
 ### 4. 着手へ受け渡す
 
