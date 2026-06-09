@@ -36,10 +36,10 @@ pokeform の実装計画は **計画ディレクトリ単位**で分割し、各
 
 ### 01-mvp（ライブラリ本体）
 
-- [ ] 01-mvp / phase-00 — 足場 + 実数値計算（calc-stats）
-- [ ] 01-mvp / phase-01 — データ生成 + 一貫性/技範囲チェック（MVP コア）
-- [ ] 01-mvp / phase-02 — 個体 tsc 検証層
-- [ ] 01-mvp / phase-03 — ステータス調整の壁打ち
+- [x] 01-mvp / phase-00 — 足場 + 実数値計算（calc-stats）
+- [x] 01-mvp / phase-01 — データ生成 + 一貫性/技範囲チェック（MVP コア）
+- [x] 01-mvp / phase-02 — 個体 tsc 検証層
+- [x] 01-mvp / phase-03 — ステータス調整の壁打ち
 
 ### 02-data-model-redesign（データ保持モデル再設計）
 
