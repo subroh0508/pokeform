@@ -4,7 +4,8 @@
 # 記録方法（ADR 0022・block 記法）:
 #   name / period / items は予約キー。それ以外のトップレベルキー = 解禁種族（キーの存在 = allow）。
 #   各種族キー下に moves（per-reg 習得技）と、メガ運用種族は mega（配列・複数メガ可）をコロケーション。
-#   id は data/champions/catalog/*.yaml を参照する（参照切れ・覚えない技は check:regulation で弾く）。
+#   id は data/champions/catalog/*.yaml を参照する（参照切れ・覚えない技は生成段 generate.ts が検証して弾く。
+#   Phase 6 以降は authoring 時ゲート check:regulation へ移設予定）。
 #
 # 出典（2026-06 検証）: serebii.net / game8 / bulbapedia。M-A（2026-04-08〜06-17・基本最終進化・
 # メガ可 / テラス&ダイマ不可・Restricted なし）。

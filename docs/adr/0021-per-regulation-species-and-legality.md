@@ -94,3 +94,8 @@ MVP（[ADR 0012](./0012-vendor-pokeapi-data.md)）では各種族が「解禁レ
 - **per-regulation を単一ファイルに集約**（1 ファイルに全レギュ）。ファイル数は減るが、レギュ増で 1 ファイルが
   肥大し差分レビューが難しい。1 レギュ = 1 ディレクトリの方が追加・改訂の粒度が明快なため却下
   （旧 0021 から引き継ぐ却下理由）。
+
+<!-- 追記（本文不変・末尾ポインタのみ）: 本 ADR の「`allow.moves` はレギュ記録のみ・generate が
+`catalog ∩ learnset` を導出」という**記録方法**は [ADR 0022](./0022-per-regulation-species-keyed-moves.md)
+で改訂された（per-reg YAML を species-keyed の明示記録にし generate を変換専任へ寄せる）。per-reg species
+正本・reg-aware 型機構という本 ADR の核は不変（full supersede ではない）。 -->
