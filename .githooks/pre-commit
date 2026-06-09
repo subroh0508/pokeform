@@ -23,4 +23,10 @@ pnpm lint
 echo "[pre-commit] pokeform check:individual team/individuals"
 pnpm pokeform check:individual team/individuals
 
+# pokeform レギュレーション検証ゲート（02 Phase 6・ADR 0023）: regulation YAML の参照整合 / schema /
+# 覚えない技を authoring 時に検証する。覚えない技検証は data/raw（learnset）が要り、未取得時は参照整合
+# のみに degrade する（full 検証は pnpm fetch:data 後・CI はオフライン維持で本ゲートを課さない）。
+echo "[pre-commit] pokeform check:regulation data/champions/regulations"
+pnpm pokeform check:regulation data/champions/regulations
+
 echo "[pre-commit] OK"

@@ -20,6 +20,7 @@
     "compile": "node src/cli/index.ts compile",
     "check:party": "node src/cli/index.ts check:party",
     "check:individual": "node src/cli/index.ts check:individual",
+    "check:regulation": "node src/cli/index.ts check:regulation",
     "analyze:coverage": "node src/cli/index.ts analyze:coverage",
     "fetch:data": "node scripts/fetch-pokeapi.ts",
     "generate:data": "node scripts/generate.ts",

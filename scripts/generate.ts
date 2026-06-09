@@ -312,8 +312,8 @@ for (const [id, e] of Object.entries(speciesInfo)) {
 }
 
 // --- per-regulation species dex（roster ∪ mega 先・per-reg 習得技を含む legality 正本） ----------
-// トップレベル種族キー: moves は YAML 由来（learnset に含まれることを検証＝覚えない技を弾く・Phase 5 では
-// generate に検証を残す）。megaEvolvesTo は per-reg の mega（配列）。
+// トップレベル種族キー: moves は YAML 由来をそのまま採用（変換専任・ADR 0023）。覚えない技の検証は
+// authoring 時ゲート check:regulation が担う（generate は検証しない）。megaEvolvesTo は per-reg の mega（配列）。
 // mega 先のみの種族（種族キーでない）: moves は catalog ∩ learnset を継承（base と同 movepool・出力等価）。
 const perRegSpecies: Record<string, Record<string, unknown>> = {};
 for (const [id, reg] of Object.entries(regs)) {
@@ -331,14 +331,8 @@ for (const [id, reg] of Object.entries(regs)) {
     let moves: string[];
     let megaEvolvesTo: string[] | undefined;
     if (keySet.has(sid)) {
+      // generate は変換専任（ADR 0023）。覚えない技の検証は authoring 時ゲート check:regulation が担う。
       const allow = speciesAllowOf(reg, sid);
-      for (const mv of allow.moves) {
-        if (!learnSets[sid]?.has(mv)) {
-          throw new Error(
-            `regulation '${id}' species '${sid}' move '${mv}' not learnable (learnset)`,
-          );
-        }
-      }
       moves = allow.moves;
       if (allow.mega && allow.mega.length > 0) megaEvolvesTo = allow.mega;
     } else {

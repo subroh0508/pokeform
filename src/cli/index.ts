@@ -3,6 +3,7 @@ import { cac } from "cac";
 import type { Lang } from "../types/party.ts";
 import { runAnalyzeCoverage } from "./commands/analyze-coverage.ts";
 import { runCheckParty } from "./commands/check-party.ts";
+import { runCheckRegulation } from "./commands/check-regulation.ts";
 import { runCompile, runTypecheck } from "./commands/compile.ts";
 import { runStat } from "./commands/stat.ts";
 
@@ -49,6 +50,16 @@ cli
   )
   .action(async (path: string) => {
     process.exitCode = await runTypecheck(path, "individual");
+  });
+
+cli
+  .command(
+    "check:regulation <path>",
+    "レギュレーション整合: 覚えない技 / 参照切れ / schema を authoring 時に検証（非0終了）",
+  )
+  .option("--lang <lang>", "表示言語 (ja|en)", { default: "ja" })
+  .action((path: string, options: { lang?: string }) => {
+    process.exitCode = runCheckRegulation(path, toLang(options.lang));
   });
 
 cli
