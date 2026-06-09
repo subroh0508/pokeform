@@ -8,7 +8,7 @@ import type { PokemonType } from "./type-chart.ts";
  * **レギュレーション不変**の種族情報（種族値・タイプ・日英名・メガ先）。実数値計算・名前表示・
  * coverage はレギュ非依存のためこの派生 base view（`data/generated/species-base.ts` の
  * `speciesBaseDex`・全種族）を引く（per-reg 化の設計判断5・[[type-conventions]]）。
- * `megaEvolvesTo` は per-reg dex 側で legality を見るため素の `string`（自己参照を避ける）。
+ * `megaEvolvesTo` は per-reg dex 側で legality を見るため素の `string[]`（自己参照を避ける）。
  */
 export interface SpeciesBaseInfo {
   readonly dex: number;
@@ -16,8 +16,8 @@ export interface SpeciesBaseInfo {
   readonly name: { readonly en: string; readonly ja: string };
   readonly types: readonly PokemonType[];
   readonly baseStats: BaseStats;
-  /** メガシンカ先の種族 id（[[game-spec]] のメガ二重表現）。 */
-  readonly megaEvolvesTo?: string;
+  /** メガシンカ先の種族 id の配列（1 種族複数メガ可・[[game-spec]] のメガ二重表現）。 */
+  readonly megaEvolvesTo?: readonly string[];
 }
 
 /**

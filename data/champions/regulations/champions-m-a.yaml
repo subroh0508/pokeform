@@ -1,81 +1,229 @@
 # data/champions/regulations/champions-m-a.yaml — レギュレーション M-A の解禁情報（手動・コミット）。
-# 1 レギュ = 1 ファイル。解禁判定の正本（per-regulation 一本化・ADR 0021）。generate.ts が
-# data/generated/regulations/champions-m-a/（index.ts=メタ + species.ts=per-reg 種族 dex）を出力する。
+# 1 レギュ = 1 ファイル。解禁判定の正本（per-regulation 一本化・ADR 0021 / 記録方法 ADR 0022）。
 #
-# period: 開催期間。start 必須・end は空（開催中）を許容。
-# allow: このレギュで使える解禁集合。id は data/champions/catalog/*.yaml を参照する（参照切れは生成段でエラー）。
-#   species: 構築に使える base 種族。  mega: 解禁メガ先（base + メガストーンで展開）。
-#   items: 解禁持ち物。               moves: 解禁技（YAML 記録のみ・per-reg 型は生成しない）。
+# 記録方法（ADR 0022・block 記法）:
+#   name / period / items は予約キー。それ以外のトップレベルキー = 解禁種族（キーの存在 = allow）。
+#   各種族キー下に moves（per-reg 習得技）と、メガ運用種族は mega（配列・複数メガ可）をコロケーション。
+#   id は data/champions/catalog/*.yaml を参照する（参照切れ・覚えない技は check:regulation で弾く）。
 #
-# 出典（2026-06 検証）: serebii.net/pokemonchampions/rankedbattle/regulationm-a.shtml /
-# game8.co/games/Pokemon-Champions/archives/601460 / bulbapedia「List of Pokémon in Pokémon Champions」。
-# M-A（2026-04-08〜06-17・基本最終進化・メガ可/テラス&ダイマ不可・Restricted なし）。
-# salamence / metagross / mewtwo は catalog 在籍だが allow 不在 = 未解禁（demo 用）。
+# 出典（2026-06 検証）: serebii.net / game8 / bulbapedia。M-A（2026-04-08〜06-17・基本最終進化・
+# メガ可 / テラス&ダイマ不可・Restricted なし）。
 name:
-  en: "Champions Regulation M-A"
-  ja: "チャンピオンズ レギュレーションM-A"
+  en: Champions Regulation M-A
+  ja: チャンピオンズ レギュレーションM-A
 period:
-  start: "2026-04-08"
-  end: "2026-06-17"
-allow:
-  species:
-    - garchomp
-    - dragonite
-    - rotom-wash
-    - charizard
-    - dragapult
-    - hydreigon
-    # M-A 解禁・無作為20匹サンプル（Phase 3・docs/plan/02-data-model-redesign/ma-roster-source.md）。
-    - aggron
-    - alakazam
-    - arcanine
-    - blastoise
-    - chandelure
-    - corviknight
-    - decidueye
-    - excadrill
-    - garganacl
-    - gengar
-    - greninja
-    - heracross
-    - krookodile
-    - lucario
-    - meowscarada
-    - milotic
-    - quaquaval
-    - skeledirge
-    - talonflame
-    - tyranitar
-  mega:
-    - charizard-mega-x
-  items:
-    - charizardite-x
-    - rocky-helmet
-    - life-orb
-    - leftovers
-    - assault-vest
-    - choice-scarf
+  start: 2026-04-08
+  end: 2026-06-17
+items:
+  - charizardite-x
+  - rocky-helmet
+  - life-orb
+  - leftovers
+  - assault-vest
+  - choice-scarf
+garchomp:
   moves:
     - earthquake
     - dragon-claw
     - stone-edge
     - swords-dance
     - outrage
+    - draco-meteor
+    - fire-blast
+dragonite:
+  moves:
+    - earthquake
+    - dragon-claw
+    - stone-edge
+    - outrage
     - fire-punch
     - extreme-speed
     - draco-meteor
     - fire-blast
     - roost
-    - meteor-mash
-    - zen-headbutt
-    - bullet-punch
+    - hydro-pump
+    - thunderbolt
+    - ice-beam
+rotom-wash:
+  moves:
     - hydro-pump
     - thunderbolt
     - volt-switch
     - will-o-wisp
-    - flare-blitz
-    - psystrike
-    - ice-beam
     - shadow-ball
     - dark-pulse
     - nasty-plot
+charizard:
+  moves:
+    - earthquake
+    - dragon-claw
+    - swords-dance
+    - outrage
+    - fire-punch
+    - fire-blast
+    - roost
+    - will-o-wisp
+    - flare-blitz
+  mega:
+    - charizard-mega-x
+dragapult:
+  moves:
+    - dragon-claw
+    - outrage
+    - draco-meteor
+    - fire-blast
+    - hydro-pump
+    - thunderbolt
+    - will-o-wisp
+    - shadow-ball
+hydreigon:
+  moves:
+    - earthquake
+    - stone-edge
+    - outrage
+    - draco-meteor
+    - fire-blast
+    - roost
+    - zen-headbutt
+    - hydro-pump
+    - dark-pulse
+    - nasty-plot
+aggron:
+  moves:
+    - earthquake
+    - dragon-claw
+    - stone-edge
+    - outrage
+    - fire-punch
+    - fire-blast
+    - hydro-pump
+    - thunderbolt
+    - ice-beam
+    - dark-pulse
+alakazam:
+  moves:
+    - fire-punch
+    - zen-headbutt
+    - shadow-ball
+    - nasty-plot
+arcanine:
+  moves:
+    - outrage
+    - extreme-speed
+    - fire-blast
+    - will-o-wisp
+    - flare-blitz
+blastoise:
+  moves:
+    - earthquake
+    - outrage
+    - zen-headbutt
+    - hydro-pump
+    - ice-beam
+    - dark-pulse
+chandelure:
+  moves:
+    - fire-blast
+    - will-o-wisp
+    - flare-blitz
+    - shadow-ball
+    - dark-pulse
+corviknight:
+  moves:
+    - roost
+    - nasty-plot
+decidueye:
+  moves:
+    - swords-dance
+    - roost
+    - shadow-ball
+    - nasty-plot
+excadrill:
+  moves:
+    - earthquake
+    - swords-dance
+garganacl:
+  moves:
+    - earthquake
+    - stone-edge
+    - fire-punch
+    - zen-headbutt
+gengar:
+  moves:
+    - fire-punch
+    - thunderbolt
+    - will-o-wisp
+    - shadow-ball
+    - dark-pulse
+    - nasty-plot
+greninja:
+  moves:
+    - swords-dance
+    - hydro-pump
+    - ice-beam
+    - dark-pulse
+heracross:
+  moves:
+    - earthquake
+    - stone-edge
+    - swords-dance
+krookodile:
+  moves:
+    - earthquake
+    - dragon-claw
+    - stone-edge
+    - outrage
+    - dark-pulse
+lucario:
+  moves:
+    - earthquake
+    - stone-edge
+    - swords-dance
+    - extreme-speed
+    - meteor-mash
+    - zen-headbutt
+    - bullet-punch
+    - shadow-ball
+    - dark-pulse
+    - nasty-plot
+meowscarada:
+  moves:
+    - shadow-ball
+    - dark-pulse
+    - nasty-plot
+milotic:
+  moves:
+    - hydro-pump
+    - ice-beam
+quaquaval:
+  moves:
+    - swords-dance
+    - hydro-pump
+skeledirge:
+  moves:
+    - earthquake
+    - outrage
+    - fire-blast
+    - zen-headbutt
+    - will-o-wisp
+    - flare-blitz
+    - shadow-ball
+talonflame:
+  moves:
+    - swords-dance
+    - fire-blast
+    - roost
+    - will-o-wisp
+    - flare-blitz
+tyranitar:
+  moves:
+    - earthquake
+    - dragon-claw
+    - stone-edge
+    - outrage
+    - fire-punch
+    - fire-blast
+    - hydro-pump
+    - thunderbolt
+    - ice-beam
+    - dark-pulse

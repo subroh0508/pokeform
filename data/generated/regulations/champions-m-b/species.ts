@@ -120,7 +120,7 @@ export const speciesDex = {
       "flare-blitz",
     ],
     items: "any",
-    megaEvolvesTo: "charizard-mega-x",
+    megaEvolvesTo: ["charizard-mega-x"],
   },
   dragapult: {
     dex: 887,

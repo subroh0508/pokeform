@@ -16,7 +16,9 @@ flowchart TD
     P1[phase-01 — カタログ分離] --> P2[phase-02 — レギュレーションモデル再設計]
     P2 --> P3[phase-03 — 情報源確定 + 20匹サンプル検証]
     P3 --> P4[phase-04 — per-regulation 種族型 + 個体複数レギュ宣言]
-    P4 --> P5[phase-05 — M-A 全データ投入]
+    P4 --> P5[phase-05 — 技記録スキーマ再設計]
+    P5 --> P6[phase-06 — generate 変換専任 + 検証ゲート]
+    P6 --> P7[phase-07 — M-A 全データ投入]
 ```
 
 ## フェーズ一覧（この順で実施）
@@ -25,7 +27,9 @@ flowchart TD
 - [x] [Phase 2 — レギュレーションモデル再設計（per-reg YAML + period + per-reg 型 + A案型機構）](./phase-02-regulation-model.md)
 - [x] [Phase 3 — 情報源確定 + 20匹サンプル検証](./phase-03-source-and-sample.md)
 - [x] [Phase 4 — per-regulation 種族型 + 個体の複数レギュレーション宣言（global species.ts 廃止 → per-reg species.ts 正本・per-reg 習得技 + reg-aware 型機構 + 個体 regulations:[] fan-out）](./phase-04-per-regulation-species.md)
-- [ ] [Phase 5 — M-A 全データ投入](./phase-05-ma-full-data.md)
+- [ ] [Phase 5 — 技記録スキーマ再設計（種族キー = 解禁 + per-species moves/mega[]・block 記法・generate 読取り追従・ADR 0022）](./phase-05-move-recording-schema.md)
+- [ ] [Phase 6 — generate.ts を変換専任へ縮小 + authoring 検証ゲート check:regulation 新設（ADR-B）](./phase-06-generator-and-validation.md)
+- [ ] [Phase 7 — M-A 全データ投入（全186種 + 全 learnable 技）](./phase-07-ma-full-data.md)
 
 > 計画群全体の受け入れ基準は [`OVERVIEW.md` の「受け入れ基準」節](./OVERVIEW.md#受け入れ基準) を参照。
 

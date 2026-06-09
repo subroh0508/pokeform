@@ -16,10 +16,11 @@ const speciesDex: Record<string, SpeciesInfo> = {
   mewtwo: { types: ["psychic"] },
   charizard: {
     types: ["fire", "flying"],
-    megaEvolvesTo: "charizard-mega-x",
+    megaEvolvesTo: ["charizard-mega-x"],
   },
   "charizard-mega-x": { types: ["fire", "dragon"] },
-  badmega: { types: ["normal"], megaEvolvesTo: "ghost-x" },
+  badmega: { types: ["normal"], megaEvolvesTo: ["ghost-x"] },
+  emptymega: { types: ["water"], megaEvolvesTo: [] },
 };
 // 解禁判定の正本は per-regulation（A案・ADR 0021）。M-A は garchomp / charizard を解禁・mewtwo は未解禁。
 const regulationDex: Record<string, RegulationInfo> = {
@@ -34,6 +35,7 @@ const itemDex: Record<string, ItemInfo> = {
   "charizardite-x": { id: "charizardite-x", megaStoneFor: "charizard" },
   leftovers: { id: "leftovers" },
   badstone: { id: "badstone", megaStoneFor: "badmega" },
+  emptystone: { id: "emptystone", megaStoneFor: "emptymega" },
 };
 
 const mk = (p: Partial<ResolvedMember> & { path: string }): ResolvedMember => ({
@@ -135,13 +137,14 @@ describe("toCoverageMembers", () => {
     expect(zard?.attackTypes).toEqual(["fire", "ground"]); // status / 未知 を除外
   });
 
-  it("非メガ（持ち物なし / メガストーンでない / メガ先が辞書に無い）は素のタイプ", () => {
+  it("非メガ（持ち物なし / メガストーンでない / メガ先が辞書に無い / メガ先配列が空）は素のタイプ", () => {
     const party: ResolvedParty = {
       regulation: "champions-m-a",
       members: [
         mk({ path: "noitem", speciesId: "charizard", itemId: null }),
         mk({ path: "nostone", speciesId: "charizard", itemId: "leftovers" }),
         mk({ path: "badmega", speciesId: "badmega", itemId: "badstone" }),
+        mk({ path: "emptymega", speciesId: "emptymega", itemId: "emptystone" }),
       ],
     };
     const members = toCoverageMembers(party, speciesDex, moveDex, itemDex);
@@ -149,6 +152,7 @@ describe("toCoverageMembers", () => {
       ["fire", "flying"],
       ["fire", "flying"],
       ["normal"],
+      ["water"],
     ]);
   });
 
