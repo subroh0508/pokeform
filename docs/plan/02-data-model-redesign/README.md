@@ -6,11 +6,8 @@
 信頼できる情報源から全量投入する。設計の正本は [`OVERVIEW.md`](./OVERVIEW.md)、規約は
 [`.claude/rules/data-pipeline.md`](../../../.claude/rules/data-pipeline.md) / [`type-conventions.md`](../../../.claude/rules/type-conventions.md)。
 
-## ゴール / アウトカム
-
-レギュレーション（期間付き・終了 nullable）ごとに解禁される種族・技・持ち物・メガを per-regulation YAML で
-保持し、種族・持ち物・メガは per-reg TS 型として生成・型レベル解禁判定の正本になる。M-A の全解禁データが揃う。
-詳細は [`OVERVIEW.md`](./OVERVIEW.md) を参照。
+> 設計の正本は [`OVERVIEW.md`](./OVERVIEW.md)（ゴール / 背景 / 設計方針 / 実装指針 / スコープ外 /
+> 計画群全体の受け入れ基準）。本 README は薄索引（導入 + OVERVIEW ポインタ + 依存グラフ + phase 一覧）。
 
 ## フェーズ依存グラフ
 
@@ -18,7 +15,7 @@
 flowchart TD
     P1[phase-01 — カタログ分離] --> P2[phase-02 — レギュレーションモデル再設計]
     P2 --> P3[phase-03 — 情報源確定 + 20匹サンプル検証]
-    P3 --> P4[phase-04 — per-regulation 種族/メガ構造化]
+    P3 --> P4[phase-04 — per-regulation 種族型 + 個体複数レギュ宣言]
     P4 --> P5[phase-05 — M-A 全データ投入]
 ```
 
@@ -30,18 +27,11 @@ flowchart TD
 - [x] [Phase 4 — per-regulation 種族型 + 個体の複数レギュレーション宣言（global species.ts 廃止 → per-reg species.ts 正本・per-reg 習得技 + reg-aware 型機構 + 個体 regulations:[] fan-out）](./phase-04-per-regulation-species.md)
 - [ ] [Phase 5 — M-A 全データ投入](./phase-05-ma-full-data.md)
 
-## この計画群全体の受け入れ基準
-
-1. 各フェーズ末で `pnpm verify`（型 / カバレッジ100% / Biome）が緑。
-2. レギュレーションが期間（開始必須・終了 nullable）付きで管理され TS 型として参照できる。
-3. 種族 / 技 / 持ち物 / 特性が独立カタログ YAML（append-only）で管理され、種族はその id を参照する。
-4. 解禁情報の正本が per-regulation に一本化され（`SpeciesBase.regulations[]` 廃止）、型レベル解禁判定が
-   per-reg 解禁集合を参照する。
-5. レギュレーション M-A の解禁種族・技・持ち物・メガが信頼できる情報源に基づき全量そろう。
+> 計画群全体の受け入れ基準は [`OVERVIEW.md` の「受け入れ基準」節](./OVERVIEW.md#受け入れ基準) を参照。
 
 ## 補足
 
-- 各 phase doc は `docs/plan/README.md` の Phase doc 共通テンプレートに従う。
+- 各 phase doc は [`plan-templates.md`](../../../.claude/skills/plans-new/references/plan-templates.md) の
+  「phase-NN-<slug>.md」節（テンプレ正本）に従う。
 - スキル作成は `skill-creator`、ADR は `adr-new`（[[skill-authoring]] / [[adr]]）。Phase 2 はデータ保持モデルの
   アーキ決定（解禁判定正本の一本化 / カタログ分離 / period）として ADR を起票する（ADR 0012 / 0014 を踏まえる）。
-- 既存 `00` / `01` の遡及改修はしない。

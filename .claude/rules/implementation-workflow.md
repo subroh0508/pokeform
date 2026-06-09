@@ -142,6 +142,9 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 - **成功条件**: README 進捗が更新され、learning が生成済み。
 - **不変条件**: ADR 採番・レトロ生成・README 更新は各専任 skill の責務。本 skill は**起動・委譲のみ**で
   再実装しない（idempotent: 既に `- [x]` / learning 有りなら二重実行しない）。
+- **進捗更新の二層（finish-phase に委譲）**: README 進捗は **(a) サブ README の対象 phase チェック**
+  （`- [ ]`→`- [x]`）に加え、計画の状況が変わったとき **(b) トップ `docs/plan/README.md` の status
+  ロールアップ表**（🚧 進行中 / ✅ 完了・分数は付けない）も更新する。いずれも `finish-phase` 手順 4 の責務。
 - **README 進捗・doc 同期の取り込み方**: 進捗・doc 同期コミットは**フィーチャー PR に同梱してからマージ**するか、
   別 follow-up PR に切り出す（オーケストレーター主導マージで同期が main 未反映になるのを防ぐ）。ただし
   **`docs/plan` の phase doc に紐づかない単発ハーネス PR は finish-phase の README 進捗更新をスキップ可**
