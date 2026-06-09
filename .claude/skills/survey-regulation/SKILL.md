@@ -88,12 +88,15 @@ MetaVGC 等）を集める。各ソースの「総数・期間・メガ可能数
 （id は catalog 参照）。`mega` は解禁メガ先 slug、`moves` は記録のみ（per-reg 型は生成しない・ADR 0021）。
 `period.end` は開催中なら空（`null`）。
 
-### 7. 再生成して検証する（委譲）
+### 7. 検証して再生成する（委譲）
 
-`pnpm fetch:data`（新規 slug 取得・ネットワーク）→ `pnpm generate:data`（per-reg 型・catalog 整合を生成段で
-検証）→ [`verify`](../verify/SKILL.md)（`pnpm verify`）。CLI で解禁判定を end-to-end 確認したいときは
+`pnpm fetch:data`（新規 slug 取得・ネットワーク）→ **`pnpm check:regulation data/champions/regulations`**
+（authoring 時ゲート・覚えない技 / 参照切れ / schema を非0終了で検出・ADR 0023。`fetch:data` 後なら learnset
+full 検証）→ `pnpm generate:data`（YAML → TS 変換・catalog 参照切れは生成段エラー）→
+[`verify`](../verify/SKILL.md)（`pnpm verify`）。CLI で解禁判定を end-to-end 確認したいときは
 `node src/cli/index.ts check:party <party.md>`（解禁種 = exit0 / 未解禁混入 = exit1）。**機械ゲートは
-再実装せず委譲**する（[[skill-authoring]]）。
+再実装せず委譲**する（[[skill-authoring]]）。`generate.ts` は変換専任で妥当性検証はしない（ADR 0023）ため、
+**覚えない技 / 参照切れの検出は `check:regulation` を必ず通す**こと。
 
 ## Gotchas
 
