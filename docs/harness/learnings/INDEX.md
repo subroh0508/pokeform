@@ -21,6 +21,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #44 | 02 Phase 3 M-A情報源確定 + survey-regulation skill + 20匹 | 2026-06-07 | 02-data-model-redesign/phase-03 | draft | [2026-06-07-pr-44.md](./2026-06-07-pr-44.md) |
 | #47 | 02 Phase 4 per-regulation 種族型 + 個体複数レギュ宣言 | 2026-06-07 | 02-data-model-redesign/phase-04 | draft | [2026-06-07-pr-47.md](./2026-06-07-pr-47.md) |
 | #50 | plan README 群の薄索引化・テンプレ正本一本化 | 2026-06-09 | 00-harness-setup（横断） | draft | [2026-06-09-pr-50.md](./2026-06-09-pr-50.md) |
+| #52 | 02 Phase 5 per-regulation 技記録 species-keyed 化 + mega 配列化 | 2026-06-09 | 02-data-model-redesign/phase-05 | draft | [2026-06-09-pr-52.md](./2026-06-09-pr-52.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
