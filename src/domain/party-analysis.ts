@@ -11,7 +11,8 @@ import type { CoverageMember } from "./coverage.ts";
 /** 検証 / 分析に必要な種族の最小情報。 */
 export interface SpeciesInfo {
   readonly types: readonly PokemonType[];
-  readonly megaEvolvesTo?: string;
+  /** メガシンカ先 SpeciesId の配列（1 種族複数メガ可・ADR 0022）。 */
+  readonly megaEvolvesTo?: readonly string[];
 }
 /** レギュレーションの最小情報（解禁判定に必要な解禁種族集合・per-reg 一本化・ADR 0021）。 */
 export interface RegulationInfo {
@@ -133,7 +134,9 @@ export const toCoverageMembers = (
     let defenseTypes = species.types;
     if (m.itemId !== null && species.megaEvolvesTo !== undefined) {
       const item = itemDex[m.itemId];
-      const mega = speciesDex[species.megaEvolvesTo];
+      // メガストーンが当該種族用なら、メガ先候補（配列）の先頭タイプで防御分析する。
+      // 複数メガ先は現状単一のため先頭を採用（将来 megaStoneFor がメガ先を直接指す拡張余地）。
+      const mega = speciesDex[species.megaEvolvesTo[0] ?? ""];
       if (item?.megaStoneFor === m.speciesId && mega !== undefined) {
         defenseTypes = mega.types;
       }

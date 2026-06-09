@@ -8,7 +8,7 @@
 # ことのある種族」のマスター）。スコープを広げるときは列挙を足して再取得・再生成すればよい。
 #
 # pokemon: PokeAPI の pokemon slug（フォルム/メガは固有 slug）。
-# megaLinks: base SpeciesId -> メガ先 SpeciesId（種族の megaEvolvesTo を張る）。
+# megaLinks: base SpeciesId -> メガ先 SpeciesId の**配列**（1 種族複数メガ可・種族の megaEvolvesTo を張る・ADR 0022）。
 pokemon:
   - garchomp
   - dragonite
@@ -42,4 +42,5 @@ pokemon:
   - talonflame
   - tyranitar
 megaLinks:
-  charizard: charizard-mega-x
+  charizard:
+    - charizard-mega-x

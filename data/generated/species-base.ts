@@ -103,7 +103,7 @@ export const speciesBaseDex = {
       spDefense: 85,
       speed: 100,
     },
-    megaEvolvesTo: "charizard-mega-x",
+    megaEvolvesTo: ["charizard-mega-x"],
   },
   "charizard-mega-x": {
     dex: 6,

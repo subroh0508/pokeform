@@ -68,6 +68,33 @@ Phase 1〜3 は生成 `species.ts` を **全レギュ共通の単一 `speciesDex
 archive せず**0021 を削除し per-regulation の確定設計で作り直す**（番号維持・archive しない・Accepted ADR の
 不変則に対する意図的な例外として ADR 本文に明記）。roster の per-reg 一本化という 0021 の主旨は踏襲する。
 
+### 設計方針の再々改訂（Phase 5〜6 で導入）
+
+Phase 1〜4 では、各種族の技を `generate.ts` が **`global catalog/moves.yaml ∩ PokeAPI learnset`** から
+**その場で導出**し、per-reg YAML の `allow.moves` は記録のみ（生成未使用）だった。この方式には 2 つの問題がある:
+
+- **種族×レギュレーションの技対応が YAML で確認できない**: 「どの種族がそのレギュで何の技を覚えるか」は
+  生成された `species.ts` を読むしかなく、入力 YAML からは追えない。
+- **各種族に数技しか紐づかない**: catalog が少数技のため、実態（M-A は解禁技467・各種族の全 learnable 技）に
+  全く届かない。
+
+これを次の方針へ改訂する（ユーザー合意済み・本計画 Phase 5〜7 の前提）:
+
+10. **per-reg 技記録を species-keyed の明示記録へ**: `regulations/<id>.yaml` の `allow.{species,items,mega,moves}`
+    フラット構造を廃し、**トップレベルの種族IDキー（キーの存在 = 解禁）+ per-species `moves`・`mega`** を持つ
+    構造にする。`name`/`period`/`items` は予約キー。YAML は **block 記法**で統一する。種族×レギュの技対応が
+    YAML で直読できる。
+11. **`mega` は配列**: 1 種族が複数メガを持ちうる（リザードン X/Y 等）ため `mega` を `readonly string[]` にし、
+    per-reg 種族 dex / `species-base.ts` の `megaEvolvesTo` と `catalog/species.yaml` の `megaLinks` を配列対応にする。
+12. **`generate.ts` は YAML → TS 変換専任**: learnset 交差・生成段バリデーションを除去し、YAML の `moves` を
+    そのまま `species.ts` へ流す dumb transformer にする。`species.ts` の出力形（`moves: string[]` 等）は不変。
+13. **妥当性検証は authoring 時ゲートへ**: 覚えない技の混入・参照切れ・条件違反は新 CLI `check:regulation`
+    （`check:individual` と同系）で YAML 作成・更新時点に判断し、Git hooks / CI から駆動する。
+
+この改訂は ADR 0021 の「`allow.moves` はレギュ記録のみ・generate が `catalog ∩ learnset` を導出」という記録方法
+の該当箇所を更新する（per-reg species 正本・reg-aware 型機構という 0021 の核は不変＝full supersede ではなく
+**改訂**）。記録方法（Phase 5・ADR 0022）と generate 責務縮小 + 検証位置（Phase 6・ADR-B）で **ADR を分割**して残す。
+
 ## 実装指針
 
 ### data/champions/（手動・コミット）の新構造
@@ -82,8 +109,40 @@ data/champions/
     items.yaml                    #   解禁済み持ち物 id の一覧（+ megaStone メタ）
     abilities.yaml                #   解禁済み特性 id の一覧
   regulations/                    # ← 新規：1 レギュ = 1 ファイル
-    champions-m-a.yaml            #   name / period / allow{ species, items, mega, moves }
+    champions-m-a.yaml            #   name / period / items（予約キー）+ 種族IDキー = 解禁（Phase 5 で改訂）
     champions-m-b.yaml
+```
+
+> **Phase 5 で改訂**: `regulations/<id>.yaml` の `allow.{...}` フラット構造を廃し、**種族IDキー = 解禁 +
+> per-species `moves`/`mega[]`** の block 記法へ。`name`/`period`/`items` は予約キー。新スキーマの例:
+
+```yaml
+# data/champions/regulations/champions-m-a.yaml（Phase 5 以降・block 記法）
+name:
+  en: "Champions Regulation M-A"
+  ja: "チャンピオンズ レギュレーションM-A"
+period:
+  start: "2026-04-08"
+  end: "2026-06-17"
+items:                            # レギュ共通の解禁持ち物プール（予約キー）
+  - charizardite-x
+  - charizardite-y
+  - life-orb
+garchomp:                         # トップレベル種族IDキー = 解禁（allow）
+  moves:
+    - earthquake
+    - dragon-claw
+    - stone-edge
+    - swords-dance
+charizard:
+  moves:
+    - flare-blitz
+    - dragon-claw
+    - earthquake
+    - roost
+  mega:                           # 1 種族複数メガを許容（配列）
+    - charizard-mega-x
+    - charizard-mega-y
 ```
 
 ### data/generated/（生成・コミット）の新構造
@@ -137,13 +196,15 @@ champions/regulations を合成 → `data/generated` を出力・Biome 整形）
 3. 種族 / 技 / 持ち物 / 特性が独立カタログ YAML（append-only）で管理され、種族はその id を参照する。
 4. 解禁情報の正本が per-regulation に一本化され（`SpeciesBase.regulations[]` 廃止）、型レベル解禁判定が
    per-reg 解禁集合を参照する。
-5. レギュレーション M-A の解禁種族・技・持ち物・メガが信頼できる情報源に基づき全量そろう。
+5. レギュレーション M-A の解禁種族・技・持ち物・メガが信頼できる情報源に基づき全量そろう（全186種・各種族の全 learnable 技）。
+6. 種族×レギュレーションの技対応が `regulations/<id>.yaml`（block 記法・種族キー = 解禁・per-species `moves`/`mega[]`）で直読できる。
+7. `generate.ts` は YAML → TS 変換専任で、妥当性検証は authoring 時ゲート `check:regulation` が担う。
 
 ## phase 分割（6 基準の評価サマリ）
 
 データモデル再設計（構造変更）とデータ投入（情報源確定・全量投入）は性質が異なり、構造変更も「カタログ分離」
-と「レギュレーションモデル再設計（型機構を含む）」「per-regulation 種族型化」で意思決定・不可逆性が分かれる。
-想定 diff と並行性から 5 phase に分割（直列依存）:
+「レギュレーションモデル再設計（型機構を含む）」「per-regulation 種族型化」「技記録スキーマ再設計」「generate 責務
+縮小 + authoring 検証」で意思決定・不可逆性が分かれる。想定 diff と並行性から **7 phase に分割（直列依存）**:
 
 | phase | 狙い | 意思決定 | 不可逆性 | 想定 diff | 備考 |
 |---|---|---|---|---|---|
@@ -151,12 +212,17 @@ champions/regulations を合成 → `data/generated` を出力・Biome 整形）
 | **02 レギュレーションモデル再設計** | per-reg YAML + period + per-reg 型生成 + A案型機構 + species.regulations[] 廃止。 | 高 | 高 | ~500-700 | 本計画の核・ADR 起票 |
 | **03 情報源確定 + 20匹サンプル検証** | 解禁情報取得 skill を作成し、WebSearch で M-A 信頼情報源を確定・全リスト doc 化。無作為20匹で end-to-end 検証。 | 中 | 低 | ~中（大半データ） | 新構造の妥当性確認・skill 化 |
 | **04 per-regulation 種族型 + 個体複数レギュ宣言** | global species.ts 廃止 → per-reg `regulations/<id>/species.ts`（per-reg 習得技）を正本化 + reg-aware 型機構 + 個体 `regulations:[]` fan-out + ADR 0021 削除して作り直す。 | 高 | 高 | ~700-1200 | 構造 + 型機構・データ量不変・diff 過大なら 2 PR（型基盤 / 個体 fan-out）分割 |
-| **05 M-A 全データ投入** | M-A 解禁の種族・技・持ち物・メガを全量投入し完成。 | 低 | 低 | 大（データ例外） | データ投入 PR |
+| **05 技記録スキーマ再設計** | `allow.{...}` 廃止 → 種族キー = 解禁 + per-species `moves`/`mega[]`・block 記法。`mega` 配列化。generate を新スキーマ読取りへ追従（learnset 検証は残す）。出力等価。 | 高 | 高 | ~400-600 | ADR 0022（記録方法）・安全性のため検証は残す |
+| **06 generate 変換専任 + 検証ゲート** | `check:regulation` 新設（authoring ゲート）+ generate から learnset 交差・検証を除去し変換専任へ。Git hooks/CI 連携。 | 高 | 中 | ~300-500 | ADR-B（generate 責務 / 検証位置） |
+| **07 M-A 全データ投入** | M-A 解禁の全186種・全技・全持ち物・全メガを全量投入し完成（各種族の全 learnable 技）。 | 低 | 低 | 大（データ例外） | データ投入 PR |
 
-- **01 → 02 → 03 → 04 → 05 の直列**。01/02/04 は共に `generate.ts` と生成構造を触り競合しやすいため直列。
-- **03 で情報源と全リストを確定 → 04 で生成構造を per-reg へ確定 → 05 で全量投入**（最終構造の上で投入し
-  やり直しを避ける）。
+- **01 → 02 → 03 → 04 → 05 → 06 → 07 の直列**。01/02/04/05/06 は共に `generate.ts` と生成構造を触り競合しやすいため直列。
+- **03 で情報源と全リストを確定 → 04 で生成構造を per-reg へ → 05 で技記録スキーマを確定 → 06 で検証位置を確定 → 07 で全量投入**
+  （最終構造の上で投入しやり直しを避ける）。
 - **04 は構造 + 型機構変更**（データ量不変）。`SpeciesId` の波及が広く reg-aware 化で型引数 `R` が増えるため、
   想定 diff が >1000 行に膨らむ場合は「型基盤（per-reg species 生成 + reg-aware 型機構 + `ConstrainParty` 追従
   + ADR）」と「個体 `regulations:[]` codegen fan-out」へ 2 PR 分割する（[[planning]] の分割）。
-- 05 はデータセット追加で意味ある粒度分割が困難なため、1 PR（>1000 行）を許容する（[[planning]] の例外）。
+- **05/06 を分割した理由**: 記録方法（データ形式・ADR 0022）と generate 責務縮小 + 検証位置（ADR-B）は独立した
+  不可逆判断で、ADR も分割して残す。検証の空白を作らないため **05 では generate の learnset 検証を残し、06 で
+  `check:regulation` を用意してから除去する**（順序厳守）。
+- 07 はデータセット追加で意味ある粒度分割が困難なため、1 PR（>1000 行）を許容する（[[planning]] の例外）。

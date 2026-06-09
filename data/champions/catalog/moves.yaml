@@ -1,7 +1,8 @@
 # data/champions/catalog/moves.yaml — 技カタログ（append-only マスター・手動・コミット）。
 # ポケモンチャンピオンズに**一度でも解禁された技**の id を列挙する vendor スコープ。
-# generate.ts はここの技を取得・整形し data/generated/moves.ts を出力する。種族の learnable は
-# PokeAPI 由来でこのカタログとの積集合になる。
+# generate.ts はここの技を取得・整形し data/generated/moves.ts（技 universe）を出力する。
+# 各種族の per-reg 習得技は regulations/<id>.yaml の種族キー下 moves が正本（ADR 0022）。本カタログは
+# その技 slug の fetch / universe マニフェスト（覚えない技は learnset 検証で弾く）。
 #
 # append-only 方針: 一度解禁された技は、後のレギュレーションで没収されても**この一覧から消さない**
 # （レギュレーションごとの解禁/非解禁の正本は別管理が持つ＝後続フェーズで導入）。

@@ -1,53 +1,84 @@
 # data/champions/regulations/champions-m-b.yaml — レギュレーション M-B の解禁情報（手動・コミット）。
-# 1 レギュ = 1 ファイル。詳細は構造・形式の正本コメントを champions-m-a.yaml に置く。
+# 記録方法の正本コメントは champions-m-a.yaml を参照（種族キー = 解禁 + per-species moves/mega[]・block 記法）。
 #
-# 詳細未公開（2026-06-17 開始）。M-A 解禁集合を暫定ベースに置く（公開後に要更新）。
-# mewtwo は Restricted で M-A 同様 M-B 暫定にも含めない（公開リストで要確認）。
-# period.end は空（開催中）。
+# 詳細未公開（2026-06-17 開始）。M-A 解禁集合を暫定ベースに置く（公開後に要更新）。period.end は空（開催中）。
 name:
-  en: "Champions Regulation M-B"
-  ja: "チャンピオンズ レギュレーションM-B"
+  en: Champions Regulation M-B
+  ja: チャンピオンズ レギュレーションM-B
 period:
-  start: "2026-06-17"
-  end:
-allow:
-  species:
-    - garchomp
-    - dragonite
-    - rotom-wash
-    - charizard
-    - dragapult
-    - hydreigon
-  mega:
-    - charizard-mega-x
-  items:
-    - charizardite-x
-    - rocky-helmet
-    - life-orb
-    - leftovers
-    - assault-vest
-    - choice-scarf
+  start: 2026-06-17
+  end: null
+items:
+  - charizardite-x
+  - rocky-helmet
+  - life-orb
+  - leftovers
+  - assault-vest
+  - choice-scarf
+garchomp:
   moves:
     - earthquake
     - dragon-claw
     - stone-edge
     - swords-dance
     - outrage
+    - draco-meteor
+    - fire-blast
+dragonite:
+  moves:
+    - earthquake
+    - dragon-claw
+    - stone-edge
+    - outrage
     - fire-punch
     - extreme-speed
     - draco-meteor
     - fire-blast
     - roost
-    - meteor-mash
-    - zen-headbutt
-    - bullet-punch
+    - hydro-pump
+    - thunderbolt
+    - ice-beam
+rotom-wash:
+  moves:
     - hydro-pump
     - thunderbolt
     - volt-switch
     - will-o-wisp
-    - flare-blitz
-    - psystrike
-    - ice-beam
     - shadow-ball
+    - dark-pulse
+    - nasty-plot
+charizard:
+  moves:
+    - earthquake
+    - dragon-claw
+    - swords-dance
+    - outrage
+    - fire-punch
+    - fire-blast
+    - roost
+    - will-o-wisp
+    - flare-blitz
+  mega:
+    - charizard-mega-x
+dragapult:
+  moves:
+    - dragon-claw
+    - outrage
+    - draco-meteor
+    - fire-blast
+    - hydro-pump
+    - thunderbolt
+    - will-o-wisp
+    - shadow-ball
+hydreigon:
+  moves:
+    - earthquake
+    - stone-edge
+    - outrage
+    - draco-meteor
+    - fire-blast
+    - roost
+    - zen-headbutt
+    - hydro-pump
     - dark-pulse
     - nasty-plot

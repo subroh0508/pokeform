@@ -44,7 +44,8 @@ const TYPES = [
 
 interface SpeciesCatalog {
   pokemon: string[];
-  megaLinks?: Record<string, string>;
+  // 1 base 種族 -> メガ先 SpeciesId の配列（1 種族複数メガを許容・ADR 0022）。
+  megaLinks?: Record<string, string[]>;
 }
 interface MovesCatalog {
   moves: string[];
@@ -56,11 +57,24 @@ interface ItemsCatalog {
 interface AbilitiesCatalog {
   abilities: string[];
 }
-interface RegulationFile {
-  name: { en: string; ja: string };
-  period: { start: string; end: string | null };
-  allow: { species: string[]; items: string[]; mega: string[]; moves: string[] };
+/**
+ * レギュレーション YAML（ADR 0022・block 記法）。`name` / `period` / `items` は予約キー。
+ * それ以外のトップレベルキーは**種族 ID = 解禁種族**（キーの存在 = allow）で、値は `SpeciesAllow`。
+ * 予約キーと種族キーを同階層で混在させるため、parse 後は `Record<string, unknown>` として読み、
+ * 予約キーを `RESERVED_REG_KEYS` で仕分ける。
+ */
+interface SpeciesAllow {
+  moves: string[];
+  // メガ運用種族のメガ先 SpeciesId 配列（複数メガ可）。
+  mega?: string[];
 }
+const RESERVED_REG_KEYS = new Set(["name", "period", "items"]);
+/** レギュレーション YAML の種族 ID キー（予約キー以外）を列挙する。 */
+const regSpeciesKeys = (r: Record<string, unknown>): string[] =>
+  Object.keys(r).filter((k) => !RESERVED_REG_KEYS.has(k));
+/** 種族キーの解禁内容（moves / mega）を取り出す。 */
+const speciesAllowOf = (r: Record<string, unknown>, sid: string): SpeciesAllow =>
+  r[sid] as SpeciesAllow;
 interface NameEntry {
   language: { name: string };
   name: string;
@@ -90,12 +104,12 @@ const abilitiesCat = ch<AbilitiesCatalog>("catalog/abilities.yaml");
 
 // レギュレーションは 1 レギュ = 1 ファイル（data/champions/regulations/<id>.yaml）。
 const REG_DIR = join(CH, "regulations");
-const regs: Record<string, RegulationFile> = {};
+const regs: Record<string, Record<string, unknown>> = {};
 for (const file of readdirSync(REG_DIR)
   .filter((f) => f.endsWith(".yaml"))
   .sort()) {
   const id = file.replace(/\.yaml$/, "");
-  regs[id] = parseYaml(readFileSync(join(REG_DIR, file), "utf8")) as RegulationFile;
+  regs[id] = parseYaml(readFileSync(join(REG_DIR, file), "utf8")) as Record<string, unknown>;
 }
 
 // --- types（全 18・相性表） -------------------------------------------------
@@ -190,27 +204,38 @@ const itemIdSet = new Set(itemsCat.items);
 const moveCatSet = new Set(movesCat.moves);
 const regEntries: Record<string, Record<string, unknown>> = {};
 for (const [id, reg] of Object.entries(regs)) {
+  // 種族キー（解禁種族）・解禁 mega（per-species mega の和集合）・解禁技（per-species moves の和集合）を集計。
+  const speciesKeys = regSpeciesKeys(reg);
+  const items = (reg.items as string[] | undefined) ?? [];
+  const megaSet = new Set<string>();
+  const movesUnion = new Set<string>();
+  for (const sid of speciesKeys) {
+    const allow = speciesAllowOf(reg, sid);
+    for (const mv of allow.moves) movesUnion.add(mv);
+    for (const mg of allow.mega ?? []) megaSet.add(mg);
+  }
+  const mega = [...megaSet];
   const check = (kind: string, ids: string[], pool: Set<string>): void => {
     for (const v of ids) {
       if (!pool.has(v)) {
-        throw new Error(
-          `regulation '${id}' allow.${kind} '${v}' not in catalog (append-only catalog)`,
-        );
+        throw new Error(`regulation '${id}' ${kind} '${v}' not in catalog (append-only catalog)`);
       }
     }
   };
-  check("species", reg.allow.species, speciesIdSet);
-  check("mega", reg.allow.mega, speciesIdSet);
-  check("items", reg.allow.items, itemIdSet);
-  check("moves", reg.allow.moves, moveCatSet);
+  check("species", speciesKeys, speciesIdSet);
+  check("mega", mega, speciesIdSet);
+  check("items", items, itemIdSet);
+  check("moves", [...movesUnion], moveCatSet);
   // メタは species / items / mega（解禁集合）のみ。per-reg 習得技は perRegSpecies が持つ（ADR 0021）。
+  const name = reg.name as { en: string; ja: string };
+  const period = reg.period as { start: string; end: string | null };
   regEntries[id] = {
     id,
-    name: reg.name,
-    period: { start: reg.period.start, end: reg.period.end ?? null },
-    species: reg.allow.species,
-    items: reg.allow.items,
-    mega: reg.allow.mega,
+    name,
+    period: { start: period.start, end: period.end ?? null },
+    species: speciesKeys,
+    items,
+    mega,
   };
 }
 /** "champions-m-a" -> "championsMA"（per-reg const 名）。 */
@@ -220,9 +245,11 @@ const camel = (id: string): string =>
     .map((p, i) => (i === 0 ? p : p.charAt(0).toUpperCase() + p.slice(1)))
     .join("");
 
-// --- species ---------------------------------------------------------------
-const moveIdSet = new Set(movesCat.moves);
-const speciesEntries: Record<string, unknown> = {};
+// --- species（reg 不変 info + 学習技集合）------------------------------------
+// reg 不変フィールド（dex/name/types/baseStats/abilities/megaEvolvesTo）と learnSets を全種族ぶん用意し、
+// per-reg dex / species-base / names の素材にする。per-reg の習得技は YAML 由来（per-reg dex 構築時に採用）。
+const learnSets: Record<string, Set<string>> = {};
+const speciesInfo: Record<string, Record<string, unknown>> = {};
 for (const slug of speciesCat.pokemon) {
   const poke = pokeJson[slug];
   if (!poke) throw new Error(`missing pokemon json: ${slug}`);
@@ -254,27 +281,24 @@ for (const slug of speciesCat.pokemon) {
     const key = statMap[s.stat.name];
     if (key) base[key] = s.base_stat;
   }
-  const learn = (poke.moves as { move: { name: string } }[]).map((m) => m.move.name);
-  const moves = movesCat.moves.filter((m) => moveIdSet.has(m) && learn.includes(m));
-  const entry: Record<string, unknown> = {
+  learnSets[slug] = new Set((poke.moves as { move: { name: string } }[]).map((m) => m.move.name));
+  const info: Record<string, unknown> = {
     dex: speciesJson.id,
     id: slug,
     name,
     types: (poke.types as { type: { name: string } }[]).map((t) => t.type.name),
     baseStats: base,
     abilities: (poke.abilities as { ability: { name: string } }[]).map((a) => a.ability.name),
-    moves,
-    items: "any",
   };
   const mega = speciesCat.megaLinks?.[slug];
-  if (mega) entry.megaEvolvesTo = mega;
-  speciesEntries[slug] = entry;
+  if (mega && mega.length > 0) info.megaEvolvesTo = mega;
+  speciesInfo[slug] = info;
 }
 
 // --- species-base（reg 不変フィールドのみの派生 base view・全種族） -----------
 // 実数値計算・名前表示・coverage はレギュ非依存のためこの base view を引く（設計判断5・per-reg 化）。
 const speciesBaseEntries: Record<string, unknown> = {};
-for (const [id, e] of Object.entries(speciesEntries)) {
+for (const [id, e] of Object.entries(speciesInfo)) {
   const s = e as Record<string, unknown>;
   const base: Record<string, unknown> = {
     dex: s.dex,
@@ -288,13 +312,50 @@ for (const [id, e] of Object.entries(speciesEntries)) {
 }
 
 // --- per-regulation species dex（roster ∪ mega 先・per-reg 習得技を含む legality 正本） ----------
+// トップレベル種族キー: moves は YAML 由来（learnset に含まれることを検証＝覚えない技を弾く・Phase 5 では
+// generate に検証を残す）。megaEvolvesTo は per-reg の mega（配列）。
+// mega 先のみの種族（種族キーでない）: moves は catalog ∩ learnset を継承（base と同 movepool・出力等価）。
 const perRegSpecies: Record<string, Record<string, unknown>> = {};
 for (const [id, reg] of Object.entries(regs)) {
-  const rosterIds = [...new Set([...reg.allow.species, ...reg.allow.mega])];
+  const speciesKeys = regSpeciesKeys(reg);
+  const keySet = new Set(speciesKeys);
+  const megaTargets: string[] = [];
+  for (const sid of speciesKeys) {
+    for (const mg of speciesAllowOf(reg, sid).mega ?? []) megaTargets.push(mg);
+  }
+  const rosterIds = [...new Set([...speciesKeys, ...megaTargets])];
   const dex: Record<string, unknown> = {};
   for (const sid of rosterIds) {
-    const entry = speciesEntries[sid];
-    if (!entry) throw new Error(`regulation '${id}' roster species '${sid}' missing from catalog`);
+    const info = speciesInfo[sid];
+    if (!info) throw new Error(`regulation '${id}' roster species '${sid}' missing from catalog`);
+    let moves: string[];
+    let megaEvolvesTo: string[] | undefined;
+    if (keySet.has(sid)) {
+      const allow = speciesAllowOf(reg, sid);
+      for (const mv of allow.moves) {
+        if (!learnSets[sid]?.has(mv)) {
+          throw new Error(
+            `regulation '${id}' species '${sid}' move '${mv}' not learnable (learnset)`,
+          );
+        }
+      }
+      moves = allow.moves;
+      if (allow.mega && allow.mega.length > 0) megaEvolvesTo = allow.mega;
+    } else {
+      // mega 先のみ: base と同 movepool。catalog ∩ learnset を採用（現行出力と等価）。
+      moves = movesCat.moves.filter((m) => learnSets[sid]?.has(m));
+    }
+    const entry: Record<string, unknown> = {
+      dex: info.dex,
+      id: info.id,
+      name: info.name,
+      types: info.types,
+      baseStats: info.baseStats,
+      abilities: info.abilities,
+      moves,
+      items: "any",
+    };
+    if (megaEvolvesTo) entry.megaEvolvesTo = megaEvolvesTo;
     dex[sid] = entry;
   }
   perRegSpecies[id] = dex;
@@ -367,7 +428,7 @@ for (const [id, entry] of Object.entries(regEntries)) {
 emit(
   "names.ts",
   `// ja 表示名 -> 安定 ID の逆引きマップ（ランタイム正規化用・[[cli-and-io]]）。\n` +
-    `export const speciesIdByJa = ${lit(jaMap(speciesEntries))} as const;\n` +
+    `export const speciesIdByJa = ${lit(jaMap(speciesInfo))} as const;\n` +
     `export const moveIdByJa = ${lit(jaMap(moveEntries))} as const;\n` +
     `export const abilityIdByJa = ${lit(jaMap(abilityEntries))} as const;\n` +
     `export const itemIdByJa = ${lit(jaMap(itemEntries))} as const;\n` +
@@ -385,5 +446,5 @@ execFileSync(
 );
 
 console.log(
-  `[generate] wrote ${Object.keys(speciesEntries).length} species, ${Object.keys(moveEntries).length} moves, ${TYPES.length} types`,
+  `[generate] wrote ${Object.keys(speciesInfo).length} species, ${Object.keys(moveEntries).length} moves, ${TYPES.length} types`,
 );
