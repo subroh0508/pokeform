@@ -13,7 +13,7 @@ description: 型表現の統一パターン（`XxxBase` + `XxxDex` + `XxxId = ke
 
 エントリ種別ごとに**3 点セット**を定義する:
 
-- **親型 `XxxBase`**: 構造的に共通な形（`id` / `name: { en; ja }` / その他フィールド）。
+- **親型 `XxxBase`**: 構造的に共通な形（`id` / その他フィールド）。`name: { en; ja }` は **species / moves / types のみ**が持つ。**abilities / items は `name` を持たない**（生成 dex は id のみ + items は `category?`/`megaStoneFor?`。名前の SoT は `data/champions/catalog/{abilities,items}.yaml`・効果フィールドは後続で足す前提・Phase 10）。
 - **`XxxDex`**: 各エントリを ID キーに集約した型（`XxxDex[Id]` でルックアップ）。生成物では値
   `export const xxxDex = {...} as const` から **`type XxxDex = typeof xxxDex` で派生**し、値と型を
   単一ソース化する（手書き interface でなく derive・親型適合は `satisfies` / `Assignable` で検証）。
@@ -36,8 +36,9 @@ description: 型表現の統一パターン（`XxxBase` + `XxxDex` + `XxxId = ke
 
 ## 日英名と逆引き
 
-- すべて**英名（kebab-case の安定 ID）を型キー**にし、**日本語名は各エントリの `name.ja`** に持つ。ID を型キーにするのは安定性（PokeAPI 由来・改名されにくい）のため。
-- 逆引き（日本語名 → ID）は双方向リテラル型 `IdByJaName<"ピカチュウ"> = "pikachu"` 等で引ける（`data/generated/names.ts` に生成）。YAML を日英どちらでも書けるのはこの逆引きを codegen が使うため（[[data-pipeline]] / [[cli-and-io]]）。
+- すべて**英名（kebab-case の安定 ID）を型キー**にする。ID を型キーにするのは安定性（改名されにくい）のため。
+- **名前の SoT は `data/champions/catalog/*.yaml`**（`id → { ja, en }`・types は + `damageTo`・Phase 10）。`generate.ts` は名前について `data/raw`（PokeAPI）を読まず YAML を変換する。species / moves / types は生成 dex の各エントリ `name.ja` に持ち、**abilities / items は生成 dex に name を持たない**（catalog YAML が唯一の名前ソース）。
+- 逆引き（日本語名 → ID）は `data/generated/names.ts`（`speciesIdByJa` / `moveIdByJa` / `abilityIdByJa` / `itemIdByJa` / `typeIdByJa`）に生成し、catalog YAML の `ja` 由来で作る。YAML を日英どちらでも書けるのはこの逆引きを codegen が使うため（[[data-pipeline]] / [[cli-and-io]]）。
 
 ## 整合（ID 単一ソース）
 

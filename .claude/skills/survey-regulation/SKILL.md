@@ -92,17 +92,20 @@ Serebii から解禁種族の全リストと**各種族の使用可能技 全件
 
 ### 5. catalog へ append-only 追記する
 
-解禁エンティティの id を `data/champions/catalog/*.yaml` に追記する（**append-only**: 既存を消さない・
-[[data-pipeline]]）:
+解禁エンティティを `data/champions/catalog/*.yaml` に追記する（**append-only**: 既存を消さない・
+[[data-pipeline]]）。**Phase 10 以降、各エントリは `id → { ja, en }` 形式で日英名も併記する**（名前の SoT は
+catalog YAML・ja/en 欠落は `generate.ts` が生成段で非0終了にする）:
 
-- `species.yaml`: 種族 slug（+ メガ運用するなら `megaLinks` 配列）。**PokeAPI default slug**を使う（複数フォルムは
-  フォルム slug に注意）。
-- `abilities.yaml`: **追加種族が持つ特性を必ず全て追記**する（catalog に無い特性を種族が参照すると
+- `species.yaml`: `pokemon` 下に `slug: { ja, en }`（+ メガ運用するなら `megaLinks` 配列）。**PokeAPI default slug**を
+  使う（複数フォルムはフォルム slug に注意）。
+- `abilities.yaml`: **追加種族が持つ特性を必ず全て** `id: { ja, en }` で追記する（catalog に無い特性を種族が参照すると
   `generate.ts` が生成段でエラーになる）。`pnpm fetch:data` 後に `data/raw/pokemon/<slug>.json` の
-  `abilities[].ability.name` を集めると漏れない。
-- `moves.yaml`: 各種族の全 learnable 技の id（全量・少数サブセットにしない）。
-- `items.yaml`: 解禁持ち物の id を**全件**（一般 + きのみ + メガストーン）。メガストーンは `itemMeta` に
-  `megaStone` を付与。**PokeAPI item slug の正確な綴り**を確認する（例: `oran-berry` / `garchompite`）。
+  `abilities[].ability.name` を集めると id の漏れが無い（ja/en 名は Serebii 等で確定する）。
+- `moves.yaml`: 各種族の全 learnable 技を `id: { ja, en }` で（全量・少数サブセットにしない）。
+- `items.yaml`: 解禁持ち物を**全件** `id: { ja, en }` で（一般 + きのみ + メガストーン）。メガストーンは各エントリに
+  `megaStoneFor`（メガ先 base SpeciesId）を付与する（旧 `itemMeta` は廃止・各エントリへ統合）。**PokeAPI item slug の
+  正確な綴り**を確認する（例: `oran-berry` / `garchompite`）。
+- `types.yaml`（18 タイプ固定・通常は追記不要）: `id: { ja, en, damageTo }`。名前・相性とも catalog が SoT。
 
 ### 6. per-regulation YAML を書く / 更新する（新スキーマ・block 記法）
 

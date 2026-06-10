@@ -1,50 +1,108 @@
 # data/champions/catalog/species.yaml — 種族カタログ（append-only マスター・手動・コミット）。
-# ポケモンチャンピオンズに**一度でも解禁された種族**の slug を列挙する vendor スコープ。
-# fetch-pokeapi.ts はここ（+ moves/items/abilities）の列挙のみ取得し data/raw にキャッシュ、
-# generate.ts が data/generated/species.ts を出力する。
-#
-# append-only 方針: 一度解禁された種族は、後のレギュレーションで没収されても**この一覧から消さない**
-# （解禁の正本はレギュレーションごとの別管理が持つ＝後続フェーズで導入。本ファイルは「存在した
-# ことのある種族」のマスター）。スコープを広げるときは列挙を足して再取得・再生成すればよい。
-#
-# pokemon: PokeAPI の pokemon slug（フォルム/メガは固有 slug）。
-# megaLinks: base SpeciesId -> メガ先 SpeciesId の**配列**（1 種族複数メガ可・種族の megaEvolvesTo を張る・ADR 0022）。
+# ポケモンチャンピオンズに**一度でも解禁された種族** slug を id とし、日本語名 / 英名を併記する
+# （名前の SoT は本ファイル・Phase 10）。generate.ts はここの名前を data/generated/*.ts へ変換する
+# （PokeAPI を名前の取得元にしない）。種族値・タイプ・特性など構造データは引き続き data/raw 由来。
+# megaLinks: 1 base 種族 -> メガ先 SpeciesId の配列（1 種族複数メガ可）。
 pokemon:
-  - garchomp
-  - dragonite
-  - salamence
-  - metagross
-  - rotom-wash
-  - charizard
-  - charizard-mega-x
-  - mewtwo
-  - dragapult
-  - hydreigon
-  # M-A 解禁・無作為20匹サンプル（Phase 3・docs/plan/02-data-model-redesign/ma-roster-source.md）。
-  - aggron
-  - alakazam
-  - arcanine
-  - blastoise
-  - chandelure
-  - corviknight
-  - decidueye
-  - excadrill
-  - garganacl
-  - gengar
-  - greninja
-  - heracross
-  - krookodile
-  - lucario
-  - meowscarada
-  - milotic
-  - quaquaval
-  - skeledirge
-  - talonflame
-  - tyranitar
-  # Phase 9: garchomp / charizard / gengar のメガ先。
-  - charizard-mega-y
-  - garchomp-mega
-  - gengar-mega
+  garchomp:
+    ja: ガブリアス
+    en: Garchomp
+  dragonite:
+    ja: カイリュー
+    en: Dragonite
+  salamence:
+    ja: ボーマンダ
+    en: Salamence
+  metagross:
+    ja: メタグロス
+    en: Metagross
+  rotom-wash:
+    ja: ウォッシュロトム
+    en: Wash Rotom
+  charizard:
+    ja: リザードン
+    en: Charizard
+  charizard-mega-x:
+    ja: メガリザードンＸ
+    en: Mega Charizard X
+  mewtwo:
+    ja: ミュウツー
+    en: Mewtwo
+  dragapult:
+    ja: ドラパルト
+    en: Dragapult
+  hydreigon:
+    ja: サザンドラ
+    en: Hydreigon
+  aggron:
+    ja: ボスゴドラ
+    en: Aggron
+  alakazam:
+    ja: フーディン
+    en: Alakazam
+  arcanine:
+    ja: ウインディ
+    en: Arcanine
+  blastoise:
+    ja: カメックス
+    en: Blastoise
+  chandelure:
+    ja: シャンデラ
+    en: Chandelure
+  corviknight:
+    ja: アーマーガア
+    en: Corviknight
+  decidueye:
+    ja: ジュナイパー
+    en: Decidueye
+  excadrill:
+    ja: ドリュウズ
+    en: Excadrill
+  garganacl:
+    ja: キョジオーン
+    en: Garganacl
+  gengar:
+    ja: ゲンガー
+    en: Gengar
+  greninja:
+    ja: ゲッコウガ
+    en: Greninja
+  heracross:
+    ja: ヘラクロス
+    en: Heracross
+  krookodile:
+    ja: ワルビアル
+    en: Krookodile
+  lucario:
+    ja: ルカリオ
+    en: Lucario
+  meowscarada:
+    ja: マスカーニャ
+    en: Meowscarada
+  milotic:
+    ja: ミロカロス
+    en: Milotic
+  quaquaval:
+    ja: ウェーニバル
+    en: Quaquaval
+  skeledirge:
+    ja: ラウドボーン
+    en: Skeledirge
+  talonflame:
+    ja: ファイアロー
+    en: Talonflame
+  tyranitar:
+    ja: バンギラス
+    en: Tyranitar
+  charizard-mega-y:
+    ja: メガリザードンＹ
+    en: Mega Charizard Y
+  garchomp-mega:
+    ja: メガガブリアス
+    en: Mega Garchomp
+  gengar-mega:
+    ja: メガゲンガー
+    en: Mega Gengar
 megaLinks:
   charizard:
     - charizard-mega-x
