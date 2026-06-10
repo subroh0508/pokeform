@@ -1,11 +1,12 @@
-# Phase 7 — M-A 全データ投入（全186種 + 全 learnable 技）
+# Phase 8 — M-A 全データ投入（全186種 + 全 learnable 技）
 
 ## 目的 / スコープ
 
 Phase 5〜6 で確定した新スキーマ（種族キー = 解禁・per-species `moves`/`mega[]`・block 記法）と
-`check:regulation` ゲートの上に、レギュレーション M-A で解禁されている**全種族・全技・全持ち物・全メガ**を
-全量投入し M-A を完成させる。各種族の `moves` は **learnset ∩ M-A legal(467)** で全量化し、全 learnable 技が
-紐づく（各種族 10+）。
+`check:regulation` ゲート、および Phase 7（現ロスター持ち物・技 正確化）で正確化済みの土台の上に、
+レギュレーション M-A で解禁されている**全種族・全技・全持ち物・全メガ**を全量投入し M-A を完成させる。
+Phase 7 で正確化した現ロスターを起点に種族を全列挙へ拡張する（やり直しを避ける）。各種族の `moves` は
+**learnset ∩ M-A legal(467)** で全量化し、全 learnable 技が紐づく（各種族 10+）。
 
 - スコープ内:
   - `survey-regulation` で M-A 解禁の**全186種 + legal 技467 + 持ち物117 + メガ**を出典付き確定・doc 化。
@@ -21,6 +22,7 @@ Phase 5〜6 で確定した新スキーマ（種族キー = 解禁・per-species
 
 - **Phase 5（スキーマ再設計）/ Phase 6（generate 変換専任 + `check:regulation`）完了**。新スキーマと authoring
   ゲートが揃い、全量投入を**最終構造の上**で行えること。
+- **Phase 7（現ロスター持ち物・技 正確化）完了**。現ロスターの正確化済みデータを起点に全186種へ拡張する。
 - **Phase 3（情報源確定 + 20匹サンプル検証）完了**（マージ済み）。情報源・全リスト doc・`survey-regulation` skill が確立済み。
 - 確定済み rule: [[data-pipeline]] / [[cli-and-io]] / [[type-conventions]] / [[testing]]。
 

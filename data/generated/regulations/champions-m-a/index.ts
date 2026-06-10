@@ -43,14 +43,7 @@ export const championsMA = {
     "talonflame",
     "tyranitar",
   ],
-  items: [
-    "charizardite-x",
-    "rocky-helmet",
-    "life-orb",
-    "leftovers",
-    "assault-vest",
-    "choice-scarf",
-  ],
+  items: ["charizardite-x", "leftovers", "choice-scarf"],
   mega: ["charizard-mega-x"],
   speciesDex,
 } as const satisfies RegulationBase;
