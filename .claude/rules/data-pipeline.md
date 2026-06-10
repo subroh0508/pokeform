@@ -15,7 +15,7 @@ PokeAPI を vendor 方式で取り込み `data/generated/` を出力する流れ
 - **`data/champions/`** = **コミット・手動管理**。PokeAPI に無い情報の唯一のソース:
   - `rules.yaml`（能力ポイント 66/32・計算式定数）
   - `regulations/<id>.yaml`（**1 レギュ = 1 ファイル**・**block 記法**。`name` / `period`（`start` 必須・`end` は開催中なら空＝`null`）/ `items` は**予約キー**。それ以外の**トップレベルキー = 解禁種族**（キーの存在 = allow）で、各種族キー下に **per-reg 習得技 `moves`** と、メガ運用種族は **`mega`（配列・1 種族複数メガ可）** をコロケーションする。`allow.{...}` ラッパーは廃止（ADR `0022`）。**解禁判定の正本**＝per-regulation 一本化（A案・ADR `0021`）。種族 / 持ち物 / メガの id は catalog を参照する。覚えない技（`moves` ⊄ learnset）・参照整合・schema は **authoring 時ゲート `check:regulation`** が検証する（`generate.ts` は変換専任・ADR `0023`。learnset 検証は `data/raw` 依存で未取得時は参照整合のみに degrade・CI はオフライン維持で本ゲートを課さない）)
-  - `overrides.yaml`（習得技 / 特性の世代差・上書き）
+  - `overrides.yaml`（習得技 / 特性の世代差・上書き）。**適用範囲は `generate.ts`（生成段の補正）のみ**。`check:regulation` の覚えない技検証は `data/raw` の **raw PokeAPI learnset を正とし `overrides.yaml` を適用しない**。よって「Serebii にあり PokeAPI learnset に無い技」は override では `check:regulation` を通せず、per-reg YAML から**除去で解消**する（override は authoring ゲートには効かない・learning #59）。
   - `catalog/{species,moves,items,abilities}.yaml`（vendor スコープのマニフェスト = 取得対象を**エンティティ種別ごと**に列挙する **append-only マスター**。`species.yaml` は `pokemon` + `megaLinks`、`items.yaml` は `items` + `itemMeta`、`abilities.yaml` は種族が参照する特性 id を持つ）。**append-only 方針**: 一度解禁されたものは後のレギュレーションで没収されても消さない（レギュレーションごとの解禁/非解禁の正本は別管理）。種族の `abilities` はカタログ id を参照し、カタログに無い id を参照すると `generate.ts` が**生成段でエラー**にして整合を担保する。
 - **`data/generated/`** = **コミット**。`scripts/generate.ts` が raw と champions を合成して Dex 単位の `.ts` を出力する:
   - `types` / `moves` / `abilities` / `items` / `names`。
