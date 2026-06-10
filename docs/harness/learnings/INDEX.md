@@ -27,6 +27,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #58 | 02 Phase 8 survey-regulation を Serebii 第一優先・全量 materialize へ拡張 | 2026-06-10 | 02-data-model-redesign/phase-08 | draft | [2026-06-10-pr-58.md](./2026-06-10-pr-58.md) |
 | #59 | 02 Phase 9 3種小データセット全 movepool + M-A 持ち物全件 投入 | 2026-06-10 | 02-data-model-redesign/phase-09 | draft | [2026-06-10-pr-59.md](./2026-06-10-pr-59.md) |
 | #62 | メガ先 moves を base の per-reg moves 継承へ（ADR 0024・#59 follow-up） | 2026-06-10 | 02-data-model-redesign（follow-up） | draft | [2026-06-10-pr-62.md](./2026-06-10-pr-62.md) |
+| #67 | 02 Phase 11 ADR の可変 plan 参照除去 + adr.md codify | 2026-06-10 | 02-data-model-redesign/phase-11 | draft | [2026-06-10-pr-67.md](./2026-06-10-pr-67.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
