@@ -90,3 +90,49 @@ PokeAPI default slug が単一フォルム最終進化で、`data/champions/cata
   メガ可能だが、メガ path は既存 `charizard-mega-x` で実証済みのため、20 匹サンプルでは base 種族のみ投入。
 - **技の網羅**: species.moves は既存 catalog 技との積集合（sparse）で可。M-A 解禁技の全量は Phase 4。
 - **残り ~166 種・複数フォルム種**: Phase 4 で `survey-regulation` skill により全量投入。
+
+## Phase 7 — 現ロスター持ち物 / 技 正確化（2026-06-10 検証）
+
+Phase 7（`phase-07-ma-roster-accuracy.md`）で、現ロスター26種の **持ち物プール**と各種族 **moves** を、
+暫定でっち上げ（[[champions-regulation-data-placeholder]]）から M-A 実情へ正確化した。検証日 2026-06-10。
+
+### 持ち物の解禁可否（多ソース突き合わせ）
+
+M-A の持ち物プールは VGC 既存フォーマットより**大幅に絞られている**ことがコミュニティの一致した認識
+（"stripped-down item pool"）。現 `items` の混入を次のとおり判定した:
+
+| item | M-A 解禁 | 採否 | 根拠 |
+|---|---|---|---|
+| `charizardite-x`（メガストーン） | ✅ 解禁 | 維持 | メガ進化が M-A の主ギミック（テラス代替）。複数ソース一致。 |
+| `leftovers` | ✅ 解禁 | 維持 | pokemondb pokebase / pokemon-zone の legal item 一覧に在籍。 |
+| `choice-scarf` | ✅ 解禁 | 維持 | 同上。なお choice-band / choice-specs は**非解禁**（scarf のみ）。 |
+| `life-orb` | ❌ 非解禁 | **除去** | pokemondb pokebase / games.gg / pokemon-zone / 検索コンセンサスで未在籍。 |
+| `assault-vest` | ❌ 非解禁 | **除去** | 同上（M-A プールに無し）。 |
+| `rocky-helmet` | ❌ 非解禁 | **除去** | 同上（M-A プールに無し）。 |
+
+> **ソース間の差異と解消**: 初回の WebSearch 要約は life-orb を "regulation item" として挙げたが、これは
+> 小型モデルの誤抽出と判断する。一次に近い複数ソース（pokemondb pokebase の解禁一覧 / games.gg の
+> "Item List: What's Missing" 記事 / pokemon-zone）が life-orb / assault-vest / rocky-helmet の**非在籍**で
+> 一致するため、これを正とした。M-A の legal item 総数は 117（MetaVGC / RotomPicks。berry・タイプ強化等を含む）と
+> されるが、本 phase は現ロスター正確化が責務のため**未解禁の除去**に絞り、全117プールの反映は Phase 8 へ送る。
+> append-only 方針により catalog/items.yaml からは除去せず、per-reg `items` プールからのみ外す。
+
+出典:
+- pokemondb pokebase「What are all the items allowed in champions?」 https://pokemondb.net/pokebase/439258/
+- GAMES.GG「Pokémon Champions Item List: What's Missing and Why It Matters」 https://games.gg/news/pokemon-champions-items-list-meta/
+- Pokémon Zone「Champions Items」 https://www.pokemon-zone.com/champions/items/
+- MetaVGC「Champions format legal Pokemon/items/moves」 https://metavgc.com/guides/pokemon-champions-format-legal-pokemon-items-moves（legal moves **467** / items **117** / Pokémon **186**）
+
+### 各種族 moves の正確化方針（learnset ∩ M-A legal）
+
+- **learnset の正本 = PokeAPI**（`pnpm fetch:data` で取得した `data/raw/pokemon/<slug>.json` の `moves[]`）。
+  全26種について curate した競技用 movepool を**プログラムで learnset 照合**し、覚えない技をゼロにした
+  （`check:regulation` の learnable 検証で二重担保）。curate 段で 2 件の覚えない技（corviknight:snarl /
+  meowscarada:sucker-punch）を検出・差し替えた。
+- **M-A legal（467技）** との交差: M-A は Restricted 種・テラス・ダイマを除外する一方、個別技の ban は限定的で、
+  各種族の現行世代 learnset の競技採用技はほぼ legal。本 phase は "全 learnable 技の全量" ではなく
+  **実情準拠の競技 movepool（各種族10+・13〜16技）** へ正確化し（暫定の共有プール ~22技を解消）、
+  full 全量化（learnset ∩ 467 の materialize）は Phase 8 に残す。
+- **テラス不可**のため `tera-blast` は競技無効として除外。Hidden Power 等の旧世代撤去技も不採用。
+- メガ運用は現状維持（`charizard` の `charizard-mega-x` のみ）。他メガ運用種（aggron / lucario 等）の
+  メガ先・メガストーン全量は Phase 8（種族追加を伴うため本 phase スコープ外）。

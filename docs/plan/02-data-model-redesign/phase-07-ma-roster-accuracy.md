@@ -32,17 +32,17 @@ interim phase。現状データは暫定でっち上げ（[[champions-regulation
 
 ## タスク
 
-- [ ] `survey-regulation` で M-A の**正確な解禁持ち物リスト**を複数ソース突き合わせで確定・出典付き doc 化
-      （現 `items` の `rocky-helmet` / `life-orb` 等が解禁か否かを判定）。
-- [ ] 現ロスター27種それぞれの **learnset ∩ M-A legal** を確定（PokeAPI learnset を `fetch:data` で取得し
-      M-A legal フィルタと交差・`overrides.yaml` で世代差補正）。
-- [ ] `champions-m-a.yaml` の `items` 予約キーを正確化（未解禁を除去・解禁分を反映）。
-- [ ] 現ロスター27種の各種族キー下 `moves` を learnset ∩ legal へ正確化（block シーケンス・各種族 10+ 目安）。
-- [ ] 追加 id を `catalog/moves.yaml` / `items.yaml` / 必要なら `abilities.yaml` へ append-only 追記。
-- [ ] `node src/cli/index.ts check:regulation data/champions/regulations/champions-m-a.yaml` が 0 終了
+- [x] `survey-regulation` で M-A の**正確な解禁持ち物リスト**を複数ソース突き合わせで確定・出典付き doc 化
+      （`rocky-helmet` / `life-orb` / `assault-vest` は**非解禁**と判定・`ma-roster-source.md` Phase 7 節）。
+- [x] 現ロスター26種それぞれの **learnset ∩ M-A legal** を確定（PokeAPI learnset を `fetch:data` で取得し
+      競技 movepool を learnset 照合・覚えない技 2 件を差し替え）。
+- [x] `champions-m-a.yaml` の `items` 予約キーを正確化（life-orb / assault-vest / rocky-helmet 除去・3 解禁維持）。
+- [x] 現ロスター26種の各種族キー下 `moves` を learnset ∩ legal へ正確化（block シーケンス・各種族 13〜16 技）。
+- [x] 追加 id（126 技）を `catalog/moves.yaml` へ append-only 追記。
+- [x] `node src/cli/index.ts check:regulation data/champions/regulations/champions-m-a.yaml` が 0 終了
       （覚えない技混入・参照切れ無し）。
-- [ ] `pnpm fetch:data && pnpm generate:data` で再生成し、`data/generated/regulations/champions-m-a/` に反映。
-- [ ] 生成データの妥当性を `pokemon-data-reviewer` agent でレビュー（解禁整合・技範囲・メガ配列）。
+- [x] `pnpm fetch:data && pnpm generate:data` で再生成し、`data/generated/regulations/champions-m-a/` に反映。
+- [x] 生成データの妥当性を `pokemon-data-reviewer` agent でレビュー（重大な不整合なし）。
 
 ## この Phase で育てるハーネス（rule・skill）
 
