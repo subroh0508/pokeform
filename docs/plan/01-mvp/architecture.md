@@ -105,7 +105,9 @@ export interface SpeciesDex {
 export type SpeciesId = keyof SpeciesDex;   // 技の MoveId = keyof MoveDex と同じ導出
 ```
 
-PokeAPI は `names`（localized, language=`ja`/`ja-Hrkt`）を各リソースに持つため、日本語名は生成段で自動付与する（手動データ不要）。CLI 出力（`analyze:coverage` の表など）も日本語名で表示する。
+日本語名は生成段で自動付与し、CLI 出力（`analyze:coverage` の表など）も日本語名で表示する。
+
+> **更新（02-data-model-redesign Phase 10 / ADR 0025）**: 名前の SoT は PokeAPI ではなく **`data/champions/catalog/*.yaml`（`id → { ja, en }`・手書き）** へ移行した。`generate.ts` は名前 / タイプ相性について PokeAPI を読まず YAML を変換する。また **abilities / items の生成 dex は `name` を持たない**（id のみ + items は `category?`/`megaStoneFor?`。名前は catalog YAML と `names.ts` 逆引きが持つ）。本節以下の `AbilityBase`/`ItemBase` の `name` を含む例は MVP 当時のもので、現行は [[type-conventions]] / [[data-pipeline]] を正本とする。
 
 #### 技の型: 親型 `MoveBase` + 技ごとの子型（`MoveDex` で ID キー集約）
 

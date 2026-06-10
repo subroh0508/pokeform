@@ -1,9 +1,14 @@
 /**
  * fetch-pokeapi.ts — PokeAPI を取得し `data/raw/`（.gitignore）にキャッシュする。
  *
- * vendor 方式（ADR 0012）の取得段。`data/champions/catalog/*.yaml` の列挙（species / moves /
- * items / abilities）+ 全 18 タイプを取得し、リソース種別ごとに `data/raw/<category>/<name>.json`
- * へ保存する。既にキャッシュ済みのファイルは再取得しない（決定論・オフライン再生のため）。
+ * vendor 方式（ADR 0012）の取得段。`data/champions/catalog/*.yaml` の列挙（species / moves / items）を
+ * 取得し、リソース種別ごとに `data/raw/<category>/<name>.json` へ保存する。既にキャッシュ済みの
+ * ファイルは再取得しない（決定論・オフライン再生のため）。
+ *
+ * Phase 10 以降、**名前 / タイプ相性は catalog YAML が SoT**（generate は名前 / types について raw を
+ * 読まない）。よって `type` / `ability` / `pokemon-form` は取得しない（generate が消費しないため）。
+ * 取得するのは pokemon（種族値 / タイプ / 特性 id）/ pokemon-species（図鑑番号）/ move（type /
+ * damageClass / power 等）/ item（category）のみ。
  *
  * 実行: `pnpm fetch:data`（ネットワーク必須）。取得後は raw キャッシュ固定で generate.ts が
  * 決定論的に data/generated を出力する。スコープ（全種族 vs サブセット）は catalog/*.yaml が制御する。
@@ -16,28 +21,6 @@ import { parse as parseYaml } from "yaml";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const RAW = join(ROOT, "data", "raw");
 const API = "https://pokeapi.co/api/v2";
-
-/** PokemonType union と一致する 18 タイプ（unknown/shadow/stellar は除外）。 */
-const TYPES = [
-  "normal",
-  "fire",
-  "water",
-  "electric",
-  "grass",
-  "ice",
-  "fighting",
-  "poison",
-  "ground",
-  "flying",
-  "psychic",
-  "bug",
-  "rock",
-  "ghost",
-  "dragon",
-  "dark",
-  "steel",
-  "fairy",
-];
 
 /** catalog/*.yaml をまとめて読むための最小形（fetch は列挙だけ要る）。 */
 const readCatalog = <T>(root: string, file: string): T =>
@@ -70,26 +53,21 @@ async function fetchInto(category: string, name: string): Promise<Record<string,
 }
 
 async function main(): Promise<void> {
-  const { pokemon } = readCatalog<{ pokemon: string[] }>(ROOT, "species.yaml");
-  const { moves } = readCatalog<{ moves: string[] }>(ROOT, "moves.yaml");
-  const { items } = readCatalog<{ items: string[] }>(ROOT, "items.yaml");
-  const { abilities } = readCatalog<{ abilities: string[] }>(ROOT, "abilities.yaml");
+  // catalog は id → { ja, en } マップ（Phase 10）。fetch は id（キー）の列挙だけ要る。
+  const { pokemon } = readCatalog<{ pokemon: Record<string, unknown> }>(ROOT, "species.yaml");
+  const { moves } = readCatalog<{ moves: Record<string, unknown> }>(ROOT, "moves.yaml");
+  const { items } = readCatalog<{ items: Record<string, unknown> }>(ROOT, "items.yaml");
 
-  // タイプ（全 18・相性表のソース）
-  for (const t of TYPES) await fetchInto("type", t);
-
-  // pokemon 本体 + 種族（ja 名・全国図鑑番号）+ フォルム（メガ/リージョンの ja 名）
-  for (const slug of pokemon) {
+  // pokemon 本体（種族値 / タイプ / 特性 id）+ 種族（全国図鑑番号）。
+  for (const slug of Object.keys(pokemon)) {
     const poke = await fetchInto("pokemon", slug);
     const species = (poke.species as { name: string }).name;
     await fetchInto("pokemon-species", species);
-    if (slug !== species) await fetchInto("pokemon-form", slug);
   }
 
-  // 特性は catalog/abilities.yaml を正本に取得（append-only マスター）。
-  for (const name of abilities) await fetchInto("ability", name);
-  for (const m of moves) await fetchInto("move", m);
-  for (const i of items) await fetchInto("item", i);
+  // move は type / damageClass / power 等、item は category のソース（名前は catalog YAML 由来）。
+  for (const m of Object.keys(moves)) await fetchInto("move", m);
+  for (const i of Object.keys(items)) await fetchInto("item", i);
 
   console.log("[fetch] done");
 }

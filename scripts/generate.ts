@@ -21,41 +21,32 @@ const RAW = join(ROOT, "data", "raw");
 const CH = join(ROOT, "data", "champions");
 const OUT = join(ROOT, "data", "generated");
 
-const TYPES = [
-  "normal",
-  "fire",
-  "water",
-  "electric",
-  "grass",
-  "ice",
-  "fighting",
-  "poison",
-  "ground",
-  "flying",
-  "psychic",
-  "bug",
-  "rock",
-  "ghost",
-  "dragon",
-  "dark",
-  "steel",
-  "fairy",
-];
-
+/** カタログ共通の日英名（名前の SoT は catalog YAML・Phase 10）。 */
+interface NamePair {
+  ja: string;
+  en: string;
+}
 interface SpeciesCatalog {
-  pokemon: string[];
+  // id -> 日英名。種族値・タイプ・特性など構造データは引き続き data/raw 由来。
+  pokemon: Record<string, NamePair>;
   // 1 base 種族 -> メガ先 SpeciesId の配列（1 種族複数メガを許容・ADR 0022）。
   megaLinks?: Record<string, string[]>;
 }
 interface MovesCatalog {
-  moves: string[];
+  // id -> 日英名。type / damageClass / power 等の構造データは data/raw 由来。
+  moves: Record<string, NamePair>;
 }
 interface ItemsCatalog {
-  items: string[];
-  itemMeta?: Record<string, { megaStoneFor?: string }>;
+  // id -> 日英名 + megaStoneFor（旧 itemMeta を各エントリへ統合・Phase 10）。category は data/raw 由来。
+  items: Record<string, NamePair & { megaStoneFor?: string }>;
 }
 interface AbilitiesCatalog {
-  abilities: string[];
+  // id -> 日英名。生成 abilities.ts は id のみ（name は持たない）。
+  abilities: Record<string, NamePair>;
+}
+interface TypesCatalog {
+  // id -> 日英名 + 攻撃側相性倍率 damageTo（非 1.0 のみ記録・generate が 1.0 を補完・Phase 10）。
+  types: Record<string, NamePair & { damageTo?: Record<string, number> }>;
 }
 /**
  * レギュレーション YAML（ADR 0022・block 記法）。`name` / `period` / `items` は予約キー。
@@ -75,24 +66,11 @@ const regSpeciesKeys = (r: Record<string, unknown>): string[] =>
 /** 種族キーの解禁内容（moves / mega）を取り出す。 */
 const speciesAllowOf = (r: Record<string, unknown>, sid: string): SpeciesAllow =>
   r[sid] as SpeciesAllow;
-interface NameEntry {
-  language: { name: string };
-  name: string;
-}
 
 const raw = (category: string, name: string): Record<string, unknown> =>
   JSON.parse(readFileSync(join(RAW, category, `${name}.json`), "utf8")) as Record<string, unknown>;
 
 const ch = <T>(file: string): T => parseYaml(readFileSync(join(CH, file), "utf8")) as T;
-
-/** localized names から優先言語順で最初に見つかった名前を返す。 */
-const pickName = (names: NameEntry[], langs: string[]): string => {
-  for (const lang of langs) {
-    const found = names.find((n) => n.language.name === lang);
-    if (found) return found.name;
-  }
-  throw new Error(`name not found for langs ${langs.join("/")}`);
-};
 
 /** オブジェクトを TS リテラルとして直列化（Biome が後段で整形する）。 */
 const lit = (value: unknown): string => JSON.stringify(value, null, 2);
@@ -101,6 +79,29 @@ const speciesCat = ch<SpeciesCatalog>("catalog/species.yaml");
 const movesCat = ch<MovesCatalog>("catalog/moves.yaml");
 const itemsCat = ch<ItemsCatalog>("catalog/items.yaml");
 const abilitiesCat = ch<AbilitiesCatalog>("catalog/abilities.yaml");
+const typesCat = ch<TypesCatalog>("catalog/types.yaml");
+
+// 種族 slug 一覧（catalog/species.yaml の pokemon キー）。
+const speciesSlugs = Object.keys(speciesCat.pokemon);
+// 18 タイプの id 集合（catalog/types.yaml のキー = 旧ハードコード列挙の置き換え）。
+const TYPES = Object.keys(typesCat.types);
+
+// authoring ゲート: 各 catalog エントリに ja/en が揃っているか検証（名前の SoT は catalog YAML・
+// 欠落は非0終了で弾く・Phase 10）。
+const requireNames = (kind: string, m: Record<string, { ja?: string; en?: string }>): void => {
+  for (const [id, v] of Object.entries(m)) {
+    if (!v?.ja || !v?.en) {
+      throw new Error(
+        `catalog ${kind} '${id}' is missing ja/en name (catalog YAML is the name SoT)`,
+      );
+    }
+  }
+};
+requireNames("species", speciesCat.pokemon);
+requireNames("moves", movesCat.moves);
+requireNames("abilities", abilitiesCat.abilities);
+requireNames("items", itemsCat.items);
+requireNames("types", typesCat.types);
 
 // レギュレーションは 1 レギュ = 1 ファイル（data/champions/regulations/<id>.yaml）。
 const REG_DIR = join(CH, "regulations");
@@ -112,36 +113,28 @@ for (const file of readdirSync(REG_DIR)
   regs[id] = parseYaml(readFileSync(join(REG_DIR, file), "utf8")) as Record<string, unknown>;
 }
 
-// --- types（全 18・相性表） -------------------------------------------------
+// --- types（全 18・name + 相性表とも catalog/types.yaml 由来・raw 非依存・Phase 10） ----------
 const typeEntries: Record<string, unknown> = {};
 for (const t of TYPES) {
-  const j = raw("type", t);
-  const rel = j.damage_relations as Record<string, { name: string }[]>;
+  const c = typesCat.types[t];
+  // 非 1.0 のみ記録された damageTo を、全タイプ 1.0 で初期化したうえで上書きする。
   const to: Record<string, number> = {};
   for (const d of TYPES) to[d] = 1;
-  for (const d of rel.double_damage_to) to[d.name] = 2;
-  for (const d of rel.half_damage_to) to[d.name] = 0.5;
-  for (const d of rel.no_damage_to) to[d.name] = 0;
+  for (const [d, m] of Object.entries(c.damageTo ?? {})) to[d] = m;
   typeEntries[t] = {
     id: t,
-    name: {
-      en: pickName(j.names as NameEntry[], ["en"]),
-      ja: pickName(j.names as NameEntry[], ["ja-hrkt", "ja"]),
-    },
+    name: { en: c.en, ja: c.ja },
     damageTo: to,
   };
 }
 
-// --- moves -----------------------------------------------------------------
+// --- moves（name は catalog/moves.yaml 由来・type/damageClass/power 等の構造は data/raw 由来） ----
 const moveEntries: Record<string, unknown> = {};
-for (const m of movesCat.moves) {
+for (const [m, nm] of Object.entries(movesCat.moves)) {
   const j = raw("move", m);
   moveEntries[m] = {
     id: m,
-    name: {
-      en: pickName(j.names as NameEntry[], ["en"]),
-      ja: pickName(j.names as NameEntry[], ["ja-hrkt", "ja"]),
-    },
+    name: { en: nm.en, ja: nm.ja },
     type: (j.type as { name: string }).name,
     damageClass: (j.damage_class as { name: string }).name,
     power: j.power ?? null,
@@ -151,14 +144,15 @@ for (const m of movesCat.moves) {
   };
 }
 
-// --- abilities（catalog/abilities.yaml を正本に生成・種族の特性はこの id を参照） ------
+// --- abilities（catalog/abilities.yaml を正本に id のみ生成・name は持たない・Phase 10） ------
+// 効果定義は後続フェーズで足す前提で生成ファイル自体は残す。種族の特性はこの id を参照する。
 const pokeJson: Record<string, Record<string, unknown>> = {};
-for (const slug of speciesCat.pokemon) {
+for (const slug of speciesSlugs) {
   pokeJson[slug] = raw("pokemon", slug);
 }
 // 参照整合: 各種族の特性が abilities カタログに存在することを検証（append-only マスターの担保）。
-const abilitySet = new Set(abilitiesCat.abilities);
-for (const slug of speciesCat.pokemon) {
+const abilitySet = new Set(Object.keys(abilitiesCat.abilities));
+for (const slug of speciesSlugs) {
   for (const a of pokeJson[slug]?.abilities as { ability: { name: string } }[]) {
     if (!abilitySet.has(a.ability.name)) {
       throw new Error(
@@ -168,40 +162,28 @@ for (const slug of speciesCat.pokemon) {
   }
 }
 const abilityEntries: Record<string, unknown> = {};
-for (const a of [...abilitiesCat.abilities].sort()) {
-  const j = raw("ability", a);
-  abilityEntries[a] = {
-    id: a,
-    name: {
-      en: pickName(j.names as NameEntry[], ["en"]),
-      ja: pickName(j.names as NameEntry[], ["ja-hrkt", "ja"]),
-    },
-  };
+for (const a of Object.keys(abilitiesCat.abilities).sort()) {
+  abilityEntries[a] = { id: a };
 }
 
-// --- items -----------------------------------------------------------------
+// --- items（id-only + category(raw) + megaStoneFor(yaml)・name は持たない・Phase 10） -----------
 const itemEntries: Record<string, unknown> = {};
-for (const i of itemsCat.items) {
+for (const [i, meta] of Object.entries(itemsCat.items)) {
   const j = raw("item", i);
-  const meta = itemsCat.itemMeta?.[i];
   const entry: Record<string, unknown> = {
     id: i,
-    name: {
-      en: pickName(j.names as NameEntry[], ["en"]),
-      ja: pickName(j.names as NameEntry[], ["ja-hrkt", "ja"]),
-    },
     category: (j.category as { name: string }).name,
   };
-  if (meta?.megaStoneFor) entry.megaStoneFor = meta.megaStoneFor;
+  if (meta.megaStoneFor) entry.megaStoneFor = meta.megaStoneFor;
   itemEntries[i] = entry;
 }
 
 // --- regulations（per-reg・1 レギュ = 1 ディレクトリ + index 集約。解禁判定の正本・ADR 0021） -----
 // レギュメタ（regEntries）は name/period/解禁集合のみ。per-reg 習得技は別途 perRegSpecies（種族 dex）が持つ。
 // 参照整合: 解禁集合の id がカタログに存在することを生成段で検証する（append-only マスターの担保）。
-const speciesIdSet = new Set(speciesCat.pokemon);
-const itemIdSet = new Set(itemsCat.items);
-const moveCatSet = new Set(movesCat.moves);
+const speciesIdSet = new Set(speciesSlugs);
+const itemIdSet = new Set(Object.keys(itemsCat.items));
+const moveCatSet = new Set(Object.keys(movesCat.moves));
 const regEntries: Record<string, Record<string, unknown>> = {};
 for (const [id, reg] of Object.entries(regs)) {
   // 種族キー（解禁種族）・解禁 mega（per-species mega の和集合）・解禁技（per-species moves の和集合）を集計。
@@ -249,24 +231,14 @@ const camel = (id: string): string =>
 // reg 不変フィールド（dex/name/types/baseStats/abilities/megaEvolvesTo）を全種族ぶん用意し、
 // per-reg dex / species-base / names の素材にする。per-reg の習得技は YAML 由来（per-reg dex 構築時に採用）。
 const speciesInfo: Record<string, Record<string, unknown>> = {};
-for (const slug of speciesCat.pokemon) {
+for (const slug of speciesSlugs) {
   const poke = pokeJson[slug];
   if (!poke) throw new Error(`missing pokemon json: ${slug}`);
   const speciesName = (poke.species as { name: string }).name;
   const speciesJson = raw("pokemon-species", speciesName);
-  const isForm = slug !== speciesName;
-  const name = isForm
-    ? (() => {
-        const form = raw("pokemon-form", slug);
-        return {
-          en: pickName(form.form_names as NameEntry[], ["en"]),
-          ja: pickName(form.form_names as NameEntry[], ["ja-hrkt", "ja"]),
-        };
-      })()
-    : {
-        en: pickName(speciesJson.names as NameEntry[], ["en"]),
-        ja: pickName(speciesJson.names as NameEntry[], ["ja-hrkt", "ja"]),
-      };
+  // 名前は catalog/species.yaml 由来（PokeAPI を名前の取得元にしない・Phase 10）。dex は raw 由来。
+  const nm = speciesCat.pokemon[slug];
+  const name = { en: nm.en, ja: nm.ja };
   const base = { hp: 0, attack: 0, defense: 0, spAttack: 0, spDefense: 0, speed: 0 };
   const statMap: Record<string, keyof typeof base> = {
     hp: "hp",
@@ -355,11 +327,18 @@ for (const [id, reg] of Object.entries(regs)) {
 }
 
 // --- names（ja 名 -> id の逆引き・ランタイム正規化用） ----------------------
+// 生成 dex が name を持つ species/moves/types は dex から、id-only の abilities/items は
+// catalog YAML（名前の SoT・Phase 10）から ja を引く。
 const jaMap = (entries: Record<string, unknown>): Record<string, string> => {
   const out: Record<string, string> = {};
   for (const [id, e] of Object.entries(entries)) {
     out[(e as { name: { ja: string } }).name.ja] = id;
   }
+  return out;
+};
+const jaMapCat = (m: Record<string, { ja: string }>): Record<string, string> => {
+  const out: Record<string, string> = {};
+  for (const [id, v] of Object.entries(m)) out[v.ja] = id;
   return out;
 };
 
@@ -423,8 +402,8 @@ emit(
   `// ja 表示名 -> 安定 ID の逆引きマップ（ランタイム正規化用・[[cli-and-io]]）。\n` +
     `export const speciesIdByJa = ${lit(jaMap(speciesInfo))} as const;\n` +
     `export const moveIdByJa = ${lit(jaMap(moveEntries))} as const;\n` +
-    `export const abilityIdByJa = ${lit(jaMap(abilityEntries))} as const;\n` +
-    `export const itemIdByJa = ${lit(jaMap(itemEntries))} as const;\n` +
+    `export const abilityIdByJa = ${lit(jaMapCat(abilitiesCat.abilities))} as const;\n` +
+    `export const itemIdByJa = ${lit(jaMapCat(itemsCat.items))} as const;\n` +
     `export const typeIdByJa = ${lit(jaMap(typeEntries))} as const;\n`,
 );
 
