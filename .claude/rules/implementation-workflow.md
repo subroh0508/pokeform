@@ -52,7 +52,10 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
   `git worktree add <abs-path> -b <branch> origin/main`。branch 名は命名規約（`<type>/<scope>-<purpose>`、
   [AGENTS.md](../../AGENTS.md) / [[cross-agent]]）に従う。worktree パスは**絶対パス**で扱う。
   worktree 作成後は **`pnpm install` を実行**してから検証する（git worktree は node_modules を共有しないため、
-  各 worktree で依存を導入しないと `pnpm verify` が失敗する）。
+  各 worktree で依存を導入しないと `pnpm verify` が失敗する）。同様に **`data/raw`（gitignore・PokeAPI キャッシュ）も
+  worktree 間で共有されない**。`generate:data` / `check:regulation` の learnset 検証で raw が要るデータ系作業では、
+  着手前に **メイン側の `data/raw` を cp するか `pnpm fetch:data` を回してから** `generate` する（未取得だと
+  `check:regulation` の覚えない技検証が参照整合のみに degrade する・[[data-pipeline]]）。
 - **成功条件**: worktree が作成され、対象 branch が origin/main 起点で checkout 済み。
 - **fallback**: 既に同名 worktree / branch があれば再利用（再作成しない）。stash した変更は最終フェーズ後に
   `git stash pop` する余地を残す。
