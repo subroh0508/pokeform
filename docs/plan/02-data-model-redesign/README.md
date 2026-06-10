@@ -33,8 +33,8 @@ flowchart TD
 - [x] [Phase 5 — 技記録スキーマ再設計（種族キー = 解禁 + per-species moves/mega[]・block 記法・generate 読取り追従・ADR 0022）](./phase-05-move-recording-schema.md)
 - [x] [Phase 6 — generate.ts を変換専任へ縮小 + authoring 検証ゲート check:regulation 新設（ADR 0023）](./phase-06-generator-and-validation.md)
 - [x] [Phase 7 — M-A 現ロスター持ち物・技 正確化（interim・現ロスター26種限定）](./phase-07-ma-roster-accuracy.md)
-- [ ] [Phase 8 — `survey-regulation` skill の全量 materialize 手順を定型化（harness・Serebii 第一優先）](./phase-08-survey-skill-fullset.md)
-- [ ] [Phase 9 — 小データセット検証投入（garchomp / charizard / gengar の 3 種・パイプライン本格スケール de-risk）](./phase-09-smoke-three-species.md)
+- [x] [Phase 8 — `survey-regulation` skill の全量 materialize 手順を定型化（harness・Serebii 第一優先）](./phase-08-survey-skill-fullset.md)
+- [x] [Phase 9 — 小データセット検証投入（garchomp / charizard / gengar の 3 種・パイプライン本格スケール de-risk）](./phase-09-smoke-three-species.md)
 - [ ] [Phase 10 — M-A 全データ投入（全186種 + 全 learnable 技）](./phase-10-ma-full-data.md)
 
 > 計画群全体の受け入れ基準は [`OVERVIEW.md` の「受け入れ基準」節](./OVERVIEW.md#受け入れ基準) を参照。
