@@ -19,7 +19,7 @@ pokeform は Claude Code と Codex の両方で実装される前提。指示・
 - **ゲート = Git hooks**（[ADR 0013](./0013-git-hooks-over-claude-hooks.md)）でツール非依存に強制。
 - path-scoped rules は Claude が自動ロード、Codex 等は `docs/harness/rules-index.md`（`paths` から生成）を参照。
 
-詳細は `docs/plan/00-harness-setup/phase-07-rules-and-claude-md.md` と `.claude/rules/cross-agent.md`（SoT）。
+詳細は `.claude/rules/cross-agent.md`（SoT）。
 
 ## Consequences
 

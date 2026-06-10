@@ -38,7 +38,7 @@ flowchart TD
 - [x] [Phase 8 — `survey-regulation` skill の全量 materialize 手順を定型化（harness・Serebii 第一優先）](./phase-08-survey-skill-fullset.md)
 - [x] [Phase 9 — 小データセット検証投入（garchomp / charizard / gengar の 3 種・パイプライン本格スケール de-risk）](./phase-09-smoke-three-species.md)
 - [ ] [Phase 10 — catalog 日英名 authoring + generate 名前変換専任化（catalog `id → { ja, en }`・名前 SoT を YAML へ・types は名前+相性も YAML・abilities/items 生成 TS を id-only 化）](./phase-10-catalog-name-authoring.md)
-- [ ] [Phase 11 — ADR の可変 plan 参照を除去 + adr.md へ方針 codify（harness hygiene）](./phase-11-adr-plan-hygiene.md)
+- [x] [Phase 11 — ADR の可変 plan 参照を除去 + adr.md へ方針 codify（harness hygiene）](./phase-11-adr-plan-hygiene.md)
 - [ ] [Phase 12 — M-A 全データ投入（全186種 + 全 learnable 技）](./phase-12-ma-full-data.md)
 
 > 計画群全体の受け入れ基準は [`OVERVIEW.md` の「受け入れ基準」節](./OVERVIEW.md#受け入れ基準) を参照。

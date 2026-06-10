@@ -12,7 +12,7 @@ date: 2026-06-07
 
 ## Decision
 
-**Pull Request ごとに KPT（Keep / Problem / Try）レトロスペクティブ**を行い、学びをハーネスへ書き戻す二段構えのループを採用する: `pr-retrospective`（1 PR = 1 learning を `docs/harness/learnings/` に生成）→ `harness-meta`（複数 learning を集約し、採用 / 見送り / 撤去を `harness-meta-criteria.md` で判定 → 改修 PR or `adr-new` 起票）。改善提案は `[rule]` / `[skill]` / `[template]` / `[remove]` / `[adr]` のプレフィックスで分類する。重量級の自動化（cron 自動起動・三層メトリクス・外部研究駆動）は pokeform 規模に合わせて簡素化／将来送り。詳細は `docs/plan/00-harness-setup/phase-02-retrospective-loop.md`。
+**Pull Request ごとに KPT（Keep / Problem / Try）レトロスペクティブ**を行い、学びをハーネスへ書き戻す二段構えのループを採用する: `pr-retrospective`（1 PR = 1 learning を `docs/harness/learnings/` に生成）→ `harness-meta`（複数 learning を集約し、採用 / 見送り / 撤去を `harness-meta-criteria.md` で判定 → 改修 PR or `adr-new` 起票）。改善提案は `[rule]` / `[skill]` / `[template]` / `[remove]` / `[adr]` のプレフィックスで分類する。重量級の自動化（cron 自動起動・三層メトリクス・外部研究駆動）は pokeform 規模に合わせて簡素化／将来送り。詳細は [[retrospective-format]]。
 
 ## Consequences
 

@@ -9,7 +9,7 @@ date: 2026-06-10
 ## Context
 
 [ADR 0022](./0022-per-regulation-species-keyed-moves.md) で per-regulation の技記録を species-keyed の明示
-記録にし、`scripts/generate.ts` を YAML → TS 変換へ寄せると決めたが、**Phase 5 では覚えない技の検出
+記録にし、`scripts/generate.ts` を YAML → TS 変換へ寄せると決めたが、**当初は覚えない技の検出
 （per-species `moves` ⊆ learnset）を generate に残した**（安全性の空白を作らないため）。これにより generate は
 「変換」と「妥当性検証」の 2 責務を持ったままだった。
 
@@ -17,9 +17,8 @@ date: 2026-06-10
 `pnpm generate:data` を走らせないと働かず authoring の早い段階で弾けない、という課題がある。検証は
 **YAML 作成・更新の時点**で独立に働くべきで、`check:individual`（個体の覚えない技を tsc で弾く）と対称な
 **レギュレーション用の authoring 時ゲート**が要る。仕様の詳細は
-[`docs/plan/02-data-model-redesign/phase-06-generator-and-validation.md`](../plan/02-data-model-redesign/phase-06-generator-and-validation.md)
-と [[data-pipeline]] / [[cli-and-io]] を正本とし、本 ADR は「なぜ」を記録する。本 ADR は ADR 0022 の
-「generate の責務縮小は段階的（Phase 6 で完了）」を実現する後続であり、0022 を supersede しない。
+[[data-pipeline]] / [[cli-and-io]] を正本とし、本 ADR は「なぜ」を記録する。本 ADR は ADR 0022 の
+「generate の責務縮小は段階的に完了させる」を実現する後続であり、0022 を supersede しない。
 
 ## Decision
 
@@ -56,7 +55,7 @@ date: 2026-06-10
 
 ## Alternatives Considered
 
-- **検証を generate に残す**: Phase 5 の暫定。生成と検証の関心が混ざり、authoring 早期に弾けない。分離のため却下。
+- **検証を generate に残す**: 当初の暫定。生成と検証の関心が混ざり、authoring 早期に弾けない。分離のため却下。
 - **check:regulation を tsc 方式（codegen → 型エラー）にする**（`check:individual` と同じ）: レギュレーション
   YAML を型に落として tsc で弾く案。per-species 技 × 種族の組合せを型化すると生成が複雑化し、参照整合や
   degrade 制御が型では表しにくい。データ検証は純関数 + 終了コードの方が単純なため却下。

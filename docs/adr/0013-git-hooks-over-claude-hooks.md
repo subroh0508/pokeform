@@ -12,7 +12,7 @@ date: 2026-06-07
 
 ## Decision
 
-強制ゲートを **Git ネイティブフック**（`.githooks/` + `core.hooksPath`）に集約する。`pre-commit` で高速ゲート（`pnpm typecheck` → `pnpm lint`）、`pre-push` で重ゲート（`pnpm test:cov`、カバレッジ100%）を実行し、失敗で `exit 1`。`core.hooksPath=.githooks` は `package.json` の `prepare` で設定し、新規 clone でも `pnpm install` で有効化される。Claude 固有の即時フィードバック（編集直後の Biome 等）は**補助**として `.claude/hooks` に併設するが、ゲートとは二重化しない（commit ブロックの PreToolUse は置かない）。詳細は `docs/plan/00-harness-setup/phase-09-verification-gates.md`。
+強制ゲートを **Git ネイティブフック**（`.githooks/` + `core.hooksPath`）に集約する。`pre-commit` で高速ゲート（`pnpm typecheck` → `pnpm lint`）、`pre-push` で重ゲート（`pnpm test:cov`、カバレッジ100%）を実行し、失敗で `exit 1`。`core.hooksPath=.githooks` は `package.json` の `prepare` で設定し、新規 clone でも `pnpm install` で有効化される。Claude 固有の即時フィードバック（編集直後の Biome 等）は**補助**として `.claude/hooks` に併設するが、ゲートとは二重化しない（commit ブロックの PreToolUse は置かない）。詳細は `.githooks/` と [[testing]] / [[tsc-verification]]。
 
 ## Consequences
 
