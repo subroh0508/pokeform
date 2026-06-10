@@ -137,3 +137,49 @@ M-A の持ち物プールは VGC 既存フォーマットより**大幅に絞ら
 - **テラス不可**のため `tera-blast` は競技無効として除外。Hidden Power 等の旧世代撤去技も不採用。
 - メガ運用は現状維持（`charizard` の `charizard-mega-x` のみ）。他メガ運用種（aggron / lucario 等）の
   メガ先・メガストーン全量は Phase 8（種族追加を伴うため本 phase スコープ外）。
+
+## Phase 9 — 3 種小データセット 全量 movepool 投入（2026-06-10 検証）
+
+Phase 9（`phase-09-smoke-three-species.md`）で、`garchomp` / `charizard` / `gengar` の **全 Serebii movepool** と
+M-A 解禁持ち物プール全件を投入し、データ更新パイプラインが本格スケール（各種族57〜75技・持ち物プール62件）で
+通ることを検証した。Phase 8 で定型化した `survey-regulation` skill の手順（Serebii 第一優先・全量 materialize・
+投入前 learnset 照合）を最初に適用した実投入。
+
+### 情報源（Serebii 第一優先）
+
+- Serebii Champions 図鑑（各種族の使用可能技 全件・**主ソース**・検証日 2026-06-10）:
+  - https://www.serebii.net/pokedex-champions/garchomp/
+  - https://www.serebii.net/pokedex-champions/charizard/
+  - https://www.serebii.net/pokedex-champions/gengar/
+- Serebii アイテムページ（解禁持ち物 全件）: https://www.serebii.net/pokemonchampions/items.shtml
+- learnset 照合の正本 = PokeAPI（`data/raw/pokemon/<slug>.json` の `moves[]`・全世代 union）。
+
+### 各種族 全 movepool（Serebii 由来・投入後 moves 数）
+
+- `garchomp`: 57 技（Serebii 58 技 − 投入前 learnset 照合で除外 1）。
+- `charizard`: 72 技（メガ X/Y 同 movepool）。
+- `gengar`: 75 技（Serebii 76 技 − 除外 1）。
+
+### Serebii ∩ PokeAPI learnset 差異の解消（投入前 learnset 照合で検出）
+
+`check:regulation`（PokeAPI learnset 照合）で **覚えない技 2 件**を検出し、Serebii ∩ PokeAPI の差異として
+**除去**した（過去世代 / 抽出アーティファクトと判断・PokeAPI 全世代 union に不在）:
+
+- `garchomp` の `thrash` — PokeAPI learnset に不在（現行 Garchomp は習得不可）。除去。
+- `gengar` の `clear-smog` — PokeAPI learnset に不在（Clear Smog は Koffing 系等の技・Gengar 習得不可）。除去。
+
+> 注: `check:regulation` は `overrides.yaml` を適用せず raw PokeAPI learnset を正とするため、Serebii にあり
+> PokeAPI に無い技は override では通せず**除去で解消**する（learnset 照合ゲートが Serebii 抽出の誤りを捕捉した好例）。
+
+### M-A 解禁持ち物プール（per-reg `items`・全件）
+
+一般持ち物（Serebii items.shtml）+ きのみ + 3 種のメガストーン（`charizardite-x/y` / `garchompite` /
+`gengarite`）= **62 件**を `items` 予約キーへ反映。非解禁（`life-orb` / `assault-vest` / `rocky-helmet` /
+`choice-band` / `choice-specs`）は per-reg に入れず、catalog からは append-only で残置。
+
+### メガ
+
+`charizard` → `charizard-mega-x` / `charizard-mega-y`、`garchomp` → `garchomp-mega`、`gengar` → `gengar-mega`
+を `catalog/species.yaml`（`megaLinks` 配列）/ per-reg `mega[]` / `items.yaml`（`megaStoneFor`）で整合。
+
+> 全186種・各種族の全 legal 技 / メガストーン全量（約60）の全量投入は Phase 10（M-A 全データ投入）に残す（本 phase スコープ外）。
