@@ -14,6 +14,74 @@ items:
   - leftovers
   - assault-vest
   - choice-scarf
+  # Phase 9: M-A 解禁の一般持ち物（Serebii items.shtml）。
+  - black-belt
+  - black-glasses
+  - bright-powder
+  - charcoal
+  - dragon-fang
+  - fairy-feather
+  - focus-band
+  - focus-sash
+  - hard-stone
+  - kings-rock
+  - light-ball
+  - magnet
+  - mental-herb
+  - metal-coat
+  - miracle-seed
+  - mystic-water
+  - never-melt-ice
+  - poison-barb
+  - quick-claw
+  - scope-lens
+  - sharp-beak
+  - shell-bell
+  - silk-scarf
+  - silver-powder
+  - soft-sand
+  - spell-tag
+  - twisted-spoon
+  - white-herb
+  # Phase 9: M-A 解禁のきのみ（Serebii items.shtml）。
+  - aspear-berry
+  - babiri-berry
+  - charti-berry
+  - cheri-berry
+  - chesto-berry
+  - chilan-berry
+  - chople-berry
+  - coba-berry
+  - colbur-berry
+  - haban-berry
+  - kasib-berry
+  - kebia-berry
+  - leppa-berry
+  - lum-berry
+  - occa-berry
+  - oran-berry
+  - passho-berry
+  - payapa-berry
+  - pecha-berry
+  - persim-berry
+  - rawst-berry
+  - rindo-berry
+  - roseli-berry
+  - shuca-berry
+  - sitrus-berry
+  - tanga-berry
+  - wacan-berry
+  - yache-berry
+  # Phase 9: 3 種のメガストーン。
+  - charizardite-y
+  - garchompite
+  - gengarite
 itemMeta:
   charizardite-x:
     megaStoneFor: charizard
+  charizardite-y:
+    megaStoneFor: charizard
+  garchompite:
+    megaStoneFor: garchomp
+  gengarite:
+    megaStoneFor: gengar

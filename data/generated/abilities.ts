@@ -44,6 +44,13 @@ export const abilityDex = {
       ja: "メロメロボディ",
     },
   },
+  drought: {
+    id: "drought",
+    name: {
+      en: "Drought",
+      ja: "ひでり",
+    },
+  },
   "flame-body": {
     id: "flame-body",
     name: {
@@ -245,6 +252,13 @@ export const abilityDex = {
     name: {
       en: "Sand Veil",
       ja: "すながくれ",
+    },
+  },
+  "shadow-tag": {
+    id: "shadow-tag",
+    name: {
+      en: "Shadow Tag",
+      ja: "かげふみ",
     },
   },
   "solar-power": {

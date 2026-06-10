@@ -18,28 +18,130 @@ period:
   start: 2026-04-08
   end: 2026-06-17
 items:
+  - aspear-berry
+  - babiri-berry
+  - black-belt
+  - black-glasses
+  - bright-powder
+  - charcoal
   - charizardite-x
-  - leftovers
+  - charizardite-y
+  - charti-berry
+  - cheri-berry
+  - chesto-berry
+  - chilan-berry
   - choice-scarf
+  - chople-berry
+  - coba-berry
+  - colbur-berry
+  - dragon-fang
+  - fairy-feather
+  - focus-band
+  - focus-sash
+  - garchompite
+  - gengarite
+  - haban-berry
+  - hard-stone
+  - kasib-berry
+  - kebia-berry
+  - kings-rock
+  - leftovers
+  - leppa-berry
+  - light-ball
+  - lum-berry
+  - magnet
+  - mental-herb
+  - metal-coat
+  - miracle-seed
+  - mystic-water
+  - never-melt-ice
+  - occa-berry
+  - oran-berry
+  - passho-berry
+  - payapa-berry
+  - pecha-berry
+  - persim-berry
+  - poison-barb
+  - quick-claw
+  - rawst-berry
+  - rindo-berry
+  - roseli-berry
+  - scope-lens
+  - sharp-beak
+  - shell-bell
+  - shuca-berry
+  - silk-scarf
+  - silver-powder
+  - sitrus-berry
+  - soft-sand
+  - spell-tag
+  - tanga-berry
+  - twisted-spoon
+  - wacan-berry
+  - white-herb
+  - yache-berry
 
 garchomp:
   moves:
-    - earthquake
-    - scale-shot
+    - aerial-ace
+    - bite
+    - body-slam
+    - breaking-swipe
+    - brick-break
+    - brutal-swing
+    - bulldoze
+    - crunch
+    - dig
+    - double-edge
+    - draco-meteor
+    - dragon-cheer
     - dragon-claw
-    - outrage
-    - stone-edge
-    - rock-slide
-    - swords-dance
-    - stealth-rock
-    - fire-fang
-    - iron-head
-    - poison-jab
+    - dragon-pulse
+    - dragon-rush
     - dragon-tail
-    - spikes
-    - scorching-sands
-    - substitute
+    - earth-power
+    - earthquake
+    - endure
+    - facade
+    - fire-blast
+    - fire-fang
+    - flamethrower
+    - fling
+    - giga-impact
+    - helping-hand
+    - hyper-beam
+    - iron-head
+    - iron-tail
+    - liquidation
+    - mud-shot
+    - outrage
+    - poison-jab
+    - power-gem
     - protect
+    - rain-dance
+    - rest
+    - rock-slide
+    - rock-tomb
+    - round
+    - sand-tomb
+    - sandstorm
+    - scale-shot
+    - scary-face
+    - scorching-sands
+    - shadow-claw
+    - sleep-talk
+    - snore
+    - spikes
+    - stealth-rock
+    - stomping-tantrum
+    - stone-edge
+    - substitute
+    - sunny-day
+    - surf
+    - swords-dance
+    - thunder-fang
+  mega:
+    - garchomp-mega
 dragonite:
   moves:
     - dragon-dance
@@ -75,24 +177,81 @@ rotom-wash:
     - protect
 charizard:
   moves:
-    - dragon-dance
-    - flare-blitz
-    - dragon-claw
-    - earthquake
-    - fire-punch
-    - thunder-punch
-    - roost
-    - will-o-wisp
+    - acrobatics
+    - aerial-ace
+    - air-cutter
     - air-slash
-    - fire-blast
-    - heat-wave
-    - hurricane
-    - focus-blast
+    - ancient-power
+    - beat-up
+    - belly-drum
+    - bite
+    - blast-burn
+    - body-slam
+    - breaking-swipe
+    - brick-break
+    - brutal-swing
+    - bulldoze
+    - counter
+    - crunch
+    - dig
+    - double-edge
+    - dragon-cheer
+    - dragon-claw
+    - dragon-dance
     - dragon-pulse
-    - scale-shot
+    - dragon-rush
+    - dragon-tail
+    - earthquake
+    - endure
+    - facade
+    - fire-blast
+    - fire-fang
+    - fire-punch
+    - fire-spin
+    - flame-charge
+    - flamethrower
+    - flare-blitz
+    - fling
+    - fly
+    - focus-blast
+    - focus-punch
+    - giga-impact
+    - heat-crash
+    - heat-wave
+    - helping-hand
+    - hurricane
+    - hyper-beam
+    - inferno
+    - iron-tail
+    - mega-kick
+    - outrage
+    - overheat
     - protect
+    - rest
+    - roar
+    - rock-slide
+    - rock-tomb
+    - roost
+    - round
+    - sandstorm
+    - scale-shot
+    - scary-face
+    - scorching-sands
+    - shadow-claw
+    - sleep-talk
+    - snore
+    - solar-beam
+    - steel-wing
+    - substitute
+    - sunny-day
+    - swords-dance
+    - temper-flare
+    - thunder-punch
+    - weather-ball
+    - will-o-wisp
   mega:
     - charizard-mega-x
+    - charizard-mega-y
 dragapult:
   moves:
     - dragon-darts
@@ -278,22 +437,83 @@ garganacl:
     - protect
 gengar:
   moves:
-    - shadow-ball
-    - sludge-bomb
-    - focus-blast
-    - dazzling-gleam
-    - nasty-plot
-    - will-o-wisp
-    - hex
-    - thunderbolt
-    - icy-wind
+    - acid-spray
+    - body-slam
+    - brick-break
+    - confuse-ray
+    - corrosive-gas
+    - curse
     - dark-pulse
+    - dazzling-gleam
     - destiny-bond
-    - hypnosis
+    - disable
+    - drain-punch
+    - endure
     - energy-ball
-    - taunt
+    - facade
+    - fire-punch
+    - fling
+    - focus-blast
+    - focus-punch
+    - foul-play
+    - giga-drain
+    - giga-impact
+    - gunk-shot
+    - haze
+    - hex
+    - hyper-beam
+    - hypnosis
+    - ice-punch
+    - icy-wind
+    - imprison
     - knock-off
+    - mean-look
+    - nasty-plot
+    - night-shade
+    - pain-split
+    - payback
+    - perish-song
+    - phantom-force
+    - poison-jab
+    - poltergeist
     - protect
+    - psych-up
+    - psychic
+    - psychic-noise
+    - rain-dance
+    - reflect-type
+    - rest
+    - round
+    - scary-face
+    - self-destruct
+    - shadow-ball
+    - shadow-claw
+    - shadow-punch
+    - skill-swap
+    - skitter-smack
+    - sleep-talk
+    - sludge-bomb
+    - sludge-wave
+    - snore
+    - spite
+    - substitute
+    - sucker-punch
+    - sunny-day
+    - taunt
+    - thief
+    - thunder
+    - thunder-punch
+    - thunder-wave
+    - thunderbolt
+    - toxic
+    - toxic-spikes
+    - trick
+    - trick-room
+    - venoshock
+    - will-o-wisp
+    - wonder-room
+  mega:
+    - gengar-mega
 greninja:
   moves:
     - hydro-pump

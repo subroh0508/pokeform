@@ -18,6 +18,7 @@ export const speciesBaseDex = {
       spDefense: 85,
       speed: 102,
     },
+    megaEvolvesTo: ["garchomp-mega"],
   },
   dragonite: {
     dex: 149,
@@ -103,7 +104,7 @@ export const speciesBaseDex = {
       spDefense: 85,
       speed: 100,
     },
-    megaEvolvesTo: ["charizard-mega-x"],
+    megaEvolvesTo: ["charizard-mega-x", "charizard-mega-y"],
   },
   "charizard-mega-x": {
     dex: 6,
@@ -342,6 +343,7 @@ export const speciesBaseDex = {
       spDefense: 75,
       speed: 110,
     },
+    megaEvolvesTo: ["gengar-mega"],
   },
   greninja: {
     dex: 658,
@@ -511,6 +513,57 @@ export const speciesBaseDex = {
       spAttack: 95,
       spDefense: 100,
       speed: 61,
+    },
+  },
+  "charizard-mega-y": {
+    dex: 6,
+    id: "charizard-mega-y",
+    name: {
+      en: "Mega Charizard Y",
+      ja: "メガリザードンＹ",
+    },
+    types: ["fire", "flying"],
+    baseStats: {
+      hp: 78,
+      attack: 104,
+      defense: 78,
+      spAttack: 159,
+      spDefense: 115,
+      speed: 100,
+    },
+  },
+  "garchomp-mega": {
+    dex: 445,
+    id: "garchomp-mega",
+    name: {
+      en: "Mega Garchomp",
+      ja: "メガガブリアス",
+    },
+    types: ["dragon", "ground"],
+    baseStats: {
+      hp: 108,
+      attack: 170,
+      defense: 115,
+      spAttack: 120,
+      spDefense: 95,
+      speed: 92,
+    },
+  },
+  "gengar-mega": {
+    dex: 94,
+    id: "gengar-mega",
+    name: {
+      en: "Mega Gengar",
+      ja: "メガゲンガー",
+    },
+    types: ["ghost", "poison"],
+    baseStats: {
+      hp: 60,
+      attack: 65,
+      defense: 80,
+      spAttack: 170,
+      spDefense: 95,
+      speed: 130,
     },
   },
 } as const satisfies Record<string, SpeciesBaseInfo>;

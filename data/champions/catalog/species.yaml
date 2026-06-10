@@ -41,6 +41,15 @@ pokemon:
   - skeledirge
   - talonflame
   - tyranitar
+  # Phase 9: garchomp / charizard / gengar のメガ先。
+  - charizard-mega-y
+  - garchomp-mega
+  - gengar-mega
 megaLinks:
   charizard:
     - charizard-mega-x
+    - charizard-mega-y
+  garchomp:
+    - garchomp-mega
+  gengar:
+    - gengar-mega
