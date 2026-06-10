@@ -23,6 +23,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #50 | plan README 群の薄索引化・テンプレ正本一本化 | 2026-06-09 | 00-harness-setup（横断） | draft | [2026-06-09-pr-50.md](./2026-06-09-pr-50.md) |
 | #52 | 02 Phase 5 per-regulation 技記録 species-keyed 化 + mega 配列化 | 2026-06-09 | 02-data-model-redesign/phase-05 | draft | [2026-06-09-pr-52.md](./2026-06-09-pr-52.md) |
 | #54 | 02 Phase 6 generate 変換専任化 + check:regulation 新設 | 2026-06-09 | 02-data-model-redesign/phase-06 | draft | [2026-06-09-pr-54.md](./2026-06-09-pr-54.md) |
+| #55 | 02 Phase 7 M-A 現ロスター26種 持ち物・技 正確化 | 2026-06-10 | 02-data-model-redesign/phase-07 | draft | [2026-06-10-pr-55.md](./2026-06-10-pr-55.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
