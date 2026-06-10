@@ -245,10 +245,9 @@ const camel = (id: string): string =>
     .map((p, i) => (i === 0 ? p : p.charAt(0).toUpperCase() + p.slice(1)))
     .join("");
 
-// --- species（reg 不変 info + 学習技集合）------------------------------------
-// reg 不変フィールド（dex/name/types/baseStats/abilities/megaEvolvesTo）と learnSets を全種族ぶん用意し、
+// --- species（reg 不変 info）------------------------------------
+// reg 不変フィールド（dex/name/types/baseStats/abilities/megaEvolvesTo）を全種族ぶん用意し、
 // per-reg dex / species-base / names の素材にする。per-reg の習得技は YAML 由来（per-reg dex 構築時に採用）。
-const learnSets: Record<string, Set<string>> = {};
 const speciesInfo: Record<string, Record<string, unknown>> = {};
 for (const slug of speciesCat.pokemon) {
   const poke = pokeJson[slug];
@@ -281,7 +280,6 @@ for (const slug of speciesCat.pokemon) {
     const key = statMap[s.stat.name];
     if (key) base[key] = s.base_stat;
   }
-  learnSets[slug] = new Set((poke.moves as { move: { name: string } }[]).map((m) => m.move.name));
   const info: Record<string, unknown> = {
     dex: speciesJson.id,
     id: slug,
@@ -314,16 +312,17 @@ for (const [id, e] of Object.entries(speciesInfo)) {
 // --- per-regulation species dex（roster ∪ mega 先・per-reg 習得技を含む legality 正本） ----------
 // トップレベル種族キー: moves は YAML 由来をそのまま採用（変換専任・ADR 0023）。覚えない技の検証は
 // authoring 時ゲート check:regulation が担う（generate は検証しない）。megaEvolvesTo は per-reg の mega（配列）。
-// mega 先のみの種族（種族キーでない）: moves は catalog ∩ learnset を継承（base と同 movepool・出力等価）。
+// mega 先のみの種族（種族キーでない）: moves は base 種族の per-reg moves を継承する（同一 movepool・ADR 0024）。
 const perRegSpecies: Record<string, Record<string, unknown>> = {};
 for (const [id, reg] of Object.entries(regs)) {
   const speciesKeys = regSpeciesKeys(reg);
   const keySet = new Set(speciesKeys);
-  const megaTargets: string[] = [];
+  // mega 先 -> base 種族キーの逆引き（base の per-reg moves を継承するため・ADR 0024）。
+  const megaToBase: Record<string, string> = {};
   for (const sid of speciesKeys) {
-    for (const mg of speciesAllowOf(reg, sid).mega ?? []) megaTargets.push(mg);
+    for (const mg of speciesAllowOf(reg, sid).mega ?? []) megaToBase[mg] = sid;
   }
-  const rosterIds = [...new Set([...speciesKeys, ...megaTargets])];
+  const rosterIds = [...new Set([...speciesKeys, ...Object.keys(megaToBase)])];
   const dex: Record<string, unknown> = {};
   for (const sid of rosterIds) {
     const info = speciesInfo[sid];
@@ -336,8 +335,8 @@ for (const [id, reg] of Object.entries(regs)) {
       moves = allow.moves;
       if (allow.mega && allow.mega.length > 0) megaEvolvesTo = allow.mega;
     } else {
-      // mega 先のみ: base と同 movepool。catalog ∩ learnset を採用（現行出力と等価）。
-      moves = movesCat.moves.filter((m) => learnSets[sid]?.has(m));
+      // mega 先のみ: base 種族の per-reg moves を継承する（実ゲームは技を base 形態に登録・同一 movepool・ADR 0024）。
+      moves = speciesAllowOf(reg, megaToBase[sid]).moves;
     }
     const entry: Record<string, unknown> = {
       dex: info.dex,
