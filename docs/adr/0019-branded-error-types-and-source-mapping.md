@@ -9,7 +9,7 @@ date: 2026-06-07
 ## Context
 
 [ADR 0010](./0010-tsc-only-verification.md) で「検証は tsc のみ（Zod 等の実行時バリデーション不採用）」を
-決めた。これを 01-mvp Phase 2 で実装するにあたり、**素の union 制約だけでは tsc 診断が難読**という問題が
+決めた。これを 01-mvp で実装するにあたり、**素の union 制約だけでは tsc 診断が難読**という問題が
 表面化した。例えば `moves: ReadonlyArray<SpeciesDex[S]["moves"][number]>` に覚えない技を渡すと、tsc は
 「`'meteor-mash'` is not assignable to type `'earthquake' | 'dragon-claw' | …`」という**長い union を列挙する
 メッセージ**を出し、何が問題かが人間にもエージェントにも伝わりにくい。さらに診断は**生成 TS の行**を指す

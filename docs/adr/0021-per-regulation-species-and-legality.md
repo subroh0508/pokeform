@@ -13,12 +13,12 @@ date: 2026-06-08
 ポケモンチャンピオンズはレギュレーションごとに解禁される種族・**習得技**・持ち物・メガシンカが変化する。
 MVP（[ADR 0012](./0012-vendor-pokeapi-data.md)）では各種族が「解禁レギュレーション」を逆引き配列で持ち、
 型レベル / ランタイムのパーティ検証がその配列を参照していた。データ保持モデル再設計
-（`docs/plan/02-data-model-redesign`）で、解禁判定の正本を per-regulation に寄せる必要が生じた。
+（02-data-model-redesign）で、解禁判定の正本を per-regulation に寄せる必要が生じた。
 
-**この 0021 は番号を維持したまま「削除して作り直した」**。経緯は次のとおり。0021 は本計画 Phase 2 で当日
-新規採番され、「**解禁の正本を per-regulation に一本化する。ただし per-reg 型は species / items / mega のみ
+**この 0021 は番号を維持したまま「削除して作り直した」**。経緯は次のとおり。0021 はデータ保持モデル再設計の初期に
+当日新規採番され、「**解禁の正本を per-regulation に一本化する。ただし per-reg 型は species / items / mega のみ
 生成し、技は型生成しない（生成 species は global 単一 dex のまま）**」と決めた。しかしこの「種族の習得技は
-レギュ不変」という前提は **実態に反する**（習得技はレギュごとに異なりうる）。Phase 4 でこの前提を覆し、
+レギュ不変」という前提は **実態に反する**（習得技はレギュごとに異なりうる）。後続でこの前提を覆し、
 **種族定義そのものを per-regulation 化**して習得技を per-reg 属性にする確定設計へ作り直した。
 
 - **番号再利用が [[adr]] の例外規定をどう拡張するか（明示）**: [[adr]] の番号再利用例外は本来「ブートスト
@@ -30,7 +30,7 @@ MVP（[ADR 0012](./0012-vendor-pokeapi-data.md)）では各種族が「解禁レ
   例外**であり、その旨を本 ADR と削除・再作成を行う PR の説明の両方に記録する（[[adr]] の「撤回理由は撤回
   PR に残す」に準じる）。
 
-仕様の詳細は `docs/plan/02-data-model-redesign/OVERVIEW.md` と [[type-conventions]] / [[data-pipeline]] /
+仕様の詳細は [[type-conventions]] / [[data-pipeline]] /
 [[cli-and-io]] を正本とし、本 ADR は「なぜ」を記録する。catalog 分離は
 [ADR 0012](./0012-vendor-pokeapi-data.md) の vendor 方式の拡張であり、本 ADR は
 [ADR 0012](./0012-vendor-pokeapi-data.md) / [ADR 0014](./0014-yaml-lang-per-file.md) を
@@ -78,7 +78,7 @@ MVP（[ADR 0012](./0012-vendor-pokeapi-data.md)）では各種族が「解禁レ
 - **トレードオフ / 留意点**:
   - パーティの legality は「メンバー（base 種族）∈ per-reg roster」で判定し、`mega` は別メタとして持つ。
   - 当面、各レギュの per-reg `moves` は現行カタログ値を materialize する（レギュ間同一でも可）。正確なレギュ
-    別技プールの投入は M-A 全量（Phase 5）/ M-B 公開時に行う。
+    別技プールの投入は M-A 全量投入 / M-B 公開時に行う。
 
 ## Alternatives Considered
 
