@@ -27,7 +27,9 @@ model: sonnet
 - **レギュレーション（regulations.yaml / regulationDex）**: allow リストと各種族の `regulations`
   逆引きが整合するか（[[data-pipeline]]）。
 - **メガ（megaLinks / megaEvolvesTo / items.megaStoneFor）**: base → mega の対応と、メガストーンの
-  `megaStoneFor` が指す種族が整合するか。
+  `megaStoneFor` が指す種族が整合するか。**メガ先の per-reg `moves` が base 種族の `moves` と一致するか**
+  （メガは base と movepool を共有・[ADR 0024](../../docs/adr/0024-mega-moves-inherit-base.md)）。base より
+  広い過大表現（メガ先のみに現れる技）が無いか点検する。小規模データでは顕在化しにくいので明示で確認する。
 - **生成物の手編集疑い**: `data/generated/**` が generate.ts 出力と乖離していないか（手編集禁止）。
 
 ## 進め方
