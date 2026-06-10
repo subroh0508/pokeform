@@ -1,57 +1,142 @@
 # data/champions/catalog/abilities.yaml — 特性カタログ（append-only マスター・手動・コミット）。
-# ポケモンチャンピオンズに**一度でも解禁された種族が持つ特性**の id を列挙する vendor スコープ。
-# generate.ts はここの特性を取得・整形し data/generated/abilities.ts を出力し、種族の abilities は
-# この id を参照する（カタログに無い id を種族が参照すると生成段でエラー = 整合担保）。
-#
-# 初期値は roster の代表種から自動収集していた特性集合を seed にしている（取りこぼし防止）。以後は
-# append-only: 新種族の追加で増える特性を手動追記し、没収されても消さない。種族追加時は
-# `data/raw/pokemon/<slug>.json` の abilities から機械的に集めると漏れない（survey-regulation skill）。
-#
-# abilities: PokeAPI の ability slug（sort 済み）。
+# 一度でも解禁された種族が持つ特性 id に日本語名 / 英名を併記する（名前の SoT は本ファイル・Phase 10）。
+# 生成 abilities.ts は id のみ（name は持たない・効果定義は後続）。種族の abilities はこの id を参照する。
 abilities:
-  - anger-point
-  - blaze
-  - clear-body
-  - competitive
-  - cursed-body
-  - cute-charm
-  - drought
-  - flame-body
-  - flash-fire
-  - gale-wings
-  - guts
-  - heavy-metal
-  - infiltrator
-  - inner-focus
-  - intimidate
-  - justified
-  - levitate
-  - light-metal
-  - long-reach
-  - magic-guard
-  - marvel-scale
-  - mirror-armor
-  - mold-breaker
-  - moxie
-  - multiscale
-  - overgrow
-  - pressure
-  - protean
-  - purifying-salt
-  - rain-dish
-  - rock-head
-  - rough-skin
-  - sand-force
-  - sand-rush
-  - sand-stream
-  - sand-veil
-  - shadow-tag
-  - solar-power
-  - steadfast
-  - sturdy
-  - swarm
-  - synchronize
-  - torrent
-  - tough-claws
-  - unaware
-  - unnerve
+  anger-point:
+    ja: いかりのつぼ
+    en: Anger Point
+  blaze:
+    ja: もうか
+    en: Blaze
+  clear-body:
+    ja: クリアボディ
+    en: Clear Body
+  competitive:
+    ja: かちき
+    en: Competitive
+  cursed-body:
+    ja: のろわれボディ
+    en: Cursed Body
+  cute-charm:
+    ja: メロメロボディ
+    en: Cute Charm
+  drought:
+    ja: ひでり
+    en: Drought
+  flame-body:
+    ja: ほのおのからだ
+    en: Flame Body
+  flash-fire:
+    ja: もらいび
+    en: Flash Fire
+  gale-wings:
+    ja: はやてのつばさ
+    en: Gale Wings
+  guts:
+    ja: こんじょう
+    en: Guts
+  heavy-metal:
+    ja: ヘヴィメタル
+    en: Heavy Metal
+  infiltrator:
+    ja: すりぬけ
+    en: Infiltrator
+  inner-focus:
+    ja: せいしんりょく
+    en: Inner Focus
+  intimidate:
+    ja: いかく
+    en: Intimidate
+  justified:
+    ja: せいぎのこころ
+    en: Justified
+  levitate:
+    ja: ふゆう
+    en: Levitate
+  light-metal:
+    ja: ライトメタル
+    en: Light Metal
+  long-reach:
+    ja: えんかく
+    en: Long Reach
+  magic-guard:
+    ja: マジックガード
+    en: Magic Guard
+  marvel-scale:
+    ja: ふしぎなうろこ
+    en: Marvel Scale
+  mirror-armor:
+    ja: ミラーアーマー
+    en: Mirror Armor
+  mold-breaker:
+    ja: かたやぶり
+    en: Mold Breaker
+  moxie:
+    ja: じしんかじょう
+    en: Moxie
+  multiscale:
+    ja: マルチスケイル
+    en: Multiscale
+  overgrow:
+    ja: しんりょく
+    en: Overgrow
+  pressure:
+    ja: プレッシャー
+    en: Pressure
+  protean:
+    ja: へんげんじざい
+    en: Protean
+  purifying-salt:
+    ja: きよめのしお
+    en: Purifying Salt
+  rain-dish:
+    ja: あめうけざら
+    en: Rain Dish
+  rock-head:
+    ja: いしあたま
+    en: Rock Head
+  rough-skin:
+    ja: さめはだ
+    en: Rough Skin
+  sand-force:
+    ja: すなのちから
+    en: Sand Force
+  sand-rush:
+    ja: すなかき
+    en: Sand Rush
+  sand-stream:
+    ja: すなおこし
+    en: Sand Stream
+  sand-veil:
+    ja: すながくれ
+    en: Sand Veil
+  shadow-tag:
+    ja: かげふみ
+    en: Shadow Tag
+  solar-power:
+    ja: サンパワー
+    en: Solar Power
+  steadfast:
+    ja: ふくつのこころ
+    en: Steadfast
+  sturdy:
+    ja: がんじょう
+    en: Sturdy
+  swarm:
+    ja: むしのしらせ
+    en: Swarm
+  synchronize:
+    ja: シンクロ
+    en: Synchronize
+  torrent:
+    ja: げきりゅう
+    en: Torrent
+  tough-claws:
+    ja: かたいツメ
+    en: Tough Claws
+  unaware:
+    ja: てんねん
+    en: Unaware
+  unnerve:
+    ja: きんちょうかん
+    en: Unnerve

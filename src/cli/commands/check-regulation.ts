@@ -21,8 +21,12 @@ const CH = join(root, "data", "champions");
 const RAW = join(root, "data", "raw");
 
 const readCatalogSet = (file: string, key: string): Set<string> => {
-  const y = parseYaml(readFileSync(join(CH, "catalog", file), "utf8")) as Record<string, string[]>;
-  return new Set(y[key] ?? []);
+  // catalog は id → { ja, en } マップ（Phase 10）。参照整合に要るのは id（キー）集合のみ。
+  const y = parseYaml(readFileSync(join(CH, "catalog", file), "utf8")) as Record<
+    string,
+    Record<string, unknown>
+  >;
+  return new Set(Object.keys(y[key] ?? {}));
 };
 
 /** data/raw/pokemon の learnset を読む。未取得なら null（覚えない技検証はスキップ）。 */

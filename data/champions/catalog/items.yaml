@@ -1,87 +1,204 @@
 # data/champions/catalog/items.yaml — 持ち物カタログ（append-only マスター・手動・コミット）。
-# ポケモンチャンピオンズに**一度でも解禁された持ち物**の id を列挙する vendor スコープ。
-# generate.ts はここの持ち物を取得・整形し data/generated/items.ts を出力する。
-#
-# append-only 方針: 一度解禁された持ち物は、後のレギュレーションで没収されても**この一覧から消さない**
-# （レギュレーションごとの解禁/非解禁の正本は別管理が持つ＝後続フェーズで導入）。
-#
-# items: PokeAPI の item slug。
-# itemMeta: メガストーン等のメタ情報（megaStoneFor = メガ先 base SpeciesId）。
+# 一度でも解禁された持ち物 id に日本語名 / 英名を併記する（名前の SoT は本ファイル・Phase 10）。
+# megaStoneFor: メガストーンのメガ先 base SpeciesId。category は引き続き data/raw 由来。
+# 生成 items.ts は { id, category?, megaStoneFor? }（name は持たない・効果定義は後続）。
 items:
-  - charizardite-x
-  - rocky-helmet
-  - life-orb
-  - leftovers
-  - assault-vest
-  - choice-scarf
-  # Phase 9: M-A 解禁の一般持ち物（Serebii items.shtml）。
-  - black-belt
-  - black-glasses
-  - bright-powder
-  - charcoal
-  - dragon-fang
-  - fairy-feather
-  - focus-band
-  - focus-sash
-  - hard-stone
-  - kings-rock
-  - light-ball
-  - magnet
-  - mental-herb
-  - metal-coat
-  - miracle-seed
-  - mystic-water
-  - never-melt-ice
-  - poison-barb
-  - quick-claw
-  - scope-lens
-  - sharp-beak
-  - shell-bell
-  - silk-scarf
-  - silver-powder
-  - soft-sand
-  - spell-tag
-  - twisted-spoon
-  - white-herb
-  # Phase 9: M-A 解禁のきのみ（Serebii items.shtml）。
-  - aspear-berry
-  - babiri-berry
-  - charti-berry
-  - cheri-berry
-  - chesto-berry
-  - chilan-berry
-  - chople-berry
-  - coba-berry
-  - colbur-berry
-  - haban-berry
-  - kasib-berry
-  - kebia-berry
-  - leppa-berry
-  - lum-berry
-  - occa-berry
-  - oran-berry
-  - passho-berry
-  - payapa-berry
-  - pecha-berry
-  - persim-berry
-  - rawst-berry
-  - rindo-berry
-  - roseli-berry
-  - shuca-berry
-  - sitrus-berry
-  - tanga-berry
-  - wacan-berry
-  - yache-berry
-  # Phase 9: 3 種のメガストーン。
-  - charizardite-y
-  - garchompite
-  - gengarite
-itemMeta:
   charizardite-x:
+    ja: リザードナイトＸ
+    en: Charizardite X
     megaStoneFor: charizard
+  rocky-helmet:
+    ja: ゴツゴツメット
+    en: Rocky Helmet
+  life-orb:
+    ja: いのちのたま
+    en: Life Orb
+  leftovers:
+    ja: たべのこし
+    en: Leftovers
+  assault-vest:
+    ja: とつげきチョッキ
+    en: Assault Vest
+  choice-scarf:
+    ja: こだわりスカーフ
+    en: Choice Scarf
+  black-belt:
+    ja: くろおび
+    en: Black Belt
+  black-glasses:
+    ja: くろいメガネ
+    en: Black Glasses
+  bright-powder:
+    ja: ひかりのこな
+    en: Bright Powder
+  charcoal:
+    ja: もくたん
+    en: Charcoal
+  dragon-fang:
+    ja: りゅうのキバ
+    en: Dragon Fang
+  fairy-feather:
+    ja: ようせいのハネ
+    en: Fairy Feather
+  focus-band:
+    ja: きあいのハチマキ
+    en: Focus Band
+  focus-sash:
+    ja: きあいのタスキ
+    en: Focus Sash
+  hard-stone:
+    ja: かたいいし
+    en: Hard Stone
+  kings-rock:
+    ja: おうじゃのしるし
+    en: King’s Rock
+  light-ball:
+    ja: でんきだま
+    en: Light Ball
+  magnet:
+    ja: じしゃく
+    en: Magnet
+  mental-herb:
+    ja: メンタルハーブ
+    en: Mental Herb
+  metal-coat:
+    ja: メタルコート
+    en: Metal Coat
+  miracle-seed:
+    ja: きせきのタネ
+    en: Miracle Seed
+  mystic-water:
+    ja: しんぴのしずく
+    en: Mystic Water
+  never-melt-ice:
+    ja: とけないこおり
+    en: Never-Melt Ice
+  poison-barb:
+    ja: どくバリ
+    en: Poison Barb
+  quick-claw:
+    ja: せんせいのツメ
+    en: Quick Claw
+  scope-lens:
+    ja: ピントレンズ
+    en: Scope Lens
+  sharp-beak:
+    ja: するどいくちばし
+    en: Sharp Beak
+  shell-bell:
+    ja: かいがらのすず
+    en: Shell Bell
+  silk-scarf:
+    ja: シルクのスカーフ
+    en: Silk Scarf
+  silver-powder:
+    ja: ぎんのこな
+    en: Silver Powder
+  soft-sand:
+    ja: やわらかいすな
+    en: Soft Sand
+  spell-tag:
+    ja: のろいのおふだ
+    en: Spell Tag
+  twisted-spoon:
+    ja: まがったスプーン
+    en: Twisted Spoon
+  white-herb:
+    ja: しろいハーブ
+    en: White Herb
+  aspear-berry:
+    ja: ナナシのみ
+    en: Aspear Berry
+  babiri-berry:
+    ja: リリバのみ
+    en: Babiri Berry
+  charti-berry:
+    ja: ヨロギのみ
+    en: Charti Berry
+  cheri-berry:
+    ja: クラボのみ
+    en: Cheri Berry
+  chesto-berry:
+    ja: カゴのみ
+    en: Chesto Berry
+  chilan-berry:
+    ja: ホズのみ
+    en: Chilan Berry
+  chople-berry:
+    ja: ヨプのみ
+    en: Chople Berry
+  coba-berry:
+    ja: バコウのみ
+    en: Coba Berry
+  colbur-berry:
+    ja: ナモのみ
+    en: Colbur Berry
+  haban-berry:
+    ja: ハバンのみ
+    en: Haban Berry
+  kasib-berry:
+    ja: カシブのみ
+    en: Kasib Berry
+  kebia-berry:
+    ja: ビアーのみ
+    en: Kebia Berry
+  leppa-berry:
+    ja: ヒメリのみ
+    en: Leppa Berry
+  lum-berry:
+    ja: ラムのみ
+    en: Lum Berry
+  occa-berry:
+    ja: オッカのみ
+    en: Occa Berry
+  oran-berry:
+    ja: オレンのみ
+    en: Oran Berry
+  passho-berry:
+    ja: イトケのみ
+    en: Passho Berry
+  payapa-berry:
+    ja: ウタンのみ
+    en: Payapa Berry
+  pecha-berry:
+    ja: モモンのみ
+    en: Pecha Berry
+  persim-berry:
+    ja: キーのみ
+    en: Persim Berry
+  rawst-berry:
+    ja: チーゴのみ
+    en: Rawst Berry
+  rindo-berry:
+    ja: リンドのみ
+    en: Rindo Berry
+  roseli-berry:
+    ja: ロゼルのみ
+    en: Roseli Berry
+  shuca-berry:
+    ja: シュカのみ
+    en: Shuca Berry
+  sitrus-berry:
+    ja: オボンのみ
+    en: Sitrus Berry
+  tanga-berry:
+    ja: タンガのみ
+    en: Tanga Berry
+  wacan-berry:
+    ja: ソクノのみ
+    en: Wacan Berry
+  yache-berry:
+    ja: ヤチェのみ
+    en: Yache Berry
   charizardite-y:
+    ja: リザードナイトＹ
+    en: Charizardite Y
     megaStoneFor: charizard
   garchompite:
+    ja: ガブリアスナイト
+    en: Garchompite
     megaStoneFor: garchomp
   gengarite:
+    ja: ゲンガナイト
+    en: Gengarite
     megaStoneFor: gengar
