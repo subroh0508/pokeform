@@ -33,7 +33,7 @@ moves:
   - shadow-ball
   - dark-pulse
   - nasty-plot
-  # Phase 7（02-data-model-redesign）: 現ロスター27種の learnset ∩ M-A legal 正確化で参照する技。
+  # Phase 7（02-data-model-redesign）: 現ロスター26種の learnset ∩ M-A legal 正確化で参照する技。
   - acrobatics
   - aerial-ace
   - air-slash

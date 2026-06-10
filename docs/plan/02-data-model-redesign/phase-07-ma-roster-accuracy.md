@@ -2,7 +2,7 @@
 
 ## 目的 / スコープ
 
-`data/champions/regulations/champions-m-a.yaml` に**既に記載済みの現ロスター種族（約27種）**に限定して、
+`data/champions/regulations/champions-m-a.yaml` に**既に記載済みの現ロスター種族（26種）**に限定して、
 持ち物（`items` 予約キー）と各種族の `moves` を、チャンピオンズ M-A レギュレーションの**実情に正確化**する
 interim phase。現状データは暫定でっち上げ（[[champions-regulation-data-placeholder]]）で、(1) `items` に
 **未解禁の持ち物**（`rocky-helmet` / `life-orb` 等）が混入、(2) 各種族の `moves` が手選びの少数サブセット
@@ -10,10 +10,10 @@ interim phase。現状データは暫定でっち上げ（[[champions-regulation
 正す（全186種への拡張は次 Phase 8 = M-A 全データ投入に残す）。
 
 - スコープ内:
-  - `survey-regulation` で **M-A の正確な解禁持ち物リスト**と、**現ロスター27種の learnset ∩ M-A legal**を
+  - `survey-regulation` で **M-A の正確な解禁持ち物リスト**と、**現ロスター26種の learnset ∩ M-A legal**を
     複数ソース突き合わせで出典付き確定・doc 化。
   - `champions-m-a.yaml` の `items` 予約キーを正確化（未解禁を除去・解禁分を反映）。
-  - 現ロスター27種の各種族 `moves` を **learnset ∩ M-A legal** へ正確化（各種族 10+ 技目安・実情準拠）。
+  - 現ロスター26種の各種族 `moves` を **learnset ∩ M-A legal** へ正確化（各種族 10+ 技目安・実情準拠）。
     メガ運用種族の `mega[]` は現状維持 / 正確化。
   - 追加で参照する技 / 持ち物 id を `catalog/moves.yaml` / `items.yaml` へ append-only 追記
     （未解禁を catalog から消さない・append-only マスター方針）。必要なら `fetch:data` で `data/raw` 取得。
@@ -53,7 +53,7 @@ interim phase。現状データは暫定でっち上げ（[[champions-regulation
 
 - `pnpm verify`（型 / カバレッジ100% / Biome）が緑。
 - `champions-m-a.yaml` の `items` から**未解禁の持ち物が除去**され、M-A 実情に整合する（出典付き）。
-- 現ロスター27種の各種族 `moves` が **learnset ∩ M-A legal** で正確化され（各種族 10+ 技目安・少数サブセット解消）、
+- 現ロスター26種の各種族 `moves` が **learnset ∩ M-A legal** で正確化され（各種族 10+ 技目安・少数サブセット解消）、
   手選びの共有プールではなく実情準拠になっている。
 - `check:regulation` が 0 終了（覚えない技混入・参照切れ無し）。全 id が catalog 参照で解決できる。
 - `pokemon-data-reviewer` のレビューで重大な不整合が無い。

@@ -122,6 +122,7 @@ M-A の持ち物プールは VGC 既存フォーマットより**大幅に絞ら
 - GAMES.GG「Pokémon Champions Item List: What's Missing and Why It Matters」 https://games.gg/news/pokemon-champions-items-list-meta/
 - Pokémon Zone「Champions Items」 https://www.pokemon-zone.com/champions/items/
 - MetaVGC「Champions format legal Pokemon/items/moves」 https://metavgc.com/guides/pokemon-champions-format-legal-pokemon-items-moves（legal moves **467** / items **117** / Pokémon **186**）
+  - 注: legal 総数 467/117 は現状 MetaVGC 単一ソース由来（186 は Game8 と一致・Phase 3 節）。全量投入の Phase 8 では RotomPicks / Victory Road 等で再突き合わせして確定する。
 
 ### 各種族 moves の正確化方針（learnset ∩ M-A legal）
 
