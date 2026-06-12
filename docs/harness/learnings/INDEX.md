@@ -29,6 +29,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #62 | メガ先 moves を base の per-reg moves 継承へ（ADR 0024・#59 follow-up） | 2026-06-10 | 02-data-model-redesign（follow-up） | draft | [2026-06-10-pr-62.md](./2026-06-10-pr-62.md) |
 | #67 | 02 Phase 11 ADR の可変 plan 参照除去 + adr.md codify | 2026-06-10 | 02-data-model-redesign/phase-11 | draft | [2026-06-10-pr-67.md](./2026-06-10-pr-67.md) |
 | #69 | 02 Phase 10 名前/タイプ相性 SoT を catalog YAML へ・abilities/items id-only 化 | 2026-06-10 | 02-data-model-redesign/phase-10 | draft | [2026-06-10-pr-69.md](./2026-06-10-pr-69.md) |
+| #70 | 02 PokeAPI 除外/構造データ catalog 化/data README フェーズ挿入 + renumber | 2026-06-12 | 02-data-model-redesign/phase-12〜15 | draft | [2026-06-12-pr-70.md](./2026-06-12-pr-70.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
