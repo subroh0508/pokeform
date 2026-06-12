@@ -7,7 +7,7 @@
 interim phase。現状データは暫定でっち上げ（[[champions-regulation-data-placeholder]]）で、(1) `items` に
 **未解禁の持ち物**（`rocky-helmet` / `life-orb` 等）が混入、(2) 各種族の `moves` が手選びの少数サブセット
 （全種族で共有プール ~22 技のみ・`excadrill` 2 技等）で全 learnable 技に程遠い。これを現ロスター分だけ先に
-正す（全186種への拡張は後続の Phase 12 = M-A 全データ投入に残す）。
+正す（全186種への拡張は後続の Phase 15 = M-A 全データ投入に残す）。
 
 - スコープ内:
   - `survey-regulation` で **M-A の正確な解禁持ち物リスト**と、**現ロスター26種の learnset ∩ M-A legal**を
@@ -19,7 +19,7 @@ interim phase。現状データは暫定でっち上げ（[[champions-regulation
     （未解禁を catalog から消さない・append-only マスター方針）。必要なら `fetch:data` で `data/raw` 取得。
   - `check:regulation` 緑 → `generate:data` 再生成 → `pokemon-data-reviewer` レビュー。
 - スコープ外:
-  - **全186種への拡張・全 legal 技/持ち物/メガの全量投入**（後続の Phase 12 = M-A 全データ投入が担う）。
+  - **全186種への拡張・全 legal 技/持ち物/メガの全量投入**（後続の Phase 15 = M-A 全データ投入が担う）。
   - 現ロスターに**未記載の種族の追加**（種族キーの追加は本 phase では行わない・正確化のみ）。
   - スキーマ / generate の再設計（Phase 5〜6 で確定済み）・新機能・新 rule・M-B 以降。
 
@@ -70,8 +70,8 @@ interim phase。現状データは暫定でっち上げ（[[champions-regulation
 
 ## リスク・備考
 
-- **interim の位置づけ**: 本 phase は現ロスター限定の正確化で、全186種の全量投入は Phase 12（M-A 全データ投入）が
-  担う。Phase 12 は本 phase の正確化済みデータを土台に種族を全列挙して拡張する（やり直しを避ける）。
+- **interim の位置づけ**: 本 phase は現ロスター限定の正確化で、全186種の全量投入は Phase 15（M-A 全データ投入）が
+  担う。Phase 15 は本 phase の正確化済みデータを土台に種族を全列挙して拡張する（やり直しを避ける）。
 - learnset ∩ legal の materialize 時、PokeAPI learnset の version_group 差異に注意（過去世代限定技の混入を
   `overrides` / legal フィルタで除外）。
 - `data/raw` は gitignore・worktree 非共有のため、`fetch:data` 未実行時 `check:regulation` の learnset 検証は

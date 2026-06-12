@@ -117,6 +117,47 @@ YAML は id の列挙のみを持っていた。しかしこれは「名前の S
 構造データの raw 由来は不変であることを ADR に明記）。なお Phase 10 で起こす ADR は、可変な plan ファイル（phase doc /
 phase 番号）を参照しない（Phase 11 で codify する方針を先取りする）。
 
+### 設計方針の改訂（Phase 12 で導入）
+
+Phase 1〜11 は、Champions の「使える技」を **raw PokeAPI learnset** に照合して検証し（`check:regulation` の覚えない技
+検出）、技の威力等の技メタも `data/raw`（PokeAPI）の move 構造から導出していた。しかし **PokeAPI はポケモン
+チャンピオンズに対応しておらず**、Champions の learnset / 技数値が PokeAPI と一致する保証がない。誤った「使える/
+使えない」判定や誤った技数値を生む温床になる。Phase 12 で次へ改訂する（ユーザー合意済み）:
+
+16. **PokeAPI を Champions レギュレーション情報・技威力の信頼源にしない**: 解禁種族 / 使用できる技（learnset
+    legality）/ 使用できる持ち物 / 技威力等の技メタについて、PokeAPI を信頼源にせず **信頼できる情報源
+    （Serebii 第一優先・複数ソース突き合わせ）**で補完する。**`check:regulation` の learnset 照合（覚えない技検出）を
+    撤去**し、技メタの SoT を PokeAPI raw から catalog 等へ移設し、`survey-regulation` の投入前 learnset 照合手順と
+    関連 rule を追従させる。**種族値・タイプ・特性・持ち物 category 等のレギュ非依存の構造データは ADR 0012 の
+    vendor 方式を維持**する。
+
+この改訂は ADR 0012（vendor 方式）の Champions legality + 技メタ部分を改訂する新 ADR を Phase 12 で起票する
+（構造データの raw 由来は不変であることを ADR に明記）。**PokeAPI が Champions に正式対応したら本決定を見直せる**
+（reversible・ADR の Consequences に見直し条件を明記）。
+
+### 設計方針の改訂（Phase 13 で導入）
+
+Phase 12 までは、レギュ非依存の構造データ（種族値・タイプ・特性 id・全国図鑑番号・持ち物 category）を
+`generate.ts` が **`data/raw`（PokeAPI）から直読**して生成物を組んでいた（vendor 方式の構造部分）。しかしこれは
+(a) 値が入力 YAML から直読できない、(b) Champions 実態との差分補正が間接レイヤー（`overrides.yaml`）頼みになる、
+(c) `generate` が raw 依存のままという弱点を残す。Phase 10 が名前・タイプ相性で解いたのと同じ問題なので、構造
+データにも同じ解を当てる。**取得元は PokeAPI のまま**（信頼できる Champions 非依存データなので）次へ改訂する
+（ユーザー合意済み）:
+
+17. **構造データの SoT を `data/raw` 直読から catalog YAML へ移す**: `catalog/species.yaml` の各エントリに
+    `dex` / `types` / `stats` / `abilities`、`catalog/items.yaml` に `category` を持たせる。`data/raw` → catalog の
+    転記は専任スクリプト **`materialize.ts`（新設）**が行い、`generate.ts` は **raw を一切読まず catalog のみを
+    変換**する（`species-base.ts` / `items.ts` が catalog 100% 由来に）。**取得元は PokeAPI 継続**（`fetch:data` は
+    残し、raw は materialize 元キャッシュに降格）。
+18. **責務分離（スクリプト fail-fast / raw 存在担保は skill）**: `materialize.ts` は **raw 必須・不在なら
+    fail-fast でエラー**（自前の存在チェック・誘導を持たない）。**raw 存在の担保は `survey-regulation` skill の
+    責務**（手順で `fetch:data` → `materialize` の順を保証）。スクリプトに存在チェックを再実装しない。
+19. **`overrides.yaml` 廃止**: 参照ゼロ・中身空で、learnset 撤去（Phase 12）と構造データ catalog 化により役割が
+    消滅する。Champions 実態との差分は catalog / regulations YAML を直接直して吸収する（補正レイヤー不要）。
+
+この改訂は ADR 0025（catalog name/type SoT）を構造データへ拡張する新 ADR を Phase 13 で起票する（取得元 =
+PokeAPI 維持・SoT のみ catalog へ・materialize スクリプト/スキル責務分離・overrides 廃止を明記）。
+
 ## 実装指針
 
 ### data/champions/（手動・コミット）の新構造
@@ -220,7 +261,7 @@ champions/regulations を合成 → `data/generated` を出力・Biome 整形）
 3. 種族 / 技 / 持ち物 / 特性が独立カタログ YAML（append-only）で管理され、種族はその id を参照する。
 4. 解禁情報の正本が per-regulation に一本化され（`SpeciesBase.regulations[]` 廃止）、型レベル解禁判定が
    per-reg 解禁集合を参照する。
-5. レギュレーション M-A の解禁種族・技・持ち物・メガが信頼できる情報源に基づき全量そろう（全186種・各種族の全 learnable 技）。
+5. レギュレーション M-A の解禁種族・技・持ち物・メガが信頼できる情報源（Serebii 第一優先・PokeAPI 非依存）に基づき全量そろう（全186種・各種族の全 movepool）。
 6. 種族×レギュレーションの技対応が `regulations/<id>.yaml`（block 記法・種族キー = 解禁・per-species `moves`/`mega[]`）で直読できる。
 7. `generate.ts` は YAML → TS 変換専任で、妥当性検証は authoring 時ゲート `check:regulation` が担う。
 8. エンティティの ja/en 名の SoT が `catalog/*.yaml`（`id → { ja, en }`）にあり、`generate.ts` は名前を PokeAPI から
@@ -228,15 +269,27 @@ champions/regulations を合成 → `data/generated` を出力・Biome 整形）
    types について `data/raw` を読まない。`abilities.ts` / `items.ts` の生成 TS は id-only（+ items 構造）で name を
    持たず、species / moves / types は name を保持する（ja→id 逆引きは維持）。
 9. ADR 本文が可変な plan ファイル（phase doc / OVERVIEW / phase 番号）を参照せず、方針が `adr.md` rule に codify される。
+10. PokeAPI を Champions の解禁種族 / 使用できる技（learnset legality）/ 持ち物 / 技威力の信頼源にしない決定が ADR
+    として残り、`check:regulation` の learnset 照合が撤去され、技メタの SoT が PokeAPI raw から移設され、
+    `survey-regulation`/関連 rule がこれに追従する（正式対応時に見直し可）。
+11. レギュ非依存の構造データ（種族値 / タイプ / 特性 id / 図鑑番号 / 持ち物 category）の SoT が catalog YAML にあり、
+    `data/raw` → catalog の転記を `materialize.ts`（raw 不在なら fail-fast）が担い、`generate.ts` が `data/raw` を
+    一切読まず catalog から生成物を等価に出力する。取得元は PokeAPI 継続（`fetch:data` 維持）。raw 存在の担保は
+    `survey-regulation` skill の責務で、`overrides.yaml` は廃止される。決定が ADR（0025 拡張）として残る。
+12. `data/README.md` が `data/` 配下の各エントリの「何を表す / 取得元 / SoT / 取得・更新 skill・コマンド」を索引化し、
+    スキーマ詳細は SoT（rule）へのリンクで委譲する（重複記述を持たないポインタ式）。
 
 ## phase 分割（6 基準の評価サマリ）
 
 データモデル再設計（構造変更）とデータ投入（情報源確定・正確化・全量投入）は性質が異なり、構造変更も「カタログ分離」
 「レギュレーションモデル再設計（型機構を含む）」「per-regulation 種族型化」「技記録スキーマ再設計」「generate 責務
-縮小 + authoring 検証」で意思決定・不可逆性が分かれる。想定 diff と並行性から **12 phase に分割（直列依存）**。
-全量投入（Phase 12）の手前に、**materialize 手順の定型化（Phase 8・harness）と 3 種小データセットでの本格スケール
-検証（Phase 9・data）、名前 / タイプ相性 SoT を catalog YAML へ移すスキーマ確定（Phase 10・構造）、および ADR の
-可変 plan 参照を除去する hygiene（Phase 11・harness）**を挿入し、全186種投入を de-risk する:
+縮小 + authoring 検証」で意思決定・不可逆性が分かれる。想定 diff と並行性から **15 phase に分割（直列依存）**。
+全量投入（最終 Phase）の手前に、**materialize 手順の定型化（Phase 8・harness）と 3 種小データセットでの本格スケール
+検証（Phase 9・data）、名前 / タイプ相性 SoT を catalog YAML へ移すスキーマ確定（Phase 10・構造）、ADR の
+可変 plan 参照を除去する hygiene（Phase 11・harness）、PokeAPI を Champions legality / 技威力の信頼源から外す
+決定 + harness 追従（Phase 12・harness/構造）、構造データ（種族値/タイプ/特性/図鑑番号/category）の catalog 化 +
+materialize 新設 + overrides 廃止（Phase 13・構造）、および data/ ディレクトリ説明 README の追加（Phase 14・doc）**を
+挿入し、全186種投入を de-risk する:
 
 | phase | 狙い | 意思決定 | 不可逆性 | 想定 diff | 備考 |
 |---|---|---|---|---|---|
@@ -246,36 +299,56 @@ champions/regulations を合成 → `data/generated` を出力・Biome 整形）
 | **04 per-regulation 種族型 + 個体複数レギュ宣言** | global species.ts 廃止 → per-reg `regulations/<id>/species.ts`（per-reg 習得技）を正本化 + reg-aware 型機構 + 個体 `regulations:[]` fan-out + ADR 0021 削除して作り直す。 | 高 | 高 | ~700-1200 | 構造 + 型機構・データ量不変・diff 過大なら 2 PR（型基盤 / 個体 fan-out）分割 |
 | **05 技記録スキーマ再設計** | `allow.{...}` 廃止 → 種族キー = 解禁 + per-species `moves`/`mega[]`・block 記法。`mega` 配列化。generate を新スキーマ読取りへ追従（learnset 検証は残す）。出力等価。 | 高 | 高 | ~400-600 | ADR 0022（記録方法）・安全性のため検証は残す |
 | **06 generate 変換専任 + 検証ゲート** | `check:regulation` 新設（authoring ゲート）+ generate から learnset 交差・検証を除去し変換専任へ。Git hooks/CI 連携。 | 高 | 中 | ~300-500 | ADR-B（generate 責務 / 検証位置） |
-| **07 M-A 現ロスター持ち物・技 正確化（interim）** | 現 `champions-m-a.yaml` 記載済み約27種に限定し、`items`（未解禁除去）と各種族 `moves`（learnset ∩ M-A legal）を実情に正確化。種族追加はしない。 | 低 | 低 | ~300-600 | データ正確化 PR・全量化は 12 に残す |
+| **07 M-A 現ロスター持ち物・技 正確化（interim）** | 現 `champions-m-a.yaml` 記載済み約27種に限定し、`items`（未解禁除去）と各種族 `moves`（learnset ∩ M-A legal）を実情に正確化。種族追加はしない。 | 低 | 低 | ~300-600 | データ正確化 PR・全量化は 14 に残す |
 | **08 survey-regulation skill 全量 materialize 定型化** | Phase 7 で人手実行した「Serebii 第一優先で全 learnable 技 + 解禁持ち物を全量 materialize・投入前 learnset 照合」手順を skill へ恒久化。レギュ更新時 routine 化。 | 中 | 低 | ~中（skill 改修） | harness PR・`skill-creator` 利用・`harness-review` |
-| **09 小データセット検証投入（3 種）** | garchomp / charizard / gengar の全 Serebii movepool（各60〜70技）+ M-A 解禁持ち物全件を投入し、パイプラインが本格スケールで通ることを確認。Phase 12 を de-risk。 | 低 | 低 | ~中（データ） | データ投入 PR・skill の実用検証 |
+| **09 小データセット検証投入（3 種）** | garchomp / charizard / gengar の全 Serebii movepool（各60〜70技）+ M-A 解禁持ち物全件を投入し、パイプラインが本格スケールで通ることを確認。Phase 15 を de-risk。 | 低 | 低 | ~中（データ） | データ投入 PR・skill の実用検証 |
 | **10 catalog 日英名 authoring + generate 名前変換専任化** | catalog YAML を `id → { ja, en }` 形式へ・名前 SoT を catalog YAML へ移し generate を名前について変換専任化。types は名前 + 相性倍率も YAML 化し generate を types について raw 非依存に。abilities/items 生成 TS を id-only 化（species/moves/types は name 保持）。既存分の移行のみ。 | 中 | 高 | ~中（catalog 移行 + 生成物差分） | 構造 + データ移行・ADR 起票（0012 名前部分の改訂） |
 | **11 ADR の可変 plan 参照除去 + adr.md codify** | ADR 本文から可変 plan ファイル（phase doc / OVERVIEW / phase 番号）参照を遡及除去し、方針を `adr.md` rule へ codify（不変則の遡及除去例外を明記）。 | 中 | 中 | ~中（rule + ADR 編集） | harness PR・`harness-review`・データ phase と独立 |
-| **12 M-A 全データ投入** | M-A 解禁の全186種・全技・全持ち物・全メガを全量投入し完成（各種族の全 learnable 技・ja/en 名併記）。07 の正確化と 09 の 3 種を起点に拡張。 | 低 | 低 | 大（データ例外） | データ投入 PR |
+| **12 PokeAPI を Champions legality・技威力の信頼源から外す** | PokeAPI は Champions 非対応。解禁種族 / 使える技(learnset legality) / 持ち物 / 技威力の信頼源として使わない決定を ADR 化し、`check:regulation` の learnset 照合を撤去・技メタ SoT を raw から移設・`survey-regulation`/各 rule を追従。構造データ(種族値・タイプ等)は vendor 維持。修正前後の検証フェーズを含む。 | 高 | 高 | ~中-大（src + skill + rule + ADR） | harness/構造 PR・`code-review`/`harness-review`・全量投入の前提 |
+| **13 構造データの catalog 化** | レギュ非依存の構造データ（種族値/タイプ/特性 id/図鑑番号/持ち物 category）の SoT を `data/raw` 直読から catalog YAML へ移す。`materialize.ts`（raw→catalog 転記・fail-fast）新設・`generate` raw 非依存化・`overrides.yaml` 廃止・`survey-regulation` に materialize 手順内包。取得元は PokeAPI 継続。生成物は等価。 | 高 | 高 | ~中-大（src + skill + catalog 移行 + 生成物差分） | 構造 PR・`code-review`/`harness-review`・ADR 起票（0025 拡張）・全量投入の前提 |
+| **14 data/ ディレクトリ説明 README** | `data/README.md` を 1 枚追加し各エントリの「何を表す / 取得元 / SoT / 取得・更新 skill・コマンド」を索引化。スキーマ詳細は rule へリンク（ポインタ式・重複回避・壁打ちで確定）。 | 低 | 低 | ~小（doc 1 枚） | doc PR・`harness-review`・12/13 の決定を最終形として反映 |
+| **15 M-A 全データ投入** | M-A 解禁の全186種・全技・全持ち物・全メガを全量投入し完成（各種族の全 movepool・ja/en 名併記）。07 の正確化と 09 の 3 種を起点に拡張・12 の Serebii 情報源 + 13 の materialize 経路で全量化。 | 低 | 低 | 大（データ例外） | データ投入 PR |
 
-- **01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 の直列**。01/02/04/05/06/10 は共に `generate.ts` と生成構造を触り競合しやすいため直列。Phase 11（ADR hygiene）はデータ phase と独立だが順序上は 10 の後・12 の前に置く。
-- **03 で情報源と全リストを確定 → 04 で生成構造を per-reg へ → 05 で技記録スキーマを確定 → 06 で検証位置を確定 → 07 で現ロスターを正確化 → 08 で materialize 手順を定型化 → 09 で 3 種小データセット検証 → 10 で名前 / タイプ相性 SoT を catalog YAML へ確定 → 11 で ADR hygiene → 12 で全量投入**
-  （最終構造・定型手順の上で投入しやり直しを避ける）。
+- **01 → 02 → 03 → 04 → 05 → 06 → 07 → 08 → 09 → 10 → 11 → 12 → 13 → 14 → 15 の直列**。01/02/04/05/06/10/12/13 は共に `generate.ts` と生成構造を触り競合しやすいため直列。Phase 11（ADR hygiene）はデータ phase と独立だが順序上は 10 の後・12 の前に置く。
+- **03 で情報源と全リストを確定 → 04 で生成構造を per-reg へ → 05 で技記録スキーマを確定 → 06 で検証位置を確定 → 07 で現ロスターを正確化 → 08 で materialize 手順を定型化 → 09 で 3 種小データセット検証 → 10 で名前 / タイプ相性 SoT を catalog YAML へ確定 → 11 で ADR hygiene → 12 で PokeAPI を Champions legality / 技威力の信頼源から外す決定 + harness 追従 → 13 で構造データを catalog YAML へ（materialize 新設 / generate raw 非依存 / overrides 廃止）→ 14 で data/ ディレクトリ説明 README → 15 で全量投入**
+  （最終構造・定型手順・確定した情報源方針・catalog SoT の上で投入しやり直しを避ける）。
 - **07 を全量投入の手前に分けた理由**: 現ロスター（記載済み約27種）の持ち物・技は暫定でっち上げで未解禁混入・技サブセット
-  化しており、全186種の全量投入（12・大規模）を待たずに**現データを使える状態に正確化**する価値がある。07 は
+  化しており、全186種の全量投入（15・大規模）を待たずに**現データを使える状態に正確化**する価値がある。07 は
   現ロスター限定・種族追加なしで scope を絞り、後続が 07 の土台の上で全列挙へ拡張する。
-- **08 / 09 を全量投入（12）の手前に挿入した理由**: 全186種・各種族数十技の全量投入は取りこぼし・名称ゆれ・フォルム
-  扱い・learnset version_group 差異の事故が起きやすい。**08 で materialize 手順（Serebii 第一優先 / 全量 / 投入前
-  learnset 照合）を skill へ恒久化**し、**09 で 3 種（各60〜70技・持ち物100件超）の本格スケールでパイプラインを
-  先に通す**ことで、12 を de-risk する。08 は harness 改修（`harness-review`）、09 はデータ投入（`code-review` /
-  `pokemon-data-reviewer`）で性質が分かれるため別 phase。
-- **10 を全量投入（12）の手前に挿入した理由**: 名前（ja/en）と types 相性の SoT を PokeAPI 由来生成から catalog YAML の
+- **08 / 09 を全量投入（15）の手前に挿入した理由**: 全186種・各種族数十技の全量投入は取りこぼし・名称ゆれ・フォルム
+  扱いの事故が起きやすい。**08 で materialize 手順（Serebii 第一優先 / 全量）を skill へ恒久化**し、**09 で 3 種
+  （各60〜70技・持ち物100件超）の本格スケールでパイプラインを先に通す**ことで、15 を de-risk する。08 は harness
+  改修（`harness-review`）、09 はデータ投入（`code-review` / `pokemon-data-reviewer`）で性質が分かれるため別 phase。
+- **10 を全量投入（15）の手前に挿入した理由**: 名前（ja/en）と types 相性の SoT を PokeAPI 由来生成から catalog YAML の
   hand-authored へ移すスキーマ変更は、全量投入の**前**に確定しないと全186種を旧スキーマで入れてからやり直す事故に
-  なる。10 で catalog を `id → { ja, en }` 形式へ確定し `survey-regulation` に ja/en 記録手順を入れてから、12 で全量を
+  なる。10 で catalog を `id → { ja, en }` 形式へ確定し `survey-regulation` に ja/en 記録手順を入れてから、15 で全量を
   ja/en 名込みで materialize する。10 は **catalog 形式・`generate.ts`・型・生成物を同時に変える意味的 atomic な
-  1 PR**（途中状態が壊れる）で、既存分の移行のみ・新規 id の Web 調査は 12 が担う。
+  1 PR**（途中状態が壊れる）で、既存分の移行のみ・新規 id の Web 調査は 15 が担う。
 - **11（ADR hygiene）を分けた理由**: ADR 本文から可変 plan 参照を除去し方針を `adr.md` へ codify する作業は、データ
   モデル変更とは独立した**harness hygiene**で、`harness-review` 観点・diff も別系統。Phase 10 の ADR 起票が本方針に
-  従うため、それを恒久化し過去 ADR を揃える位置づけ。データ phase（10 / 12）と diff が干渉しないため独立 PR とする。
+  従うため、それを恒久化し過去 ADR を揃える位置づけ。データ phase（10 / 13 / 15）と diff が干渉しないため独立 PR とする。
 - **04 は構造 + 型機構変更**（データ量不変）。`SpeciesId` の波及が広く reg-aware 化で型引数 `R` が増えるため、
   想定 diff が >1000 行に膨らむ場合は「型基盤（per-reg species 生成 + reg-aware 型機構 + `ConstrainParty` 追従
   + ADR）」と「個体 `regulations:[]` codegen fan-out」へ 2 PR 分割する（[[planning]] の分割）。
 - **05/06 を分割した理由**: 記録方法（データ形式・ADR 0022）と generate 責務縮小 + 検証位置（ADR-B）は独立した
   不可逆判断で、ADR も分割して残す。検証の空白を作らないため **05 では generate の learnset 検証を残し、06 で
   `check:regulation` を用意してから除去する**（順序厳守）。
-- 12 はデータセット追加で意味ある粒度分割が困難なため、1 PR（>1000 行）を許容する（[[planning]] の例外）。
+- **12（PokeAPI 除外決定）を全量投入の手前に挿入した理由**: PokeAPI は Champions に対応しておらず、解禁種族 /
+  使える技（learnset legality）/ 持ち物 / 技威力の信頼源として使うと実態と乖離する。全186種を「learnset ∩ legal」
+  前提で入れてからこの前提を覆すとやり直しになるため、**全量投入の前に決定（ADR）と harness 追従（`check:regulation`
+  の learnset 照合撤去・技メタ SoT 移設・`survey-regulation`/各 rule 追従）を確定**する。意思決定 + src/skill/rule の
+  不可逆改訂で性質が分かれるため独立 phase。修正前後の検証フェーズを必須にし取り残しを防ぐ。**PokeAPI が Champions
+  に正式対応したら本決定は見直せる**（reversible・ADR に明記）。
+- **13（構造データ catalog 化）を 12 の後・14 の前に挿入した理由**: 構造データ（種族値/タイプ/特性/図鑑番号/
+  category）の SoT を `data/raw` 直読から catalog YAML へ移すスキーマ変更は、Phase 10（名前/相性）と同じく**全量
+  投入の前**に確定しないと全186種を旧スキーマ（raw 直読）で入れてからやり直す事故になる。13 で catalog スキーマを
+  拡張し `materialize.ts` を新設・`generate` を raw 非依存化・`overrides.yaml` を廃止してから、15 で全量を materialize
+  経由で投入する。13 は **catalog スキーマ・`materialize.ts`・`generate.ts`・型・生成物・overrides 廃止を同時に変える
+  意味的 atomic な 1 PR**（途中状態が壊れる・既存分の移行のみ）で、Phase 12（技メタ Serebii 化）とは対象（構造データ
+  vs 技メタ）が分かれるため別 phase。取得元は PokeAPI 継続で「PokeAPI を使わない」Phase 12 とは方向が異なる。
+- **14（data/ 説明 README）を 13 の後・15 の前に挿入した理由**: `data/` の索引（何を表す / 取得元 / SoT / 取得・更新
+  skill）は、**12（Serebii 第一優先・PokeAPI 非依存）+ 13（構造データ catalog SoT・materialize・overrides 廃止）の
+  確定済み最終形**を反映する必要があるため両者の後に置く（途中状態を索引化するとすぐ陳腐化する）。スキーマ詳細は
+  既存 rule（[[data-pipeline]] 等）が SoT で、README は**ポインタ式**にして重複を避ける（壁打ちで確定）。doc 1 枚
+  追加で diff も性質も独立するため別 phase（`harness-review`）。
+- 15 はデータセット追加で意味ある粒度分割が困難なため、1 PR（>1000 行）を許容する（[[planning]] の例外）。
