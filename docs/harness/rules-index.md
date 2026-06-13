@@ -52,7 +52,7 @@
 | `cli-and-io.md` | `src/cli/**`<br>`src/io/**` | CLI と I/O の規約（lang のファイル単位宣言・--lang 表示言語・終了コード 0/非0・ディレクトリ再帰 glob・診断の YAML 行マッピング）。src/cli/ や src/io/ を扱うとき適用する。 |
 | `code-review.md` | `src/**`<br>`scripts/**`<br>`.claude/**`<br>`docs/**`<br>`AGENTS.md`<br>`CLAUDE.md` | PR マージ前の意味的レビュー（code-review / harness-review skill）の共通 SoT。レビュー基準「健全性の純改善」・機械ゲート非再実行・指摘フォーマット（重大度 / ファイル:行 / 根拠）・effort 段階・redaction を定める。ソース / ハーネス資産を変更する PR をレビューするとき適用する。 |
 | `cross-agent.md` | _常時_ | クロスエージェント共有方針の SoT（AGENTS.md=指示 SoT / CLAUDE.md=@AGENTS.md / skill symlink 共有と copy フォールバック / rules-index 生成 / Git hooks=ゲート SoT）。常時適用する。 |
-| `data-pipeline.md` | `scripts/**`<br>`data/**` | データ生成パイプライン（raw=gitignore / champions=手動 / generated=commit の vendor 方式・PokeAPI 項目対応・overrides）。scripts/ や data/ を扱うとき適用する。 |
+| `data-pipeline.md` | `scripts/**`<br>`data/**` | データ生成パイプライン（raw=取得キャッシュ / champions catalog=SoT / generated=raw 非依存合成の vendor 方式・取得元 PokeAPI / SoT catalog / materialize 転記）。scripts/ や data/ を扱うとき適用する。 |
 | `game-spec.md` | `data/**`<br>`src/domain/**` | ポケモンチャンピオンズの確定ゲーム仕様（実数値の二重 floor 計算式・能力ポイント 66/32・性格 ±10%・Lv50/個体値31 固定・レギュ M 系）。data/ や src/domain/ を扱うとき適用する。 |
 | `harness-meta-criteria.md` | `.claude/skills/harness-meta/**` | harness-meta skill が learning の改善提案を「採用 / 見送り / 撤去」へ振り分ける判定基準。 |
 | `implementation-workflow.md` | `.claude/skills/implementation-workflow/**` | implementation-workflow skill の詳細手順 SoT。1 本の PR の実装ライフサイクル（Phase 0〜9: worktree 作成 → 着手 → 実装+verify fix loop → セルフ検証 → Draft PR → 独立レビュー → auto-merge → レトロ → worktree 削除）の各フェーズの入出力・成功条件・失敗 fallback と不変条件（fix loop 上限3・Generator/Evaluator 独立・worktree Phase 0/9 ペア・auto-merge 委譲）を定める。implementation-workflow skill を読む / 動かすときに適用する。 |

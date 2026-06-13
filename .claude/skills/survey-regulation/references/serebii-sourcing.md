@@ -76,5 +76,7 @@ per-reg `items` 予約キーへ反映する:
 2. `<id>-roster-source.md` に出典付きで記録。
 3. catalog へ append-only 追記（種族 / 技 / 持ち物 / 特性・特性漏れ = 生成エラーに注意）。
 4. per-reg YAML を新スキーマ（種族キー = 解禁・per-species `moves` 全量・`items` 予約キー・block 記法）で記述。
-5. `fetch:data`（構造データ取得・learnset 照合はしない）→ `check:regulation` 0 終了（参照整合 / schema）→
-   `generate:data` → `verify` 緑。
+5. `fetch:data`（PokeAPI から構造データ取得・learnset 照合はしない）→ `materialize`（raw → catalog へ構造データ
+   `dex` / `types` / `stats` / `abilities` / `category` を転記・append/既存尊重・ADR 0027）→ `check:regulation`
+   0 終了（参照整合 / schema）→ `generate:data`（raw 非依存・catalog のみ変換）→ `verify` 緑。**fetch:data →
+   materialize の順序保証は本 skill の責務**（スクリプトは raw 不在で fail-fast するだけ・ADR 0027）。

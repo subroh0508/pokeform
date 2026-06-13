@@ -1,8 +1,0 @@
-# data/champions/overrides.yaml — 習得技 / 特性の世代差・上書き（手動・コミット）。
-# PokeAPI の version_group では拾えない / 補正したい習得技・特性をここで上書きする。
-# 形式:
-#   moves:    { <speciesId>: { add: [moveId...], remove: [moveId...] } }
-#   abilities:{ <speciesId>: { add: [abilityId...], remove: [abilityId...] } }
-# MVP の代表種は PokeAPI 由来で過不足が無いため、現時点では空（前方参照用の骨格）。
-moves: {}
-abilities: {}
