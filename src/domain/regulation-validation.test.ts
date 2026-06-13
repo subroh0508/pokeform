@@ -6,13 +6,9 @@ const catalog: RegulationCatalog = {
   items: new Set(["life-orb", "charizardite-x"]),
   moves: new Set(["earthquake", "dragon-claw", "flare-blitz"]),
 };
-const learnsets: Record<string, ReadonlySet<string>> = {
-  garchomp: new Set(["earthquake", "dragon-claw"]),
-  charizard: new Set(["flare-blitz", "dragon-claw"]),
-};
 
 describe("validateRegulation", () => {
-  it("正当なレギュレーションは問題なし（learnset あり）", () => {
+  it("正当なレギュレーションは問題なし（参照整合・schema のみ検証）", () => {
     const reg = {
       name: { en: "M-A", ja: "M-A" },
       period: { start: "2026-04-08", end: null },
@@ -20,7 +16,7 @@ describe("validateRegulation", () => {
       garchomp: { moves: ["earthquake", "dragon-claw"] },
       charizard: { moves: ["flare-blitz", "dragon-claw"], mega: ["charizard-mega-x"] },
     };
-    expect(validateRegulation(reg, catalog, learnsets)).toEqual([]);
+    expect(validateRegulation(reg, catalog)).toEqual([]);
   });
 
   it("参照切れ（種族 / 持ち物 / メガ / 技）を検出する", () => {
@@ -29,7 +25,7 @@ describe("validateRegulation", () => {
       garchomp: { moves: ["earthquake", "unknown-move"] },
       "ghost-mon": { moves: ["earthquake"], mega: ["ghost-mega"] },
     };
-    const issues = validateRegulation(reg, catalog, learnsets);
+    const issues = validateRegulation(reg, catalog);
     expect(issues).toContainEqual({ kind: "missing-item", item: "unknown-item" });
     expect(issues).toContainEqual({
       kind: "missing-move",
@@ -44,22 +40,10 @@ describe("validateRegulation", () => {
     });
   });
 
-  it("覚えない技（learnset 不適合）を検出する", () => {
+  it("catalog 所属の技は learnset 照合せず通す（覚えない技検証は撤去・ADR 0026）", () => {
+    // catalog に存在すれば、種族が実ゲームで覚えるかは検証しない（PokeAPI は Champions 非対応）。
     const reg = { garchomp: { moves: ["flare-blitz"] } };
-    expect(validateRegulation(reg, catalog, learnsets)).toEqual([
-      { kind: "move-not-learnable", species: "garchomp", move: "flare-blitz" },
-    ]);
-  });
-
-  it("learnset が null のとき覚えない技検証はスキップ（参照整合のみ）", () => {
-    const reg = { garchomp: { moves: ["flare-blitz"] } };
-    expect(validateRegulation(reg, catalog, null)).toEqual([]);
-  });
-
-  it("learnset に未収載の種族は技検証をスキップ", () => {
-    // charizard-mega-x は learnsets に無い → 覚えない技検証はスキップ（参照整合は通る）。
-    const reg = { "charizard-mega-x": { moves: ["flare-blitz"] } };
-    expect(validateRegulation(reg, catalog, learnsets)).toEqual([]);
+    expect(validateRegulation(reg, catalog)).toEqual([]);
   });
 
   it("不正な種族ブロック（moves 欠落 / moves 非文字列配列 / mega 非配列）を検出する", () => {
@@ -68,7 +52,7 @@ describe("validateRegulation", () => {
       charizard: { moves: [123] },
       "charizard-mega-x": { moves: ["flare-blitz"], mega: "charizard-mega-x" },
     };
-    const issues = validateRegulation(reg, catalog, learnsets);
+    const issues = validateRegulation(reg, catalog);
     expect(issues).toContainEqual({ kind: "bad-species-block", species: "garchomp" });
     expect(issues).toContainEqual({ kind: "bad-species-block", species: "charizard" });
     expect(issues).toContainEqual({ kind: "bad-species-block", species: "charizard-mega-x" });
@@ -76,12 +60,12 @@ describe("validateRegulation", () => {
 
   it("items が無い / 配列でないときは持ち物検証をスキップ", () => {
     const reg = { garchomp: { moves: ["earthquake"] } };
-    expect(validateRegulation(reg, catalog, learnsets)).toEqual([]);
+    expect(validateRegulation(reg, catalog)).toEqual([]);
   });
 
   it("種族ブロックが null のとき bad-species-block を検出する", () => {
     const reg = { garchomp: null };
-    expect(validateRegulation(reg, catalog, learnsets)).toEqual([
+    expect(validateRegulation(reg, catalog)).toEqual([
       { kind: "bad-species-block", species: "garchomp" },
     ]);
   });

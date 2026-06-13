@@ -32,9 +32,19 @@ interface SpeciesCatalog {
   // 1 base 種族 -> メガ先 SpeciesId の配列（1 種族複数メガを許容・ADR 0022）。
   megaLinks?: Record<string, string[]>;
 }
+interface MoveMeta extends NamePair {
+  // 技メタ（type / damageClass / power / accuracy / pp / priority）の SoT は catalog YAML（hand-authored・
+  // ADR 0026）。PokeAPI は Champions 非対応のため技威力等の信頼源にしない。
+  type: string;
+  damageClass: string;
+  power: number | null;
+  accuracy: number | null;
+  pp: number;
+  priority: number;
+}
 interface MovesCatalog {
-  // id -> 日英名。type / damageClass / power 等の構造データは data/raw 由来。
-  moves: Record<string, NamePair>;
+  // id -> 日英名 + 技メタ（catalog YAML が SoT・raw 非依存・ADR 0026）。
+  moves: Record<string, MoveMeta>;
 }
 interface ItemsCatalog {
   // id -> 日英名 + megaStoneFor（旧 itemMeta を各エントリへ統合・Phase 10）。category は data/raw 由来。
@@ -128,19 +138,19 @@ for (const t of TYPES) {
   };
 }
 
-// --- moves（name は catalog/moves.yaml 由来・type/damageClass/power 等の構造は data/raw 由来） ----
+// --- moves（name + 技メタとも catalog/moves.yaml 由来・raw 非依存・ADR 0026） ------------------
+// 技威力等を PokeAPI raw から導出しない（PokeAPI は Champions 非対応）。SoT は hand-authored catalog。
 const moveEntries: Record<string, unknown> = {};
-for (const [m, nm] of Object.entries(movesCat.moves)) {
-  const j = raw("move", m);
+for (const [m, meta] of Object.entries(movesCat.moves)) {
   moveEntries[m] = {
     id: m,
-    name: { en: nm.en, ja: nm.ja },
-    type: (j.type as { name: string }).name,
-    damageClass: (j.damage_class as { name: string }).name,
-    power: j.power ?? null,
-    accuracy: j.accuracy ?? null,
-    pp: j.pp,
-    priority: j.priority,
+    name: { en: meta.en, ja: meta.ja },
+    type: meta.type,
+    damageClass: meta.damageClass,
+    power: meta.power ?? null,
+    accuracy: meta.accuracy ?? null,
+    pp: meta.pp,
+    priority: meta.priority,
   };
 }
 

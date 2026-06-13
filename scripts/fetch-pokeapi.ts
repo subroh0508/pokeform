@@ -7,8 +7,9 @@
  *
  * Phase 10 以降、**名前 / タイプ相性は catalog YAML が SoT**（generate は名前 / types について raw を
  * 読まない）。よって `type` / `ability` / `pokemon-form` は取得しない（generate が消費しないため）。
- * 取得するのは pokemon（種族値 / タイプ / 特性 id）/ pokemon-species（図鑑番号）/ move（type /
- * damageClass / power 等）/ item（category）のみ。
+ * ADR 0026 以降、**技メタ（type / damageClass / power 等）も catalog/moves.yaml が SoT**（PokeAPI は
+ * Champions 非対応で技威力等の信頼源にしない）。よって `move` も取得しない（generate が消費しないため）。
+ * 取得するのは pokemon（種族値 / タイプ / 特性 id）/ pokemon-species（図鑑番号）/ item（category）のみ。
  *
  * 実行: `pnpm fetch:data`（ネットワーク必須）。取得後は raw キャッシュ固定で generate.ts が
  * 決定論的に data/generated を出力する。スコープ（全種族 vs サブセット）は catalog/*.yaml が制御する。
@@ -54,8 +55,8 @@ async function fetchInto(category: string, name: string): Promise<Record<string,
 
 async function main(): Promise<void> {
   // catalog は id → { ja, en } マップ（Phase 10）。fetch は id（キー）の列挙だけ要る。
+  // moves.yaml は技メタの SoT（ADR 0026）で raw 取得しないため列挙不要。
   const { pokemon } = readCatalog<{ pokemon: Record<string, unknown> }>(ROOT, "species.yaml");
-  const { moves } = readCatalog<{ moves: Record<string, unknown> }>(ROOT, "moves.yaml");
   const { items } = readCatalog<{ items: Record<string, unknown> }>(ROOT, "items.yaml");
 
   // pokemon 本体（種族値 / タイプ / 特性 id）+ 種族（全国図鑑番号）。
@@ -65,8 +66,7 @@ async function main(): Promise<void> {
     await fetchInto("pokemon-species", species);
   }
 
-  // move は type / damageClass / power 等、item は category のソース（名前は catalog YAML 由来）。
-  for (const m of Object.keys(moves)) await fetchInto("move", m);
+  // item は category のソース（名前は catalog YAML 由来）。
   for (const i of Object.keys(items)) await fetchInto("item", i);
 
   console.log("[fetch] done");
