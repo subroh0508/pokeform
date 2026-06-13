@@ -36,7 +36,17 @@ ADR 本文は **可変な plan ファイル（`docs/plan/**` の phase doc / `OV
 
 `status` は frontmatter の 1 フィールド。値は `Proposed` | `Accepted` | `Deprecated` | `Superseded by ADR-NNNN`。1→多の**分割** supersede は範囲表記 `Superseded by ADR-MMMM〜NNNN`（または列挙 `ADR-MMMM, ADR-PPPP`）でよい。
 
-**Accepted の ADR は本文を書き換えない。** ただし**可変な plan ファイル参照（phase doc / 「Phase N」表記 / `OVERVIEW.md` リンク）の遡及除去**は、決定内容を変えない hygiene として例外的に許可する（上記「参照のルール」に揃える）。決定を覆すときは:
+**Accepted の ADR は本文を書き換えない。** ただし次の **2 つの整備（決定の本質を変えない機械的な書き換え）は例外的に許可する**。いずれも決定文・理由・Alternatives を変えないため、不変ログの追跡可能性は損なわれない:
+
+1. **可変な plan ファイル参照の遡及除去** — phase doc / 「Phase N」表記 / `OVERVIEW.md` リンクを取り除く整備（上記「参照のルール」に揃える）。
+2. **用語 rename（表記の言い換え）** — 同一概念を指す用語を別表記へ機械的に置き換える整備（例: ある語を平易な別語へ統一する）。
+
+**用語 rename の許可範囲と線引き**（不変ログを緩めすぎないため厳に限定する）:
+
+- **許可**: 機械的・意味保存の言い換えに限る（同一指示対象を別表記に置換するだけで、決定の内容・適用範囲が一切変わらないもの）。逐一どの語をどう置換したか確認できる単位で行う。
+- **非許可**: 決定文・理由・Consequences・Alternatives の**意味を変える**書き換え。これは整備ではなく決定の見直しであり、引き続き禁止する（覆すときは下記の supersede 手順 = 新 ADR + `status` 更新 + archive 退避による）。
+
+決定を覆すときは:
 
 1. `adr-new` で新 ADR（`MMMM`）を作成し、Context に旧 ADR を見直す経緯を書く。
 2. 旧 ADR（`NNNN`）の **frontmatter `status` フィールドのみ** を `Superseded by ADR-MMMM` に更新する（本文は不変、必要なら末尾に追記のみ）。
