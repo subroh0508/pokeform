@@ -1,6 +1,8 @@
 # data/champions/catalog/items.yaml — 持ち物カタログ（append-only マスター・手動・コミット）。
-# 一度でも解禁された持ち物 id に日本語名 / 英名を併記する（名前の SoT は本ファイル・Phase 10）。
-# megaStoneFor: メガストーンのメガ先 base SpeciesId。category は引き続き data/raw 由来。
+# 一度でも解禁された持ち物 id に日本語名 / 英名を併記する。**本ファイルが SoT**（名前 + category・ADR 0027）。
+# megaStoneFor: メガストーンのメガ先 base SpeciesId。category は PokeAPI を取得元とし
+# `pnpm fetch:data` → `pnpm materialize`（raw → catalog 転記・append/既存尊重・ADR 0027）で埋める。
+# Champions 実態との差分は本ファイルを直接手編集して吸収してよい（materialize は既存値を上書きしない）。
 # 生成 items.ts は { id, category?, megaStoneFor? }（name は持たない・効果定義は後続）。
 items:
   charizardite-x:

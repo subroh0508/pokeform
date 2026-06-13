@@ -1,8 +1,10 @@
 # data/champions/catalog/species.yaml — 種族カタログ（append-only マスター・手動・コミット）。
-# ポケモンチャンピオンズに**一度でも解禁された種族** slug を id とし、日本語名 / 英名を併記する
-# （名前の SoT は本ファイル・Phase 10）。generate.ts はここの名前を data/generated/*.ts へ変換する
-# （PokeAPI を名前の取得元にしない）。種族値・タイプ・特性など構造データは引き続き data/raw 由来。
-# megaLinks: 1 base 種族 -> メガ先 SpeciesId の配列（1 種族複数メガ可）。
+# ポケモンチャンピオンズに**一度でも解禁された種族** slug を id とし、日本語名 / 英名を併記する。
+# **本ファイルが全データの SoT**（名前 + 構造データ dex / types / stats(H/A/B/C/D/S) / abilities・Phase 10 / ADR 0027）。
+# generate.ts はここから data/generated/*.ts を変換する（raw 非依存）。構造データは PokeAPI を取得元とし
+# `pnpm fetch:data` → `pnpm materialize`（raw → catalog 転記・append/既存尊重・ADR 0027）で埋める。
+# Champions 実態との差分は本ファイルを直接手編集して吸収してよい（materialize は既存値を上書きしない）。
+# megaLinks: 1 base 種族 -> メガ先 SpeciesId の配列（1 種族複数メガ可）。メガ先も構造データを持つ。
 pokemon:
   garchomp:
     ja: ガブリアス
