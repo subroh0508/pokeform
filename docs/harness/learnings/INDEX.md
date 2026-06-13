@@ -33,6 +33,8 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #72 | 02 Phase 12 PokeAPI を Champions legality/技威力の信頼源から除外（learnset 撤去・技メタ SoT 移設・ADR 0026） | 2026-06-13 | 02-data-model-redesign/phase-12 | draft | [2026-06-13-pr-72.md](./2026-06-13-pr-72.md) |
 | #73 | 02 Phase 13 構造データ SoT を catalog へ・materialize 新設・generate raw 非依存・overrides 廃止（ADR 0027） | 2026-06-13 | 02-data-model-redesign/phase-13 | draft | [2026-06-13-pr-73.md](./2026-06-13-pr-73.md) |
 | #74 | 02 Phase 14 data/ ディレクトリ索引 README をポインタ式で追加 | 2026-06-13 | 02-data-model-redesign/phase-14 | draft | [2026-06-13-pr-74.md](./2026-06-13-pr-74.md) |
+| #76 | 02 Phase 15 挿入 + M-A 全量 Phase 16 へ renumber（計画化・plans-new） | 2026-06-13 | 02-data-model-redesign | draft | [2026-06-13-pr-76.md](./2026-06-13-pr-76.md) |
+| #77 | 02 Phase 15 data/ 全 YAML ブロックスタイル強制ゲート新設（AST 検出 + check コマンド + materialize block 化・ADR 0028） | 2026-06-13 | 02-data-model-redesign/phase-15 | draft | [2026-06-13-pr-77.md](./2026-06-13-pr-77.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
