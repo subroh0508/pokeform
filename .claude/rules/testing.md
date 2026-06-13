@@ -13,6 +13,7 @@ description: テストの規約（Vitest・カバレッジ100%・境界重点・
 - **Vitest** を使う（`vitest.config.ts` の `include` は `src/**/*.test.ts`）。
 - **カバレッジ閾値は最初から 100%**（lines / branches / functions / statements すべて 100）。100% 未満は失敗。
 - 本質的にテスト困難な薄い層（codegen / CLI 配線）は `coverage.exclude` で**明示除外**し、ドメインロジック（calc-stats / type-effectiveness / coverage / legality）は完全網羅する。除外で 100% を取り繕わない。
+- **除外パスへ意味あるロジックの純関数を置かない**（learning #26 / #73 で反復）。`src/codegen/**` 等のカバレッジ除外パスは「テスト困難な薄い配線」専用とし、判断分岐を持つ純関数（`@source` 逆引き・lang 別名称解決・YAML 構造検出・転記計画など）は **`src/domain/` 等の強制カバレッジ対象へ抽出**して 100% ゲートで網羅する。除外パスは「純関数を呼ぶ薄いアダプタ」に留め、ロジックがゲート死角に落ちるのを設計時に防ぐ。
 
 ## 配置（コロケーション）
 

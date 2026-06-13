@@ -174,11 +174,29 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
   **Phase 0 と Phase 9 はペア**・未マージ時は強制削除しない。
 - **auto-merge 委譲**: マージゲートは Phase 3（ADR 0017）に委譲。独自マージ規約を導入しない。
 
+## ワーカー分業時の運用ノート（worker/orchestrator split・任意）
+
+Phase 6 の「worker/orchestrator マージ同期点」不変条件のとおり、実装を**別ワーカー**（別セッション / 別ペインの
+エージェント）に委ね、本ワークフローを駆動する側がオーケストレーターになる分業を取ることがある。これは pane
+連携の*機構*（下記「取り込まないもの」）ではなく**ワーカーへのタスク委譲の作法**であり、反復して観測された
+摩擦（learning #72 / #73 / #77）への運用ノートを次に残す:
+
+- **編集は小さく分割して適用するようワーカーへ着手時に指示する**。単一の巨大編集は長考でストールしやすい
+  （観測例: skill 1 ファイルの一括編集で約47分ハング）。大きな rule / skill / データ整形は段階的に適用させる。
+- **read-only inspection の都度承認摩擦**: `acceptEdits` 相当でワーカーを動かしてもファイル編集は自動・**Bash は
+  都度承認**になり、`git status/log/diff`・`gh ... view`・`ls`・`grep` 等の安全な確認コマンドで承認が頻発する。
+  反復する read-only コマンドは `.claude/settings.json` の allowlist で削減を検討する（設定変更は
+  [[cross-agent]] / update-config の責務・本ワークフローでは broad な権限を勝手に書かない）。
+- **進捗検知はワーカー画面のスクレイプより `gh pr list --head <branch>` / PR の `headRefOid` 変化で行う**。
+  画面 grep は**オーケストレーター自身がワーカーへ送った指示文**にマッチして誤検知しやすい。
+- **マージ同期点**（既出・不変条件）: ワーカーはレビュー fix を Draft 解除前に取り込んで `READY_FOR_MERGE` を
+  **最終 HEAD SHA 付き**で報告し、オーケストレーターはその SHA を照合してからマージする。
+
 ## 取り込まないもの
 
 参考にした多段ワークフローの「Plan/Epic frontmatter 同期・roadmap ミラー・PR ポーリング・複数 pane
-オーケストレーション」は pokeform に該当機構が無いため**取り込まない**。進捗反映は `finish-phase` の
-README 進捗更新で代替し、学びは `pr-retrospective` が担う。
+オーケストレーション*機構*」は pokeform に該当機構が無いため**取り込まない**（上のノートは機構でなく委譲の
+作法）。進捗反映は `finish-phase` の README 進捗更新で代替し、学びは `pr-retrospective` が担う。
 
 ## 関連
 
