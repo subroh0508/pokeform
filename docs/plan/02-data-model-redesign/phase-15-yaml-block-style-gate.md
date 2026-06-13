@@ -49,9 +49,9 @@
 - 関連 ADR: [ADR 0010]（検証は tsc のみ・本 Phase はスタイル lint としてその例外を線引き）/ [ADR 0013]
   （ゲートは `.githooks`・本 Phase の配線先方針）/ [ADR 0023]（`check:regulation` の check コマンド前例）。
 
-[ADR 0010]: ../../adr/0010-tsc-only-validation.md
+[ADR 0010]: ../../adr/0010-tsc-only-verification.md
 [ADR 0013]: ../../adr/0013-git-hooks-over-claude-hooks.md
-[ADR 0023]: ../../adr/0023-generate-transform-only-check-regulation.md
+[ADR 0023]: ../../adr/0023-generate-transformer-and-check-regulation.md
 
 ## タスク
 
