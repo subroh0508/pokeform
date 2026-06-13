@@ -240,10 +240,11 @@ PokeAPI→要求項目の対応:
 | 全国図鑑番号・種族名 | `pokemon-species`, `pokemon.id` |
 | フォルム/リージョン/メガ | `pokemon-form`, variety 群 |
 | 種族値 | `pokemon.stats[].base_stat` |
-| 覚える技 | `pokemon.moves[]`（version_group で世代を絞り、`overrides.yaml` で補正） |
 | タイプ | `pokemon.types[]` |
 | 特性 | `pokemon.abilities[]`（隠れ特性可否は champions 側フラグ） |
-| 持ち物 | `item` エンドポイント（メガストーン含む） |
+| 持ち物 category | `item` エンドポイント（メガストーン含む） |
+| **使用できる技（learnset legality）** | **PokeAPI を信頼源にしない（Champions 非対応・ADR 0026）→ `regulations/<id>.yaml` の per-species `moves`（Serebii 第一優先）** |
+| **技メタ（type / damageClass / power 等）** | **PokeAPI を信頼源にしない（ADR 0026）→ `data/champions/catalog/moves.yaml`（hand-authored・SoT）** |
 | **レギュレーション解禁** | **PokeAPI に無し → `data/champions/regulations/<id>.yaml`（per-reg 一本化・ADR 0021）** |
 
 ---
