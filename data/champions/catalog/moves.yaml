@@ -1510,8 +1510,8 @@ moves:
     en: Dragon Cheer
     type: dragon
     damageClass: status
-    power: 0
-    accuracy: 0
+    power: null
+    accuracy: null
     pp: 15
     priority: 0
   dragon-rush:
