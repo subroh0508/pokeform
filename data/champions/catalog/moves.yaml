@@ -1,5 +1,5 @@
-# data/champions/catalog/moves.yaml — 技カタログ（append-only マスター・手動・コミット）。
-# 名前 / type / damageClass / power / accuracy / pp / priority の SoT は本ファイル（hand-authored）。
+# data/champions/catalog/moves.yaml — 技カタログ（append-only マスター・skill 著述・コミット）。
+# 名前 / type / damageClass / power / accuracy / pp / priority の SoT は本ファイル（skill-authored）。
 # PokeAPI は Champions 非対応のため技メタの信頼源にしない（ADR 0026）。出自は Serebii 第一優先。
 moves:
   earthquake:

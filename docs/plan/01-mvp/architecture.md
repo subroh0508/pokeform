@@ -221,7 +221,7 @@ export function defineIndividual<S extends SpeciesId>(species: S, spec: Individu
 flowchart LR
     F["scripts/fetch-pokeapi.ts"] --> RAW["data/raw/<br/>(.gitignore・PokeAPI 取得キャッシュ)"]
     RAW --> M["scripts/materialize.ts<br/>raw→catalog 転記・fail-fast"]
-    subgraph CH["data/champions/ (コミット・手動管理・SoT)"]
+    subgraph CH["data/champions/ (コミット・skill 著述・SoT)"]
         R["rules.yaml<br/>能力ポイント 66/32・計算式定数"]
         REG["regulations/&lt;id&gt;.yaml<br/>1レギュ=1ファイル・期間+解禁集合"]
         CAT["catalog/*.yaml<br/>名前 + 構造データ(種族値/タイプ/特性/dex/category) の SoT"]
@@ -244,7 +244,7 @@ PokeAPI→要求項目の対応（**取得元** = PokeAPI / **SoT** = catalog・
 | 特性 | `pokemon.abilities[]`（隠れ特性可否は champions 側フラグ） | `catalog/species.yaml`（`abilities`） |
 | 持ち物 category | `item` エンドポイント（メガストーン含む） | `catalog/items.yaml`（`category`） |
 | **使用できる技（learnset legality）** | **PokeAPI を信頼源にしない（Champions 非対応・ADR 0026）** | `regulations/<id>.yaml` の per-species `moves`（Serebii 第一優先） |
-| **技メタ（type / damageClass / power 等）** | **PokeAPI を信頼源にしない（ADR 0026）** | `data/champions/catalog/moves.yaml`（hand-authored） |
+| **技メタ（type / damageClass / power 等）** | **PokeAPI を信頼源にしない（ADR 0026）** | `data/champions/catalog/moves.yaml`（skill-authored） |
 | **レギュレーション解禁** | **PokeAPI に無し** | `data/champions/regulations/<id>.yaml`（per-reg 一本化・ADR 0021） |
 
 ---

@@ -1,4 +1,4 @@
-# data/champions/regulations/champions-m-a.yaml — レギュレーション M-A の解禁情報（手動・コミット）。
+# data/champions/regulations/champions-m-a.yaml — レギュレーション M-A の解禁情報（skill 著述・コミット）。
 # 1 レギュ = 1 ファイル。解禁判定の正本（per-regulation 一本化・ADR 0021 / 記録方法 ADR 0022）。
 #
 # 記録方法（ADR 0022・block 記法）:

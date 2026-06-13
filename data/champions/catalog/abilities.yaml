@@ -1,4 +1,4 @@
-# data/champions/catalog/abilities.yaml — 特性カタログ（append-only マスター・手動・コミット）。
+# data/champions/catalog/abilities.yaml — 特性カタログ（append-only マスター・skill 著述・コミット）。
 # 一度でも解禁された種族が持つ特性 id に日本語名 / 英名を併記する（名前の SoT は本ファイル・Phase 10）。
 # 生成 abilities.ts は id のみ（name は持たない・効果定義は後続）。種族の abilities はこの id を参照する。
 abilities:

@@ -10,7 +10,7 @@
  * ADR 0027 / [[data-pipeline]]）。
  *
  * **append/既存尊重**: 未設定の構造フィールドだけを raw 由来値で埋め、既に値があるフィールドは raw と
- * 異なっても上書きしない（Champions 実態に合わせた hand-authored 修正を保護）。差分は conflict として
+ * 異なっても上書きしない（Champions 実態に合わせた skill 著述値を保護）。差分は conflict として
  * 標準出力に提示する（要目視）。コメントは `parseDocument` で保持する。
  *
  * 実行: `pnpm materialize`（fetch:data 後・ネットワーク不要）。
@@ -50,7 +50,7 @@ const apply = <T extends object>(
   for (const c of plan.conflicts) {
     conflictCount++;
     console.warn(
-      `[materialize] conflict ${id}.${String(c.key)}: keep hand-authored ${JSON.stringify(
+      `[materialize] conflict ${id}.${String(c.key)}: keep skill-authored ${JSON.stringify(
         c.existing,
       )} (raw=${JSON.stringify(c.fresh)})`,
     );

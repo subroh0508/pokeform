@@ -1,4 +1,4 @@
-# data/champions/regulations/champions-m-b.yaml — レギュレーション M-B の解禁情報（手動・コミット）。
+# data/champions/regulations/champions-m-b.yaml — レギュレーション M-B の解禁情報（skill 著述・コミット）。
 # 記録方法の正本コメントは champions-m-a.yaml を参照（種族キー = 解禁 + per-species moves/mega[]・block 記法）。
 #
 # 詳細未公開（2026-06-17 開始）。M-A 解禁集合を暫定ベースに置く（公開後に要更新）。period.end は空（開催中）。
