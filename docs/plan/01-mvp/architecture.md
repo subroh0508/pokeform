@@ -217,21 +217,36 @@ export function defineIndividual<S extends SpeciesId>(species: S, spec: Individu
 
 ### データ生成パイプライン（vendor）
 
+3 系統の情報源（① Serebii 第一優先 / ② 補助裏取り / ③ PokeAPI 構造データ）が、**skill 著述の辺**（① + ② →
+`survey-regulation`）と**機械転記の辺**（③ → `fetch:data` → raw → `materialize`）の **2 系統で catalog に合流**する。
+情報源の役割・関係性の SoT は [`survey-regulation` の `references/serebii-sourcing.md`](../../../.claude/skills/survey-regulation/references/serebii-sourcing.md)。
+
 ```mermaid
 flowchart LR
-    F["scripts/fetch-pokeapi.ts"] --> RAW["data/raw/<br/>(.gitignore・PokeAPI 取得キャッシュ)"]
+    SB["① Serebii Champions 図鑑 / items.shtml<br/>第一優先=正（解禁種族 / 全技 / 技メタ / 解禁持ち物）"]
+    AUX["② Game8 / Victory Road / Bulbapedia<br/>補助=件数裏取り"]
+    API["③ PokeAPI<br/>構造データ取得元（種族値 / タイプ / 特性 / dex / category）"]
+
+    SB -->|skill 著述| SR["survey-regulation skill<br/>突き合わせ・著述"]
+    AUX -.->|件数突き合わせ| SR
+    API -->|機械転記| F["scripts/fetch-pokeapi.ts"]
+    F --> RAW["data/raw/<br/>(.gitignore・取得キャッシュ)"]
     RAW --> M["scripts/materialize.ts<br/>raw→catalog 転記・fail-fast"]
-    subgraph CH["data/champions/ (コミット・skill 著述・SoT)"]
+
+    subgraph CH["data/champions/ (コミット・skill-authored・SoT)"]
+        CAT["catalog/*.yaml<br/>名前 / 技メタ + 構造データ(種族値/タイプ/特性/dex/category)"]
+        REG["regulations/&lt;id&gt;.yaml<br/>解禁種族・per-species moves"]
         R["rules.yaml<br/>能力ポイント 66/32・計算式定数"]
-        REG["regulations/&lt;id&gt;.yaml<br/>1レギュ=1ファイル・期間+解禁集合"]
-        CAT["catalog/*.yaml<br/>名前 + 構造データ(種族値/タイプ/特性/dex/category) の SoT"]
     end
-    M --> CAT
+
+    SR -->|skill 著述の辺| CAT
+    SR -->|skill 著述の辺| REG
+    M -->|機械転記の辺| CAT
     CH --> GEN["scripts/generate.ts<br/>(raw 非依存)"]
     GEN --> OUT["data/generated/ (コミット)<br/>Dex 単位 .ts（値 as const → 型派生・単一ソース）"]
 ```
 
-> `data/champions/catalog/*.yaml` は**全データの SoT**（名前・解禁・技メタに加え、構造データ＝種族値 / タイプ / 特性 / 図鑑番号 / category も含む・ADR 0027）。PokeAPI は構造データの**取得元**で、`materialize.ts` が raw → catalog へ転記する（fail-fast・append/既存尊重）。`generate.ts` は **catalog のみを変換**し raw を読まない（決定論的）。
+> `data/champions/catalog/*.yaml` は**全データの SoT**（名前・解禁・技メタに加え、構造データ＝種族値 / タイプ / 特性 / 図鑑番号 / category も含む・ADR 0027）。**①②（skill 著述）**は `survey-regulation` が catalog / regulations へ著述し（Serebii 第一優先・ADR 0026）、**③（PokeAPI 構造データ）**は `materialize.ts` が raw → catalog へ機械転記する（fail-fast・append/既存尊重）。`generate.ts` は **catalog のみを変換**し raw を読まない（決定論的）。
 
 PokeAPI→要求項目の対応（**取得元** = PokeAPI / **SoT** = catalog・転記は `materialize`・ADR 0027）:
 

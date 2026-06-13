@@ -1,9 +1,32 @@
 # Serebii 第一優先の調査・全量 materialize 手順（詳細）
 
-`survey-regulation` skill 本体（[SKILL.md](../SKILL.md)）が参照する詳細手順。Serebii を第一優先の正とする
+`survey-regulation` skill 本体（[SKILL.md](../SKILL.md)）が参照する詳細手順。**チャンピオンズ解禁データの
+情報源の役割・関係性（第一優先 / 補助裏取り / 構造データ取得元）の SoT**であり、Serebii を第一優先の正とする
 理由・主ソース URL パターン・全 learnable 技の全量 materialize の機構を定める。技の出自は Serebii 第一優先に
-一本化し、PokeAPI learnset への照合はしない（PokeAPI は Champions 非対応・ADR 0026）。方針 SoT はメモリ
-`serebii-first-priority-champions-data`、データ仕様 SoT は [[data-pipeline]]。
+一本化し、PokeAPI learnset への照合はしない（PokeAPI は Champions 非対応・ADR 0026）。データ仕様（取得元 / SoT /
+転記の対応表）の正本は [[data-pipeline]]。
+
+## 情報源の役割・関係性（SoT）
+
+チャンピオンズの解禁データは複数の情報源から集めて突き合わせる。各情報源の**役割と関係性**をここに 1 か所へ
+集約する（`SKILL.md` / [[data-pipeline]] / `data/README.md` の情報源記述は本節へのポインタ）。情報源は次の
+**3 系統**で、catalog へは **skill 著述の辺（① + ② → `survey-regulation` → catalog / regulations）** と
+**機械転記の辺（③ → `fetch:data` → raw → `materialize` → catalog）** の **2 系統が合流**する:
+
+| 系統 | 情報源 | 役割 | catalog への流入経路 | 担当データ |
+|---|---|---|---|---|
+| **①** | **Serebii Champions 図鑑 / items.shtml** | **第一優先 = 正** | skill 著述（`survey-regulation`） | 解禁種族 / 各種族の全 learnable 技 / 技メタ / 解禁持ち物 |
+| **②** | **Game8 / Victory Road / Bulbapedia 等** | **補助 = 件数裏取り** | skill 著述（① の件数突き合わせ） | ① の総数・帰属を 2 ソース以上で検証（矛盾は出典 doc に記録） |
+| **③** | **PokeAPI** | **構造データ取得元** | 機械転記（`fetch:data` → `materialize`） | 種族値 / タイプ / 特性 / 図鑑番号 / 持ち物 category |
+
+**突き合わせ原則**: ① Serebii を正とし、② 補助ソースで総数・帰属を**必ず 2 ソース以上で突き合わせ**、矛盾と
+採用根拠を `<id>-roster-source.md` に記録する（再現可能性）。③ PokeAPI は Champions legality・技メタの信頼源に
+**しない**（Champions 非対応・ADR 0026）。構造データ（種族値 / タイプ等）は Champions 非依存で PokeAPI の値が
+信頼できるため取得元に使う（ADR 0027）。
+
+> **memory との役割分担**: 情報源の役割・関係性の SoT は**本節**（`serebii-sourcing.md`）。memory
+> `serebii-first-priority-champions-data` は「Serebii を第一優先の正にする」という**方針の要約ポインタ**に
+> 留め、詳細・3 系統の関係性は本節を正とする（両者が食い違わないよう役割分担する）。
 
 ## なぜ Serebii を第一優先にするか
 
