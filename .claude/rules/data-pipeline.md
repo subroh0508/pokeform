@@ -9,11 +9,26 @@ description: データ生成パイプライン（raw=取得キャッシュ / cha
 
 PokeAPI を **取得元**に vendor 方式で取り込み、構造データの **SoT は catalog YAML** に置いて `data/generated/` を出力する流れの要点。正本は `docs/plan/01-mvp/architecture.md`（「データ生成パイプライン」節）と ADR `0012-vendor-pokeapi-data`（取得方式）/ ADR `0027-structural-data-catalog-sot`（構造データ SoT を catalog へ・generate raw 非依存）。
 
+## data/champions の運用方針（skill 著述・人間直編集 NG）
+
+`data/champions/**`（`catalog/*.yaml` / `regulations/*.yaml` / `rules.yaml`）は **skill 著述で維持し、人間が直接エディタで編集しない**。著述主体は **`survey-regulation` / `author-individual` を実行する AI エージェント**で、[ADR 0026](../../docs/adr/0026-pokeapi-not-champions-legality-source.md) の方針どおり Serebii 等の出典を閲覧して YAML へ転記する。人間の直編集を禁じるのは、出典との同期・再現性（同じ skill を再実行すれば同じ結果に収束する性質）を壊さないためで、決定の「なぜ」は [ADR 0030](../../docs/adr/0030-data-champions-skill-authored.md)。
+
+- **訂正経路**: 誤りの訂正は **skill 再実行または AI への直接指示**を経由する。`catalog` / `regulations` の訂正は対応 skill（`survey-regulation` 等）の再実行で行う。**`rules.yaml` は対応 skill が無いため改定経路を「AI への直接指示」と定義する**（人間が直接書き換えるのではなく AI に指示して書かせる）。
+- **強制レベル**: 人間直編集 NG は **規約・方針レベルで担保**する。「誰が編集したか」は機械判定しづらく CI 強制が困難なため、本方針は機械ゲートでは強制しない（直編集を warn する check の要否は将来判断・ADR `0030`）。
+
 ## 取得 → 転記 → 合成の三段（raw=キャッシュ / catalog=SoT / generated=合成）
 
 - **取得元 = PokeAPI**（継続・`fetch:data`）。取得した構造データ（種族値 / タイプ / 特性 id / 図鑑番号 / 持ち物 category）の **SoT は `data/champions/catalog/*.yaml`**（hand-authored・コミット）。raw は転記元の取得キャッシュに過ぎず、`generate.ts` は raw を読まない（ADR `0027`）。
 - **`scripts/materialize.ts`**（転記段）= raw → catalog の構造データ転記専任。**raw 必須・fail-fast**（不在なら ENOENT で即エラー・自前の存在チェックや `fetch:data` 誘導は持たない）。**append/既存尊重**: 未設定フィールドのみ raw 由来値で埋め、既存値は raw と異なっても上書きせず conflict を提示する（Champions 実態に合わせた hand-authored 修正を保護）。**raw 存在の担保は呼び出し側 `survey-regulation` skill の責務**（手順で `fetch:data` → `materialize` の順を保証する。スクリプトは前提が揃っている前提で動き、欠けたら fail-fast＝責務の二重化を避ける・ADR `0027`）。
 - **`scripts/generate.ts`**（合成段）= catalog YAML のみを変換し `data/generated/` を出力。**raw 非依存**（決定論的・raw 不在でも動く）。
+
+## 統一用語: skill-authored（定義 SoT）
+
+ソースとして著述される SoT を **`skill-authored`**（英語ラベルのまま・日本語化しない）と呼ぶ。本節がこの語の定義の SoT で、SKILL / README 等はここへのポインタにする（二重管理回避）。
+
+- **意味**: 「`generate` / `materialize` の派生出力ではないソース著述。著述主体は skill を実行する AI（人間は直接編集せず skill/AI を経由する）」。機械転記の `materialize` と対比される語。
+- **対象**: 上記「運用方針」の `data/champions/**`（`catalog` の名前 / 構造データ / 技メタ、`regulations` の解禁・per-species `moves`、`rules.yaml`）。表「項目の取得元 / SoT / 転記」で転記列が `materialize` でないソース著述値がこれにあたる。
+- **`materialize` の保護対象 = skill-authored 値**: `materialize` の **append/既存尊重**（未設定フィールドのみ raw 由来値で埋め、既存値は上書きせず conflict 提示・ADR `0027`）が保護するのは **skill-authored 値**である。append/既存尊重の設計自体は不変で、保護される値の主体が「人間の手修正」ではなく「skill/AI の著述値」だと整理されるだけ（ADR `0030`）。
 
 ## ディレクトリの扱い（vendor）
 

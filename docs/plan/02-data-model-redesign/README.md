@@ -53,7 +53,7 @@ flowchart TD
 - [x] [Phase 14 — data/ ディレクトリ説明 README（ポインタ式・何を表す / 取得元 / SoT / 取得・更新 skill を索引化）](./phase-14-data-directory-readme.md)
 - [x] [Phase 15 — data/ 全 YAML にブロックスタイルを強制する CI ゲート新設（materialize block 出力・既存再整形・flow 禁止）](./phase-15-yaml-block-style-gate.md)
 - [x] [Phase 16 — ADR 不変ログの「用語整備の例外」確立（adr.md に用語 rename を整備例外として許可 + 新規 ADR・phase-18 の ADR 本文 rename を正規化）](./phase-16-adr-term-edit-exception.md)
-- [ ] [Phase 17 — data/champions データ運用方針 + 統一用語の確定（skill 著述・人間直編集 NG・統一用語 skill-authored を ADR + data-pipeline.md に確定）](./phase-17-data-authoring-policy.md)
+- [x] [Phase 17 — data/champions データ運用方針 + 統一用語の確定（skill 著述・人間直編集 NG・統一用語 skill-authored を ADR + data-pipeline.md に確定）](./phase-17-data-authoring-policy.md)
 - [ ] [Phase 18 — 用語 rename + 人間直編集文言の全資産展開（hand-authored → skill-authored・ADR 本文含む・手動編集前提文言を改訂）](./phase-18-skill-authored-rename.md)
 - [ ] [Phase 19 — 情報源の役割・関係性の SoT 整理 + フロー図の Mermaid 化・改訂（Serebii 第一優先 / 補助裏取り / PokeAPI 構造データの 3 系統・2 系統合流図）](./phase-19-source-roles-and-flow.md)
 - [ ] [Phase 20 — M-A 全データ投入（全186種 + 全 movepool）](./phase-20-ma-full-data.md)
