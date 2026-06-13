@@ -28,7 +28,7 @@ pokeform の実装計画は **計画ディレクトリ単位**で分割し、各
 | [00-harness-setup](./00-harness-setup/README.md) | ✅ 完了 |
 | [01-mvp](./01-mvp/README.md) | ✅ 完了 |
 | [02-data-model-redesign](./02-data-model-redesign/README.md) | ✅ 完了 |
-| [03-survey-regulation-rework](./03-survey-regulation-rework/README.md) | ⬜ 未着手 |
+| [03-survey-regulation-rework](./03-survey-regulation-rework/README.md) | 🚧 進行中 |
 
 ## MVP の範囲
 
