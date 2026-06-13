@@ -29,4 +29,11 @@ pnpm pokeform check:individual team/individuals
 echo "[pre-commit] pokeform check:regulation data/champions/regulations"
 pnpm pokeform check:regulation data/champions/regulations
 
+# data YAML ブロックスタイル強制ゲート（02 Phase 15）: data/ 配下の YAML に flow スタイル
+# （[ a, b ] / { k: v } のインライン記法）が混入していないかを AST ベースで検出する（非0終了）。
+# diff の可読性のため block へ統一する規約（[[data-pipeline]]）。検出ロジックは
+# domain/yaml-block-style（テスト済み純関数）に委譲し CI は pnpm verify で同一ゲートを通す。
+echo "[pre-commit] pokeform check:yaml-style data"
+pnpm pokeform check:yaml-style data
+
 echo "[pre-commit] OK"

@@ -18,7 +18,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { type Document, isCollection, parseDocument, type YAMLMap } from "yaml";
+import { type Document, parseDocument, type YAMLMap } from "yaml";
 import {
   extractItemCategory,
   extractSpeciesStructural,
@@ -35,13 +35,6 @@ const CAT = join(ROOT, "data", "champions", "catalog");
 const raw = <T>(category: string, name: string): T =>
   JSON.parse(readFileSync(join(RAW, category, `${name}.json`), "utf8")) as T;
 
-/** flow スタイルのノードを作り compact に整形する（stats / types / abilities）。 */
-const flow = (doc: Document, value: unknown): unknown => {
-  const node = doc.createNode(value);
-  if (isCollection(node)) node.flow = true;
-  return node;
-};
-
 let conflictCount = 0;
 /** plan の fill をノードへ適用し、conflict を提示する。 */
 const apply = <T extends object>(
@@ -51,7 +44,8 @@ const apply = <T extends object>(
   plan: FieldPlan<T>,
 ): number => {
   for (const [key, value] of Object.entries(plan.fill)) {
-    node.set(key, flow(doc, value));
+    // block スタイルで転記する（flow を生まない・data YAML は全 block・02 Phase 15 / [[data-pipeline]]）。
+    node.set(key, doc.createNode(value));
   }
   for (const c of plan.conflicts) {
     conflictCount++;
