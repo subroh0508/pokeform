@@ -32,7 +32,7 @@ date: 2026-06-13
 残す。取得（raw キャッシュ）と SoT（catalog）の間の転記を専任スクリプト **`scripts/materialize.ts`（新設）**が
 担う。`materialize` は raw → catalog へ構造データを転記し、**raw 必須・fail-fast**（不在なら即エラー終了・
 自前の存在チェックや `fetch:data` 誘導は持たない）、**append/既存尊重**（未設定フィールドのみ埋め、既存値は
-raw と異なっても上書きせず conflict を提示）で hand-authored 修正を保護する。
+raw と異なっても上書きせず conflict を提示）で skill-authored 値を保護する。
 
 **raw 存在の担保はスクリプトでなく `survey-regulation` skill の責務とする。** スクリプト
 （`fetch-pokeapi` / `materialize` / `generate` / `check-regulation`）は前提が揃っている前提で動き、欠けたら
@@ -56,7 +56,7 @@ fail-fast する。raw を用意する順序（`fetch:data` → `materialize`）
   - 構造データが catalog にコミットされ、種族追加時の `materialize` 転記が 1 手順増える（順序は skill が担保）。
   - catalog YAML が構造データぶん肥大化する（全量投入時は全186種ぶん）。
 - **トレードオフ / 留意点**:
-  - `materialize` の append/既存尊重は hand-authored 修正を守るが、raw 側の更新を取り込むには既存値の手削除 +
+  - `materialize` の append/既存尊重は skill-authored 値を守るが、raw 側の更新を取り込むには既存値の手削除 +
     再 `materialize` か手修正が要る（conflict 提示で気づける）。
   - 既存エントリは `materialize` で初期移行し、`species-base` / per-reg dex / `items` 生成出力は移行前と等価。
 
@@ -67,4 +67,4 @@ fail-fast する。raw を用意する順序（`fetch:data` → `materialize`）
 | 構造データを raw 直読のまま維持（現状） | 値が入力から直読できず、Champions 差分補正が間接的。名前 / 相性 / 技メタが catalog SoT になった後も raw 依存が残り、SoT が分散して決定論性も上がらない。 |
 | `materialize` を作らず catalog を手書きで埋める | 全量投入時に種族値等を手入力するのは転記ミスの温床。取得元 PokeAPI の値を機械転記し、差分のみ手修正する方が安全。 |
 | `materialize` に raw 存在チェック + `fetch:data` 誘導を持たせる | スクリプトと skill で前提担保が二重化しドリフトする。スクリプトは fail-fast、順序保証は skill 責務に分離する方が単純。 |
-| PokeAPI 取得自体を廃止し構造データも完全 hand-authored 化 | 構造データは Champions 非依存で PokeAPI が信頼でき、取得を捨てると全種族の種族値等を手入力する負担が過大。取得元は維持し SoT だけ移す。 |
+| PokeAPI 取得自体を廃止し構造データも完全 skill-authored 化 | 構造データは Champions 非依存で PokeAPI が信頼でき、取得を捨てると全種族の種族値等を手入力する負担が過大。取得元は維持し SoT だけ移す。 |

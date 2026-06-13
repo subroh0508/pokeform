@@ -1,4 +1,4 @@
-# data/champions/catalog/types.yaml — タイプカタログ（18 タイプ固定・手動・コミット）。
+# data/champions/catalog/types.yaml — タイプカタログ（18 タイプ固定・skill 著述・コミット）。
 # 各タイプの日本語名 / 英名 + 攻撃側相性倍率 damageTo（非 1.0 のみ記録・generate が 1.0 を補完）。
 # 名前・相性とも本ファイルが SoT（Phase 10）。generate.ts は types について data/raw を読まない。
 types:

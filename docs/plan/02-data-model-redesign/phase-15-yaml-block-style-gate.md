@@ -2,7 +2,7 @@
 
 ## 目的 / スコープ
 
-`data/` 配下の YAML は手編集 SoT（catalog / regulations / rules）であり、**flow スタイル**（`[ a, b ]` /
+`data/` 配下の YAML は skill 著述 SoT（catalog / regulations / rules）であり、**flow スタイル**（`[ a, b ]` /
 `{ k: v }` のインライン記法）と**ブロックスタイル**が混在すると、diff の可読性が落ち、レビューで値の変化を
 追いにくくなる。実際 Phase 13 の `materialize.ts` は `stats` / `types` / `abilities` を flow で書き出しており、
 `catalog/species.yaml` は flow と block が混在している。本 Phase で **`data/` 配下の全 YAML に flow 混入を

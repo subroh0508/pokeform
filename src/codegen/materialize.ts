@@ -4,7 +4,7 @@
  * fs / YAML I/O は `scripts/materialize.ts`（薄い orchestrator・coverage 除外）が担う。
  *
  * 種族値・タイプ・特性・category の SoT を `data/raw` 直読から catalog YAML へ移すための転記材料
- * （raw=取得キャッシュ / catalog=SoT・[[data-pipeline]] / ADR 0027）。hand-authored 値は
+ * （raw=取得キャッシュ / catalog=SoT・[[data-pipeline]] / ADR 0027）。skill 著述値は
  * `planFields` で「既存尊重・上書きしない」（未設定のみ fill・差分は conflict 報告）。
  */
 
@@ -68,14 +68,14 @@ export function extractItemCategory(item: RawItem): string {
 export interface FieldPlan<T> {
   /** 未設定のため raw 由来値で埋めるフィールド。 */
   fill: Partial<T>;
-  /** 既存値が raw と異なるフィールド（hand-authored 尊重で上書きしない・要目視）。 */
+  /** 既存値が raw と異なるフィールド（skill 著述値尊重で上書きしない・要目視）。 */
   conflicts: { key: keyof T; existing: unknown; fresh: unknown }[];
 }
 
 /**
  * 既存 catalog 値（`existing`）と raw 由来値（`fresh`）を比較し、転記計画を作る。
  * **append/既存尊重**: 未設定（`undefined`）のみ `fill` し、既に値があるフィールドは raw と異なっても
- * 上書きせず `conflicts` に積む（Champions 実態に合わせた hand-authored 修正を保護する）。
+ * 上書きせず `conflicts` に積む（Champions 実態に合わせた skill 著述値を保護する）。
  */
 export function planFields<T extends object>(existing: Partial<T>, fresh: T): FieldPlan<T> {
   const fill: Partial<T> = {};

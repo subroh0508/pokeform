@@ -1,4 +1,4 @@
-# data/champions/rules.yaml — PokeAPI に無いゲーム計算定数の唯一のソース（手動・コミット）。
+# data/champions/rules.yaml — PokeAPI に無いゲーム計算定数の唯一のソース（skill 著述・コミット）。
 # 正本のゲーム仕様は .claude/rules/game-spec.md / docs/plan/01-mvp/architecture.md。
 # Lv50・個体値31 固定を代入済みの実数値計算式の定数を持つ。
 level: 50

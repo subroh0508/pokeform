@@ -44,7 +44,7 @@ id の列挙しか持たない。これを **catalog YAML に `id → { ja, en }
 - **Phase 20（全量投入）の手前**: 名前を YAML 記録するスキーマを全量投入の前に確定し、`survey-regulation` skill が
   全186種の ja/en も同時に materialize できるようにする（やり直しを避ける）。
 - 確定済み rule: [[data-pipeline]] / [[cli-and-io]] / [[type-conventions]] / [[testing]]。
-- 関連 ADR: [ADR 0012](../../adr/0012-vendor-pokeapi-data.md)（vendor 方式・本 phase は**名前部分のみ** hand-authored へ
+- 関連 ADR: [ADR 0012](../../adr/0012-vendor-pokeapi-data.md)（vendor 方式・本 phase は**名前部分のみ** skill-authored へ
   改訂）/ [ADR 0023](../../adr/0023-generate-transformer-and-check-regulation.md)（generate 変換専任）。
 
 ## タスク
@@ -76,7 +76,7 @@ id の列挙しか持たない。これを **catalog YAML に `id → { ja, en }
 
 - **`survey-regulation` skill に「ja/en 名も catalog YAML へ記録する」手順を追記**（Phase 20 が全186種で利用）。
   → `skill-creator` で改修・[[skill-authoring]]。
-- **ADR を起票**: 名前（ja/en・types 含む）の SoT を「PokeAPI 由来の生成」から「hand-authored catalog YAML」へ移し、
+- **ADR を起票**: 名前（ja/en・types 含む）の SoT を「PokeAPI 由来の生成」から「skill-authored catalog YAML」へ移し、
   abilities/items の生成 dex を id-only（+ items 構造）へ縮小する決定。ADR 0012（vendor 方式）の**名前部分の改訂**として
   位置づけ、構造データ（種族値・タイプ相性・分類）の raw 由来は不変であることを明記する。→ `adr-new`・[[adr]]。
   - **ADR は可変な plan ファイルを参照しない**: phase doc / OVERVIEW / phase 番号（renumber されうる）を本文で
@@ -118,6 +118,6 @@ id の列挙しか持たない。これを **catalog YAML に `id → { ja, en }
   移行前後で 18×18 倍率を機械突き合わせする。`TYPES` ハードコード列挙は types.yaml のキー集合へ一本化する。
 - **意味的に atomic な 1 PR**: catalog 形式・`generate.ts`・型（`AbilityBase`/`ItemBase`）・生成物は同時に変えないと
   ビルドが通らない（途中状態が壊れる）ため、分割せず 1 PR とする（[[planning]] の意味的完結性優先）。生成物の
-  大量差分はレビュー容易性のため「手動カタログ差分」「`generate.ts` 差分」「生成物差分」を分けて説明する。
+  大量差分はレビュー容易性のため「skill 著述カタログ差分」「`generate.ts` 差分」「生成物差分」を分けて説明する。
 - **Phase 20 への申し送り**: 全量投入時は catalog 各エントリに ja/en を含めて materialize する。`survey-regulation`
   skill にその手順が入っていること（本 phase で追記）を前提にする。

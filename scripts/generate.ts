@@ -41,7 +41,7 @@ interface SpeciesCatalog {
   megaLinks?: Record<string, string[]>;
 }
 interface MoveMeta extends NamePair {
-  // 技メタ（type / damageClass / power / accuracy / pp / priority）の SoT は catalog YAML（hand-authored・
+  // 技メタ（type / damageClass / power / accuracy / pp / priority）の SoT は catalog YAML（skill-authored・
   // ADR 0026）。PokeAPI は Champions 非対応のため技威力等の信頼源にしない。
   type: string;
   damageClass: string;
@@ -145,7 +145,7 @@ for (const t of TYPES) {
 }
 
 // --- moves（name + 技メタとも catalog/moves.yaml 由来・raw 非依存・ADR 0026） ------------------
-// 技威力等を PokeAPI raw から導出しない（PokeAPI は Champions 非対応）。SoT は hand-authored catalog。
+// 技威力等を PokeAPI raw から導出しない（PokeAPI は Champions 非対応）。SoT は skill-authored catalog。
 const moveEntries: Record<string, unknown> = {};
 for (const [m, meta] of Object.entries(movesCat.moves)) {
   moveEntries[m] = {

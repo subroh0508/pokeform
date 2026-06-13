@@ -65,7 +65,7 @@ describe("planFields", () => {
     expect(plan.conflicts).toEqual([]);
   });
 
-  it("reports conflicts without overwriting hand-authored values", () => {
+  it("reports conflicts without overwriting skill-authored values", () => {
     const plan = planFields(
       // types は Champions 実態に合わせ手修正済み（raw と異なる）。
       { dex: 445, types: ["dragon"], stats: fresh.stats, abilities: fresh.abilities },

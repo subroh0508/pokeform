@@ -4,7 +4,7 @@ import { isMap, isSeq, LineCounter, type Node, parseDocument } from "yaml";
  * yaml-block-style — data/ 配下の YAML が flow スタイル（`[ a, b ]` / `{ k: v }` のインライン記法）を
  * 含まないことを保証するための flow コレクション検出純関数。
  *
- * data YAML は手編集 SoT（catalog / regulations / rules）であり、flow と block が混在すると diff の
+ * data YAML は skill 著述 SoT（catalog / regulations / rules）であり、flow と block が混在すると diff の
  * 可読性が落ちレビューで値の変化を追いにくくなる。本関数は `yaml` の `parseDocument` で AST を作り、
  * `flow === true` なコレクション（seq / map）を再帰的に検出して位置（path / 行番号）を列挙する。
  * 検出は AST ベースで、文字列値中の `[` / `{` を誤検出しない（正規表現での弾きは不可・[[testing]]）。

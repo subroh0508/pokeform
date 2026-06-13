@@ -15,7 +15,7 @@ date: 2026-06-11
 入力（手書き YAML）から直読できない、という弱点があった。
 
 `data/champions/catalog/*.yaml` は append-only マスターとして id を列挙していたが名前を持たず、特性 / 持ち物の
-**効果**を将来定義する余地も無かった。名前を hand-authored の入力へ寄せ、`generate.ts` を名前について変換専任に
+**効果**を将来定義する余地も無かった。名前を skill-authored の入力へ寄せ、`generate.ts` を名前について変換専任に
 する必要が生じた。
 
 ## Decision
@@ -42,7 +42,7 @@ date: 2026-06-11
     不要になる（取得対象が縮小）。
   - abilities / items の生成 dex が id のみになり、将来の**効果フィールド**追加の素地ができる。
 - **悪い点 / コスト**:
-  - 名前が hand-authored になり、新規 id 追加時に ja/en の記入（出典確認）が必要になる（取りこぼしは authoring
+  - 名前が skill-authored になり、新規 id 追加時に ja/en の記入（出典確認）が必要になる（取りこぼしは authoring
     ゲートが非0終了で弾く）。
   - `AbilityBase` / `ItemBase` から `name` を外す不可逆な型変更で、`type-conventions` の「XxxBase は name を持つ」
     前提に例外が入る（species / moves / types のみ name 保持）。
