@@ -11,7 +11,7 @@
  * schema 欠落（stage 3）を健全性（stage 4）より優先する（必須欄が無ければ件数検証は無意味なため）。
  */
 import { isCatalogIdShape } from "./normalize.ts";
-import type { ParsedSpecies } from "./parse.ts";
+import type { ParsedItems, ParsedSpecies } from "./parse.ts";
 
 /** 自己検証 stage（= exit code）。2（取得失敗）は取得層 `scrape-serebii.ts` が判定し本関数は扱わない。 */
 export type Stage = 0 | 3 | 4;
@@ -62,6 +62,34 @@ export function validateSpecies(p: ParsedSpecies): ValidationResult {
   const missingFields = missingFieldsOf(p);
   if (missingFields.length > 0) return { stage: 3, missingFields, issues: [] };
   const issues = healthIssuesOf(p);
+  if (issues.length > 0) return { stage: 4, missingFields: [], issues };
+  return { stage: 0, missingFields: [], issues: [] };
+}
+
+/** 持ち物ページの件数・健全性の違反を集める（stage 4 の源）。 */
+function itemIssuesOf(p: ParsedItems): string[] {
+  const issues: string[] = [];
+  for (const it of p.items) {
+    if (!isCatalogIdShape(it.id)) issues.push(`item id shape: ${it.slug || it.name}`);
+    if (it.category === "mega-stone" && it.megaStoneFor === null) {
+      issues.push(`mega stone missing target: ${it.id}`);
+    }
+    if (it.megaStoneFor !== null && !isCatalogIdShape(it.megaStoneFor)) {
+      issues.push(`mega target shape: ${it.megaStoneFor}`);
+    }
+  }
+  return issues;
+}
+
+/**
+ * 持ち物ページのパース結果を検証し stage（exit code）を判定する。
+ * - stage 3 = schema 欠落: 1 件も持ち物が取れていない（セクション見出し / 表構造の取りこぼし）。
+ * - stage 4 = 健全性: id が catalog id 形不適合 / メガストーンにメガ先欠落 / メガ先 id 形不適合。
+ * - stage 0 = 健全。
+ */
+export function validateItems(p: ParsedItems): ValidationResult {
+  if (p.items.length === 0) return { stage: 3, missingFields: ["items"], issues: [] };
+  const issues = itemIssuesOf(p);
   if (issues.length > 0) return { stage: 4, missingFields: [], issues };
   return { stage: 0, missingFields: [], issues: [] };
 }

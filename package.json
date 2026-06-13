@@ -24,6 +24,7 @@
     "check:yaml-style": "node src/cli/index.ts check:yaml-style",
     "analyze:coverage": "node src/cli/index.ts analyze:coverage",
     "fetch:data": "node scripts/fetch-pokeapi.ts",
+    "fetch:serebii": "node scripts/fetch-serebii.ts",
     "materialize": "node scripts/materialize.ts",
     "scrape:serebii": "node scripts/scrape-serebii.ts",
     "generate:data": "node scripts/generate.ts",

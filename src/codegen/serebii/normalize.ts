@@ -39,6 +39,24 @@ export function toCatalogId(
 /** 決定論 kebab では catalog id を復元できない表示名の上書き表（判明次第追記・既定は空）。 */
 export const EXCEPTIONS: Readonly<Record<string, string>> = {};
 
+/**
+ * 持ち物の表示名 → catalog id 上書き表（技 / 特性の `EXCEPTIONS` と別管理）。Serebii items.shtml の
+ * item slug は圧縮形（`choicescarf` / `never-meltice`）で catalog / PokeAPI slug（`choice-scarf` /
+ * `never-melt-ice`）とずれ、**圧縮 slug からはハイフン位置を復元できない**。よって正規化は技 / 特性と同様
+ * **表示名**（`Choice Scarf` / `Never-Melt Ice`）を入力に決定論 kebab 化する。決定論変換で復元できない綴りの
+ * 持ち物が判明したらここへ追記する（既定は空）。
+ */
+export const ITEM_EXCEPTIONS: Readonly<Record<string, string>> = {};
+
+/**
+ * 持ち物の表示名 → catalog id（kebab-case）。`toCatalogId` を `ITEM_EXCEPTIONS` で適用する薄いラッパ。
+ * 未知 slug を新規 catalog id として勝手に作らないガードは、`normalizeAgainstCatalog(name, known,
+ * ITEM_EXCEPTIONS)` を用いる（catalog 書き込み = Phase 3 がそれで未知を弾く）。
+ */
+export function normalizeItemName(name: string): string {
+  return toCatalogId(name, ITEM_EXCEPTIONS);
+}
+
 /** 照合結果: 正規化 id と、既知 catalog id 集合に存在するか（未知 = 新規作成ガード対象）。 */
 export interface NormalizedId {
   id: string;
