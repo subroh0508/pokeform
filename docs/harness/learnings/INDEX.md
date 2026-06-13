@@ -30,6 +30,9 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #67 | 02 Phase 11 ADR の可変 plan 参照除去 + adr.md codify | 2026-06-10 | 02-data-model-redesign/phase-11 | draft | [2026-06-10-pr-67.md](./2026-06-10-pr-67.md) |
 | #69 | 02 Phase 10 名前/タイプ相性 SoT を catalog YAML へ・abilities/items id-only 化 | 2026-06-10 | 02-data-model-redesign/phase-10 | draft | [2026-06-10-pr-69.md](./2026-06-10-pr-69.md) |
 | #70 | 02 PokeAPI 除外/構造データ catalog 化/data README フェーズ挿入 + renumber | 2026-06-12 | 02-data-model-redesign/phase-12〜15 | draft | [2026-06-12-pr-70.md](./2026-06-12-pr-70.md) |
+| #72 | 02 Phase 12 PokeAPI を Champions legality/技威力の信頼源から除外（learnset 撤去・技メタ SoT 移設・ADR 0026） | 2026-06-13 | 02-data-model-redesign/phase-12 | draft | [2026-06-13-pr-72.md](./2026-06-13-pr-72.md) |
+| #73 | 02 Phase 13 構造データ SoT を catalog へ・materialize 新設・generate raw 非依存・overrides 廃止（ADR 0027） | 2026-06-13 | 02-data-model-redesign/phase-13 | draft | [2026-06-13-pr-73.md](./2026-06-13-pr-73.md) |
+| #74 | 02 Phase 14 data/ ディレクトリ索引 README をポインタ式で追加 | 2026-06-13 | 02-data-model-redesign/phase-14 | draft | [2026-06-13-pr-74.md](./2026-06-13-pr-74.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
