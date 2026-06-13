@@ -6,14 +6,29 @@
 [`.claude/rules/data-pipeline.md`](../.claude/rules/data-pipeline.md) ほかの rule・[`architecture.md`](../docs/plan/01-mvp/architecture.md)・
 [`docs/adr/`](../docs/adr/) にあり、本 README はそこへ誘導する。詳細はリンク先を参照（このファイルには重複させない）。
 
-## データの流れ（1 行サマリ）
+## データの流れ
 
-```
-PokeAPI  →fetch:data→  raw/  →materialize→  champions/catalog (SoT)  →generate:data→  generated/
+3 系統の情報源（① Serebii 第一優先 / ② 補助裏取り / ③ PokeAPI 構造データ）が、**skill 著述の辺**（① + ② →
+`survey-regulation`）と**機械転記の辺**（③ → `fetch:data` → raw → `materialize`）の **2 系統で catalog (SoT) に合流**し、
+`generate:data` が catalog を変換して `generated/` を出力する。
+
+```mermaid
+flowchart LR
+    SB["① Serebii Champions 図鑑 / items.shtml<br/>第一優先=正（解禁種族 / 全技 / 技メタ / 解禁持ち物）"]
+    AUX["② Game8 / Victory Road / Bulbapedia<br/>補助=件数裏取り"]
+    API["③ PokeAPI<br/>構造データ取得元（種族値 / タイプ / 特性 / dex / category）"]
+
+    SB -->|skill 著述| SR["survey-regulation skill"]
+    AUX -.->|件数突き合わせ| SR
+    API -->|機械転記| RAW["raw/<br/>(.gitignore・取得キャッシュ)"]
+    RAW -->|materialize| CAT
+    SR -->|skill 著述の辺| CAT["champions/catalog (SoT)<br/>+ regulations"]
+    CAT -->|generate:data| GEN["generated/ (コミット)"]
 ```
 
 - `raw/` は `materialize` の**転記元キャッシュ**（`.gitignore`・`generate` は読まない）。
-- 構造データ（種族値 / タイプ / 特性 / 図鑑番号 / 持ち物 category）の **SoT は catalog YAML**。技 / 名前 / 解禁は PokeAPI 非依存で skill-authored（技威力 / legality = **Serebii 第一優先**）。
+- 構造データ（種族値 / タイプ / 特性 / 図鑑番号 / 持ち物 category）の **SoT は catalog YAML**。技 / 名前 / 解禁は PokeAPI 非依存で skill-authored（技威力 / legality = **① Serebii 第一優先**）。
+- **情報源の役割・関係性（① 第一優先 / ② 補助裏取り / ③ 構造データ取得元・突き合わせ原則）の SoT** は [`survey-regulation` の `serebii-sourcing.md`](../.claude/skills/survey-regulation/references/serebii-sourcing.md) の「情報源の役割・関係性」節。本 README はそこへ誘導する索引（重複させない）。
 - **責務分離**: `raw/` の存在担保は `survey-regulation` **skill の責務**（手順で `fetch:data` → `materialize` の順を保証）。`materialize` / `generate` などスクリプトは前提が揃っている前提で動き、欠けたら **fail-fast**（責務の二重化を避ける）。
 - 詳細は [`data-pipeline.md`](../.claude/rules/data-pipeline.md) / [ADR 0012](../docs/adr/0012-vendor-pokeapi-data.md)（vendor 方式）/ [ADR 0026](../docs/adr/0026-pokeapi-not-champions-legality-source.md)（Serebii 第一優先）/ [ADR 0027](../docs/adr/0027-structural-data-catalog-sot.md)（catalog SoT・generate raw 非依存）。
 

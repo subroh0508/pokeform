@@ -58,6 +58,8 @@ PokeAPI を **取得元**に vendor 方式で取り込み、構造データの *
 
 全項目の **SoT は catalog YAML**（`generate.ts` は raw を読まない・ADR 0027）。構造データは PokeAPI を**取得元**とし、`materialize.ts` が raw → catalog へ転記する。技 / 名前 / 解禁は PokeAPI 非依存で skill-authored。
 
+> **情報源の役割・関係性のポインタ**: 本表は**パイプライン機構**（どの項目がどこから来て・どこが SoT か・誰が転記するか）の SoT。一方、解禁データの**情報源の役割・関係性**（① Serebii = 第一優先の正 / ② Game8 等 = 補助・件数裏取り / ③ PokeAPI = 構造データ取得元・突き合わせ原則）の SoT は [`survey-regulation` の `references/serebii-sourcing.md`](../skills/survey-regulation/references/serebii-sourcing.md) の「情報源の役割・関係性」節にある（ここでは二重記述しない）。
+
 | 要求項目 | 取得元 | SoT（generate の入力） | 転記 |
 |---|---|---|---|
 | 全国図鑑番号 | `pokemon-species.id` | `catalog/species.yaml` の `dex` | `materialize` |
