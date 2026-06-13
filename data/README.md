@@ -60,7 +60,8 @@ PokeAPI  →fetch:data→  raw/  →materialize→  champions/catalog (SoT)  →
 - **育成済み個体 YAML を作成・検証**: [`author-individual`](../.claude/skills/author-individual/SKILL.md)（per-reg 種族 dex の許容値に絞り `check:individual` で検証。個体は `data/champions/` ではなく利用者の team 配下）。
 - **構造データのみ取得し直す**: `fetch:data`（raw 取得）→ `materialize`（raw → catalog 転記・**append/既存尊重**で hand-authored 修正を上書きしない）→ `generate:data`（再生成）。
 - **生成物を作り直す**: `generate:data`（catalog / regulations を変換・raw 不在でも動く）。
-- **検証ゲート**: `pnpm verify`（型 / カバレッジ100% / Biome）。解禁データの参照整合・schema は `check:regulation`。
+- **検証ゲート**: `pnpm verify`（型 / カバレッジ100% / Biome / **`check:yaml-style`**）。解禁データの参照整合・schema は `check:regulation`。
+- **YAML スタイル**: `data/` 配下の YAML は**全 block スタイル**（flow `[ a, b ]` / `{ k: v }` 禁止）。`check:yaml-style`（`pnpm pokeform check:yaml-style data`）が flow 混入を AST ベースで検出して非0終了する（local `.githooks/pre-commit` + CI `pnpm verify` で強制）。詳細は [data-pipeline.md](../.claude/rules/data-pipeline.md)。
 
 > 運用ルール（`raw/` の gitignore 方針・生成物の手書き編集禁止・取得元 / SoT / 転記の対応表）の SoT は
 > [`data-pipeline.md`](../.claude/rules/data-pipeline.md) にある。本 README はその索引であり、方針の実体は持たない

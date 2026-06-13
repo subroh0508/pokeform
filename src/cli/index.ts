@@ -4,6 +4,7 @@ import type { Lang } from "../types/party.ts";
 import { runAnalyzeCoverage } from "./commands/analyze-coverage.ts";
 import { runCheckParty } from "./commands/check-party.ts";
 import { runCheckRegulation } from "./commands/check-regulation.ts";
+import { runCheckYamlStyle } from "./commands/check-yaml-style.ts";
 import { runCompile, runTypecheck } from "./commands/compile.ts";
 import { runStat } from "./commands/stat.ts";
 
@@ -60,6 +61,16 @@ cli
   .option("--lang <lang>", "表示言語 (ja|en)", { default: "ja" })
   .action((path: string, options: { lang?: string }) => {
     process.exitCode = runCheckRegulation(path, toLang(options.lang));
+  });
+
+cli
+  .command(
+    "check:yaml-style [path]",
+    "data 配下 YAML の flow スタイル混入を検出（block 強制ゲート・非0終了）",
+  )
+  .option("--lang <lang>", "表示言語 (ja|en)", { default: "ja" })
+  .action(async (path: string | undefined, options: { lang?: string }) => {
+    process.exitCode = await runCheckYamlStyle(path ?? "data", toLang(options.lang));
   });
 
 cli
