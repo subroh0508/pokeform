@@ -42,8 +42,8 @@ flowchart TD
 - [x] [Phase 9 — 小データセット検証投入（garchomp / charizard / gengar の 3 種・パイプライン本格スケール de-risk）](./phase-09-smoke-three-species.md)
 - [x] [Phase 10 — catalog 日英名 authoring + generate 名前変換専任化（catalog `id → { ja, en }`・名前 SoT を YAML へ・types は名前+相性も YAML・abilities/items 生成 TS を id-only 化）](./phase-10-catalog-name-authoring.md)
 - [x] [Phase 11 — ADR の可変 plan 参照を除去 + adr.md へ方針 codify（harness hygiene）](./phase-11-adr-plan-hygiene.md)
-- [ ] [Phase 12 — PokeAPI を Champions レギュレーション情報・技威力の信頼源から外す（決定 + ADR + harness 追従 + 検証）](./phase-12-pokeapi-exclusion.md)
-- [ ] [Phase 13 — 構造データの catalog 化（種族値/タイプ/特性/図鑑番号/category を YAML SoT へ・materialize 新設・generate raw 非依存・overrides 廃止）](./phase-13-structural-data-catalog.md)
+- [x] [Phase 12 — PokeAPI を Champions レギュレーション情報・技威力の信頼源から外す（決定 + ADR + harness 追従 + 検証）](./phase-12-pokeapi-exclusion.md)
+- [x] [Phase 13 — 構造データの catalog 化（種族値/タイプ/特性/図鑑番号/category を YAML SoT へ・materialize 新設・generate raw 非依存・overrides 廃止）](./phase-13-structural-data-catalog.md)
 - [ ] [Phase 14 — data/ ディレクトリ説明 README（ポインタ式・何を表す / 取得元 / SoT / 取得・更新 skill を索引化）](./phase-14-data-directory-readme.md)
 - [ ] [Phase 15 — M-A 全データ投入（全186種 + 全 movepool）](./phase-15-ma-full-data.md)
 

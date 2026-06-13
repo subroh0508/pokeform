@@ -23,6 +23,7 @@
     "check:regulation": "node src/cli/index.ts check:regulation",
     "analyze:coverage": "node src/cli/index.ts analyze:coverage",
     "fetch:data": "node scripts/fetch-pokeapi.ts",
+    "materialize": "node scripts/materialize.ts",
     "generate:data": "node scripts/generate.ts",
     "gen:rules-index": "node scripts/gen-rules-index.ts",
     "prepare": "git config core.hooksPath .githooks && node scripts/gen-rules-index.ts"

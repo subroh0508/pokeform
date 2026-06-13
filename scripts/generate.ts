@@ -1,14 +1,16 @@
 /**
- * generate.ts — `data/raw/`（PokeAPI キャッシュ）と `data/champions/`（手動）を合成し
- * `data/generated/`（コミット）へ型 + 値を出力する。vendor 方式（ADR 0012）の生成段。
+ * generate.ts — `data/champions/`（手動・catalog SoT）を変換して `data/generated/`（コミット）へ
+ * 型 + 値を出力する。vendor 方式（ADR 0012）の生成段。**PokeAPI 取得キャッシュは一切読まない**（構造
+ * データ（種族値 / タイプ / 特性 id / 図鑑番号 / 持ち物 category）の SoT も catalog YAML へ移設済み・ADR 0027）。
+ * キャッシュ → catalog の転記は専任 `scripts/materialize.ts` が担い、generate は catalog のみを変換する。
  *
  * 出力: types / moves / abilities / items / species-base（reg 不変 base view）/ regulations（1 レギュ =
  * 1 ディレクトリ・per-reg 種族 dex を同梱）/ names。各 Dex は
  * `as const satisfies Record<string, XxxBase>` から `type XxxDex = typeof xxxDex` /
  * `XxxId = keyof XxxDex` を派生（値と型を単一ソース化・[[type-conventions]]）。生成後に
- * Biome で整形して機械ゲート（biome check）と一致させる。手書き編集しない（raw/champions を直す）。
+ * Biome で整形して機械ゲート（biome check）と一致させる。手書き編集しない（champions を直す）。
  *
- * 実行: `pnpm generate:data`（fetch:data 後・ネットワーク不要・決定論的）。
+ * 実行: `pnpm generate:data`（ネットワーク不要・決定論的・raw 非依存）。
  */
 import { execFileSync } from "node:child_process";
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -17,7 +19,6 @@ import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
 
 const ROOT = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
-const RAW = join(ROOT, "data", "raw");
 const CH = join(ROOT, "data", "champions");
 const OUT = join(ROOT, "data", "generated");
 
@@ -26,9 +27,16 @@ interface NamePair {
   ja: string;
   en: string;
 }
+/** 種族の構造データ（catalog SoT・materialize が raw から転記・ADR 0027）。 */
+interface SpeciesStructural {
+  dex: number;
+  types: string[];
+  stats: { H: number; A: number; B: number; C: number; D: number; S: number };
+  abilities: string[];
+}
 interface SpeciesCatalog {
-  // id -> 日英名。種族値・タイプ・特性など構造データは引き続き data/raw 由来。
-  pokemon: Record<string, NamePair>;
+  // id -> 日英名 + 構造データ（種族値 / タイプ / 特性 id / 図鑑番号）。catalog が SoT（ADR 0027）。
+  pokemon: Record<string, NamePair & SpeciesStructural>;
   // 1 base 種族 -> メガ先 SpeciesId の配列（1 種族複数メガを許容・ADR 0022）。
   megaLinks?: Record<string, string[]>;
 }
@@ -47,8 +55,9 @@ interface MovesCatalog {
   moves: Record<string, MoveMeta>;
 }
 interface ItemsCatalog {
-  // id -> 日英名 + megaStoneFor（旧 itemMeta を各エントリへ統合・Phase 10）。category は data/raw 由来。
-  items: Record<string, NamePair & { megaStoneFor?: string }>;
+  // id -> 日英名 + megaStoneFor（旧 itemMeta を各エントリへ統合・Phase 10）+ category（catalog SoT・
+  // materialize が raw から転記・ADR 0027）。
+  items: Record<string, NamePair & { megaStoneFor?: string; category: string }>;
 }
 interface AbilitiesCatalog {
   // id -> 日英名。生成 abilities.ts は id のみ（name は持たない）。
@@ -76,9 +85,6 @@ const regSpeciesKeys = (r: Record<string, unknown>): string[] =>
 /** 種族キーの解禁内容（moves / mega）を取り出す。 */
 const speciesAllowOf = (r: Record<string, unknown>, sid: string): SpeciesAllow =>
   r[sid] as SpeciesAllow;
-
-const raw = (category: string, name: string): Record<string, unknown> =>
-  JSON.parse(readFileSync(join(RAW, category, `${name}.json`), "utf8")) as Record<string, unknown>;
 
 const ch = <T>(file: string): T => parseYaml(readFileSync(join(CH, file), "utf8")) as T;
 
@@ -156,17 +162,13 @@ for (const [m, meta] of Object.entries(movesCat.moves)) {
 
 // --- abilities（catalog/abilities.yaml を正本に id のみ生成・name は持たない・Phase 10） ------
 // 効果定義は後続フェーズで足す前提で生成ファイル自体は残す。種族の特性はこの id を参照する。
-const pokeJson: Record<string, Record<string, unknown>> = {};
-for (const slug of speciesSlugs) {
-  pokeJson[slug] = raw("pokemon", slug);
-}
-// 参照整合: 各種族の特性が abilities カタログに存在することを検証（append-only マスターの担保）。
+// 参照整合: 各種族の特性（catalog SoT・ADR 0027）が abilities カタログに存在することを検証する。
 const abilitySet = new Set(Object.keys(abilitiesCat.abilities));
 for (const slug of speciesSlugs) {
-  for (const a of pokeJson[slug]?.abilities as { ability: { name: string } }[]) {
-    if (!abilitySet.has(a.ability.name)) {
+  for (const a of speciesCat.pokemon[slug].abilities) {
+    if (!abilitySet.has(a)) {
       throw new Error(
-        `ability '${a.ability.name}' of '${slug}' not in catalog/abilities.yaml (append-only catalog)`,
+        `ability '${a}' of '${slug}' not in catalog/abilities.yaml (append-only catalog)`,
       );
     }
   }
@@ -176,13 +178,12 @@ for (const a of Object.keys(abilitiesCat.abilities).sort()) {
   abilityEntries[a] = { id: a };
 }
 
-// --- items（id-only + category(raw) + megaStoneFor(yaml)・name は持たない・Phase 10） -----------
+// --- items（id-only + category(catalog) + megaStoneFor(yaml)・name は持たない・Phase 10/ADR 0027） --
 const itemEntries: Record<string, unknown> = {};
 for (const [i, meta] of Object.entries(itemsCat.items)) {
-  const j = raw("item", i);
   const entry: Record<string, unknown> = {
     id: i,
-    category: (j.category as { name: string }).name,
+    category: meta.category,
   };
   if (meta.megaStoneFor) entry.megaStoneFor = meta.megaStoneFor;
   itemEntries[i] = entry;
@@ -242,33 +243,26 @@ const camel = (id: string): string =>
 // per-reg dex / species-base / names の素材にする。per-reg の習得技は YAML 由来（per-reg dex 構築時に採用）。
 const speciesInfo: Record<string, Record<string, unknown>> = {};
 for (const slug of speciesSlugs) {
-  const poke = pokeJson[slug];
-  if (!poke) throw new Error(`missing pokemon json: ${slug}`);
-  const speciesName = (poke.species as { name: string }).name;
-  const speciesJson = raw("pokemon-species", speciesName);
-  // 名前は catalog/species.yaml 由来（PokeAPI を名前の取得元にしない・Phase 10）。dex は raw 由来。
-  const nm = speciesCat.pokemon[slug];
-  const name = { en: nm.en, ja: nm.ja };
-  const base = { hp: 0, attack: 0, defense: 0, spAttack: 0, spDefense: 0, speed: 0 };
-  const statMap: Record<string, keyof typeof base> = {
-    hp: "hp",
-    attack: "attack",
-    defense: "defense",
-    "special-attack": "spAttack",
-    "special-defense": "spDefense",
-    speed: "speed",
+  // 名前・種族値・タイプ・特性・図鑑番号とも catalog/species.yaml 由来（構造データ SoT を raw から
+  // catalog へ移設・materialize が転記・ADR 0027）。generate は raw を読まない。
+  const cat = speciesCat.pokemon[slug];
+  const name = { en: cat.en, ja: cat.ja };
+  // 能力ポイント表記 H/A/B/C/D/S を生成形（hp/attack/defense/spAttack/spDefense/speed）へ写す。
+  const base = {
+    hp: cat.stats.H,
+    attack: cat.stats.A,
+    defense: cat.stats.B,
+    spAttack: cat.stats.C,
+    spDefense: cat.stats.D,
+    speed: cat.stats.S,
   };
-  for (const s of poke.stats as { base_stat: number; stat: { name: string } }[]) {
-    const key = statMap[s.stat.name];
-    if (key) base[key] = s.base_stat;
-  }
   const info: Record<string, unknown> = {
-    dex: speciesJson.id,
+    dex: cat.dex,
     id: slug,
     name,
-    types: (poke.types as { type: { name: string } }[]).map((t) => t.type.name),
+    types: cat.types,
     baseStats: base,
-    abilities: (poke.abilities as { ability: { name: string } }[]).map((a) => a.ability.name),
+    abilities: cat.abilities,
   };
   const mega = speciesCat.megaLinks?.[slug];
   if (mega && mega.length > 0) info.megaEvolvesTo = mega;
