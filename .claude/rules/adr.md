@@ -53,3 +53,7 @@ ADR 本文は **可変な plan ファイル（`docs/plan/**` の phase doc / `OV
 3. 旧 ADR を **`docs/adr/archive/` へ `git mv`** して退避する（アクティブな `docs/adr/*.md` を「現行の決定」に絞る）。`deprecated`（後継なし撤回）も同様に archive へ退避してよい。番号は退避後も retired として再利用しない。
 
 これで「いつ・なぜ方針が変わったか」が連番ログとして連続し、アクティブ一覧は現行の決定だけになる。運用の詳細は `docs/adr/README.md` を参照。
+
+### 決定を変えたら関連 memory の追従も点検する
+
+ADR で決定を覆す / 大きく変えたとき（supersede・部分改訂）は、リポジトリ内の rule / skill / doc だけでなく、**リポジトリ外の auto-memory**（`~/.claude/projects/<...>/memory/*.md`）に旧決定を前提とした記述が残っていないかを点検し、あれば新決定へ追従させる。理由は、memory はリポジトリの SoT 更新に**自動追従しない**ため、ADR を覆しても古い決定を保持し続け、後続セッションが陳腐化した方針を recall して誤る（実例: ADR 0026 で PokeAPI learnset 照合を撤去した後も、関連 memory に「learnset で検証する」旨が残存していた drift）。点検の起動点は finish-phase の追従点検（[`finish-phase`](../skills/finish-phase/SKILL.md) 手順 5）に置く。
