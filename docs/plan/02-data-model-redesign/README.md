@@ -27,13 +27,14 @@ flowchart TD
     P12 --> P13[phase-13 — 構造データの catalog 化]
     P13 --> P14[phase-14 — data/ ディレクトリ説明 README]
     P14 --> P15[phase-15 — data/ 全 YAML ブロックスタイル強制ゲート]
-    P15 --> P20[phase-20 — M-A 全データ投入]
     P16[phase-16 — ADR 用語整備の例外] --> P18[phase-18 — 用語 rename + 文言展開]
     P17[phase-17 — 運用方針 + 統一用語確定] --> P18
     P17 --> P19[phase-19 — 情報源 SoT + フロー図 Mermaid]
     P18 -. churn最小化 .-> P19
-    P19 --> P20
 ```
+
+> 旧 Phase 20（M-A 全データ投入）は [`03-survey-regulation-rework`](../03-survey-regulation-rework/README.md) の
+> 最終 phase（[phase-07](../03-survey-regulation-rework/phase-07-ma-full-data.md)）へ移動した。
 
 ## フェーズ一覧（この順で実施）
 
@@ -56,7 +57,11 @@ flowchart TD
 - [x] [Phase 17 — data/champions データ運用方針 + 統一用語の確定（skill 著述・人間直編集 NG・統一用語 skill-authored を ADR + data-pipeline.md に確定）](./phase-17-data-authoring-policy.md)
 - [x] [Phase 18 — 用語 rename + 人間直編集文言の全資産展開（hand-authored → skill-authored・ADR 本文含む・手動編集前提文言を改訂）](./phase-18-skill-authored-rename.md)
 - [x] [Phase 19 — 情報源の役割・関係性の SoT 整理 + フロー図の Mermaid 化・改訂（Serebii 第一優先 / 補助裏取り / PokeAPI 構造データの 3 系統・2 系統合流図）](./phase-19-source-roles-and-flow.md)
-- [ ] [Phase 20 — M-A 全データ投入（全186種 + 全 movepool）](./phase-20-ma-full-data.md)
+
+> **旧 Phase 20（M-A 全データ投入）は [`03-survey-regulation-rework`](../03-survey-regulation-rework/README.md) の
+> 最終 phase（[phase-07](../03-survey-regulation-rework/phase-07-ma-full-data.md)）へ移動**した。新パイプライン
+> （決定論スクレイパー + 自己修復）経由で投入するため。02 は Phase 1-19 で完了とする（完了済み phase doc 内の
+> 「Phase 20」への forward 参照は当時の計画スナップショットとして凍結）。
 
 > 計画群全体の受け入れ基準は [`OVERVIEW.md` の「受け入れ基準」節](./OVERVIEW.md#受け入れ基準) を参照。
 
