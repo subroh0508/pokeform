@@ -25,6 +25,7 @@
     "analyze:coverage": "node src/cli/index.ts analyze:coverage",
     "fetch:data": "node scripts/fetch-pokeapi.ts",
     "materialize": "node scripts/materialize.ts",
+    "scrape:serebii": "node scripts/scrape-serebii.ts",
     "generate:data": "node scripts/generate.ts",
     "gen:rules-index": "node scripts/gen-rules-index.ts",
     "prepare": "git config core.hooksPath .githooks && node scripts/gen-rules-index.ts"
@@ -39,6 +40,7 @@
     "@biomejs/biome": "2.4.16",
     "@types/node": "^25.9.2",
     "@vitest/coverage-v8": "4.1.8",
+    "cheerio": "^1.2.0",
     "typescript": "6.0.3",
     "vitest": "4.1.8"
   }

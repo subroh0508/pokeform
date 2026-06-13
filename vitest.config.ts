@@ -12,7 +12,9 @@ export default defineConfig({
         "**/*.test.ts",
         "**/__fixtures__/**",
         "src/cli/**",
-        "src/codegen/**",
+        // codegen のトップレベルは薄い配線で除外。判断分岐を持つ純関数を切り出した
+        // `src/codegen/serebii/**`（parse / schema / normalize）は 100% ゲートで網羅する（[[testing]]）。
+        "src/codegen/*.ts",
         "src/io/**",
         "src/index.ts",
       ],
