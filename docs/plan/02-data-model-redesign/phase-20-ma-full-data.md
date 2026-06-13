@@ -1,4 +1,4 @@
-# Phase 16 — M-A 全データ投入（全186種 + 全 movepool）
+# Phase 20 — M-A 全データ投入（全186種 + 全 movepool）
 
 ## 目的 / スコープ
 

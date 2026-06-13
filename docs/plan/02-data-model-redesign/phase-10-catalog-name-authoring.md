@@ -7,7 +7,7 @@
 id の列挙しか持たない。これを **catalog YAML に `id → { ja, en }` 形式で手記録する正本**へ変え、`generate.ts` は
 名前について **YAML → TS 変換に専念**する（PokeAPI を名前の取得元にしない）。あわせて `data/generated` の
 **abilities / items の生成 TS から name オブジェクトを除去**し（species / moves / types は name 保持）、生成
-ファイル自体は将来の効果（特性・持ち物の効果）定義のため残す。Phase 16（全量投入）の手前に置き、全186種・
+ファイル自体は将来の効果（特性・持ち物の効果）定義のため残す。Phase 20（全量投入）の手前に置き、全186種・
 全技・全持ち物・全特性を「ja/en 名を含めて」materialize できるスキーマを先に確定する。
 
 - スコープ内:
@@ -29,7 +29,7 @@ id の列挙しか持たない。これを **catalog YAML に `id → { ja, en }
     `load-party.ts` / `party-analysis.ts`）を追従。
   - catalog の ja/en 欠落を検出する authoring ゲート（`generate.ts` / `check:regulation` のいずれか）を追加。
 - スコープ外:
-  - **M-A 全186種の投入**（Phase 16 が担う）。本 phase は**既存 catalog 分の移行のみ**。
+  - **M-A 全186種の投入**（Phase 20 が担う）。本 phase は**既存 catalog 分の移行のみ**。
   - 新規 id の ja/en を Web 調査して足すこと（既存分の取得元付け替え + 移行に限定）。
   - **species / moves の構造データ**（種族値・タイプ・`damageClass` 等）の YAML 化（vendor 方式のまま raw 由来を
     維持・ADR 0012）。本 phase で raw 非依存になるのは **types（name + 相性）と全エンティティの名前**に限る。
@@ -41,7 +41,7 @@ id の列挙しか持たない。これを **catalog YAML に `id → { ja, en }
   名前取得元の付け替えを確定構造の上で行えること。
 - **Phase 9（3 種小データセット検証投入）完了**。catalog に実データ（3 種 + 技 + 持ち物 + 特性）が入っており、
   移行（既存生成物 → YAML 書き戻し）の lossless 性を実データで検証できること。
-- **Phase 16（全量投入）の手前**: 名前を YAML 記録するスキーマを全量投入の前に確定し、`survey-regulation` skill が
+- **Phase 20（全量投入）の手前**: 名前を YAML 記録するスキーマを全量投入の前に確定し、`survey-regulation` skill が
   全186種の ja/en も同時に materialize できるようにする（やり直しを避ける）。
 - 確定済み rule: [[data-pipeline]] / [[cli-and-io]] / [[type-conventions]] / [[testing]]。
 - 関連 ADR: [ADR 0012](../../adr/0012-vendor-pokeapi-data.md)（vendor 方式・本 phase は**名前部分のみ** hand-authored へ
@@ -74,7 +74,7 @@ id の列挙しか持たない。これを **catalog YAML に `id → { ja, en }
 
 ## この Phase で育てるハーネス（rule・skill）
 
-- **`survey-regulation` skill に「ja/en 名も catalog YAML へ記録する」手順を追記**（Phase 16 が全186種で利用）。
+- **`survey-regulation` skill に「ja/en 名も catalog YAML へ記録する」手順を追記**（Phase 20 が全186種で利用）。
   → `skill-creator` で改修・[[skill-authoring]]。
 - **ADR を起票**: 名前（ja/en・types 含む）の SoT を「PokeAPI 由来の生成」から「hand-authored catalog YAML」へ移し、
   abilities/items の生成 dex を id-only（+ items 構造）へ縮小する決定。ADR 0012（vendor 方式）の**名前部分の改訂**として
@@ -119,5 +119,5 @@ id の列挙しか持たない。これを **catalog YAML に `id → { ja, en }
 - **意味的に atomic な 1 PR**: catalog 形式・`generate.ts`・型（`AbilityBase`/`ItemBase`）・生成物は同時に変えないと
   ビルドが通らない（途中状態が壊れる）ため、分割せず 1 PR とする（[[planning]] の意味的完結性優先）。生成物の
   大量差分はレビュー容易性のため「手動カタログ差分」「`generate.ts` 差分」「生成物差分」を分けて説明する。
-- **Phase 16 への申し送り**: 全量投入時は catalog 各エントリに ja/en を含めて materialize する。`survey-regulation`
+- **Phase 20 への申し送り**: 全量投入時は catalog 各エントリに ja/en を含めて materialize する。`survey-regulation`
   skill にその手順が入っていること（本 phase で追記）を前提にする。
