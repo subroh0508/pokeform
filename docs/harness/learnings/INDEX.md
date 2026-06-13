@@ -35,6 +35,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #74 | 02 Phase 14 data/ ディレクトリ索引 README をポインタ式で追加 | 2026-06-13 | 02-data-model-redesign/phase-14 | draft | [2026-06-13-pr-74.md](./2026-06-13-pr-74.md) |
 | #76 | 02 Phase 15 挿入 + M-A 全量 Phase 16 へ renumber（計画化・plans-new） | 2026-06-13 | 02-data-model-redesign | draft | [2026-06-13-pr-76.md](./2026-06-13-pr-76.md) |
 | #77 | 02 Phase 15 data/ 全 YAML ブロックスタイル強制ゲート新設（AST 検出 + check コマンド + materialize block 化・ADR 0028） | 2026-06-13 | 02-data-model-redesign/phase-15 | draft | [2026-06-13-pr-77.md](./2026-06-13-pr-77.md) |
+| #80 | 02 に phase-16〜19（data 著述方針の明確化）を挿入し M-A 投入を Phase 20 へ renumber（計画 scaffolding・plans-new） | 2026-06-13 | 02-data-model-redesign | draft | [2026-06-13-pr-80.md](./2026-06-13-pr-80.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
