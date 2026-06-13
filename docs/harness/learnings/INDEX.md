@@ -40,6 +40,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #84 | 02 Phase 17 data/champions 運用方針 + 統一用語 skill-authored 確定（ADR 0030） | 2026-06-13 | 02-data-model-redesign/phase-17 | draft | [2026-06-13-pr-84.md](./2026-06-13-pr-84.md) |
 | #85 | 02 Phase 18 skill-authored 統一用語 + 人間直編集 NG を全資産展開（30 files・ADR 本文 rename） | 2026-06-13 | 02-data-model-redesign/phase-18 | draft | [2026-06-13-pr-85.md](./2026-06-13-pr-85.md) |
 | #86 | 02 Phase 19 情報源 3 系統の役割 SoT 集約 + フロー図 Mermaid 化 | 2026-06-13 | 02-data-model-redesign/phase-19 | draft | [2026-06-13-pr-86.md](./2026-06-13-pr-86.md) |
+| #90 | 03 計画群 survey-regulation 刷新を plans-new で起票 + phase-20 を 03 phase-07 へ計画群間移動 | 2026-06-13 | 03-survey-regulation-rework | draft | [2026-06-13-pr-90.md](./2026-06-13-pr-90.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
