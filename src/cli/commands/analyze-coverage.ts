@@ -1,5 +1,6 @@
 import { itemDex } from "../../../data/generated/items.ts";
-import { moveDex } from "../../../data/generated/moves.ts";
+// 攻撃範囲分析は per-game 技メタ（type/damageClass）を引く（Champions 固有値・Phase 11 / ADR 0034）。
+import { moveStatsDex } from "../../../data/generated/regulations/champions/moves.ts";
 import { speciesBaseDex } from "../../../data/generated/species-base.ts";
 import { typeDex } from "../../../data/generated/types.ts";
 import { analyzeCoverage, type CoverageReport } from "../../domain/coverage.ts";
@@ -43,7 +44,7 @@ export const runAnalyzeCoverage = async (path: string, lang: Lang): Promise<numb
   let vulnerable = false;
   for (const file of files) {
     const { name, party } = await loadParty(file);
-    const members = toCoverageMembers(party, speciesBaseDex, moveDex, itemDex);
+    const members = toCoverageMembers(party, speciesBaseDex, moveStatsDex, itemDex);
     const report = analyzeCoverage(members, chart);
     if (report.vulnerable) vulnerable = true;
     const head = report.vulnerable

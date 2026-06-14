@@ -234,8 +234,8 @@ flowchart LR
     RAW --> M["scripts/materialize.ts<br/>raw→catalog 転記・fail-fast"]
 
     subgraph CH["data/champions/ (コミット・skill-authored・SoT)"]
-        CAT["catalog/*.yaml<br/>名前 / 技メタ + 構造データ(種族値/タイプ/特性/dex/category)"]
-        REG["regulations/&lt;id&gt;.yaml<br/>解禁種族・per-species moves"]
+        CAT["catalog/*.yaml<br/>名前 + 構造データ(種族値/タイプ/特性/dex/category)"]
+        REG["regulations/&lt;game&gt;/&lt;reg&gt;.yaml<br/>解禁種族・per-species moves<br/>+ &lt;game&gt;/moves.yaml(per-game 技メタ)"]
         R["rules.yaml<br/>能力ポイント 66/32・計算式定数"]
     end
 
@@ -246,7 +246,7 @@ flowchart LR
     GEN --> OUT["data/generated/ (コミット)<br/>Dex 単位 .ts（値 as const → 型派生・単一ソース）"]
 ```
 
-> `data/champions/catalog/*.yaml` は**全データの SoT**（名前・解禁・技メタに加え、構造データ＝種族値 / タイプ / 特性 / 図鑑番号 / category も含む・ADR 0027）。**①②（skill 著述）**は `survey-regulation` が catalog / regulations へ著述し（Serebii 第一優先・ADR 0026）、**③（PokeAPI 構造データ）**は `materialize.ts` が raw → catalog へ機械転記する（fail-fast・append/既存尊重）。`generate.ts` は **catalog のみを変換**し raw を読まない（決定論的）。
+> `data/champions/catalog/*.yaml` は**名前 + 構造データの SoT**（名前に加え、構造データ＝種族値 / タイプ / 特性 / 図鑑番号 / category を含む・ADR 0027）。**技メタ（type/power 等）は per-game の `regulations/champions/moves.yaml` が SoT**（Champions 固有値・ADR 0034）。**①②（skill 著述）**は `survey-regulation` が catalog / regulations へ著述し（Serebii 第一優先・ADR 0034）、**③（PokeAPI 構造データ）**は `materialize.ts` が raw → catalog へ機械転記する（fail-fast・append/既存尊重）。`generate.ts` は **catalog のみを変換**し raw を読まない（決定論的）。
 
 PokeAPI→要求項目の対応（**取得元** = PokeAPI / **SoT** = catalog・転記は `materialize`・ADR 0027）:
 
@@ -258,8 +258,9 @@ PokeAPI→要求項目の対応（**取得元** = PokeAPI / **SoT** = catalog・
 | タイプ | `pokemon.types[]` | `catalog/species.yaml`（`types`） |
 | 特性 | `pokemon.abilities[]`（隠れ特性可否は champions 側フラグ） | `catalog/species.yaml`（`abilities`） |
 | 持ち物 category | `item` エンドポイント（メガストーン含む） | `catalog/items.yaml`（`category`） |
-| **使用できる技（learnset legality）** | **PokeAPI を信頼源にしない（Champions 非対応・ADR 0026）** | `regulations/<game>/<reg>.yaml` の per-species `moves`（Serebii 第一優先） |
-| **技メタ（type / damageClass / power 等）** | **PokeAPI を信頼源にしない（ADR 0026）** | `data/champions/catalog/moves.yaml`（skill-authored） |
+| **使用できる技（learnset legality）** | **PokeAPI を信頼源にしない（Champions 非対応・ADR 0034）** | `regulations/<game>/<reg>.yaml` の per-species `moves`（Serebii 第一優先） |
+| **技名（ja / en）** | **Serebii 表示名 / ja は PokeAPI names（ADR 0032）** | `data/champions/catalog/moves.yaml`（名前 SoT・ゲーム非依存） |
+| **技メタ（type / damageClass / power 等）** | **PokeAPI を信頼源にしない（ADR 0034）** | `data/champions/regulations/champions/moves.yaml`（per-game・Champions 固有値） |
 | **レギュレーション解禁** | **PokeAPI に無し** | `data/champions/regulations/<game>/<reg>.yaml`（per-reg 一本化・ゲームグルーピング・ADR 0021） |
 
 ---

@@ -1,1975 +1,661 @@
-# data/champions/catalog/moves.yaml — 技カタログ（append-only マスター・skill 著述・コミット）。
-# 名前 / type / damageClass / power / accuracy / pp / priority の SoT は本ファイル（skill-authored）。
-# PokeAPI は Champions 非対応のため技メタの信頼源にしない（ADR 0026）。出自は Serebii 第一優先。
+# data/champions/catalog/moves.yaml — 技名カタログ（append-only マスター・skill 著述・コミット）。
+# 名前（id → ja/en）の SoT は本ファイル（名前はゲーム非依存）。技メタ（type/damageClass/power/
+# accuracy/pp/priority）は Champions 固有値のため per-game の regulations/champions/moves.yaml が SoT（ADR 0034）。
 moves:
   earthquake:
     ja: じしん
     en: Earthquake
-    type: ground
-    damageClass: physical
-    power: 100
-    accuracy: 100
-    pp: 10
-    priority: 0
   dragon-claw:
     ja: ドラゴンクロー
     en: Dragon Claw
-    type: dragon
-    damageClass: physical
-    power: 80
-    accuracy: 100
-    pp: 15
-    priority: 0
   stone-edge:
     ja: ストーンエッジ
     en: Stone Edge
-    type: rock
-    damageClass: physical
-    power: 100
-    accuracy: 80
-    pp: 5
-    priority: 0
   swords-dance:
     ja: つるぎのまい
     en: Swords Dance
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 20
-    priority: 0
   outrage:
     ja: げきりん
     en: Outrage
-    type: dragon
-    damageClass: physical
-    power: 120
-    accuracy: 100
-    pp: 10
-    priority: 0
   fire-punch:
     ja: ほのおのパンチ
     en: Fire Punch
-    type: fire
-    damageClass: physical
-    power: 75
-    accuracy: 100
-    pp: 15
-    priority: 0
   extreme-speed:
     ja: しんそく
     en: Extreme Speed
-    type: normal
-    damageClass: physical
-    power: 80
-    accuracy: 100
-    pp: 5
-    priority: 2
   draco-meteor:
     ja: りゅうせいぐん
     en: Draco Meteor
-    type: dragon
-    damageClass: special
-    power: 130
-    accuracy: 90
-    pp: 5
-    priority: 0
   fire-blast:
     ja: だいもんじ
     en: Fire Blast
-    type: fire
-    damageClass: special
-    power: 110
-    accuracy: 85
-    pp: 5
-    priority: 0
   roost:
     ja: はねやすめ
     en: Roost
-    type: flying
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 5
-    priority: 0
   meteor-mash:
     ja: コメットパンチ
     en: Meteor Mash
-    type: steel
-    damageClass: physical
-    power: 90
-    accuracy: 90
-    pp: 10
-    priority: 0
   zen-headbutt:
     ja: しねんのずつき
     en: Zen Headbutt
-    type: psychic
-    damageClass: physical
-    power: 80
-    accuracy: 90
-    pp: 15
-    priority: 0
   bullet-punch:
     ja: バレットパンチ
     en: Bullet Punch
-    type: steel
-    damageClass: physical
-    power: 40
-    accuracy: 100
-    pp: 30
-    priority: 1
   hydro-pump:
     ja: ハイドロポンプ
     en: Hydro Pump
-    type: water
-    damageClass: special
-    power: 110
-    accuracy: 80
-    pp: 5
-    priority: 0
   thunderbolt:
     ja: １０まんボルト
     en: Thunderbolt
-    type: electric
-    damageClass: special
-    power: 90
-    accuracy: 100
-    pp: 15
-    priority: 0
   volt-switch:
     ja: ボルトチェンジ
     en: Volt Switch
-    type: electric
-    damageClass: special
-    power: 70
-    accuracy: 100
-    pp: 20
-    priority: 0
   will-o-wisp:
     ja: おにび
     en: Will-O-Wisp
-    type: fire
-    damageClass: status
-    power: null
-    accuracy: 85
-    pp: 15
-    priority: 0
   flare-blitz:
     ja: フレアドライブ
     en: Flare Blitz
-    type: fire
-    damageClass: physical
-    power: 120
-    accuracy: 100
-    pp: 15
-    priority: 0
   psystrike:
     ja: サイコブレイク
     en: Psystrike
-    type: psychic
-    damageClass: special
-    power: 100
-    accuracy: 100
-    pp: 10
-    priority: 0
   ice-beam:
     ja: れいとうビーム
     en: Ice Beam
-    type: ice
-    damageClass: special
-    power: 90
-    accuracy: 100
-    pp: 10
-    priority: 0
   shadow-ball:
     ja: シャドーボール
     en: Shadow Ball
-    type: ghost
-    damageClass: special
-    power: 80
-    accuracy: 100
-    pp: 15
-    priority: 0
   dark-pulse:
     ja: あくのはどう
     en: Dark Pulse
-    type: dark
-    damageClass: special
-    power: 80
-    accuracy: 100
-    pp: 15
-    priority: 0
   nasty-plot:
     ja: わるだくみ
     en: Nasty Plot
-    type: dark
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 20
-    priority: 0
   acrobatics:
     ja: アクロバット
     en: Acrobatics
-    type: flying
-    damageClass: physical
-    power: 55
-    accuracy: 100
-    pp: 15
-    priority: 0
   aerial-ace:
     ja: つばめがえし
     en: Aerial Ace
-    type: flying
-    damageClass: physical
-    power: 60
-    accuracy: null
-    pp: 20
-    priority: 0
   air-slash:
     ja: エアスラッシュ
     en: Air Slash
-    type: flying
-    damageClass: special
-    power: 75
-    accuracy: 95
-    pp: 15
-    priority: 0
   aqua-jet:
     ja: アクアジェット
     en: Aqua Jet
-    type: water
-    damageClass: physical
-    power: 40
-    accuracy: 100
-    pp: 20
-    priority: 1
   aqua-step:
     ja: アクアステップ
     en: Aqua Step
-    type: water
-    damageClass: physical
-    power: 80
-    accuracy: 100
-    pp: 10
-    priority: 0
   aqua-tail:
     ja: アクアテール
     en: Aqua Tail
-    type: water
-    damageClass: physical
-    power: 90
-    accuracy: 90
-    pp: 10
-    priority: 0
   aura-sphere:
     ja: はどうだん
     en: Aura Sphere
-    type: fighting
-    damageClass: special
-    power: 80
-    accuracy: null
-    pp: 20
-    priority: 0
   body-press:
     ja: ボディプレス
     en: Body Press
-    type: fighting
-    damageClass: physical
-    power: 80
-    accuracy: 100
-    pp: 10
-    priority: 0
   brave-bird:
     ja: ブレイブバード
     en: Brave Bird
-    type: flying
-    damageClass: physical
-    power: 120
-    accuracy: 100
-    pp: 15
-    priority: 0
   bug-bite:
     ja: むしくい
     en: Bug Bite
-    type: bug
-    damageClass: physical
-    power: 60
-    accuracy: 100
-    pp: 20
-    priority: 0
   bulk-up:
     ja: ビルドアップ
     en: Bulk Up
-    type: fighting
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 20
-    priority: 0
   bullet-seed:
     ja: タネマシンガン
     en: Bullet Seed
-    type: grass
-    damageClass: physical
-    power: 25
-    accuracy: 100
-    pp: 30
-    priority: 0
   calm-mind:
     ja: めいそう
     en: Calm Mind
-    type: psychic
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 20
-    priority: 0
   close-combat:
     ja: インファイト
     en: Close Combat
-    type: fighting
-    damageClass: physical
-    power: 120
-    accuracy: 100
-    pp: 5
-    priority: 0
   crunch:
     ja: かみくだく
     en: Crunch
-    type: dark
-    damageClass: physical
-    power: 80
-    accuracy: 100
-    pp: 15
-    priority: 0
   curse:
     ja: のろい
     en: Curse
-    type: ghost
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 10
-    priority: 0
   darkest-lariat:
     ja: ＤＤラリアット
     en: Darkest Lariat
-    type: dark
-    damageClass: physical
-    power: 85
-    accuracy: 100
-    pp: 10
-    priority: 0
   dazzling-gleam:
     ja: マジカルシャイン
     en: Dazzling Gleam
-    type: fairy
-    damageClass: special
-    power: 80
-    accuracy: 100
-    pp: 10
-    priority: 0
   defog:
     ja: きりばらい
     en: Defog
-    type: flying
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 15
-    priority: 0
   destiny-bond:
     ja: みちづれ
     en: Destiny Bond
-    type: ghost
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 5
-    priority: 0
   disarming-voice:
     ja: チャームボイス
     en: Disarming Voice
-    type: fairy
-    damageClass: special
-    power: 40
-    accuracy: null
-    pp: 15
-    priority: 0
   dragon-dance:
     ja: りゅうのまい
     en: Dragon Dance
-    type: dragon
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 20
-    priority: 0
   dragon-darts:
     ja: ドラゴンアロー
     en: Dragon Darts
-    type: dragon
-    damageClass: physical
-    power: 50
-    accuracy: 100
-    pp: 10
-    priority: 0
   dragon-pulse:
     ja: りゅうのはどう
     en: Dragon Pulse
-    type: dragon
-    damageClass: special
-    power: 85
-    accuracy: 100
-    pp: 10
-    priority: 0
   dragon-tail:
     ja: ドラゴンテール
     en: Dragon Tail
-    type: dragon
-    damageClass: physical
-    power: 60
-    accuracy: 90
-    pp: 10
-    priority: -6
   drain-punch:
     ja: ドレインパンチ
     en: Drain Punch
-    type: fighting
-    damageClass: physical
-    power: 75
-    accuracy: 100
-    pp: 10
-    priority: 0
   drill-peck:
     ja: ドリルくちばし
     en: Drill Peck
-    type: flying
-    damageClass: physical
-    power: 80
-    accuracy: 100
-    pp: 20
-    priority: 0
   drill-run:
     ja: ドリルライナー
     en: Drill Run
-    type: ground
-    damageClass: physical
-    power: 80
-    accuracy: 95
-    pp: 10
-    priority: 0
   dual-wingbeat:
     ja: ダブルウイング
     en: Dual Wingbeat
-    type: flying
-    damageClass: physical
-    power: 40
-    accuracy: 90
-    pp: 10
-    priority: 0
   earth-power:
     ja: だいちのちから
     en: Earth Power
-    type: ground
-    damageClass: special
-    power: 90
-    accuracy: 100
-    pp: 10
-    priority: 0
   electroweb:
     ja: エレキネット
     en: Electroweb
-    type: electric
-    damageClass: special
-    power: 55
-    accuracy: 95
-    pp: 15
-    priority: 0
   encore:
     ja: アンコール
     en: Encore
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: 100
-    pp: 5
-    priority: 0
   energy-ball:
     ja: エナジーボール
     en: Energy Ball
-    type: grass
-    damageClass: special
-    power: 90
-    accuracy: 100
-    pp: 10
-    priority: 0
   expanding-force:
     ja: ワイドフォース
     en: Expanding Force
-    type: psychic
-    damageClass: special
-    power: 80
-    accuracy: 100
-    pp: 10
-    priority: 0
   extrasensory:
     ja: じんつうりき
     en: Extrasensory
-    type: psychic
-    damageClass: special
-    power: 80
-    accuracy: 100
-    pp: 20
-    priority: 0
   fake-out:
     ja: ねこだまし
     en: Fake Out
-    type: normal
-    damageClass: physical
-    power: 40
-    accuracy: 100
-    pp: 10
-    priority: 3
   fire-fang:
     ja: ほのおのキバ
     en: Fire Fang
-    type: fire
-    damageClass: physical
-    power: 65
-    accuracy: 95
-    pp: 15
-    priority: 0
   flame-charge:
     ja: ニトロチャージ
     en: Flame Charge
-    type: fire
-    damageClass: physical
-    power: 50
-    accuracy: 100
-    pp: 20
-    priority: 0
   flamethrower:
     ja: かえんほうしゃ
     en: Flamethrower
-    type: fire
-    damageClass: special
-    power: 90
-    accuracy: 100
-    pp: 15
-    priority: 0
   flash-cannon:
     ja: ラスターカノン
     en: Flash Cannon
-    type: steel
-    damageClass: special
-    power: 80
-    accuracy: 100
-    pp: 10
-    priority: 0
   flip-turn:
     ja: クイックターン
     en: Flip Turn
-    type: water
-    damageClass: physical
-    power: 60
-    accuracy: 100
-    pp: 20
-    priority: 0
   flower-trick:
     ja: トリックフラワー
     en: Flower Trick
-    type: grass
-    damageClass: physical
-    power: 70
-    accuracy: null
-    pp: 10
-    priority: 0
   focus-blast:
     ja: きあいだま
     en: Focus Blast
-    type: fighting
-    damageClass: special
-    power: 120
-    accuracy: 70
-    pp: 5
-    priority: 0
   grass-knot:
     ja: くさむすび
     en: Grass Knot
-    type: grass
-    damageClass: special
-    power: null
-    accuracy: 100
-    pp: 20
-    priority: 0
   grassy-glide:
     ja: グラススライダー
     en: Grassy Glide
-    type: grass
-    damageClass: physical
-    power: 55
-    accuracy: 100
-    pp: 20
-    priority: 0
   gunk-shot:
     ja: ダストシュート
     en: Gunk Shot
-    type: poison
-    damageClass: physical
-    power: 120
-    accuracy: 80
-    pp: 5
-    priority: 0
   haze:
     ja: くろいきり
     en: Haze
-    type: ice
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 30
-    priority: 0
   heat-wave:
     ja: ねっぷう
     en: Heat Wave
-    type: fire
-    damageClass: special
-    power: 95
-    accuracy: 90
-    pp: 10
-    priority: 0
   heavy-slam:
     ja: ヘビーボンバー
     en: Heavy Slam
-    type: steel
-    damageClass: physical
-    power: null
-    accuracy: 100
-    pp: 10
-    priority: 0
   hex:
     ja: たたりめ
     en: Hex
-    type: ghost
-    damageClass: special
-    power: 65
-    accuracy: 100
-    pp: 10
-    priority: 0
   high-horsepower:
     ja: １０まんばりき
     en: High Horsepower
-    type: ground
-    damageClass: physical
-    power: 95
-    accuracy: 95
-    pp: 10
-    priority: 0
   hone-claws:
     ja: つめとぎ
     en: Hone Claws
-    type: dark
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 15
-    priority: 0
   hurricane:
     ja: ぼうふう
     en: Hurricane
-    type: flying
-    damageClass: special
-    power: 110
-    accuracy: 70
-    pp: 10
-    priority: 0
   hyper-voice:
     ja: ハイパーボイス
     en: Hyper Voice
-    type: normal
-    damageClass: special
-    power: 90
-    accuracy: 100
-    pp: 10
-    priority: 0
   hypnosis:
     ja: さいみんじゅつ
     en: Hypnosis
-    type: psychic
-    damageClass: status
-    power: null
-    accuracy: 60
-    pp: 20
-    priority: 0
   ice-punch:
     ja: れいとうパンチ
     en: Ice Punch
-    type: ice
-    damageClass: physical
-    power: 75
-    accuracy: 100
-    pp: 15
-    priority: 0
   ice-spinner:
     ja: アイススピナー
     en: Ice Spinner
-    type: ice
-    damageClass: physical
-    power: 80
-    accuracy: 100
-    pp: 15
-    priority: 0
   icy-wind:
     ja: こごえるかぜ
     en: Icy Wind
-    type: ice
-    damageClass: special
-    power: 55
-    accuracy: 95
-    pp: 15
-    priority: 0
   imprison:
     ja: ふういん
     en: Imprison
-    type: psychic
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 10
-    priority: 0
   iron-defense:
     ja: てっぺき
     en: Iron Defense
-    type: steel
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 15
-    priority: 0
   iron-head:
     ja: アイアンヘッド
     en: Iron Head
-    type: steel
-    damageClass: physical
-    power: 80
-    accuracy: 100
-    pp: 15
-    priority: 0
   knock-off:
     ja: はたきおとす
     en: Knock Off
-    type: dark
-    damageClass: physical
-    power: 65
-    accuracy: 100
-    pp: 20
-    priority: 0
   leaf-blade:
     ja: リーフブレード
     en: Leaf Blade
-    type: grass
-    damageClass: physical
-    power: 90
-    accuracy: 100
-    pp: 15
-    priority: 0
   leaf-storm:
     ja: リーフストーム
     en: Leaf Storm
-    type: grass
-    damageClass: special
-    power: 130
-    accuracy: 90
-    pp: 5
-    priority: 0
   life-dew:
     ja: いのちのしずく
     en: Life Dew
-    type: water
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 10
-    priority: 0
   liquidation:
     ja: アクアブレイク
     en: Liquidation
-    type: water
-    damageClass: physical
-    power: 85
-    accuracy: 100
-    pp: 10
-    priority: 0
   low-kick:
     ja: けたぐり
     en: Low Kick
-    type: fighting
-    damageClass: physical
-    power: null
-    accuracy: 100
-    pp: 20
-    priority: 0
   lunge:
     ja: とびかかる
     en: Lunge
-    type: bug
-    damageClass: physical
-    power: 80
-    accuracy: 100
-    pp: 15
-    priority: 0
   megahorn:
     ja: メガホーン
     en: Megahorn
-    type: bug
-    damageClass: physical
-    power: 120
-    accuracy: 85
-    pp: 10
-    priority: 0
   mirror-coat:
     ja: ミラーコート
     en: Mirror Coat
-    type: psychic
-    damageClass: special
-    power: null
-    accuracy: 100
-    pp: 20
-    priority: -5
   muddy-water:
     ja: だくりゅう
     en: Muddy Water
-    type: water
-    damageClass: special
-    power: 90
-    accuracy: 85
-    pp: 10
-    priority: 0
   mystical-fire:
     ja: マジカルフレイム
     en: Mystical Fire
-    type: fire
-    damageClass: special
-    power: 75
-    accuracy: 100
-    pp: 10
-    priority: 0
   night-slash:
     ja: つじぎり
     en: Night Slash
-    type: dark
-    damageClass: physical
-    power: 70
-    accuracy: 100
-    pp: 15
-    priority: 0
   overheat:
     ja: オーバーヒート
     en: Overheat
-    type: fire
-    damageClass: special
-    power: 130
-    accuracy: 90
-    pp: 5
-    priority: 0
   pain-split:
     ja: いたみわけ
     en: Pain Split
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 20
-    priority: 0
   phantom-force:
     ja: ゴーストダイブ
     en: Phantom Force
-    type: ghost
-    damageClass: physical
-    power: 90
-    accuracy: 100
-    pp: 10
-    priority: 0
   pin-missile:
     ja: ミサイルばり
     en: Pin Missile
-    type: bug
-    damageClass: physical
-    power: 25
-    accuracy: 95
-    pp: 20
-    priority: 0
   play-rough:
     ja: じゃれつく
     en: Play Rough
-    type: fairy
-    damageClass: physical
-    power: 90
-    accuracy: 90
-    pp: 10
-    priority: 0
   poison-jab:
     ja: どくづき
     en: Poison Jab
-    type: poison
-    damageClass: physical
-    power: 80
-    accuracy: 100
-    pp: 20
-    priority: 0
   poltergeist:
     ja: ポルターガイスト
     en: Poltergeist
-    type: ghost
-    damageClass: physical
-    power: 110
-    accuracy: 90
-    pp: 5
-    priority: 0
   power-trip:
     ja: つけあがる
     en: Power Trip
-    type: dark
-    damageClass: physical
-    power: 20
-    accuracy: 100
-    pp: 10
-    priority: 0
   protect:
     ja: まもる
     en: Protect
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 10
-    priority: 4
   psychic:
     ja: サイコキネシス
     en: Psychic
-    type: psychic
-    damageClass: special
-    power: 90
-    accuracy: 100
-    pp: 10
-    priority: 0
   psychic-fangs:
     ja: サイコファング
     en: Psychic Fangs
-    type: psychic
-    damageClass: physical
-    power: 85
-    accuracy: 100
-    pp: 10
-    priority: 0
   psyshock:
     ja: サイコショック
     en: Psyshock
-    type: psychic
-    damageClass: special
-    power: 80
-    accuracy: 100
-    pp: 10
-    priority: 0
   rapid-spin:
     ja: こうそくスピン
     en: Rapid Spin
-    type: normal
-    damageClass: physical
-    power: 50
-    accuracy: 100
-    pp: 40
-    priority: 0
   recover:
     ja: じこさいせい
     en: Recover
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 5
-    priority: 0
   roar:
     ja: ほえる
     en: Roar
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 20
-    priority: -6
   rock-blast:
     ja: ロックブラスト
     en: Rock Blast
-    type: rock
-    damageClass: physical
-    power: 25
-    accuracy: 90
-    pp: 10
-    priority: 0
   rock-slide:
     ja: いわなだれ
     en: Rock Slide
-    type: rock
-    damageClass: physical
-    power: 75
-    accuracy: 90
-    pp: 10
-    priority: 0
   salt-cure:
     ja: しおづけ
     en: Salt Cure
-    type: rock
-    damageClass: physical
-    power: 40
-    accuracy: 100
-    pp: 15
-    priority: 0
   scald:
     ja: ねっとう
     en: Scald
-    type: water
-    damageClass: special
-    power: 80
-    accuracy: 100
-    pp: 15
-    priority: 0
   scale-shot:
     ja: スケイルショット
     en: Scale Shot
-    type: dragon
-    damageClass: physical
-    power: 25
-    accuracy: 90
-    pp: 20
-    priority: 0
   scorching-sands:
     ja: ねっさのだいち
     en: Scorching Sands
-    type: ground
-    damageClass: special
-    power: 70
-    accuracy: 100
-    pp: 10
-    priority: 0
   shadow-claw:
     ja: シャドークロー
     en: Shadow Claw
-    type: ghost
-    damageClass: physical
-    power: 70
-    accuracy: 100
-    pp: 15
-    priority: 0
   shadow-sneak:
     ja: かげうち
     en: Shadow Sneak
-    type: ghost
-    damageClass: physical
-    power: 40
-    accuracy: 100
-    pp: 30
-    priority: 1
   shell-smash:
     ja: からをやぶる
     en: Shell Smash
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 15
-    priority: 0
   sludge-bomb:
     ja: ヘドロばくだん
     en: Sludge Bomb
-    type: poison
-    damageClass: special
-    power: 90
-    accuracy: 100
-    pp: 10
-    priority: 0
   smart-strike:
     ja: スマートホーン
     en: Smart Strike
-    type: steel
-    damageClass: physical
-    power: 70
-    accuracy: null
-    pp: 10
-    priority: 0
   snarl:
     ja: バークアウト
     en: Snarl
-    type: dark
-    damageClass: special
-    power: 55
-    accuracy: 95
-    pp: 15
-    priority: 0
   spikes:
     ja: まきびし
     en: Spikes
-    type: ground
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 20
-    priority: 0
   spirit-shackle:
     ja: かげぬい
     en: Spirit Shackle
-    type: ghost
-    damageClass: physical
-    power: 80
-    accuracy: 100
-    pp: 10
-    priority: 0
   stealth-rock:
     ja: ステルスロック
     en: Stealth Rock
-    type: rock
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 20
-    priority: 0
   stomping-tantrum:
     ja: じだんだ
     en: Stomping Tantrum
-    type: ground
-    damageClass: physical
-    power: 75
-    accuracy: 100
-    pp: 10
-    priority: 0
   substitute:
     ja: みがわり
     en: Substitute
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 10
-    priority: 0
   sucker-punch:
     ja: ふいうち
     en: Sucker Punch
-    type: dark
-    damageClass: physical
-    power: 70
-    accuracy: 100
-    pp: 5
-    priority: 1
   superpower:
     ja: ばかぢから
     en: Superpower
-    type: fighting
-    damageClass: physical
-    power: 120
-    accuracy: 100
-    pp: 5
-    priority: 0
   surf:
     ja: なみのり
     en: Surf
-    type: water
-    damageClass: special
-    power: 90
-    accuracy: 100
-    pp: 15
-    priority: 0
   tailwind:
     ja: おいかぜ
     en: Tailwind
-    type: flying
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 15
-    priority: 0
   taunt:
     ja: ちょうはつ
     en: Taunt
-    type: dark
-    damageClass: status
-    power: null
-    accuracy: 100
-    pp: 20
-    priority: 0
   throat-chop:
     ja: じごくづき
     en: Throat Chop
-    type: dark
-    damageClass: physical
-    power: 80
-    accuracy: 100
-    pp: 15
-    priority: 0
   thunder-punch:
     ja: かみなりパンチ
     en: Thunder Punch
-    type: electric
-    damageClass: physical
-    power: 75
-    accuracy: 100
-    pp: 15
-    priority: 0
   thunder-wave:
     ja: でんじは
     en: Thunder Wave
-    type: electric
-    damageClass: status
-    power: null
-    accuracy: 90
-    pp: 20
-    priority: 0
   torch-song:
     ja: フレアソング
     en: Torch Song
-    type: fire
-    damageClass: special
-    power: 80
-    accuracy: 100
-    pp: 10
-    priority: 0
   toxic-spikes:
     ja: どくびし
     en: Toxic Spikes
-    type: poison
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 20
-    priority: 0
   trailblaze:
     ja: くさわけ
     en: Trailblaze
-    type: grass
-    damageClass: physical
-    power: 50
-    accuracy: 100
-    pp: 20
-    priority: 0
   trick:
     ja: トリック
     en: Trick
-    type: psychic
-    damageClass: status
-    power: null
-    accuracy: 100
-    pp: 10
-    priority: 0
   trick-room:
     ja: トリックルーム
     en: Trick Room
-    type: psychic
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 5
-    priority: -7
   triple-axel:
     ja: トリプルアクセル
     en: Triple Axel
-    type: ice
-    damageClass: physical
-    power: 20
-    accuracy: 90
-    pp: 10
-    priority: 0
   u-turn:
     ja: とんぼがえり
     en: U-turn
-    type: bug
-    damageClass: physical
-    power: 70
-    accuracy: 100
-    pp: 20
-    priority: 0
   vacuum-wave:
     ja: しんくうは
     en: Vacuum Wave
-    type: fighting
-    damageClass: special
-    power: 40
-    accuracy: 100
-    pp: 30
-    priority: 1
   water-shuriken:
     ja: みずしゅりけん
     en: Water Shuriken
-    type: water
-    damageClass: special
-    power: 15
-    accuracy: 100
-    pp: 20
-    priority: 1
   wave-crash:
     ja: ウェーブタックル
     en: Wave Crash
-    type: water
-    damageClass: physical
-    power: 120
-    accuracy: 100
-    pp: 10
-    priority: 0
   wide-guard:
     ja: ワイドガード
     en: Wide Guard
-    type: rock
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 10
-    priority: 3
   wild-charge:
     ja: ワイルドボルト
     en: Wild Charge
-    type: electric
-    damageClass: physical
-    power: 90
-    accuracy: 100
-    pp: 15
-    priority: 0
   x-scissor:
     ja: シザークロス
     en: X-Scissor
-    type: bug
-    damageClass: physical
-    power: 80
-    accuracy: 100
-    pp: 15
-    priority: 0
   acid-spray:
     ja: アシッドボム
     en: Acid Spray
-    type: poison
-    damageClass: special
-    power: 40
-    accuracy: 100
-    pp: 20
-    priority: 0
   air-cutter:
     ja: エアカッター
     en: Air Cutter
-    type: flying
-    damageClass: special
-    power: 60
-    accuracy: 95
-    pp: 25
-    priority: 0
   ancient-power:
     ja: げんしのちから
     en: Ancient Power
-    type: rock
-    damageClass: special
-    power: 60
-    accuracy: 100
-    pp: 5
-    priority: 0
   beat-up:
     ja: ふくろだたき
     en: Beat Up
-    type: dark
-    damageClass: physical
-    power: null
-    accuracy: 100
-    pp: 10
-    priority: 0
   belly-drum:
     ja: はらだいこ
     en: Belly Drum
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 10
-    priority: 0
   bite:
     ja: かみつく
     en: Bite
-    type: dark
-    damageClass: physical
-    power: 60
-    accuracy: 100
-    pp: 25
-    priority: 0
   blast-burn:
     ja: ブラストバーン
     en: Blast Burn
-    type: fire
-    damageClass: special
-    power: 150
-    accuracy: 90
-    pp: 5
-    priority: 0
   body-slam:
     ja: のしかかり
     en: Body Slam
-    type: normal
-    damageClass: physical
-    power: 85
-    accuracy: 100
-    pp: 15
-    priority: 0
   breaking-swipe:
     ja: ワイドブレイカー
     en: Breaking Swipe
-    type: dragon
-    damageClass: physical
-    power: 60
-    accuracy: 100
-    pp: 15
-    priority: 0
   brick-break:
     ja: かわらわり
     en: Brick Break
-    type: fighting
-    damageClass: physical
-    power: 75
-    accuracy: 100
-    pp: 15
-    priority: 0
   brutal-swing:
     ja: ぶんまわす
     en: Brutal Swing
-    type: dark
-    damageClass: physical
-    power: 60
-    accuracy: 100
-    pp: 20
-    priority: 0
   bulldoze:
     ja: じならし
     en: Bulldoze
-    type: ground
-    damageClass: physical
-    power: 60
-    accuracy: 100
-    pp: 20
-    priority: 0
   confuse-ray:
     ja: あやしいひかり
     en: Confuse Ray
-    type: ghost
-    damageClass: status
-    power: null
-    accuracy: 100
-    pp: 10
-    priority: 0
   corrosive-gas:
     ja: ふしょくガス
     en: Corrosive Gas
-    type: poison
-    damageClass: status
-    power: null
-    accuracy: 100
-    pp: 40
-    priority: 0
   counter:
     ja: カウンター
     en: Counter
-    type: fighting
-    damageClass: physical
-    power: null
-    accuracy: 100
-    pp: 20
-    priority: -5
   dig:
     ja: あなをほる
     en: Dig
-    type: ground
-    damageClass: physical
-    power: 80
-    accuracy: 100
-    pp: 10
-    priority: 0
   disable:
     ja: かなしばり
     en: Disable
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: 100
-    pp: 20
-    priority: 0
   double-edge:
     ja: すてみタックル
     en: Double-Edge
-    type: normal
-    damageClass: physical
-    power: 120
-    accuracy: 100
-    pp: 15
-    priority: 0
   dragon-cheer:
     ja: ドラゴンエール
     en: Dragon Cheer
-    type: dragon
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 15
-    priority: 0
   dragon-rush:
     ja: ドラゴンダイブ
     en: Dragon Rush
-    type: dragon
-    damageClass: physical
-    power: 100
-    accuracy: 75
-    pp: 10
-    priority: 0
   endure:
     ja: こらえる
     en: Endure
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 10
-    priority: 4
   facade:
     ja: からげんき
     en: Facade
-    type: normal
-    damageClass: physical
-    power: 70
-    accuracy: 100
-    pp: 20
-    priority: 0
   fire-spin:
     ja: ほのおのうず
     en: Fire Spin
-    type: fire
-    damageClass: special
-    power: 35
-    accuracy: 85
-    pp: 15
-    priority: 0
   fling:
     ja: なげつける
     en: Fling
-    type: dark
-    damageClass: physical
-    power: null
-    accuracy: 100
-    pp: 10
-    priority: 0
   fly:
     ja: そらをとぶ
     en: Fly
-    type: flying
-    damageClass: physical
-    power: 90
-    accuracy: 95
-    pp: 15
-    priority: 0
   focus-punch:
     ja: きあいパンチ
     en: Focus Punch
-    type: fighting
-    damageClass: physical
-    power: 150
-    accuracy: 100
-    pp: 20
-    priority: -3
   foul-play:
     ja: イカサマ
     en: Foul Play
-    type: dark
-    damageClass: physical
-    power: 95
-    accuracy: 100
-    pp: 15
-    priority: 0
   giga-drain:
     ja: ギガドレイン
     en: Giga Drain
-    type: grass
-    damageClass: special
-    power: 75
-    accuracy: 100
-    pp: 10
-    priority: 0
   giga-impact:
     ja: ギガインパクト
     en: Giga Impact
-    type: normal
-    damageClass: physical
-    power: 150
-    accuracy: 90
-    pp: 5
-    priority: 0
   heat-crash:
     ja: ヒートスタンプ
     en: Heat Crash
-    type: fire
-    damageClass: physical
-    power: null
-    accuracy: 100
-    pp: 10
-    priority: 0
   helping-hand:
     ja: てだすけ
     en: Helping Hand
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 20
-    priority: 5
   hyper-beam:
     ja: はかいこうせん
     en: Hyper Beam
-    type: normal
-    damageClass: special
-    power: 150
-    accuracy: 90
-    pp: 5
-    priority: 0
   inferno:
     ja: れんごく
     en: Inferno
-    type: fire
-    damageClass: special
-    power: 100
-    accuracy: 50
-    pp: 5
-    priority: 0
   iron-tail:
     ja: アイアンテール
     en: Iron Tail
-    type: steel
-    damageClass: physical
-    power: 100
-    accuracy: 75
-    pp: 15
-    priority: 0
   mean-look:
     ja: くろいまなざし
     en: Mean Look
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 5
-    priority: 0
   mega-kick:
     ja: メガトンキック
     en: Mega Kick
-    type: normal
-    damageClass: physical
-    power: 120
-    accuracy: 75
-    pp: 5
-    priority: 0
   mud-shot:
     ja: マッドショット
     en: Mud Shot
-    type: ground
-    damageClass: special
-    power: 55
-    accuracy: 95
-    pp: 15
-    priority: 0
   night-shade:
     ja: ナイトヘッド
     en: Night Shade
-    type: ghost
-    damageClass: special
-    power: null
-    accuracy: 100
-    pp: 15
-    priority: 0
   payback:
     ja: しっぺがえし
     en: Payback
-    type: dark
-    damageClass: physical
-    power: 50
-    accuracy: 100
-    pp: 10
-    priority: 0
   perish-song:
     ja: ほろびのうた
     en: Perish Song
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 5
-    priority: 0
   power-gem:
     ja: パワージェム
     en: Power Gem
-    type: rock
-    damageClass: special
-    power: 80
-    accuracy: 100
-    pp: 20
-    priority: 0
   psych-up:
     ja: じこあんじ
     en: Psych Up
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 10
-    priority: 0
   psychic-noise:
     ja: サイコノイズ
     en: Psychic Noise
-    type: psychic
-    damageClass: special
-    power: 75
-    accuracy: 100
-    pp: 10
-    priority: 0
   rain-dance:
     ja: あまごい
     en: Rain Dance
-    type: water
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 5
-    priority: 0
   reflect-type:
     ja: ミラータイプ
     en: Reflect Type
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 15
-    priority: 0
   rest:
     ja: ねむる
     en: Rest
-    type: psychic
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 5
-    priority: 0
   rock-tomb:
     ja: がんせきふうじ
     en: Rock Tomb
-    type: rock
-    damageClass: physical
-    power: 60
-    accuracy: 95
-    pp: 15
-    priority: 0
   round:
     ja: りんしょう
     en: Round
-    type: normal
-    damageClass: special
-    power: 60
-    accuracy: 100
-    pp: 15
-    priority: 0
   sand-tomb:
     ja: すなじごく
     en: Sand Tomb
-    type: ground
-    damageClass: physical
-    power: 35
-    accuracy: 85
-    pp: 15
-    priority: 0
   sandstorm:
     ja: すなあらし
     en: Sandstorm
-    type: rock
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 10
-    priority: 0
   scary-face:
     ja: こわいかお
     en: Scary Face
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: 100
-    pp: 10
-    priority: 0
   self-destruct:
     ja: じばく
     en: Self-Destruct
-    type: normal
-    damageClass: physical
-    power: 200
-    accuracy: 100
-    pp: 5
-    priority: 0
   shadow-punch:
     ja: シャドーパンチ
     en: Shadow Punch
-    type: ghost
-    damageClass: physical
-    power: 60
-    accuracy: null
-    pp: 20
-    priority: 0
   skill-swap:
     ja: スキルスワップ
     en: Skill Swap
-    type: psychic
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 10
-    priority: 0
   skitter-smack:
     ja: はいよるいちげき
     en: Skitter Smack
-    type: bug
-    damageClass: physical
-    power: 70
-    accuracy: 90
-    pp: 10
-    priority: 0
   sleep-talk:
     ja: ねごと
     en: Sleep Talk
-    type: normal
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 10
-    priority: 0
   sludge-wave:
     ja: ヘドロウェーブ
     en: Sludge Wave
-    type: poison
-    damageClass: special
-    power: 95
-    accuracy: 100
-    pp: 10
-    priority: 0
   snore:
     ja: いびき
     en: Snore
-    type: normal
-    damageClass: special
-    power: 50
-    accuracy: 100
-    pp: 15
-    priority: 0
   solar-beam:
     ja: ソーラービーム
     en: Solar Beam
-    type: grass
-    damageClass: special
-    power: 120
-    accuracy: 100
-    pp: 10
-    priority: 0
   spite:
     ja: うらみ
     en: Spite
-    type: ghost
-    damageClass: status
-    power: null
-    accuracy: 100
-    pp: 10
-    priority: 0
   steel-wing:
     ja: はがねのつばさ
     en: Steel Wing
-    type: steel
-    damageClass: physical
-    power: 70
-    accuracy: 90
-    pp: 25
-    priority: 0
   sunny-day:
     ja: にほんばれ
     en: Sunny Day
-    type: fire
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 5
-    priority: 0
   temper-flare:
     ja: やけっぱち
     en: Temper Flare
-    type: fire
-    damageClass: physical
-    power: 75
-    accuracy: 100
-    pp: 10
-    priority: 0
   thief:
     ja: どろぼう
     en: Thief
-    type: dark
-    damageClass: physical
-    power: 60
-    accuracy: 100
-    pp: 25
-    priority: 0
   thunder:
     ja: かみなり
     en: Thunder
-    type: electric
-    damageClass: special
-    power: 110
-    accuracy: 70
-    pp: 10
-    priority: 0
   thunder-fang:
     ja: かみなりのキバ
     en: Thunder Fang
-    type: electric
-    damageClass: physical
-    power: 65
-    accuracy: 95
-    pp: 15
-    priority: 0
   toxic:
     ja: どくどく
     en: Toxic
-    type: poison
-    damageClass: status
-    power: null
-    accuracy: 90
-    pp: 10
-    priority: 0
   venoshock:
     ja: ベノムショック
     en: Venoshock
-    type: poison
-    damageClass: special
-    power: 65
-    accuracy: 100
-    pp: 10
-    priority: 0
   weather-ball:
     ja: ウェザーボール
     en: Weather Ball
-    type: normal
-    damageClass: special
-    power: 50
-    accuracy: 100
-    pp: 10
-    priority: 0
   wonder-room:
     ja: ワンダールーム
     en: Wonder Room
-    type: psychic
-    damageClass: status
-    power: null
-    accuracy: null
-    pp: 10
-    priority: 0

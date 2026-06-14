@@ -17,12 +17,24 @@ import { isCatalogIdShape } from "./normalize.ts";
 import type { ParsedItem, ParsedMove, ParsedSpecies } from "./parse.ts";
 
 /**
- * moves.yaml の Serebii 由来欄（技メタ）。`en` は Serebii 表示名、`priority` は Serebii の Standard Moves
- * 表に列が無いため `0` 既定（実値は skill-authored で上書き＝materialize の append/既存尊重で保護）。`ja` は
- * 持たない（materialize が PokeAPI move names で補完）。
+ * catalog/moves.yaml の Serebii 由来名前欄。`en` は Serebii 表示名（`ja` は持たない＝materialize が PokeAPI move
+ * names で補完）。技メタは Phase 11 で per-game の regulations/champions/moves.yaml へ分離した（ADR 0034）。
  */
-export interface MoveCatalogFields {
+export interface MoveNameFields {
   en: string;
+}
+
+/** `ParsedMove` → catalog/moves.yaml 名前欄（Serebii 表示名 en のみ・ja は materialize が補完）。 */
+export function moveNameFields(m: ParsedMove): MoveNameFields {
+  return { en: m.name };
+}
+
+/**
+ * regulations/champions/moves.yaml の Serebii 由来技メタ欄（per-game 共有・Phase 11 / ADR 0034）。`priority` は
+ * Serebii の Standard Moves 表に列が無いため `0` 既定（実値は skill-authored で上書き＝materialize の
+ * append/既存尊重で保護）。技の数値は Champions 固有調整があり得るためゲーム単位で持つ。
+ */
+export interface MoveStatsFields {
   type: string;
   damageClass: string;
   power: number | null;
@@ -31,10 +43,9 @@ export interface MoveCatalogFields {
   priority: number;
 }
 
-/** `ParsedMove` → moves.yaml 転記欄（Serebii 由来の技メタ・ja は持たない）。 */
-export function moveCatalogFields(m: ParsedMove): MoveCatalogFields {
+/** `ParsedMove` → regulations/champions/moves.yaml 技メタ欄（Serebii 由来の type/damageClass/power 等）。 */
+export function moveStatsFields(m: ParsedMove): MoveStatsFields {
   return {
-    en: m.name,
     type: m.type,
     damageClass: m.damageClass,
     power: m.power,

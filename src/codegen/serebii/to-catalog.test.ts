@@ -7,7 +7,8 @@ import {
   megaAuthoring,
   megaSpeciesId,
   megaStoneSpeciesId,
-  moveCatalogFields,
+  moveNameFields,
+  moveStatsFields,
   regMoveIds,
   sortedUnion,
   speciesCatalogFields,
@@ -44,10 +45,15 @@ const species = (over: Partial<ParsedSpecies>): ParsedSpecies => ({
   ...over,
 });
 
-describe("moveCatalogFields", () => {
-  it("maps Serebii move meta with priority defaulting to 0 (no ja)", () => {
-    expect(moveCatalogFields(move({}))).toEqual({
-      en: "Earthquake",
+describe("moveNameFields", () => {
+  it("carries only the Serebii display name (en・ja は materialize が補完)", () => {
+    expect(moveNameFields(move({}))).toEqual({ en: "Earthquake" });
+  });
+});
+
+describe("moveStatsFields", () => {
+  it("maps Serebii move meta with priority defaulting to 0", () => {
+    expect(moveStatsFields(move({}))).toEqual({
       type: "ground",
       damageClass: "physical",
       power: 100,
@@ -58,7 +64,7 @@ describe("moveCatalogFields", () => {
   });
 
   it("carries null power/accuracy/pp for status/必中 moves", () => {
-    const fields = moveCatalogFields(
+    const fields = moveStatsFields(
       move({
         name: "Swords Dance",
         id: "swords-dance",

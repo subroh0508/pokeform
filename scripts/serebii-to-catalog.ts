@@ -33,7 +33,8 @@ import {
   abilityIds,
   itemCatalogFields,
   megaAuthoring,
-  moveCatalogFields,
+  moveNameFields,
+  moveStatsFields,
   regMoveIds,
   sortedUnion,
   speciesCatalogFields,
@@ -139,14 +140,27 @@ function transcribeSpecies(slug: string, regId: string, jsonPath: string | undef
   }
   writeIf(speciesFile, speciesDoc, speciesChanged);
 
+  // 技名（id + en）は catalog/moves.yaml（名前はゲーム非依存・Phase 11）。
   const movesFile = join(CAT, "moves.yaml");
   const movesDoc = loadDoc(movesFile);
   const movesMap = movesDoc.get("moves") as YAMLMap;
   let movesChanged = false;
   for (const m of p.moves) {
-    movesChanged = upsert(movesDoc, movesMap, m.id, { ...moveCatalogFields(m) }) || movesChanged;
+    movesChanged = upsert(movesDoc, movesMap, m.id, { ...moveNameFields(m) }) || movesChanged;
   }
   writeIf(movesFile, movesDoc, movesChanged);
+
+  // 技メタ（type/damageClass/power 等）は per-game の regulations/<game>/moves.yaml（Champions 固有値・ADR 0034）。
+  const game = regId.includes("-") ? regId.slice(0, regId.indexOf("-")) : "champions";
+  const moveStatsFile = join(REG, game, "moves.yaml");
+  const moveStatsDoc = loadDoc(moveStatsFile);
+  const moveStatsMap = moveStatsDoc.get("moves") as YAMLMap;
+  let moveStatsChanged = false;
+  for (const m of p.moves) {
+    moveStatsChanged =
+      upsert(moveStatsDoc, moveStatsMap, m.id, { ...moveStatsFields(m) }) || moveStatsChanged;
+  }
+  writeIf(moveStatsFile, moveStatsDoc, moveStatsChanged);
 
   const abilitiesFile = join(CAT, "abilities.yaml");
   const abilitiesDoc = loadDoc(abilitiesFile);

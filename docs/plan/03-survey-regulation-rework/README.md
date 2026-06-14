@@ -43,7 +43,7 @@ flowchart TD
 - [x] [Phase 8 — per-reg species から不要な種族名 ja/en を削除（speciesBaseDex に集約）](./phase-08-per-reg-species-name-trim.md)
 - [x] [Phase 9 — メガ関連の決定論自動取り込み（megaLinks / mega[] / megaSpecies 自動著述・ADR 0031 supersede）](./phase-09-deterministic-mega-capture.md)
 - [x] [Phase 10 — regulations をゲームグルーピング（`regulations/champions/m-(a|b).yaml`）](./phase-10-game-grouped-regulations.md)
-- [ ] [Phase 11 — 技メタを per-game へ移転（catalog = 名前 / `regulations/champions/moves.yaml` = 技メタ・ADR 0026 改訂）](./phase-11-per-game-move-meta.md)
+- [x] [Phase 11 — 技メタを per-game へ移転（catalog = 名前 / `regulations/champions/moves.yaml` = 技メタ・ADR 0026 改訂）](./phase-11-per-game-move-meta.md)
 - [ ] [Phase 12 — 取得スキルを 2 分割（catalog 取得 / regulations 取得）+ catalog 更新チェックポイント](./phase-12-update-skill-split.md)
 - [ ] [Phase 13 — M-A 全データ投入（全186種 + 全 movepool・新パイプライン経由・旧 02 phase-20）](./phase-13-ma-full-data.md)
 
