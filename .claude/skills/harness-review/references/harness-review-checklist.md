@@ -77,7 +77,7 @@ effort・redaction）の SoT は [`.claude/rules/code-review.md`](../../../rules
 | `.claude/skills/**`, `.agents/skills/**` | description=「何を + いつ」三人称・under-trigger 回避（≤1024字・XML不可）/ ≤500行・progressive disclosure / 「ルール + なぜ」（`ALWAYS/NEVER` 羅列回避）/ **canonical+symlink パリティ** / allowed-tools 最小権限 |
 | `AGENTS.md`, `CLAUDE.md` | 短さ（≤300行目安）・普遍的でない指示の混入なし・スタイルは linter 委譲 / SoT 一貫性（AGENTS=指示 SoT / CLAUDE=`@AGENTS.md` 薄アダプタ）/ 詳細はポインタ化・32KiB 意識 |
 | `.githooks/**`, `.claude/settings.json`, `.claude/hooks/**` | **ゲート二重化していないか** / 実行権限前提 / 設定値の妥当性・秘匿情報非混入 |
-| `docs/plan/**`, `docs/adr/**`, `docs/harness/**` | phase テンプレ準拠 / 相互参照（前提節）の整合・dangling なし / ADR 採番・supersede 規約 / learning の redaction / 生成物（rules-index）の手編集 / **renumber を含む plan PR は番号整合を機械確認**（`git grep "Phase N"` で表・mermaid・散文の素の番号・完了済み phase の forward 参照まで全 hit 追従 / README リンクが実在ファイルに解決 / ADR・rule リンクは slug を実体照合）。手順 SoT は [[planning]] の「phase の insert/renumber 追従チェックリスト」 |
+| `docs/plan/**`, `docs/adr/**`, `docs/harness/**` | phase テンプレ準拠 / 相互参照（前提節）の整合・dangling なし / ADR 採番・supersede 規約 / learning の redaction / 生成物（rules-index）の手編集 / **renumber を含む plan PR は番号整合を機械確認**（`git grep "Phase N"` は**計画ディレクトリ内に限定せず cross-plan = リポジトリ全体**を走査し、他計画 doc / rule / skill からの参照まで dangling を点検 / 表・mermaid・散文の素の番号・完了済み phase の forward 参照まで全 hit 追従 / README リンクが実在ファイルに解決 / ADR・rule リンクは slug を実体照合）。手順 SoT は [[planning]] の「phase の insert/renumber 追従チェックリスト」 |
 
 ## 6. auto-merge ゲート（発火条件）
 
