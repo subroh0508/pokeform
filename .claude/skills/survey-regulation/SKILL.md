@@ -118,7 +118,7 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
 - **Claude**: `Workflow({ scriptPath: ".claude/skills/survey-regulation/workflows/self-heal.workflow", args: <roster> })`
   で 層2 fan-out（read-only Haiku・exit code 判定）→ 層3 自己修復（パーサ一般化 + 回帰 fixture）を回す。失敗が
   少数で済むと見込めるなら 層2 のみ（[`fetch-fanout.workflow`](./workflows/fetch-fanout.workflow)）でもよい。
-- **Codex / 素の CLI**: 各 slug を `fetch:serebii` → `scrape:serebii` で逐次実行し、exit 3/4 は人手修正（上記）。
+- **Codex / 素の CLI**: 各 slug を `node scripts/fetch-serebii.ts species <slug>` → `node scripts/scrape-serebii.ts species <slug>` で逐次実行し、exit 3/4 は人手修正（上記）。
 
 返り値 `counts`（total / ok / escalated / rounds）と `escalated`（収束しない種）を、手順 6 の roster-source doc の
 進捗・成功/失敗記録へ転記する。**冪等キャッシュ**（`data/raw/serebii/`）により再実行は成功種を skip する。
