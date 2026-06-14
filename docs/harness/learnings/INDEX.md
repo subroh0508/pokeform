@@ -42,6 +42,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #86 | 02 Phase 19 情報源 3 系統の役割 SoT 集約 + フロー図 Mermaid 化 | 2026-06-13 | 02-data-model-redesign/phase-19 | draft | [2026-06-13-pr-86.md](./2026-06-13-pr-86.md) |
 | #90 | 03 計画群 survey-regulation 刷新を plans-new で起票 + phase-20 を 03 phase-07 へ計画群間移動 | 2026-06-13 | 03-survey-regulation-rework | draft | [2026-06-13-pr-90.md](./2026-06-13-pr-90.md) |
 | #92 | 03 Phase 1 Serebii 決定論パーサ純関数 + fixture テスト | 2026-06-13 | 03-survey-regulation-rework/phase-01 | draft | [2026-06-13-pr-92.md](./2026-06-13-pr-92.md) |
+| #94 | 03 Phase 2 Serebii items パーサ + fetch-serebii キャッシュ層 | 2026-06-14 | 03-survey-regulation-rework/phase-02 | draft | [2026-06-14-pr-94.md](./2026-06-14-pr-94.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
