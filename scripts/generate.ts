@@ -318,10 +318,10 @@ for (const [id, reg] of Object.entries(regs)) {
       // mega 先のみ: base 種族の per-reg moves を継承する（実ゲームは技を base 形態に登録・同一 movepool・ADR 0024）。
       moves = speciesAllowOf(reg, megaToBase[sid]).moves;
     }
+    // name（ja/en）は per-reg dex には載せない（種族名 SoT は speciesBaseDex・Phase 8 の dedup）。
     const entry: Record<string, unknown> = {
       dex: info.dex,
       id: info.id,
-      name: info.name,
       types: info.types,
       baseStats: info.baseStats,
       abilities: info.abilities,
@@ -387,7 +387,7 @@ for (const [id, entry] of Object.entries(regEntries)) {
   mkdirSync(join(OUT, "regulations", id), { recursive: true });
   emit(
     join("regulations", id, "species.ts"),
-    `import type { SpeciesBase } from "../../../../src/types/species.ts";\n\nexport const speciesDex = ${lit(perRegSpecies[id])} as const satisfies Record<string, SpeciesBase>;\n\nexport type SpeciesDex = typeof speciesDex;\nexport type SpeciesId = keyof SpeciesDex;\n`,
+    `import type { PerRegSpecies } from "../../../../src/types/species.ts";\n\nexport const speciesDex = ${lit(perRegSpecies[id])} as const satisfies Record<string, PerRegSpecies>;\n\nexport type SpeciesDex = typeof speciesDex;\nexport type SpeciesId = keyof SpeciesDex;\n`,
   );
   // メタに speciesDex（import 参照）を同梱して RegulationDex[R]["speciesDex"] から引けるようにする。
   const metaBody = lit(entry).replace(/\n\}$/, ",\n  speciesDex,\n}");

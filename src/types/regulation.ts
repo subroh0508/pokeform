@@ -3,7 +3,7 @@ import type {
   RegulationDex as _RegulationDex,
   RegulationId as _RegulationId,
 } from "../../data/generated/regulations/index.ts";
-import type { SpeciesBase } from "./species.ts";
+import type { PerRegSpecies } from "./species.ts";
 
 /**
  * レギュレーションエントリの親型（統一パターンの XxxBase）。1 レギュ = 1 ディレクトリで生成され
@@ -19,8 +19,9 @@ export interface RegulationBase {
   readonly name: { readonly en: string; readonly ja: string };
   /** 開催期間。`start` 必須・`end` は開催中なら `null`。 */
   readonly period: { readonly start: string; readonly end: string | null };
-  /** そのレギュの種族 dex（per-reg `moves`/`abilities`/`items` を含む legality の型正本）。 */
-  readonly speciesDex: Readonly<Record<string, SpeciesBase>>;
+  /** そのレギュの種族 dex（per-reg `moves`/`abilities`/`items` を含む legality の型正本）。種族名
+   *  （`name`）は持たない（SoT は `speciesBaseDex`・Phase 8 の dedup）。 */
+  readonly speciesDex: Readonly<Record<string, PerRegSpecies>>;
   /** 構築に使える base 種族（`speciesDex` のキー部分集合）。 */
   readonly species: readonly string[];
   /** 解禁持ち物。 */

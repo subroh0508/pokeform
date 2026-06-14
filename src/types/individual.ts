@@ -5,7 +5,7 @@ import { calcRealStats } from "../domain/calc-stats.ts";
 import type { Invalid } from "./brand.ts";
 import type { NatureSpec } from "./nature.ts";
 import type { RegulationItemId } from "./regulation.ts";
-import type { SpeciesBase } from "./species.ts";
+import type { PerRegSpecies } from "./species.ts";
 import type { PointAllocation, RealStats } from "./stats.ts";
 
 /**
@@ -24,11 +24,12 @@ export type SpeciesDexOf<R extends RegulationId> = RegulationDex[R]["speciesDex"
 /** レギュレーション `R` で構築に使える種族 id（`R` の種族 dex のキー）。 */
 export type SpeciesIdIn<R extends RegulationId> = keyof SpeciesDexOf<R> & string;
 /**
- * `R` の種族 `S` のエントリ。`& SpeciesBase` で `moves`/`abilities`/`items` キーの存在を tsc に保証する
- * （generic R での深い indexed access の限界回避）。narrow リテラル側は交差で温存される。
+ * `R` の種族 `S` のエントリ。`& PerRegSpecies` で `moves`/`abilities`/`items` キーの存在を tsc に保証する
+ * （generic R での深い indexed access の限界回避）。narrow リテラル側は交差で温存される。`PerRegSpecies` は
+ * `name` を持たない per-reg 型（種族名 SoT は `speciesBaseDex`・Phase 8 の dedup）。
  */
 type SpeciesEntryOf<R extends RegulationId, S extends SpeciesIdIn<R>> = SpeciesDexOf<R>[S] &
-  SpeciesBase;
+  PerRegSpecies;
 
 // --- ブランドエラー型（命名は能動的に「何が違うか」を表す・[[tsc-verification]]） -----------------
 

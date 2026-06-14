@@ -30,13 +30,15 @@ per-reg species dex の各種族エントリから `name`（ja/en）を取り除
 
 ## タスク
 
-- [ ] `src/types/species.ts`（または regulation 型）: name を持たない per-reg 専用型（`PerRegSpecies` =
-      `Omit<SpeciesBase, "name">` 等）を定義。
-- [ ] `scripts/generate.ts`: per-reg species 生成から `name: info.name,` を削除し、`satisfies Record<string,
+- [x] `src/types/species.ts`: name を持たない per-reg 専用型 `PerRegSpecies = Omit<SpeciesBase, "name">` を
+      定義・export。
+- [x] `scripts/generate.ts`: per-reg species 生成から `name: info.name,` を削除し、`satisfies Record<string,
       SpeciesBase>` を `satisfies Record<string, PerRegSpecies>` へ変更。
-- [ ] `src/types/individual.ts`: `SpeciesEntryOf` の `& SpeciesBase` を name レス型へ寄せる（abilities/items/moves
-      のキー存在保証は維持）。
-- [ ] `pnpm generate:data` 再生成（per-reg `species.ts` から name が消える）→ `pnpm verify` 緑。
+- [x] `src/types/individual.ts`: `SpeciesEntryOf` の `& SpeciesBase` を `& PerRegSpecies` へ寄せる
+      （abilities/items/moves のキー存在保証は維持）。あわせて `RegulationBase.speciesDex`
+      （`src/types/regulation.ts`）も `Record<string, PerRegSpecies>` へ追従（name 削除で `satisfies RegulationBase`
+      が通らなくなるため必須）。
+- [x] `pnpm generate:data` 再生成（per-reg `species.ts` から name が消える）→ `pnpm verify` 緑。
 
 ## この Phase で育てるハーネス（rule・skill）
 
