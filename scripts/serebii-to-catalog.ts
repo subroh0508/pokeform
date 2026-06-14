@@ -11,9 +11,10 @@
  *   メガストーンのメガ先 / per-reg 解禁）と en・エンティティ key を書く。
  * - **per-reg moves（per-species）は既存種族エントリを保護**: 既に解禁種族として存在する場合はその `moves` を
  *   触らない（中間 JSON が部分集合でも上書き縮小しない）。新規種族のみ Serebii 全件で `moves` を著述する。
- * - **メガ linking は自動化しない**: Serebii のメガ名（`Mega Garchomp`）は catalog のメガ種族 id 規約
- *   （`garchomp-mega`）へ決定論変換できないため、megaLinks / メガ種族 / per-reg `mega` の著述は authoring 層へ
- *   エスカレーション（diagnostic を stderr に出す）。
+ * - **メガ linking は決定論で自動著述**: base slug は既知のため、Serebii のメガ名の枝サフィックス（`""`/`X`/`Y`）
+ *   だけ拾えば `<baseslug>-mega[-x|-y]` を組める（`megaSpeciesId`）。megaLinks / メガ先種族エントリ / per-reg
+ *   `mega` / メガストーンの `megaSpecies` を append/既存尊重で著述する。`Mega ` 接頭の無い特殊形（Primal 等）・
+ *   未知 id だけ自動著述せず escalation（diagnostic）に残す（ADR 0031 を supersede）。
  *
  * 使い方（実行順: `fetch-serebii` → `scrape-serebii` → 本スクリプト → `fetch:data` → `materialize` →
  * `check:regulation` → `generate:data`）:
@@ -31,7 +32,7 @@ import {
   abilityEnFromId,
   abilityIds,
   itemCatalogFields,
-  megaFormNames,
+  megaAuthoring,
   moveCatalogFields,
   regMoveIds,
   sortedUnion,
@@ -97,11 +98,33 @@ function writeIf(file: string, doc: Document, changed: boolean): void {
 function transcribeSpecies(slug: string, regId: string, jsonPath: string | undefined): void {
   const p = readJson<ParsedSpecies>(jsonPath);
 
-  // --- catalog: species / moves / abilities（構造データ・ja は空で残し materialize が埋める） ---
+  // メガ自動著述プラン（決定論変換・null は escalations へ分離・[ADR 0024] のメガ運用）。
+  const auth = megaAuthoring(slug, p);
+
+  // --- catalog: species（base）+ メガ先種族エントリ（en のみ・構造は materialize が後埋め）+ megaLinks ---
   const speciesFile = join(CAT, "species.yaml");
   const speciesDoc = loadDoc(speciesFile);
   const pokemon = speciesDoc.get("pokemon") as YAMLMap;
-  const speciesChanged = upsert(speciesDoc, pokemon, slug, speciesCatalogFields(p));
+  let speciesChanged = upsert(speciesDoc, pokemon, slug, speciesCatalogFields(p));
+  for (const e of auth.speciesEntries) {
+    speciesChanged = upsert(speciesDoc, pokemon, e.id, { en: e.en }) || speciesChanged;
+  }
+  if (auth.ids.length > 0) {
+    // megaLinks（top-level map）へ append-only union（既存メガ先を消さない）。
+    let megaLinks = speciesDoc.get("megaLinks") as YAMLMap | undefined;
+    if (megaLinks === undefined) {
+      megaLinks = speciesDoc.createNode({}) as YAMLMap;
+      speciesDoc.set("megaLinks", megaLinks);
+      speciesChanged = true;
+    }
+    const links = megaLinks.toJS(speciesDoc) as Record<string, string[]>;
+    const existing = links[slug] ?? [];
+    const merged = sortedUnion(existing, auth.ids);
+    if (merged.length !== existing.length) {
+      megaLinks.set(slug, speciesDoc.createNode(merged));
+      speciesChanged = true;
+    }
+  }
   writeIf(speciesFile, speciesDoc, speciesChanged);
 
   const movesFile = join(CAT, "moves.yaml");
@@ -123,24 +146,24 @@ function transcribeSpecies(slug: string, regId: string, jsonPath: string | undef
   }
   writeIf(abilitiesFile, abilitiesDoc, abilitiesChanged);
 
-  // --- regulation: per-species moves（既存種族は保護・新規のみ全件著述） ---
+  // --- regulation: per-species moves + mega[]（既存種族は保護・新規のみ全件著述） ---
   const file = regPath(regId);
   const regDoc = loadDoc(file);
   if (regDoc.has(slug)) {
     warn(
-      `reg ${regId}: species '${slug}' already allowed — leaving its moves untouched (既存尊重)`,
+      `reg ${regId}: species '${slug}' already allowed — leaving its moves/mega untouched (既存尊重)`,
     );
   } else {
-    const entry = regDoc.createNode({ moves: regMoveIds(p) });
-    regDoc.set(slug, entry);
+    const entry: Record<string, unknown> = { moves: regMoveIds(p) };
+    if (auth.ids.length > 0) entry.mega = auth.ids;
+    regDoc.set(slug, regDoc.createNode(entry));
     writeFileSync(file, regDoc.toString());
   }
 
-  // --- メガは自動 linking しない（id 規約のずれ）。diagnostic だけ出す ---
-  const megas = megaFormNames(p);
-  if (megas.length > 0) {
+  // --- 決定論変換できなかったメガ（Primal 等・非 `Mega ` 形）だけ escalation（自動著述しない） ---
+  if (auth.escalations.length > 0) {
     warn(
-      `species '${slug}' has mega form(s) ${JSON.stringify(megas)} — megaLinks / mega species entry / per-reg 'mega' must be authored manually (Serebii mega name → catalog id is not deterministic)`,
+      `species '${slug}' has non-deterministic mega form(s) ${JSON.stringify(auth.escalations)} — not auto-authored, escalate to authoring (Primal / non-'Mega ' forms)`,
     );
   }
 }

@@ -13,6 +13,7 @@
  * append/既存尊重は `planFields`（`../materialize.ts`）を呼び出し側が再利用する。本関数は「fresh な転記値」を
  * 組むことに専念し、既存値との突き合わせ・conflict 判定は持たない（純変換）。
  */
+import { isCatalogIdShape } from "./normalize.ts";
 import type { ParsedItem, ParsedMove, ParsedSpecies } from "./parse.ts";
 
 /**
@@ -53,17 +54,23 @@ export function speciesCatalogFields(p: ParsedSpecies): SpeciesCatalogFields {
   return { en: p.en };
 }
 
-/** items.yaml の Serebii 由来欄（en + メガストーンのメガ先。ja / category は materialize が埋める）。 */
+/**
+ * items.yaml の Serebii 由来欄（en + メガストーンのメガ先 `megaStoneFor`（base 種族）+ メガ形態
+ * `megaSpecies`（Phase 7 新設のストーン→形態リンク）。ja / category は materialize が埋める）。
+ */
 export interface ItemCatalogFields {
   en: string;
   megaStoneFor?: string;
+  megaSpecies?: string;
 }
 
-/** `ParsedItem` → items.yaml 転記欄（メガストーンのみ `megaStoneFor` を持つ）。 */
+/** `ParsedItem` → items.yaml 転記欄（メガストーンのみ `megaStoneFor` / `megaSpecies` を持つ）。 */
 export function itemCatalogFields(it: ParsedItem): ItemCatalogFields {
-  return it.megaStoneFor === null
-    ? { en: it.name }
-    : { en: it.name, megaStoneFor: it.megaStoneFor };
+  if (it.megaStoneFor === null) return { en: it.name };
+  const fields: ItemCatalogFields = { en: it.name, megaStoneFor: it.megaStoneFor };
+  const megaSpecies = megaStoneSpeciesId(it.id, it.megaStoneFor);
+  if (megaSpecies !== null) fields.megaSpecies = megaSpecies;
+  return fields;
 }
 
 /** 種族の特性 id（abilities.yaml に key を確保する対象。ja は materialize が補完）。 */
@@ -95,11 +102,54 @@ export function sortedUnion(existing: readonly string[], fresh: readonly string[
 }
 
 /**
- * メガフォルムの表示名一覧（diagnostic 用）。Serebii のメガ名（`Mega Garchomp` / `Mega Charizard X`）は
- * catalog のメガ種族 id 規約（`garchomp-mega` / `charizard-mega-x`）へ**決定論変換できない**（接頭辞 `Mega ` と
- * 接尾辞 `-mega` のずれ）。よって本関数はメガ id を導出せず**名前だけ**を返し、megaLinks / メガ種族エントリ /
- * per-reg `mega` の著述は authoring 層（survey-regulation skill・人手 / SubAgent）へエスカレーションする。
+ * メガ表示名 → メガ形態 catalog 種族 id（決定論変換）。base slug は既知（呼び出し側が処理中の種族 slug を
+ * 渡す）ため、メガ名の**枝サフィックス**（`""` / `"X"` / `"Y"`）だけ拾えば `<baseSlug>-mega[-x|-y]` を組める
+ * （base 表示名をパースしないので en≠slug の地域フォルムでも破綻しない）。`Mega ` 接頭の無い形（Primal 等）や
+ * catalog id 形にならないものは **`null`**（自動著述せず authoring へ escalation・誤 id 注入防止＝`normalize.ts`
+ * の `normalizeAgainstCatalog` と同思想）。
  */
-export function megaFormNames(p: ParsedSpecies): string[] {
-  return p.megas.map((m) => m.name);
+export function megaSpeciesId(baseSlug: string, megaName: string): string | null {
+  const m = megaName.trim().match(/^Mega\s+.*?(?:\s+([XY]))?$/);
+  if (m === null) return null; // `Mega ` 接頭が無い（Primal 等）→ escalation
+  const suffix = m[1] ? `-${m[1].toLowerCase()}` : "";
+  const id = `${baseSlug}-mega${suffix}`;
+  return isCatalogIdShape(id) ? id : null;
+}
+
+/**
+ * メガストーン id + メガ先 base 種族 id → メガ形態種族 id（`ItemBase.megaSpecies`・Phase 7 のストーン→形態
+ * リンク）。ストーン id の枝サフィックス（`-x` / `-y`）で X/Y を区別する（`charizardite-x` → `charizard-mega-x`
+ * / `garchompite` → `garchomp-mega`）。catalog id 形にならないものは `null`（誤 id 注入防止）。
+ */
+export function megaStoneSpeciesId(stoneId: string, megaStoneFor: string): string | null {
+  const m = stoneId.match(/-([xy])$/);
+  const suffix = m ? `-${m[1]}` : "";
+  const id = `${megaStoneFor}-mega${suffix}`;
+  return isCatalogIdShape(id) ? id : null;
+}
+
+/** 種族のメガ自動著述プラン（megaLinks / メガ先種族エントリ / per-reg `mega[]` の材料）。 */
+export interface MegaAuthoring {
+  /** メガ形態 id（昇順・重複なし）。megaLinks の値・per-reg `mega[]` に使う。 */
+  ids: string[];
+  /** catalog `pokemon` へ追加するメガ先種族エントリ（en のみ・構造は materialize が後埋め）。 */
+  speciesEntries: { id: string; en: string }[];
+  /** 決定論変換できなかったメガ名（Primal 等）。呼び出し側が diagnostic に残す（自動著述しない）。 */
+  escalations: string[];
+}
+
+/**
+ * 種族の全メガへ `megaSpeciesId` を適用し、自動著述プランへまとめる。`null`（Primal 等の決定論変換不能）は
+ * `escalations` に分け、確実なものだけ `ids` / `speciesEntries` に積む（決定論で確実なものだけ自動化）。
+ */
+export function megaAuthoring(baseSlug: string, p: ParsedSpecies): MegaAuthoring {
+  const speciesEntries: { id: string; en: string }[] = [];
+  const escalations: string[] = [];
+  for (const mega of p.megas) {
+    const id = megaSpeciesId(baseSlug, mega.name);
+    if (id === null) escalations.push(mega.name);
+    else speciesEntries.push({ id, en: mega.name });
+  }
+  const ids = [...new Set(speciesEntries.map((e) => e.id))].sort();
+  return { ids, speciesEntries, escalations };
 }

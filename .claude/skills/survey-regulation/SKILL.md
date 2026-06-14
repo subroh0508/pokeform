@@ -50,7 +50,7 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
 ## 3 層ハイブリッド（決定論スクレイパー + 自己修復）
 
 正しさの核は**層1**（cross-agent 共有の npm script + テスト済み純関数）にあり、層2-3 は **Claude 固有の取得
-加速・自動修復層**である（[ADR 0031](../../../docs/adr/0031-deterministic-serebii-scraper-hybrid-layers.md)）。
+加速・自動修復層**である（[ADR 0031](../../../docs/adr/archive/0031-deterministic-serebii-scraper-hybrid-layers.md)）。
 詳細な DOM / 正規化 / exit code は [`references/serebii-sourcing.md`](./references/serebii-sourcing.md)。
 
 | 層 | 何をするか | 実体 | エージェント |
@@ -62,8 +62,10 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
 - **exit code 契約**（`scrape:serebii` が決定論判定・層2-3 のトリガ）: `0` 健全 / `2` 取得失敗 / `3` schema 欠落 /
   `4` 件数・健全性違反。stderr に `{slug, stage, missingFields, rawHtmlPath}` の 1 行 JSON 診断。**HTML 本文は
   読まない**（LLM コンテキストに載せない＝トークン最小化）。
-- **メガ linking は決定論変換できない**（Serebii メガ名 → catalog メガ id）ため、層では自動化せず手順 5 の
-  手動著述（`mega[]`）に残す。
+- **メガ linking は決定論で自動著述する**（[ADR 0033](../../../docs/adr/0033-deterministic-mega-auto-authoring.md)）。
+  base slug 既知 + メガ名の枝サフィックス（`""`/`X`/`Y`）から `serebii:catalog` が `megaLinks` / メガ先種族
+  エントリ / per-reg `mega[]` / メガストーンの `megaSpecies` を著述する。`Mega ` 接頭の無い特殊形（Primal 等）・
+  未知 id だけ escalation（diagnostic）に残るので、手順 5 で **escalation の有無を確認**する（通常メガは手動著述不要）。
 
 ### cross-agent フォールバック（正しさは層1 に宿る）
 
@@ -144,12 +146,14 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
 > `materialize` 後に `species.yaml` の `abilities`（または `data/raw/pokemon/<slug>.json` の
 > `abilities[].ability.name`）の id を `abilities.yaml` へ id→名前 で集約してから手順 6 の generate に進む。
 
-### 5. メガ linking + per-reg を手動で仕上げる
+### 5. per-reg `mega[]` 確認 + per-reg 予約キーを仕上げる
 
-決定論変換できない部分を手で仕上げる:
+メガ linking は手順 2（`serebii:catalog`）が決定論で自動著述するので、ここでは確認と残りの仕上げに絞る:
 
-- **メガ linking**: `species.yaml` の `megaLinks` とメガ先 slug、per-reg 種族の `mega[]`（1 種族複数メガ可）を
-  手動著述する（Serebii メガ名 → catalog メガ id の決定論変換が不能なため・手順 2 では埋まらない）。
+- **メガ linking 確認**: `species.yaml` の `megaLinks` / メガ先種族エントリ、per-reg 種族の `mega[]`、メガストーンの
+  `megaSpecies` は `serebii:catalog` が自動著述済み（[ADR 0033](../../../docs/adr/0033-deterministic-mega-auto-authoring.md)）。
+  `serebii:catalog` の **escalation diagnostic**（`Mega ` 接頭の無い特殊形 = Primal 等・未知 id）が出た種だけ手動著述する
+  （通常の `Mega <Base>[ X|Y]` は手動不要）。
 - **per-reg 予約キー**: `regulations/<id>.yaml` の `name` / `period`（開催中は `period.end` を `null`）/ `items`
   予約キー（解禁持ち物 全件）を確認・補う。トップレベル種族キーの存在 = 解禁（`allow.{...}` ラッパーは使わない）。
 
@@ -188,8 +192,10 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
   （層1 の自己検証）に依存する。技メタ（type / power 等）も Serebii で確定し、構造欠落のみ生成段 tsc が弾く。
 - **append-only を守る**: 没収された種・技・**非解禁持ち物**（M-A の life-orb / assault-vest / rocky-helmet 等）も
   catalog から消さない。解禁/非解禁の現況は per-reg の種族キー存在 / `items` 予約キーが表す。
-- **メガ linking は手動**: Serebii メガ名 → catalog メガ id は決定論変換できないため層では自動化せず手順 5 で
-  手動著述する（自動化しようとしない）。
+- **メガ linking は決定論で自動著述**: base slug 既知 + メガ名の枝サフィックス（`""`/`X`/`Y`）から `serebii:catalog`
+  が `megaLinks` / メガ先種族エントリ / per-reg `mega[]` / メガストーンの `megaSpecies` を append/既存尊重で書く
+  （[ADR 0033](../../../docs/adr/0033-deterministic-mega-auto-authoring.md)）。`Mega ` 接頭の無い特殊形（Primal 等）・
+  未知 id だけ escalation（diagnostic）に残り手順 5 で手当する。通常メガを手で著述しようとしない。
 - **複数フォルム種の slug**: 地域フォルム・バトルフォルム・メガ先は PokeAPI / Serebii slug が `<name>-<form>`。
   default slug が意図と違う種・Serebii で別 URL になるフォルム（例: rotom 系）は手順 7 の fallback で吸収する。
 - **生成物を手編集しない**: `data/generated/**` は触らず catalog / per-reg を直して再生成する（[[data-pipeline]]）。
@@ -209,7 +215,7 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
   [ADR 0023](../../../docs/adr/0023-generate-transformer-and-check-regulation.md)（generate 責務 / `check:regulation`）/
   [ADR 0026](../../../docs/adr/0026-pokeapi-not-champions-legality-source.md)（PokeAPI を legality / 技メタの信頼源にしない）/
   [ADR 0027](../../../docs/adr/0027-structural-data-catalog-sot.md)（構造データ SoT を catalog へ・`materialize` 新設）/
-  [ADR 0031](../../../docs/adr/0031-deterministic-serebii-scraper-hybrid-layers.md)（決定論スクレイパー + 3 層ハイブリッド）/
+  [ADR 0031](../../../docs/adr/archive/0031-deterministic-serebii-scraper-hybrid-layers.md)（決定論スクレイパー + 3 層ハイブリッド）/
   [ADR 0032](../../../docs/adr/0032-japanese-name-source-pokeapi-names.md)（日本語名 ja は PokeAPI names）。
 - 検証 / 生成: [`verify`](../verify/SKILL.md) / `pnpm check:regulation` / `pnpm generate:data`。
 - 利用者パーティ点検: [`review-party`](../review-party/SKILL.md) / 生成データ妥当性: `pokemon-data-reviewer` agent。
