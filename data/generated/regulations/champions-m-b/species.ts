@@ -1,14 +1,10 @@
 // 生成物（scripts/generate.ts 出力）。手書き編集しない。raw/champions を直し再生成する。
-import type { SpeciesBase } from "../../../../src/types/species.ts";
+import type { PerRegSpecies } from "../../../../src/types/species.ts";
 
 export const speciesDex = {
   garchomp: {
     dex: 445,
     id: "garchomp",
-    name: {
-      en: "Garchomp",
-      ja: "ガブリアス",
-    },
     types: ["dragon", "ground"],
     baseStats: {
       hp: 108,
@@ -33,10 +29,6 @@ export const speciesDex = {
   dragonite: {
     dex: 149,
     id: "dragonite",
-    name: {
-      en: "Dragonite",
-      ja: "カイリュー",
-    },
     types: ["dragon", "flying"],
     baseStats: {
       hp: 91,
@@ -66,10 +58,6 @@ export const speciesDex = {
   "rotom-wash": {
     dex: 479,
     id: "rotom-wash",
-    name: {
-      en: "Wash Rotom",
-      ja: "ウォッシュロトム",
-    },
     types: ["electric", "water"],
     baseStats: {
       hp: 50,
@@ -94,10 +82,6 @@ export const speciesDex = {
   charizard: {
     dex: 6,
     id: "charizard",
-    name: {
-      en: "Charizard",
-      ja: "リザードン",
-    },
     types: ["fire", "flying"],
     baseStats: {
       hp: 78,
@@ -125,10 +109,6 @@ export const speciesDex = {
   dragapult: {
     dex: 887,
     id: "dragapult",
-    name: {
-      en: "Dragapult",
-      ja: "ドラパルト",
-    },
     types: ["dragon", "ghost"],
     baseStats: {
       hp: 88,
@@ -154,10 +134,6 @@ export const speciesDex = {
   hydreigon: {
     dex: 635,
     id: "hydreigon",
-    name: {
-      en: "Hydreigon",
-      ja: "サザンドラ",
-    },
     types: ["dark", "dragon"],
     baseStats: {
       hp: 92,
@@ -185,10 +161,6 @@ export const speciesDex = {
   "charizard-mega-x": {
     dex: 6,
     id: "charizard-mega-x",
-    name: {
-      en: "Mega Charizard X",
-      ja: "メガリザードンＸ",
-    },
     types: ["fire", "dragon"],
     baseStats: {
       hp: 78,
@@ -212,7 +184,7 @@ export const speciesDex = {
     ],
     items: "any",
   },
-} as const satisfies Record<string, SpeciesBase>;
+} as const satisfies Record<string, PerRegSpecies>;
 
 export type SpeciesDex = typeof speciesDex;
 export type SpeciesId = keyof SpeciesDex;

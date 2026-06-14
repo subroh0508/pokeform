@@ -1,14 +1,10 @@
 // 生成物（scripts/generate.ts 出力）。手書き編集しない。raw/champions を直し再生成する。
-import type { SpeciesBase } from "../../../../src/types/species.ts";
+import type { PerRegSpecies } from "../../../../src/types/species.ts";
 
 export const speciesDex = {
   garchomp: {
     dex: 445,
     id: "garchomp",
-    name: {
-      en: "Garchomp",
-      ja: "ガブリアス",
-    },
     types: ["dragon", "ground"],
     baseStats: {
       hp: 108,
@@ -84,10 +80,6 @@ export const speciesDex = {
   dragonite: {
     dex: 149,
     id: "dragonite",
-    name: {
-      en: "Dragonite",
-      ja: "カイリュー",
-    },
     types: ["dragon", "flying"],
     baseStats: {
       hp: 91,
@@ -121,10 +113,6 @@ export const speciesDex = {
   "rotom-wash": {
     dex: 479,
     id: "rotom-wash",
-    name: {
-      en: "Wash Rotom",
-      ja: "ウォッシュロトム",
-    },
     types: ["electric", "water"],
     baseStats: {
       hp: 50,
@@ -155,10 +143,6 @@ export const speciesDex = {
   charizard: {
     dex: 6,
     id: "charizard",
-    name: {
-      en: "Charizard",
-      ja: "リザードン",
-    },
     types: ["fire", "flying"],
     baseStats: {
       hp: 78,
@@ -249,10 +233,6 @@ export const speciesDex = {
   dragapult: {
     dex: 887,
     id: "dragapult",
-    name: {
-      en: "Dragapult",
-      ja: "ドラパルト",
-    },
     types: ["dragon", "ghost"],
     baseStats: {
       hp: 88,
@@ -285,10 +265,6 @@ export const speciesDex = {
   hydreigon: {
     dex: 635,
     id: "hydreigon",
-    name: {
-      en: "Hydreigon",
-      ja: "サザンドラ",
-    },
     types: ["dark", "dragon"],
     baseStats: {
       hp: 92,
@@ -321,10 +297,6 @@ export const speciesDex = {
   aggron: {
     dex: 306,
     id: "aggron",
-    name: {
-      en: "Aggron",
-      ja: "ボスゴドラ",
-    },
     types: ["steel", "rock"],
     baseStats: {
       hp: 70,
@@ -356,10 +328,6 @@ export const speciesDex = {
   alakazam: {
     dex: 65,
     id: "alakazam",
-    name: {
-      en: "Alakazam",
-      ja: "フーディン",
-    },
     types: ["psychic"],
     baseStats: {
       hp: 55,
@@ -392,10 +360,6 @@ export const speciesDex = {
   arcanine: {
     dex: 59,
     id: "arcanine",
-    name: {
-      en: "Arcanine",
-      ja: "ウインディ",
-    },
     types: ["fire"],
     baseStats: {
       hp: 90,
@@ -427,10 +391,6 @@ export const speciesDex = {
   blastoise: {
     dex: 9,
     id: "blastoise",
-    name: {
-      en: "Blastoise",
-      ja: "カメックス",
-    },
     types: ["water"],
     baseStats: {
       hp: 79,
@@ -463,10 +423,6 @@ export const speciesDex = {
   chandelure: {
     dex: 609,
     id: "chandelure",
-    name: {
-      en: "Chandelure",
-      ja: "シャンデラ",
-    },
     types: ["ghost", "fire"],
     baseStats: {
       hp: 60,
@@ -498,10 +454,6 @@ export const speciesDex = {
   corviknight: {
     dex: 823,
     id: "corviknight",
-    name: {
-      en: "Corviknight",
-      ja: "アーマーガア",
-    },
     types: ["flying", "steel"],
     baseStats: {
       hp: 98,
@@ -533,10 +485,6 @@ export const speciesDex = {
   decidueye: {
     dex: 724,
     id: "decidueye",
-    name: {
-      en: "Decidueye",
-      ja: "ジュナイパー",
-    },
     types: ["grass", "ghost"],
     baseStats: {
       hp: 78,
@@ -570,10 +518,6 @@ export const speciesDex = {
   excadrill: {
     dex: 530,
     id: "excadrill",
-    name: {
-      en: "Excadrill",
-      ja: "ドリュウズ",
-    },
     types: ["ground", "steel"],
     baseStats: {
       hp: 110,
@@ -606,10 +550,6 @@ export const speciesDex = {
   garganacl: {
     dex: 934,
     id: "garganacl",
-    name: {
-      en: "Garganacl",
-      ja: "キョジオーン",
-    },
     types: ["rock"],
     baseStats: {
       hp: 100,
@@ -641,10 +581,6 @@ export const speciesDex = {
   gengar: {
     dex: 94,
     id: "gengar",
-    name: {
-      en: "Gengar",
-      ja: "ゲンガー",
-    },
     types: ["ghost", "poison"],
     baseStats: {
       hp: 60,
@@ -738,10 +674,6 @@ export const speciesDex = {
   greninja: {
     dex: 658,
     id: "greninja",
-    name: {
-      en: "Greninja",
-      ja: "ゲッコウガ",
-    },
     types: ["water", "dark"],
     baseStats: {
       hp: 72,
@@ -775,10 +707,6 @@ export const speciesDex = {
   heracross: {
     dex: 214,
     id: "heracross",
-    name: {
-      en: "Heracross",
-      ja: "ヘラクロス",
-    },
     types: ["bug", "fighting"],
     baseStats: {
       hp: 80,
@@ -810,10 +738,6 @@ export const speciesDex = {
   krookodile: {
     dex: 553,
     id: "krookodile",
-    name: {
-      en: "Krookodile",
-      ja: "ワルビアル",
-    },
     types: ["ground", "dark"],
     baseStats: {
       hp: 95,
@@ -847,10 +771,6 @@ export const speciesDex = {
   lucario: {
     dex: 448,
     id: "lucario",
-    name: {
-      en: "Lucario",
-      ja: "ルカリオ",
-    },
     types: ["fighting", "steel"],
     baseStats: {
       hp: 70,
@@ -884,10 +804,6 @@ export const speciesDex = {
   meowscarada: {
     dex: 908,
     id: "meowscarada",
-    name: {
-      en: "Meowscarada",
-      ja: "マスカーニャ",
-    },
     types: ["grass", "dark"],
     baseStats: {
       hp: 76,
@@ -920,10 +836,6 @@ export const speciesDex = {
   milotic: {
     dex: 350,
     id: "milotic",
-    name: {
-      en: "Milotic",
-      ja: "ミロカロス",
-    },
     types: ["water"],
     baseStats: {
       hp: 95,
@@ -955,10 +867,6 @@ export const speciesDex = {
   quaquaval: {
     dex: 914,
     id: "quaquaval",
-    name: {
-      en: "Quaquaval",
-      ja: "ウェーニバル",
-    },
     types: ["water", "fighting"],
     baseStats: {
       hp: 85,
@@ -991,10 +899,6 @@ export const speciesDex = {
   skeledirge: {
     dex: 911,
     id: "skeledirge",
-    name: {
-      en: "Skeledirge",
-      ja: "ラウドボーン",
-    },
     types: ["fire", "ghost"],
     baseStats: {
       hp: 104,
@@ -1026,10 +930,6 @@ export const speciesDex = {
   talonflame: {
     dex: 663,
     id: "talonflame",
-    name: {
-      en: "Talonflame",
-      ja: "ファイアロー",
-    },
     types: ["fire", "flying"],
     baseStats: {
       hp: 78,
@@ -1062,10 +962,6 @@ export const speciesDex = {
   tyranitar: {
     dex: 248,
     id: "tyranitar",
-    name: {
-      en: "Tyranitar",
-      ja: "バンギラス",
-    },
     types: ["rock", "dark"],
     baseStats: {
       hp: 100,
@@ -1099,10 +995,6 @@ export const speciesDex = {
   "garchomp-mega": {
     dex: 445,
     id: "garchomp-mega",
-    name: {
-      en: "Mega Garchomp",
-      ja: "メガガブリアス",
-    },
     types: ["dragon", "ground"],
     baseStats: {
       hp: 108,
@@ -1177,10 +1069,6 @@ export const speciesDex = {
   "charizard-mega-x": {
     dex: 6,
     id: "charizard-mega-x",
-    name: {
-      en: "Mega Charizard X",
-      ja: "メガリザードンＸ",
-    },
     types: ["fire", "dragon"],
     baseStats: {
       hp: 78,
@@ -1270,10 +1158,6 @@ export const speciesDex = {
   "charizard-mega-y": {
     dex: 6,
     id: "charizard-mega-y",
-    name: {
-      en: "Mega Charizard Y",
-      ja: "メガリザードンＹ",
-    },
     types: ["fire", "flying"],
     baseStats: {
       hp: 78,
@@ -1363,10 +1247,6 @@ export const speciesDex = {
   "gengar-mega": {
     dex: 94,
     id: "gengar-mega",
-    name: {
-      en: "Mega Gengar",
-      ja: "メガゲンガー",
-    },
     types: ["ghost", "poison"],
     baseStats: {
       hp: 60,
@@ -1456,7 +1336,7 @@ export const speciesDex = {
     ],
     items: "any",
   },
-} as const satisfies Record<string, SpeciesBase>;
+} as const satisfies Record<string, PerRegSpecies>;
 
 export type SpeciesDex = typeof speciesDex;
 export type SpeciesId = keyof SpeciesDex;

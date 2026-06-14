@@ -34,6 +34,14 @@ export interface SpeciesBase extends SpeciesBaseInfo {
   readonly items: "any" | readonly ItemId[];
 }
 
+/**
+ * **per-regulation 種族 dex の生成形**用の型。`SpeciesBase` から `name`（ja/en）を除いたもの。
+ * 種族名の SoT・実利用は reg 不変の `speciesBaseDex`（`data/generated/species-base.ts`）に集約され、
+ * per-reg 側は重複保持しているだけで読み手がいないため生成形から落とす（Phase 8 の dedup）。per-reg dex は
+ * per-reg 可変フィールド（`moves` / `abilities` / `items` / `megaEvolvesTo`）に集中する。
+ */
+export type PerRegSpecies = Omit<SpeciesBase, "name">;
+
 export type { SpeciesBaseDex, SpeciesBaseId } from "../../data/generated/species-base.ts";
 /** 生成済みの reg 不変 base view（値）/ SpeciesBaseDex（型）/ SpeciesBaseId を re-export する。 */
 export { speciesBaseDex } from "../../data/generated/species-base.ts";
