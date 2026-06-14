@@ -3,9 +3,10 @@
 `survey-regulation` skill による Champions 解禁データ取得を、LLM の WebFetch 目視抽出から **決定論スクレイパー
 （cheerio）+ Haiku 取得 SubAgent + 修正 SubAgent 自己修復（ハイブリッド3層）**へ刷新する計画群。トークン消費の
 削減と正確性の向上を狙い、最後に新パイプラインで M-A 全186種を投入する。02-data-model-redesign の最終 phase
-だった「M-A 全データ投入」は新パイプラインで実行すべきため、本計画群の最終 phase（Phase 10）へ移動した。
-動作確認で判明した是正（per-reg 持ち物 legality・per-reg species name 削除・メガ決定論取り込み）を全量投入の前に
-Phase 7-9 として追加している。
+だった「M-A 全データ投入」は新パイプラインで実行すべきため、本計画群の最終 phase（Phase 13）へ移動した。
+動作確認で判明した是正（per-reg 持ち物 legality・per-reg species name 削除・メガ決定論取り込み）を Phase 7-9 として、
+全量投入前のデータレイアウト整備（ゲームグルーピング・per-game 技メタ・取得スキル 2 分割）を Phase 10-12 として
+全量投入の前に追加している。
 
 > 設計の正本は [`OVERVIEW.md`](./OVERVIEW.md)（ゴール / 背景 / 設計方針 / 実装指針 / スコープ外 /
 > 計画群全体の受け入れ基準）。規約は [`.claude/rules/data-pipeline.md`](../../../.claude/rules/data-pipeline.md) /

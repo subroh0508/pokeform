@@ -55,8 +55,9 @@
 
 - **新 ADR**（`adr-new`）で **ADR 0026 の「技メタの SoT を `catalog/moves.yaml` へ」決定を改訂**し、技メタ SoT を
   **per-game `regulations/champions/moves.yaml`** とする（PokeAPI を技メタ信頼源にしない方針＝ADR 0026 の核は不変。
-  「Champions 固有値なので所在は per-game」へ精緻化する supersede）。0026 を `Superseded by ...` にして archive へ
-  退避するか、所在のみの部分改訂として補注で足すかは判定（不可逆なら supersede）。
+  「Champions 固有値なので所在は per-game」へ精緻化する supersede）。技メタ SoT の所在変更は決定の意味変更に当たるため、
+  adr.md の規約どおり**補注追記ではなく supersede で行う**（0026 を `Superseded by ...` にして archive へ退避し、
+  新 ADR をアクティブにする）。
 - `.claude/rules/data-pipeline.md`: 「`moves.yaml` は id→名前 + 技メタ」「生成 `moves`（name + 技メタ）」の表・
   本文を新所在（catalog = 名前 / regulations/champions = 技メタ）へ更新。`type-conventions.md` の moves 記述も追従。
 
