@@ -44,7 +44,7 @@ flowchart TD
 - [x] [Phase 9 — メガ関連の決定論自動取り込み（megaLinks / mega[] / megaSpecies 自動著述・ADR 0031 supersede）](./phase-09-deterministic-mega-capture.md)
 - [x] [Phase 10 — regulations をゲームグルーピング（`regulations/champions/m-(a|b).yaml`）](./phase-10-game-grouped-regulations.md)
 - [x] [Phase 11 — 技メタを per-game へ移転（catalog = 名前 / `regulations/champions/moves.yaml` = 技メタ・ADR 0026 改訂）](./phase-11-per-game-move-meta.md)
-- [ ] [Phase 12 — 取得スキルを 2 分割（catalog 取得 / regulations 取得）+ catalog 更新チェックポイント](./phase-12-update-skill-split.md)
+- [x] [Phase 12 — 取得スキルを 2 分割（catalog 取得 / regulations 取得）+ catalog 更新チェックポイント](./phase-12-update-skill-split.md)
 - [ ] [Phase 13 — M-A 全データ投入（全186種 + 全 movepool・新パイプライン経由・旧 02 phase-20）](./phase-13-ma-full-data.md)
 
 > 計画群全体の受け入れ基準は [`OVERVIEW.md` の「受け入れ基準」節](./OVERVIEW.md#受け入れ基準) を参照。

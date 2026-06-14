@@ -218,9 +218,11 @@ per-reg `items` 予約キーへ反映する:
    catalog / regulations へ append / 既存尊重で転記。**メガ linking（`megaLinks` / メガ先種族エントリ / per-reg
    `mega[]` / メガストーンの `megaSpecies`）も決定論で自動著述**する（ADR 0033）。`Mega ` 接頭の無い特殊形・未知 id は
    escalation（diagnostic）に出る。
-4. **`fetch:data` → `materialize`**: 構造データ（`dex` / `types` / `stats` / `abilities` / `category`）と日本語名
-   ja（PokeAPI `names`・ADR 0032）を catalog へ転記（append / 既存尊重・ADR 0027）。**順序保証は本 skill の責務**
-   （スクリプトは raw 不在で fail-fast するだけ・ADR 0027）。特性 id は materialize 後に `abilities.yaml` へ集約。
+4. **catalog 更新チェックポイント → `update-catalog` へ委譲**: 構造データ（`dex` / `types` / `stats` /
+   `abilities` / `category`）と日本語名 ja の catalog 取り込み（`fetch:data` → `materialize` + 特性 id 集約）は
+   [`update-catalog`](../../update-catalog/SKILL.md) の責務（取得元 = Serebii / PokeAPI で取得スキルを分離）。
+   `check:regulation` の参照整合エラーが未登録 id（種族 / 持ち物）を列挙したら、その id を `update-catalog` に渡して
+   先に catalog を揃えてから手順 5 へ戻る。不足なし（0 終了）なら手順 5 へ。
 5. **per-reg `mega[]` 確認 + per-reg 仕上げ**: メガ linking は手順 3 が自動著述済み（ADR 0033）。`serebii:catalog` の
    **escalation diagnostic**（`Mega ` 接頭の無い特殊形・未知 id）が出た種だけ手当し、`name` / `period` / `items` 予約
    キーを確認・補う。`escalated` 種は最終 WebFetch fallback で目視 + fixture 追加。
