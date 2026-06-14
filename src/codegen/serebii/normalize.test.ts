@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { EXCEPTIONS, isCatalogIdShape, normalizeAgainstCatalog, toCatalogId } from "./normalize.ts";
+import {
+  EXCEPTIONS,
+  ITEM_EXCEPTIONS,
+  isCatalogIdShape,
+  normalizeAgainstCatalog,
+  normalizeItemName,
+  toCatalogId,
+} from "./normalize.ts";
 
 describe("isCatalogIdShape", () => {
   it("accepts lower kebab ids", () => {
@@ -42,6 +49,23 @@ describe("toCatalogId", () => {
 
   it("ships an empty default exceptions table", () => {
     expect(EXCEPTIONS).toEqual({});
+  });
+});
+
+describe("normalizeItemName", () => {
+  it("kebab-cases item display names to catalog ids", () => {
+    expect(normalizeItemName("Choice Scarf")).toBe("choice-scarf");
+    expect(normalizeItemName("Oran Berry")).toBe("oran-berry");
+    expect(normalizeItemName("Charizardite X")).toBe("charizardite-x");
+  });
+
+  it("recovers hyphens from the display name that the compressed serebii slug loses", () => {
+    // serebii slug は never-meltice（1 ハイフン）だが表示名由来は PokeAPI slug never-melt-ice に一致する。
+    expect(normalizeItemName("Never-Melt Ice")).toBe("never-melt-ice");
+  });
+
+  it("ships an empty default item exceptions table", () => {
+    expect(ITEM_EXCEPTIONS).toEqual({});
   });
 });
 

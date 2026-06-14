@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { decodeSerebiiHtml, parseSpeciesPage } from "./parse.ts";
+import { decodeSerebiiHtml, parseItemsPage, parseSpeciesPage, slugFromHref } from "./parse.ts";
 
 const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), "__fixtures__");
 /** fixture は latin-1（ISO-8859-1）で保存されている（実 Serebii ページと同じ）。 */
@@ -91,6 +91,128 @@ describe("parseSpeciesPage — mega / multi-form species (charizard)", () => {
         statTotal: 634,
       },
     ]);
+  });
+});
+
+describe("slugFromHref", () => {
+  it("extracts the serebii item slug from an itemdex href", () => {
+    expect(slugFromHref("/itemdex/choicescarf.shtml")).toBe("choicescarf");
+    expect(slugFromHref("/itemdex/never-meltice.shtml")).toBe("never-meltice");
+  });
+
+  it("returns an empty string for a missing or slug-less href", () => {
+    expect(slugFromHref(undefined)).toBe("");
+    expect(slugFromHref("/itemdex/.shtml")).toBe("");
+  });
+});
+
+describe("parseItemsPage — items.shtml fixture (hold / mega-stone / berry; misc excluded)", () => {
+  const { items } = parseItemsPage(fixture("serebii-items"));
+
+  it("extracts hold items with display-name catalog ids and raw serebii slugs", () => {
+    expect(items.filter((i) => i.category === "hold")).toEqual([
+      {
+        name: "Choice Scarf",
+        id: "choice-scarf",
+        slug: "choicescarf",
+        category: "hold",
+        megaStoneFor: null,
+      },
+      {
+        name: "Never-Melt Ice",
+        id: "never-melt-ice", // 表示名由来 = PokeAPI slug（圧縮 slug never-meltice とずれる）
+        slug: "never-meltice",
+        category: "hold",
+        megaStoneFor: null,
+      },
+    ]);
+  });
+
+  it("extracts mega stones with the target base species pulled from the description text", () => {
+    expect(items.filter((i) => i.category === "mega-stone")).toEqual([
+      {
+        name: "Charizardite X",
+        id: "charizardite-x",
+        slug: "charizarditex",
+        category: "mega-stone",
+        megaStoneFor: "charizard",
+      },
+      {
+        name: "Floettite",
+        id: "floettite",
+        slug: "floettite",
+        category: "mega-stone",
+        megaStoneFor: "floette", // "A special Floette holding this stone…"
+      },
+    ]);
+  });
+
+  it("merges berries that span multiple tables within one section", () => {
+    // Berries セクションが 2 table にまたがる（次の見出しまで全 table を読む）ことを検証。
+    expect(items.filter((i) => i.category === "berry")).toEqual([
+      {
+        name: "Oran Berry",
+        id: "oran-berry",
+        slug: "oranberry",
+        category: "berry",
+        megaStoneFor: null,
+      },
+      {
+        name: "Sitrus Berry",
+        id: "sitrus-berry",
+        slug: "sitrusberry",
+        category: "berry",
+        megaStoneFor: null,
+      },
+    ]);
+  });
+
+  it("excludes the Miscellaneous Items section (tickets / coupons are not held items)", () => {
+    expect(items.map((i) => i.id)).not.toContain("training-ticket");
+    expect(items).toHaveLength(6); // hold 2 + mega-stone 2 + berry 2
+  });
+});
+
+describe("parseItemsPage — edge structures (missing slug / unmatched mega desc)", () => {
+  // itemdex href が slug パターン外（空 slug）・メガ説明文が "holding this" を含まない行を集約して境界を網羅。
+  const EDGE = `
+<div align="center"><font size="4"><b><u>Hold Items</u></b></font></div>
+<table class="dextable">
+  <tr><td class="fooevo">Picture</td><td class="fooevo">Name</td></tr>
+  <tr><td class="cen"><a href="/itemdex/.shtml"><img /></a></td>
+    <td class="fooinfo"><a href="/itemdex/.shtml">Mystery Item</a></td>
+    <td class="fooinfo">No slug in href.</td></tr></table>
+<div align="center"><font size="4"><b><u>Mega Stone</u></b></font></div>
+<table class="dextable">
+  <tr><td class="cen"><a href="/itemdex/weirdite.shtml"><img /></a></td>
+    <td class="fooinfo"><a href="/itemdex/weirdite.shtml">Weirdite</a></td>
+    <td class="fooinfo">A Mega Stone with no recognisable holder sentence.</td></tr></table>`;
+  const { items } = parseItemsPage(EDGE);
+
+  it("falls back to an empty slug when the itemdex href has no slug", () => {
+    expect(items[0]).toEqual({
+      name: "Mystery Item",
+      id: "mystery-item",
+      slug: "",
+      category: "hold",
+      megaStoneFor: null,
+    });
+  });
+
+  it("leaves megaStoneFor null when the description has no holder sentence", () => {
+    expect(items[1]).toEqual({
+      name: "Weirdite",
+      id: "weirdite",
+      slug: "weirdite",
+      category: "mega-stone",
+      megaStoneFor: null,
+    });
+  });
+});
+
+describe("parseItemsPage — no item sections", () => {
+  it("returns an empty list when no item section headings are present", () => {
+    expect(parseItemsPage("<html><body><p>nothing</p></body></html>")).toEqual({ items: [] });
   });
 });
 

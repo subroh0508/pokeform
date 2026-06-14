@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { ParsedSpecies } from "./parse.ts";
-import { validateSpecies } from "./schema.ts";
+import type { ParsedItems, ParsedSpecies } from "./parse.ts";
+import { validateItems, validateSpecies } from "./schema.ts";
 
 /** 健全な中間表現（各テストはこれを部分的に壊す）。 */
 function validSpecies(): ParsedSpecies {
@@ -90,5 +90,93 @@ describe("validateSpecies", () => {
       "move missing type: Bad Move",
       "move missing damageClass: Bad Move",
     ]);
+  });
+});
+
+/** 健全な持ち物ページの中間表現（各テストはこれを部分的に壊す）。 */
+function validItems(): ParsedItems {
+  return {
+    items: [
+      {
+        name: "Choice Scarf",
+        id: "choice-scarf",
+        slug: "choicescarf",
+        category: "hold",
+        megaStoneFor: null,
+      },
+      {
+        name: "Charizardite X",
+        id: "charizardite-x",
+        slug: "charizarditex",
+        category: "mega-stone",
+        megaStoneFor: "charizard",
+      },
+    ],
+  };
+}
+
+describe("validateItems", () => {
+  it("returns stage 0 for a healthy items page", () => {
+    expect(validateItems(validItems())).toEqual({ stage: 0, missingFields: [], issues: [] });
+  });
+
+  it("returns stage 3 when no items are parsed", () => {
+    expect(validateItems({ items: [] })).toEqual({
+      stage: 3,
+      missingFields: ["items"],
+      issues: [],
+    });
+  });
+
+  it("returns stage 4 for a malformed item id (labelled by slug, falling back to name)", () => {
+    const p: ParsedItems = {
+      items: [
+        {
+          name: "Choice Scarf",
+          id: "Choice Scarf",
+          slug: "choicescarf",
+          category: "hold",
+          megaStoneFor: null,
+        },
+        { name: "No Slug", id: "No Slug", slug: "", category: "hold", megaStoneFor: null },
+      ],
+    };
+    const result = validateItems(p);
+    expect(result.stage).toBe(4);
+    expect(result.issues).toEqual(["item id shape: choicescarf", "item id shape: No Slug"]);
+  });
+
+  it("returns stage 4 when a mega stone is missing its target species", () => {
+    const p: ParsedItems = {
+      items: [
+        {
+          name: "Weirdite",
+          id: "weirdite",
+          slug: "weirdite",
+          category: "mega-stone",
+          megaStoneFor: null,
+        },
+      ],
+    };
+    const result = validateItems(p);
+    expect(result.stage).toBe(4);
+    expect(result.issues).toEqual(["mega stone missing target: weirdite"]);
+  });
+
+  it("returns stage 4 when the mega target id is malformed", () => {
+    const p: ParsedItems = {
+      items: [
+        {
+          name: "Charizardite X",
+          id: "charizardite-x",
+          slug: "charizarditex",
+          category: "mega-stone",
+          megaStoneFor: "Charizard",
+        },
+      ],
+    };
+    const result = validateItems(p);
+    expect(result.stage).toBe(4);
+    expect(result.issues).toEqual(["mega target shape: Charizard"]);
   });
 });
