@@ -15,16 +15,17 @@
  *
  * 実行: `pnpm materialize`（fetch:data 後・ネットワーク不要）。
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Document, parseDocument, type YAMLMap } from "yaml";
 import {
   extractItemCategory,
+  extractJaName,
+  extractNames,
   extractSpeciesStructural,
   type FieldPlan,
   planFields,
-  type SpeciesStructural,
 } from "../src/codegen/materialize.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -34,6 +35,23 @@ const CAT = join(ROOT, "data", "champions", "catalog");
 /** raw JSON を 1 件読む（不在なら ENOENT で fail-fast）。 */
 const raw = <T>(category: string, name: string): T =>
   JSON.parse(readFileSync(join(RAW, category, `${name}.json`), "utf8")) as T;
+
+/** raw JSON を best-effort で読む（不在なら null）。move / ability の ja/en 補完は取得が無くても続行する。 */
+const rawOpt = <T>(category: string, name: string): T | null => {
+  const file = join(RAW, category, `${name}.json`);
+  return existsSync(file) ? (JSON.parse(readFileSync(file, "utf8")) as T) : null;
+};
+
+/** raw names から ja のみの転記欄を組む（取得できなければ空）。species/items/moves は en を Serebii 著述に委ねる。 */
+const jaOnly = (
+  r: { names?: { name: string; language: { name: string } }[] } | null,
+): { ja?: string } => {
+  const ja = r ? extractJaName(r) : undefined;
+  return ja !== undefined ? { ja } : {};
+};
+
+/** エントリが ja/en の少なくとも一方を欠くか（PokeAPI names 補完の対象判定）。 */
+const needsName = (entry: { ja?: string; en?: string }): boolean => !entry.ja || !entry.en;
 
 let conflictCount = 0;
 /** plan の fill をノードへ適用し、conflict を提示する。 */
@@ -71,26 +89,57 @@ for (const item of pokemon.items) {
     abilities: { ability: { name: string } }[];
     species: { name: string };
   }>("pokemon", slug);
-  const speciesJson = raw<{ id: number }>("pokemon-species", poke.species.name);
-  const fresh = extractSpeciesStructural(poke, speciesJson);
-  const plan = planFields(node.toJS(speciesDoc) as Partial<SpeciesStructural>, fresh);
+  const speciesJson = raw<{ id: number; names?: { name: string; language: { name: string } }[] }>(
+    "pokemon-species",
+    poke.species.name,
+  );
+  // 構造データ（dex/types/stats/abilities）+ 日本語名 ja（PokeAPI names・本 phase の ja 取得元 ADR）。
+  const fresh = { ...extractSpeciesStructural(poke, speciesJson), ...jaOnly(speciesJson) };
+  const plan = planFields(node.toJS(speciesDoc) as Partial<typeof fresh>, fresh);
   speciesFilled += apply(speciesDoc, node, slug, plan);
 }
 writeFileSync(join(CAT, "species.yaml"), speciesDoc.toString());
 
-// --- items（category） -------------------------------------------------------
+// --- items（category + ja） --------------------------------------------------
 const itemsDoc = parseDocument(readFileSync(join(CAT, "items.yaml"), "utf8"));
 const items = itemsDoc.get("items") as YAMLMap;
 let itemsFilled = 0;
 for (const entry of items.items) {
   const id = String((entry.key as { value: string }).value);
   const node = entry.value as YAMLMap;
-  const fresh = { category: extractItemCategory(raw("item", id)) };
+  const itemJson = raw<{
+    category: { name: string };
+    names?: { name: string; language: { name: string } }[];
+  }>("item", id);
+  const fresh = { category: extractItemCategory(itemJson), ...jaOnly(itemJson) };
   const plan = planFields(node.toJS(itemsDoc) as Partial<typeof fresh>, fresh);
   itemsFilled += apply(itemsDoc, node, id, plan);
 }
 writeFileSync(join(CAT, "items.yaml"), itemsDoc.toString());
 
+// --- moves / abilities の日英名 backfill（PokeAPI names・本 phase の ja 取得元 ADR） -----------
+// 名前欠落エントリのみ best-effort で raw（`move`/`ability`）から ja/en を補完する。raw が無ければ skip
+// （取得失敗 = 補完しないだけで fail させない）。技メタ（type/power 等）は Serebii 著述で本段では触れない。
+const backfillNames = (file: string, mapKey: string, category: string): number => {
+  const doc = parseDocument(readFileSync(join(CAT, file), "utf8"));
+  const map = doc.get(mapKey) as YAMLMap;
+  let filled = 0;
+  for (const entry of map.items) {
+    const id = String((entry.key as { value: string }).value);
+    const node = entry.value as YAMLMap;
+    const current = node.toJS(doc) as { ja?: string; en?: string };
+    if (!needsName(current)) continue;
+    const json = rawOpt<{ names?: { name: string; language: { name: string } }[] }>(category, id);
+    if (json === null) continue;
+    const plan = planFields(current, extractNames(json));
+    filled += apply(doc, node, id, plan);
+  }
+  if (filled > 0) writeFileSync(join(CAT, file), doc.toString());
+  return filled;
+};
+const movesFilled = backfillNames("moves.yaml", "moves", "move");
+const abilitiesFilled = backfillNames("abilities.yaml", "abilities", "ability");
+
 console.log(
-  `[materialize] filled ${speciesFilled} species field(s), ${itemsFilled} item field(s), ${conflictCount} conflict(s)`,
+  `[materialize] filled ${speciesFilled} species / ${itemsFilled} item / ${movesFilled} move / ${abilitiesFilled} ability field(s), ${conflictCount} conflict(s)`,
 );

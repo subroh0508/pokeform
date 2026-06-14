@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
+  extractEnName,
   extractItemCategory,
+  extractJaName,
+  extractNames,
   extractSpeciesStructural,
   planFields,
   type SpeciesStructural,
@@ -45,6 +48,44 @@ describe("extractSpeciesStructural", () => {
 describe("extractItemCategory", () => {
   it("reads the category name", () => {
     expect(extractItemCategory({ category: { name: "held-items" } })).toBe("held-items");
+  });
+});
+
+describe("extractJaName / extractEnName / extractNames", () => {
+  const named = {
+    names: [
+      { name: "Garchomp", language: { name: "en" } },
+      { name: "ガブリアス", language: { name: "ja-Hrkt" } },
+      { name: "ガブリアス漢字", language: { name: "ja" } },
+    ],
+  };
+
+  it("prefers ja-Hrkt over ja (case-insensitive language code)", () => {
+    expect(extractJaName(named)).toBe("ガブリアス");
+  });
+
+  it("falls back to ja when ja-Hrkt is absent", () => {
+    expect(extractJaName({ names: [{ name: "じしん", language: { name: "ja" } }] })).toBe("じしん");
+  });
+
+  it("returns undefined when no Japanese name exists", () => {
+    expect(
+      extractJaName({ names: [{ name: "Earthquake", language: { name: "en" } }] }),
+    ).toBeUndefined();
+    expect(extractJaName({})).toBeUndefined();
+  });
+
+  it("reads the English name", () => {
+    expect(extractEnName(named)).toBe("Garchomp");
+    expect(extractEnName({})).toBeUndefined();
+  });
+
+  it("builds a names object with only the resolved fields", () => {
+    expect(extractNames(named)).toEqual({ ja: "ガブリアス", en: "Garchomp" });
+    expect(extractNames({ names: [{ name: "さめはだ", language: { name: "ja" } }] })).toEqual({
+      ja: "さめはだ",
+    });
+    expect(extractNames({})).toEqual({});
   });
 });
 
