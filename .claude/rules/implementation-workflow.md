@@ -54,7 +54,9 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
   worktree 作成後は **`pnpm install` を実行**してから検証する（git worktree は node_modules を共有しないため、
   各 worktree で依存を導入しないと `pnpm verify` が失敗する）。同様に **`data/raw`（gitignore・PokeAPI キャッシュ）も
   worktree 間で共有されない**。`generate:data` で raw（種族値 / タイプ / 特性 / 持ち物 category）が要るデータ系
-  作業では、着手前に **メイン側の `data/raw` を cp するか `pnpm fetch:data` を回してから** `generate` する。
+  作業では、着手前に **`pnpm fetch:data` を回して `data/raw` を完全化してから** `generate` する。
+  **メイン側からの cp は worktree 作業では部分的になりうる**（取得済みの種だけ cp され取りこぼす）ため、
+  全量の完全性が要るデータ系作業では cp でなく `fetch:data` を優先する（learning #94 / #96 反復）。
   `check:regulation` は参照整合 / schema のみで `data/raw` 非依存（learnset 照合は撤去・ADR 0026・[[data-pipeline]]）。
 - **成功条件**: worktree が作成され、対象 branch が origin/main 起点で checkout 済み。
 - **fallback**: 既に同名 worktree / branch があれば再利用（再作成しない）。stash した変更は最終フェーズ後に
@@ -93,7 +95,9 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
   symlink/copy 一致、[[cross-agent]]）、生成物（`data/generated/**` 等）への手編集なし、命名規約準拠、
   受け入れ基準の充足を点検する。あわせて、**rule が `architecture.md` を正本と宣言しつつ数式・仕様を
   追記する場合、同一 PR で `architecture.md` を同期しているか**を点検する（rule が正本に先行する doc-data
-  乖離の再発防止）。
+  乖離の再発防止）。あわせて、phase doc に紐づく実装 PR では **README 進捗・doc 同期コミットを当該
+  フィーチャー PR に同梱したか**（Phase 8「README 進捗・doc 同期の取り込み方」と対。オーケストレーター
+  主導マージで進捗が main 未反映・別 PR へ分離するのを防ぐ・learning #82 / #102）を点検する。
 - **成功条件**: 規約違反ゼロ。
 - **fallback**: scope 縮小指示が出た場合は `git reset --soft` でコミットを巻き直し、scope を絞り直す。
 
