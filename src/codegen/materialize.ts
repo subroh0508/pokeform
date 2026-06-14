@@ -64,6 +64,38 @@ export function extractItemCategory(item: RawItem): string {
   return item.category.name;
 }
 
+/** PokeAPI の `names` を持つ raw（pokemon-species / item / move / ability に共通）。 */
+interface RawNamed {
+  names?: { name: string; language: { name: string } }[];
+}
+
+/**
+ * raw の `names` から日本語名を取り出す（**ja-Hrkt を優先・無ければ ja**）。日英名の取得元を PokeAPI names と
+ * 定める本 phase の ADR に基づく。language 名は大文字小文字の揺れ（`ja-Hrkt` / `ja-hrkt`）を吸収する。
+ * 該当名が無ければ `undefined`（呼び出し側は fill しない）。
+ */
+export function extractJaName(raw: RawNamed): string | undefined {
+  const names = raw.names ?? [];
+  const lang = (code: string): string | undefined =>
+    names.find((n) => n.language.name.toLowerCase() === code)?.name;
+  return lang("ja-hrkt") ?? lang("ja");
+}
+
+/** raw の `names` から英語名を取り出す（特性のように Serebii が表示名を持たない種別の en 補完源）。 */
+export function extractEnName(raw: RawNamed): string | undefined {
+  return (raw.names ?? []).find((n) => n.language.name.toLowerCase() === "en")?.name;
+}
+
+/** 日英名のうち**取得できた欄だけ**を持つオブジェクトを組む（`planFields` が undefined を fill しないよう）。 */
+export function extractNames(raw: RawNamed): { ja?: string; en?: string } {
+  const out: { ja?: string; en?: string } = {};
+  const ja = extractJaName(raw);
+  const en = extractEnName(raw);
+  if (ja !== undefined) out.ja = ja;
+  if (en !== undefined) out.en = en;
+  return out;
+}
+
 /** 転記計画: 未設定フィールドは fill・既存と raw が食い違うフィールドは conflict（上書きしない）。 */
 export interface FieldPlan<T> {
   /** 未設定のため raw 由来値で埋めるフィールド。 */

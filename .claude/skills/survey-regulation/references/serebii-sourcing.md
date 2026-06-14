@@ -52,6 +52,46 @@
     `items` には入れない。
 - **補助（件数検証）**: Game8 / Victory Road 等。Serebii の総数・帰属を裏取りし、差異は doc に残す。
 
+## 決定論スクレイパー（層1）の DOM / 正規化 / 自己検証の SoT
+
+[ADR 0031](../../../../docs/adr/0031-deterministic-serebii-scraper-hybrid-layers.md) の決定論スクレイパー
+（`src/codegen/serebii/*.ts` 純関数 + `scripts/{fetch-serebii,scrape-serebii,serebii-to-catalog}.ts` 配線）が
+依拠する **Serebii ページの DOM 構造・slug 正規化・文字コード・自己検証 exit code の前提**をここに集約する
+（パーサ実装の前提の SoT・実ページ確認由来）。
+
+- **文字コード = latin-1（ISO-8859-1）+ CRLF + 超長行**: バイト列を latin-1 デコードしてから cheerio に渡す
+  （HTML エンティティ展開は cheerio が担う）。UTF-8 として読むと文字化けする。
+- **種族ページ DOM**（`pokedex-champions/<species>/`）:
+  - タイプは base 種族の `img.typeimg`（alt=`Dragon-type`）で一意。技テーブルの type 画像は `typeimg` を持たない。
+  - 技テーブルは `a[name="attacks"]` 直後の `table.dextable`（"Standard Moves" **1 表 = 使用可能技 全件**。
+    mainline と違い TM/Egg/Tutor 分割なし）。各技は 2 行（データ行 + 効果説明行）。
+  - メガは `a[name="mega"]` 直後のセクション（base スコープと分離して抽出）。
+  - 種族値は最初の "Base Stats - Total: N" 行（先頭 Total セルを落とし H/A/B/C/D/S）。
+  - **accuracy の特例**: 必中技は `101` → `null`、変化技は `--` → `null`（power/pp も `--` は `null`）。
+    変化技の cat 画像 `other.png` → damageClass `status`。
+- **持ち物ページ DOM**（`pokemonchampions/items.shtml`）: セクション見出し `<font><u>Hold Items / Mega Stone /
+  Berries</u></font>` の直後から次の見出し手前までの `table.dextable` を全て読む（Berries は複数表にまたがる）。
+  メガストーンのメガ先は説明文（`A Charizard holding this stone…`）からのみ得る（リンクが無いため）。
+- **slug 正規化**: Serebii の技 / 特性 / 持ち物リンクは圧縮 slug（`aerialace` / `sandveil` / `choicescarf`）で
+  catalog id（`aerial-ace` / `sand-veil` / `choice-scarf`）とずれ、**圧縮 slug からハイフン位置を復元できない**。
+  よって正規化は**表示名**（`Aerial Ace`）を入力に決定論 kebab 化する（`toCatalogId` / `normalizeItemName`・
+  復元不能な綴りは `EXCEPTIONS` / `ITEM_EXCEPTIONS` で上書き）。
+- **自己検証 exit code**（`scrape-serebii` が決定論判定・層2-3 自己修復のトリガ）: 2 取得失敗 / 3 schema 欠落
+  （dex/en/types≥1/abilities≥1/stats/moves≥1 のいずれか欠落）/ 4 件数・健全性（stats 合計 ≠ Total / id 形不適合 /
+  技 type・damageClass 欠落 / メガ先欠落）/ 0 健全。stderr に `{slug, stage, missingFields, rawHtmlPath}` を JSON 出力。
+- **転記の役割分離**: `serebii-to-catalog` は Serebii 由来（技メタ / メガ先 / per-reg 解禁 / en）を書き、構造データ・
+  日本語名 ja は `materialize`（PokeAPI vendor）に委ねる。メガ linking は Serebii メガ名 → catalog メガ id が
+  決定論変換できないため自動化しない（authoring 層へエスカレーション）。
+
+## 日本語名は PokeAPI `names` から補完する（ja 取得元）
+
+Serebii Champions ページに**日本語名は無い**。日本語名 ja の取得元は **PokeAPI `names`（ja-Hrkt 優先・
+[ADR 0032](../../../../docs/adr/0032-japanese-name-source-pokeapi-names.md)）**とし、`materialize` が raw `names`
+から catalog へ転記する（append/既存尊重・初期値補完で catalog SoT は不変・既存値は上書きせず conflict 提示で
+表記揺れを可視化）。種族 / 持ち物の names は既存取得 raw に同梱、技 / 特性は日英名が欠けるエントリのみ `move` /
+`ability` を best-effort 取得して補完源にする。**技メタ（type/power 等）には PokeAPI を使わない**（ADR 0026 不変）。
+仕様（取得元 / SoT 表）の正本は [[data-pipeline]]。
+
 ## 全 learnable 技を全量 materialize する（curate しない）
 
 各種族の `moves` は **手選びの少数サブセットにせず、Serebii Champions ページの全 learnable 技を全量**投入する。

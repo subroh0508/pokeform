@@ -19,7 +19,8 @@ PokeAPI を **取得元**に vendor 方式で取り込み、構造データの *
 ## 取得 → 転記 → 合成の三段（raw=キャッシュ / catalog=SoT / generated=合成）
 
 - **取得元 = PokeAPI**（継続・`fetch:data`）。取得した構造データ（種族値 / タイプ / 特性 id / 図鑑番号 / 持ち物 category）の **SoT は `data/champions/catalog/*.yaml`**（skill-authored・コミット）。raw は転記元の取得キャッシュに過ぎず、`generate.ts` は raw を読まない（ADR `0027`）。
-- **`scripts/materialize.ts`**（転記段）= raw → catalog の構造データ転記専任。**raw 必須・fail-fast**（不在なら ENOENT で即エラー・自前の存在チェックや `fetch:data` 誘導は持たない）。**append/既存尊重**: 未設定フィールドのみ raw 由来値で埋め、既存値は raw と異なっても上書きせず conflict を提示する（Champions 実態に合わせた skill 著述値を保護）。**raw 存在の担保は呼び出し側 `survey-regulation` skill の責務**（手順で `fetch:data` → `materialize` の順を保証する。スクリプトは前提が揃っている前提で動き、欠けたら fail-fast＝責務の二重化を避ける・ADR `0027`）。
+- **`scripts/serebii-to-catalog.ts`**（Serebii 著述転記段・[ADR 0031](../../docs/adr/0031-deterministic-serebii-scraper-hybrid-layers.md)）= `scrape-serebii` の中間 JSON → catalog / regulations YAML。Serebii 由来の権威データ（技メタ / メガストーンのメガ先 / per-reg 解禁 / エンティティ key + en）を append/既存尊重で書き、構造データ・日本語名 ja は**空で残して** `materialize` に委ねる。per-reg `moves` は既存種族エントリを保護（部分集合で上書き縮小しない）。メガ linking は決定論変換できず authoring 層へエスカレーション（diagnostic）。実行: `pnpm serebii:catalog`。
+- **`scripts/materialize.ts`**（転記段）= raw → catalog の構造データ + 日本語名 ja 転記専任。**raw 必須・fail-fast**（不在なら ENOENT で即エラー・自前の存在チェックや `fetch:data` 誘導は持たない）。**append/既存尊重**: 未設定フィールドのみ raw 由来値で埋め、既存値は raw と異なっても上書きせず conflict を提示する（Champions 実態に合わせた skill 著述値を保護）。**raw 存在の担保は呼び出し側 `survey-regulation` skill の責務**（手順で `fetch:data` → `materialize` の順を保証する。スクリプトは前提が揃っている前提で動き、欠けたら fail-fast＝責務の二重化を避ける・ADR `0027`）。
 - **`scripts/generate.ts`**（合成段）= catalog YAML のみを変換し `data/generated/` を出力。**raw 非依存**（決定論的・raw 不在でも動く）。
 
 ## 統一用語: skill-authored（定義 SoT）
@@ -68,9 +69,11 @@ PokeAPI を **取得元**に vendor 方式で取り込み、構造データの *
 | 持ち物 category | `item.category` | `catalog/items.yaml` の `category` | `materialize` |
 | **使用できる技（learnset legality）** | **PokeAPI に無し（Champions 非対応・ADR 0026）** | `regulations/<id>.yaml` の per-species `moves`（Serebii 第一優先） | skill-authored |
 | **技メタ（type / damageClass / power / accuracy / pp / priority）** | **PokeAPI を信頼源にしない（ADR 0026）** | `catalog/moves.yaml`（skill-authored） | skill-authored |
-| **日英名 / タイプ相性** | **PokeAPI に無し（Phase 10）** | `catalog/*.yaml`（名前 SoT・types は + `damageTo`） | skill-authored |
+| **日本語名 ja** | **PokeAPI `names`（ja-Hrkt 優先・ADR 0032）** | `catalog/*.yaml`（名前 SoT・上書き可） | `materialize` |
+| **英語名 en** | **Serebii 表示名 / 特性は id 由来（PokeAPI names で突き合わせ）** | `catalog/*.yaml`（名前 SoT） | skill-authored |
+| **タイプ相性** | **PokeAPI に無し（Phase 10）** | `catalog/types.yaml` の `damageTo` | skill-authored |
 | **レギュレーション解禁** | **PokeAPI に無し** | `regulations/<id>.yaml` | skill-authored |
 
 構造データ（種族値 / タイプ / 特性 / 図鑑番号 / category）は Champions 非依存で PokeAPI の値が信頼できるため**取得元は PokeAPI 継続**。SoT を catalog へ移したのは値を入力 YAML から直読でき、Champions 実態との差分を YAML 著述で吸収でき、`generate` の決定論性が上がるため（ADR 0027）。`materialize` は **append/既存尊重**で skill 著述値を上書きしない。
 
-日英名は **`data/champions/catalog/*.yaml`（`id → { ja, en }`）が SoT**（Phase 10・skill 著述・コミット）。`generate.ts` は名前 / タイプ相性 / 技メタ / 構造データのいずれも PokeAPI を読まず YAML を変換する（`type` / `ability` / `pokemon-form` / `move` は raw 取得もしない）。構造データ（種族値 / タイプ / 特性 id / 図鑑番号 / category）の SoT を catalog へ移したのは ADR 0027、技メタを catalog SoT にするのは ADR 0026（PokeAPI が Champions 非対応）。raw → catalog の転記は `materialize.ts`（fail-fast・append/既存尊重）が担い、**raw 存在の担保は `survey-regulation` skill の責務**。MVP 時点で**全国図鑑の全種族分**を生成しておく。生成される型の形は [[type-conventions]]、検証は [[tsc-verification]] を参照。
+日英名は **`data/champions/catalog/*.yaml`（`id → { ja, en }`）が SoT**（Phase 10・コミット）。**`generate.ts` は PokeAPI を一切読まず** catalog YAML を変換する。ただし**日本語名 ja の取得元は PokeAPI `names`（ja-Hrkt 優先・[ADR 0032](../../docs/adr/0032-japanese-name-source-pokeapi-names.md)）**で、`materialize` が raw `names` から ja を catalog へ転記する（append/既存尊重・初期値補完で catalog SoT は不変・既存値は上書きせず conflict 提示）。`fetch-pokeapi.ts` は種族 / 持ち物の `names`（上記取得 raw に同梱）に加え、**技 / 特性は日英名が欠けるエントリのみ** `move` / `ability` を best-effort 取得（404 等は skip）して ja（特性は en も）の補完源にする。**技メタ（type/power 等）には PokeAPI を使わない**（ADR 0026 不変・名前と技メタは分離）。構造データ（種族値 / タイプ / 特性 id / 図鑑番号 / category）の SoT を catalog へ移したのは ADR 0027、技メタを catalog SoT にするのは ADR 0026（PokeAPI が Champions 非対応）。raw → catalog の転記は `materialize.ts`（fail-fast・append/既存尊重）が担い、**raw 存在の担保は `survey-regulation` skill の責務**。MVP 時点で**全国図鑑の全種族分**を生成しておく。生成される型の形は [[type-conventions]]、検証は [[tsc-verification]] を参照。
