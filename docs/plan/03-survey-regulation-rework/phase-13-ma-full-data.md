@@ -1,8 +1,10 @@
-# Phase 10 — M-A 全データ投入（全186種 + 全 movepool）
+# Phase 13 — M-A 全データ投入（全186種 + 全 movepool）
 
 > 本 phase は 02-data-model-redesign の旧 phase-20（M-A 全データ投入）を移動・改稿したもの。投入手段を
 > **03 で構築した新パイプライン（決定論スクレイパー + Haiku 取得 fan-out + 自己修復ループ）**経由へ更新した点が
 > 旧 doc から変わっている（旧 doc の「`survey-regulation` skill の WebFetch 全量 materialize」は本計画群で刷新済み）。
+> あわせて、本 phase の手前に追加したデータレイアウト整備（Phase 10 ゲームグルーピング `regulations/champions/`・
+> Phase 11 per-game 技メタ `regulations/champions/moves.yaml`・Phase 12 取得スキル 2 分割）の最終形で投入する。
 
 ## 目的 / スコープ
 
@@ -17,7 +19,7 @@
   - `serebii-to-catalog` で `catalog/species.yaml`（全186種・`ja`/`en` 併記・`megaLinks` 配列）/ `moves.yaml` /
     `items.yaml` / `abilities.yaml` へ append-only 転記。`fetch:data` → `materialize` で構造データ（種族値 / タイプ /
     特性 / dex / category）と ja 名を catalog へ載せる。
-  - `regulations/champions-m-a.yaml`（block 記法）の各種族キー下に `moves` = M-A 使用可能技を全量、解禁種族キーを
+  - `regulations/champions/m-a.yaml`（block 記法）の各種族キー下に `moves` = M-A 使用可能技を全量、解禁種族キーを
     全列挙、メガ種族に `mega[]` を付与、`items` 予約キーを全量化。
   - `check:regulation` 緑（参照整合 / schema・learnset 照合は ADR 0026 で撤去済み）→ `generate:data` 再生成 →
     `pokemon-data-reviewer` レビュー。
@@ -26,7 +28,7 @@
 
 ## 前提（依存）
 
-- **03 Phase 1-9 完了**（本計画群）。新パイプラインと legality / メガ / 生成整備が揃っていること:
+- **03 Phase 1-12 完了**（本計画群）。新パイプラインと legality / メガ / レイアウト整備 / 生成整備が揃っていること:
   - Phase 1-2: 決定論パーサ純関数 + fetch-serebii キャッシュ + items スクレイパー。
   - Phase 3: `serebii-to-catalog` 転記 + PokeAPI names による ja 補完 + ADR + rule 更新。
   - Phase 4-5: Haiku 取得 SubAgent + Workflow fan-out + 修正 SubAgent 自己修復ループ。
@@ -34,6 +36,9 @@
   - Phase 7: per-reg 持ち物 legality（メガストーン保持ルール = base は全件・メガ形態は対応ストーンのみ・`megaSpecies` リンク）。
   - Phase 8: per-reg species から不要な種族名 ja/en を削除。
   - Phase 9: メガ関連の決定論自動取り込み（`megaLinks` / per-reg `mega[]` / `megaSpecies` を自動著述・全量投入でメガが落ちない）。
+  - Phase 10: regulations をゲームグルーピング（`regulations/champions/m-(a|b).yaml`）。
+  - Phase 11: 技メタを per-game へ移転（`catalog/moves.yaml` = 名前 / `regulations/champions/moves.yaml` = 技メタ）。
+  - Phase 12: 取得スキルを 2 分割（catalog 取得 / regulations 取得）+ catalog 更新チェックポイント。投入はこの 2 skill 体制で行う。
 - **02-data-model-redesign 完了**（マージ済み）。確定済みの土台:
   - 新スキーマ（種族キー = 解禁・per-species `moves`/`mega[]`・block 記法）と `check:regulation` ゲート（02 Phase 5-6）。
   - 技の出自 = Serebii 第一優先・learnset 照合撤去・技メタ catalog SoT（02 Phase 12 / ADR 0026）。
@@ -53,11 +58,11 @@
 - [ ] `pnpm fetch:data` で追加 slug の**構造データ（種族値 / タイプ / 特性 / category）と ja 名**を `data/raw` 取得 →
       `pnpm materialize` で catalog YAML へ転記（ADR 0027 の経路・技威力等の技メタは ADR 0026 により raw から取らず
       Serebii authoring）。
-- [ ] `regulations/champions-m-a.yaml`（block 記法）を全量化:
+- [ ] `regulations/champions/m-a.yaml`（block 記法）を全量化:
   - [ ] 解禁種族キーを全186種列挙。各種族キー下に `moves` = M-A 使用可能技（Serebii movepool 全量）を全量（block
         シーケンス）。
   - [ ] メガ運用種族に `mega:`（配列）を付与。`items` 予約キーを全量化。
-- [ ] `node src/cli/index.ts check:regulation data/champions/regulations/champions-m-a.yaml` が 0 終了することを確認
+- [ ] `node src/cli/index.ts check:regulation data/champions/regulations/champions/m-a.yaml` が 0 終了することを確認
       （参照切れ無し・schema 整合・learnset 照合は ADR 0026 で撤去済み）。
 - [ ] `pnpm fetch:data && pnpm generate:data` で再生成。
 - [ ] 生成データの妥当性を `pokemon-data-reviewer` agent でレビュー（種族値・タイプ・日英名・解禁整合・メガ配列）。
