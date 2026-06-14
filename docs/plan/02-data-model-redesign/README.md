@@ -34,7 +34,7 @@ flowchart TD
 ```
 
 > 旧 Phase 20（M-A 全データ投入）は [`03-survey-regulation-rework`](../03-survey-regulation-rework/README.md) の
-> 最終 phase（[phase-07](../03-survey-regulation-rework/phase-07-ma-full-data.md)）へ移動した。
+> 最終 phase（[phase-10](../03-survey-regulation-rework/phase-10-ma-full-data.md)）へ移動した。
 
 ## フェーズ一覧（この順で実施）
 
@@ -59,7 +59,7 @@ flowchart TD
 - [x] [Phase 19 — 情報源の役割・関係性の SoT 整理 + フロー図の Mermaid 化・改訂（Serebii 第一優先 / 補助裏取り / PokeAPI 構造データの 3 系統・2 系統合流図）](./phase-19-source-roles-and-flow.md)
 
 > **旧 Phase 20（M-A 全データ投入）は [`03-survey-regulation-rework`](../03-survey-regulation-rework/README.md) の
-> 最終 phase（[phase-07](../03-survey-regulation-rework/phase-07-ma-full-data.md)）へ移動**した。新パイプライン
+> 最終 phase（[phase-10](../03-survey-regulation-rework/phase-10-ma-full-data.md)）へ移動**した。新パイプライン
 > （決定論スクレイパー + 自己修復）経由で投入するため。02 は Phase 1-19 で完了とする（完了済み phase doc 内の
 > 「Phase 20」への forward 参照は当時の計画スナップショットとして凍結）。
 
