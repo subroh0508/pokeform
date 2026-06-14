@@ -45,6 +45,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #94 | 03 Phase 2 Serebii items パーサ + fetch-serebii キャッシュ層 | 2026-06-14 | 03-survey-regulation-rework/phase-02 | draft | [2026-06-14-pr-94.md](./2026-06-14-pr-94.md) |
 | #96 | 03 Phase 3 serebii-to-catalog 転記 + ja 補完（PokeAPI names）+ パイプライン結合 + ADR 0031/0032 | 2026-06-14 | 03-survey-regulation-rework/phase-03 | draft | [2026-06-14-pr-96.md](./2026-06-14-pr-96.md) |
 | #98 | 03 Phase 4 Haiku 取得 SubAgent + Workflow fan-out（層2・`.workflow` ゲート除外・read-only Explore） | 2026-06-14 | 03-survey-regulation-rework/phase-04 | draft | [2026-06-14-pr-98.md](./2026-06-14-pr-98.md) |
+| #100 | 03 Phase 5 修正 SubAgent + 自己修復ループ（層3・K回上限+dedup+進捗ゼロ停止・write/read-only 権限分離・workflow() ネスト再利用） | 2026-06-14 | 03-survey-regulation-rework/phase-05 | draft | [2026-06-14-pr-100.md](./2026-06-14-pr-100.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
