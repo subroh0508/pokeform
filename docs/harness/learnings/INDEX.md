@@ -43,6 +43,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #90 | 03 計画群 survey-regulation 刷新を plans-new で起票 + phase-20 を 03 phase-07 へ計画群間移動 | 2026-06-13 | 03-survey-regulation-rework | draft | [2026-06-13-pr-90.md](./2026-06-13-pr-90.md) |
 | #92 | 03 Phase 1 Serebii 決定論パーサ純関数 + fixture テスト | 2026-06-13 | 03-survey-regulation-rework/phase-01 | draft | [2026-06-13-pr-92.md](./2026-06-13-pr-92.md) |
 | #94 | 03 Phase 2 Serebii items パーサ + fetch-serebii キャッシュ層 | 2026-06-14 | 03-survey-regulation-rework/phase-02 | draft | [2026-06-14-pr-94.md](./2026-06-14-pr-94.md) |
+| #96 | 03 Phase 3 serebii-to-catalog 転記 + ja 補完（PokeAPI names）+ パイプライン結合 + ADR 0031/0032 | 2026-06-14 | 03-survey-regulation-rework/phase-03 | draft | [2026-06-14-pr-96.md](./2026-06-14-pr-96.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
