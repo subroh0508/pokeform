@@ -74,6 +74,21 @@ function regPath(regId: string): string {
   throw new Error(`regulation not found: ${regId} (looked for ${candidates.join(" / ")})`);
 }
 
+/**
+ * regId → ゲーム名（per-game 共有ファイル `regulations/<game>/moves.yaml` の置き場）。`regPath` と同じ解釈で、
+ * `<game>-<reg>.yaml` が実在するならその `<game>`、省略形（`m-a` 等）は `champions` 既定。`indexOf("-")` の素朴
+ * 分割は短縮形を `m` 等へ誤分割するため実在優先で解決する（regPath と一貫・Phase 11）。
+ */
+function regGame(regId: string): string {
+  const dashIndex = regId.indexOf("-");
+  if (dashIndex > 0) {
+    const game = regId.slice(0, dashIndex);
+    const reg = regId.slice(dashIndex + 1);
+    if (existsSync(join(REG, game, `${reg}.yaml`))) return game;
+  }
+  return "champions";
+}
+
 /** doc を読み込む（コメント保持の parseDocument）。 */
 const loadDoc = (file: string): Document => parseDocument(readFileSync(file, "utf8"));
 
@@ -151,8 +166,7 @@ function transcribeSpecies(slug: string, regId: string, jsonPath: string | undef
   writeIf(movesFile, movesDoc, movesChanged);
 
   // 技メタ（type/damageClass/power 等）は per-game の regulations/<game>/moves.yaml（Champions 固有値・ADR 0034）。
-  const game = regId.includes("-") ? regId.slice(0, regId.indexOf("-")) : "champions";
-  const moveStatsFile = join(REG, game, "moves.yaml");
+  const moveStatsFile = join(REG, regGame(regId), "moves.yaml");
   const moveStatsDoc = loadDoc(moveStatsFile);
   const moveStatsMap = moveStatsDoc.get("moves") as YAMLMap;
   let moveStatsChanged = false;
