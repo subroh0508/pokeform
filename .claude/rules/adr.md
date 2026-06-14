@@ -51,5 +51,6 @@ ADR 本文は **可変な plan ファイル（`docs/plan/**` の phase doc / `OV
 1. `adr-new` で新 ADR（`MMMM`）を作成し、Context に旧 ADR を見直す経緯を書く。
 2. 旧 ADR（`NNNN`）の **frontmatter `status` フィールドのみ** を `Superseded by ADR-MMMM` に更新する（本文は不変、必要なら末尾に追記のみ）。
 3. 旧 ADR を **`docs/adr/archive/` へ `git mv`** して退避する（アクティブな `docs/adr/*.md` を「現行の決定」に絞る）。`deprecated`（後継なし撤回）も同様に archive へ退避してよい。番号は退避後も retired として再利用しない。
+4. **archive `git mv` 直後に当該 ADR 番号への全 inbound 参照を走査して追従する**。`.md` に限らず **`.workflow` / `.ts` まで** `git grep -n "NNNN"` で拾い、**インライン相対リンク・reference 式リンク定義（`[ADR NNNN]: ./....md`）・素の番号参照**、および **skill / `references/` 等のライブ手順 SoT が再記述している決定（SoT 所在・型名）** を、archive/ パスまたは後継 ADR へ向け直す。ライブ手順 SoT の追従漏れは blocking 級の dangling を生む（learning #104 / #117 / #122 反復）。
 
 これで「いつ・なぜ方針が変わったか」が連番ログとして連続し、アクティブ一覧は現行の決定だけになる。運用の詳細は `docs/adr/README.md` を参照。
