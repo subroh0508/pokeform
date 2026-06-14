@@ -1,5 +1,5 @@
 /**
- * fetch-fanout.workflow — survey-regulation 層2（Claude 固有・[ADR 0031](../../../../docs/adr/0031-deterministic-serebii-scraper-hybrid-layers.md)）。
+ * fetch-fanout.workflow — survey-regulation 層2（Claude 固有・[ADR 0031](../../../../docs/adr/archive/0031-deterministic-serebii-scraper-hybrid-layers.md)）。
  *
  * roster（解禁種族 slug 配列）を受け、層1 の決定論スクレイパー（`scripts/{fetch,scrape}-serebii.ts`）を
  * Haiku 取得 SubAgent へ **礼儀バッチ + Workflow `parallel()` で fan-out** するオーケストレータ。取得 SubAgent は

@@ -105,8 +105,9 @@ export function sortedUnion(existing: readonly string[], fresh: readonly string[
  * メガ表示名 → メガ形態 catalog 種族 id（決定論変換）。base slug は既知（呼び出し側が処理中の種族 slug を
  * 渡す）ため、メガ名の**枝サフィックス**（`""` / `"X"` / `"Y"`）だけ拾えば `<baseSlug>-mega[-x|-y]` を組める
  * （base 表示名をパースしないので en≠slug の地域フォルムでも破綻しない）。`Mega ` 接頭の無い形（Primal 等）や
- * catalog id 形にならないものは **`null`**（自動著述せず authoring へ escalation・誤 id 注入防止＝`normalize.ts`
- * の `normalizeAgainstCatalog` と同思想）。
+ * catalog id 形にならないものは **`null`**（自動著述せず authoring へ escalation）。これは shape チェックの
+ * ガードで、catalog 集合への membership 照合（`normalize.ts` の `normalizeAgainstCatalog`）より弱いが、誤 id を
+ * 著述しない安全側に倒す点で同じ狙い（membership は下流の `check:regulation` / tsc に委ねる）。
  */
 export function megaSpeciesId(baseSlug: string, megaName: string): string | null {
   const m = megaName.trim().match(/^Mega\s+.*?(?:\s+([XY]))?$/);
