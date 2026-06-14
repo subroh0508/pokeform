@@ -13,7 +13,7 @@ date: 2026-06-14
 「PokeAPI に無し（skill-authored）」と記述していた。しかし PokeAPI のリソースは `names`（多言語名・`ja-Hrkt` /
 `ja` を含む）を持っており、**日本語名は PokeAPI から機械取得できる**。
 
-[ADR 0031](./0031-deterministic-serebii-scraper-hybrid-layers.md) の決定論スクレイパーは Serebii から技メタ /
+[ADR 0031](./archive/0031-deterministic-serebii-scraper-hybrid-layers.md) の決定論スクレイパーは Serebii から技メタ /
 解禁を取るが、**Serebii には日本語名が無い**。新規種族 / 技 / 持ち物 / 特性を投入するたびに ja 名を人手著述すると
 取得が止まり、決定論パイプラインの利点が薄れる。一方で技メタ（type/power 等）は引き続き PokeAPI を信頼源に
 しない（ADR 0026 不変）— 名前と技メタは別物として扱える。

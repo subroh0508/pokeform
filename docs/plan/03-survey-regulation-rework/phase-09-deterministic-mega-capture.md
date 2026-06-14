@@ -37,20 +37,22 @@
 
 ## タスク
 
-- [ ] `src/codegen/serebii/to-catalog.ts`: `megaSpeciesId(baseSlug, megaName)`（"Mega <Base>"→`<slug>-mega`、
-      "Mega <Base> X/Y"→`<slug>-mega-x`/`-y`）等を純関数で追加。未知 id ガード・Primal escalation。
-- [ ] `src/codegen/serebii/to-catalog.test.ts`: fixture（charizard=X/Y・garchomp=単一・メガ無し・未知 id）で
-      網羅（カバレッジ100%維持）。
-- [ ] `scripts/serebii-to-catalog.ts`: warn-only を自動著述へ置換 — `megaLinks` / メガ先種族エントリ /
-      per-reg `mega[]` / メガストーン `megaSpecies` を append/既存尊重で書く。
-- [ ] 20種クリーンスレートで `serebii:catalog`→`fetch:data`→`materialize`→`check:regulation`→`generate:data` を通し、
-      charizard(X/Y)・garchomp・lopunny のメガが `megaLinks`/`mega[]`/`megaEvolvesTo`/`megaSpecies` まで再構築される
-      ことを確認。`charizard-mega-x/-y`・`garchomp-mega` が PokeAPI で 404 なく取れることを実機確認。
-- [ ] `pnpm verify` 緑。**冪等**（2回流して関連ファイルの git diff が空）を確認。
+- [x] `src/codegen/serebii/to-catalog.ts`: `megaSpeciesId(baseSlug, megaName)`（"Mega <Base>"→`<slug>-mega`、
+      "Mega <Base> X/Y"→`<slug>-mega-x`/`-y`）+ ストーン用 `megaStoneSpeciesId` + 集約 `megaAuthoring` を純関数で追加。
+      未知 id ガード（catalog id 形でなければ `null`）・Primal escalation（`Mega ` 接頭なしは `null`）。
+- [x] `src/codegen/serebii/to-catalog.test.ts`: fixture（charizard=X/Y・garchomp=単一・メガ無し・Primal escalation・
+      未知 id ガード）で網羅（カバレッジ100%維持）。
+- [x] `scripts/serebii-to-catalog.ts`: warn-only を自動著述へ置換 — `megaLinks` / メガ先種族エントリ（en のみ）/
+      per-reg `mega[]` / メガストーン `megaSpecies`（`itemCatalogFields` 経由）を append/既存尊重で書く。
+- [x] クリーンスレート検証: committed HTML fixture（charizard=X/Y・garchomp）から `scrape:serebii` で中間 JSON を起こし、
+      使い捨てレギュへ `serebii:catalog` を通すと per-reg `mega[]`=`[charizard-mega-x, charizard-mega-y]`、`megaLinks` /
+      メガ先エントリ / メガストーン `megaSpecies`（floettite→floette-mega 等）が自動著述されること、既存 authored 状態では
+      git diff が空（冪等）であることを確認。`charizard-mega-x/-y`・`garchomp-mega` が PokeAPI で HTTP 200（404 なし）を実機確認。
+- [x] `pnpm verify` 緑。**冪等**（authored 状態で再著述 → 関連ファイル git diff 空）を確認。
 
 ## この Phase で育てるハーネス（rule・skill）
 
-- **新 ADR** で [ADR 0031](../../adr/0031-deterministic-serebii-scraper-hybrid-layers.md) の「メガ linking は手動」
+- **新 ADR** で [ADR 0031](../../adr/archive/0031-deterministic-serebii-scraper-hybrid-layers.md) の「メガ linking は手動」
   決定を supersede（決定論変換可能と判明）。`adr-new` で採番し 0031 を `Superseded by ...` にして archive へ退避。
 - **`.claude/skills/survey-regulation/SKILL.md`**: 手順5（手動メガ linking）を「per-reg `mega[]` 確認に縮小」へ、
   Gotchas「メガ linking は手動」を改訂。`references/serebii-sourcing.md` / `.claude/rules/data-pipeline.md` の

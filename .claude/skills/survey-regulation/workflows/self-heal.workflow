@@ -1,5 +1,5 @@
 /**
- * self-heal.workflow — survey-regulation 層3（Claude 固有・[ADR 0031](../../../../docs/adr/0031-deterministic-serebii-scraper-hybrid-layers.md)）。
+ * self-heal.workflow — survey-regulation 層3（Claude 固有・[ADR 0031](../../../../docs/adr/archive/0031-deterministic-serebii-scraper-hybrid-layers.md)）。
  *
  * 層2（[`fetch-fanout.workflow`](./fetch-fanout.workflow)）の **構造化失敗レポート**（exit 3/4 の
  * `{slug, stage, status, missingFields, rawHtmlPath}`）を受けて、**修正 SubAgent（Sonnet+・write 権限）**が
@@ -11,7 +11,7 @@
  * 無限ループを防ぐ。収束しない種は `escalated` として返し、呼び出し側（SKILL 手順）が roster-source doc へ
  * **未確定として記録**する（人手エスカレーション）。
  *
- * 権限分離（[ADR 0031](../../../../docs/adr/0031-deterministic-serebii-scraper-hybrid-layers.md)）:
+ * 権限分離（[ADR 0031](../../../../docs/adr/archive/0031-deterministic-serebii-scraper-hybrid-layers.md)）:
  * - **取得 SubAgent = read-only**（層2 が `agentType: "Explore"` で起動・Bash で層1 スクリプトのみ実行）。
  * - **修正 SubAgent = write**（本スクリプトが既定 agentType で起動 = Edit/Write/Bash 可）。パーサ修正とテスト
  *   追加はこの層だけが行う。正しさは層1（テスト済み純関数）に宿るため、修復 = parse.ts/テストの更新であり、
