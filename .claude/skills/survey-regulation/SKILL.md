@@ -4,7 +4,7 @@ description: >-
   ポケモンチャンピオンズの**レギュレーション解禁情報を、決定論スクレイパー（層1）+ Workflow 自己修復（層2-3・
   Claude 固有）で Serebii 第一優先に取得**し、各種族の**使用可能技を全件（curate せず全量）**・解禁持ち物を全件、
   出典付きで doc 化して、解禁エンティティ（種族 / 技 / 持ち物 / メガ）を `data/champions/catalog/*.yaml`
-  （append-only）と `data/champions/regulations/<id>.yaml`（種族キー = 解禁・per-species `moves` 全量・block 記法）
+  （append-only）と `data/champions/regulations/<game>/<reg>.yaml`（例 `champions/m-a.yaml`・種族キー = 解禁・per-species `moves` 全量・block 記法）
   へ反映する手順 skill。HTML を LLM コンテキストに載せず exit code で判定し（トークン最小化）、取りこぼし種は
   自己修復 / 最終 WebFetch fallback で吸収する。技の出自は Serebii 第一優先へ一本化（PokeAPI は Champions 非対応で
   learnset 照合しない・ADR 0026）。「M-A の解禁データを集めて」「レギュレーション <id> の解禁種族・全技・持ち物を
@@ -88,7 +88,7 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
   - `docs/plan/<plan>/<id>-roster-source.md`（情報源・検証日・矛盾解消・取得 counts / escalated 種・各種族全技 /
     持ち物全件の出典付き記録）。
   - `data/champions/catalog/{species,moves,items,abilities}.yaml` への **append-only 追記**（持ち物は全件）。
-  - `data/champions/regulations/<id>.yaml`（`name` / `period` / `items` 予約キー + **トップレベル種族キー = 解禁**・
+  - `data/champions/regulations/<game>/<reg>.yaml`（例 `champions/m-a.yaml`・id `champions-m-a` は `<game>-<reg>` 導出）（`name` / `period` / `items` 予約キー + **トップレベル種族キー = 解禁**・
     各種族キー下に **`moves` 全量** + メガ種族に `mega[]`・block 記法）。
   - `materialize` による構造データ（`dex` / `types` / `stats` / `abilities` / `category`）と日本語名 ja の
     catalog 転記（ADR 0027 / 0032）。
@@ -129,7 +129,7 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
 ### 3. catalog / regulations へ転記する（serebii:catalog）
 
 **`pnpm serebii:catalog`** で、層1 の中間 JSON から **Serebii 由来データ**（種族 / 各種族の全技 / 技メタ /
-メガ先 / per-reg 解禁 / 英名 en）を catalog（`species` / `moves` / `items`）と `regulations/<id>.yaml` へ
+メガ先 / per-reg 解禁 / 英名 en）を catalog（`species` / `moves` / `items`）と `regulations/<game>/<reg>.yaml` へ
 **append / 既存尊重**で転記する（skill 著述値・既存値は上書きせず conflict 提示）。**構造データ（`dex` / `types` /
 `stats` / `abilities` / `category`）と日本語名 ja は書かない**（手順 4 の `materialize` が埋める）。
 
@@ -154,7 +154,7 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
   `megaSpecies` は `serebii:catalog` が自動著述済み（[ADR 0033](../../../docs/adr/0033-deterministic-mega-auto-authoring.md)）。
   `serebii:catalog` の **escalation diagnostic**（`Mega ` 接頭の無い特殊形 = Primal 等・未知 id）が出た種だけ手動著述する
   （通常の `Mega <Base>[ X|Y]` は手動不要）。
-- **per-reg 予約キー**: `regulations/<id>.yaml` の `name` / `period`（開催中は `period.end` を `null`）/ `items`
+- **per-reg 予約キー**: `regulations/<game>/<reg>.yaml` の `name` / `period`（開催中は `period.end` を `null`）/ `items`
   予約キー（解禁持ち物 全件）を確認・補う。トップレベル種族キーの存在 = 解禁（`allow.{...}` ラッパーは使わない）。
 
 ### 6. roster-source doc を書き、検証して再生成する（委譲）
