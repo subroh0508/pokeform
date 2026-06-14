@@ -15,7 +15,7 @@ date: 2026-06-14
 決定論的に抽出可能**と判明した。LLM 目視は不要で、テスト済み純関数に置き換えればトークンと正確性を同時に改善
 できる。
 
-この刷新は既存の不変決定（[ADR 0026](../0026-pokeapi-not-champions-legality-source.md) Serebii 第一優先・
+この刷新は既存の不変決定（[ADR 0026](./0026-pokeapi-not-champions-legality-source.md) Serebii 第一優先・
 PokeAPI を legality / 技メタの信頼源にしない / [ADR 0027](../0027-structural-data-catalog-sot.md) 構造データ
 catalog SoT・materialize append/既存尊重 / [ADR 0030](../0030-data-champions-skill-authored.md) skill-authored）
 の**上に取得手段だけを差し替える**もので、これらを覆さない。「Serebii から**どう**取るか」を変える決定であり、
@@ -63,6 +63,6 @@ Champions 解禁データの取得を、LLM の WebFetch 目視抽出から**決
 
 - **LLM 目視抽出の継続（現状）**: トークン重・小型モデル誤抽出のため却下。実ページが決定論抽出可能と判明した
   以上、純関数化が優位。
-- **PokeAPI learnset を技の正にする**: Champions 非対応で learnset が実態と一致しない（[ADR 0026](../0026-pokeapi-not-champions-legality-source.md) で却下済み）。本 ADR は Serebii 第一優先を維持する。
+- **PokeAPI learnset を技の正にする**: Champions 非対応で learnset が実態と一致しない（[ADR 0026](./0026-pokeapi-not-champions-legality-source.md) で却下済み）。本 ADR は Serebii 第一優先を維持する。
 - **メガ id を Serebii メガ名から決定論導出**: `Mega Garchomp` → catalog `garchomp-mega` の規約ずれで決定論変換
   できず、誤 id 混入リスクが高いため自動化せず authoring 層へ委ねる。

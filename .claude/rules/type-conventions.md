@@ -13,13 +13,13 @@ description: 型表現の統一パターン（`XxxBase` + `XxxDex` + `XxxId = ke
 
 エントリ種別ごとに**3 点セット**を定義する:
 
-- **親型 `XxxBase`**: 構造的に共通な形（`id` / その他フィールド）。`name: { en; ja }` は **species / moves / types のみ**が持つ。**abilities / items は `name` を持たない**（生成 dex は id のみ + items は `category?`/`megaStoneFor?`。名前の SoT は `data/champions/catalog/{abilities,items}.yaml`・効果フィールドは後続で足す前提・Phase 10）。
+- **親型 `XxxBase`**: 構造的に共通な形（`id` / その他フィールド）。`name: { en; ja }` は **species / moves / types のみ**が持つ。**abilities / items は `name` を持たない**（生成 dex は id のみ + items は `category?`/`megaStoneFor?`。名前の SoT は `data/champions/catalog/{abilities,items}.yaml`・効果フィールドは後続で足す前提・Phase 10）。**`MoveBase` は id + name のみ**で、技メタ（type/damageClass/power/accuracy/pp/priority）は per-game の `MoveStats` 型へ分離する（Champions 固有値・名前はゲーム非依存・Phase 11 / ADR 0034）。
 - **`XxxDex`**: 各エントリを ID キーに集約した型（`XxxDex[Id]` でルックアップ）。生成物では値
   `export const xxxDex = {...} as const` から **`type XxxDex = typeof xxxDex` で派生**し、値と型を
   単一ソース化する（手書き interface でなく derive・親型適合は `satisfies` / `Assignable` で検証）。
 - **`XxxId = keyof XxxDex`**: ID の union を `Dex` から導出する。
 
-対象は `MoveDex`/`MoveId`・`TypeDex`/`PokemonType`・`AbilityDex`/`AbilityId`・`ItemDex`/`ItemId`。巨大 union の分配コストを避けるため、**制約はプロパティアクセス主体**で行う（union を直接配らない）。
+対象は `MoveDex`/`MoveId`（名前・catalog 由来）・`TypeDex`/`PokemonType`・`AbilityDex`/`AbilityId`・`ItemDex`/`ItemId`。技メタは別系統 `moveStatsDex`（`satisfies Record<string, MoveStats>`・per-game `regulations/champions/moves.ts`・Phase 11）で持つ。巨大 union の分配コストを避けるため、**制約はプロパティアクセス主体**で行う（union を直接配らない）。
 
 ## 種族型は per-regulation（reg-aware 制約・ADR `0021`）
 

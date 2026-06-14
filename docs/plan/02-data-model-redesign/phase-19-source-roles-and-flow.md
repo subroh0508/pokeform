@@ -46,7 +46,7 @@ ASCII）は **PokeAPI の機械パイプラインしか描いておらず**、Se
 - 参照 memory: `serebii-first-priority-champions-data`（情報源優先方針）。
 
 [ADR 0012]: ../../adr/0012-vendor-pokeapi-data.md
-[ADR 0026]: ../../adr/0026-pokeapi-not-champions-legality-source.md
+[ADR 0026]: ../../adr/archive/0026-pokeapi-not-champions-legality-source.md
 [ADR 0027]: ../../adr/0027-structural-data-catalog-sot.md
 
 ## タスク

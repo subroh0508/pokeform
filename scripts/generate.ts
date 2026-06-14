@@ -40,9 +40,10 @@ interface SpeciesCatalog {
   // 1 base 種族 -> メガ先 SpeciesId の配列（1 種族複数メガを許容・ADR 0022）。
   megaLinks?: Record<string, string[]>;
 }
-interface MoveMeta extends NamePair {
-  // 技メタ（type / damageClass / power / accuracy / pp / priority）の SoT は catalog YAML（skill-authored・
-  // ADR 0026）。PokeAPI は Champions 非対応のため技威力等の信頼源にしない。
+interface MoveStatsMeta {
+  // per-game 技メタ（type / damageClass / power / accuracy / pp / priority）。技の数値は Champions 固有調整が
+  // あり得るため per-game の regulations/champions/moves.yaml が SoT（ADR 0034・ADR 0026 の核「PokeAPI を信頼源に
+  // しない」は不変で、所在を catalog → per-game へ精緻化）。
   type: string;
   damageClass: string;
   power: number | null;
@@ -51,8 +52,12 @@ interface MoveMeta extends NamePair {
   priority: number;
 }
 interface MovesCatalog {
-  // id -> 日英名 + 技メタ（catalog YAML が SoT・raw 非依存・ADR 0026）。
-  moves: Record<string, MoveMeta>;
+  // id -> 日英名のみ（名前はゲーム非依存なので catalog が SoT・Phase 11）。技メタは MoveStatsCatalog が持つ。
+  moves: Record<string, NamePair>;
+}
+interface MoveStatsCatalog {
+  // id -> 技メタ（per-game 共有・regulations/champions/moves.yaml が SoT・Phase 11 / ADR 0034）。
+  moves: Record<string, MoveStatsMeta>;
 }
 interface ItemsCatalog {
   // id -> 日英名 + megaStoneFor（旧 itemMeta を各エントリへ統合・Phase 10）+ category（catalog SoT・
@@ -96,6 +101,8 @@ const lit = (value: unknown): string => JSON.stringify(value, null, 2);
 
 const speciesCat = ch<SpeciesCatalog>("catalog/species.yaml");
 const movesCat = ch<MovesCatalog>("catalog/moves.yaml");
+// 技メタ（per-game 共有）は regulations/champions/moves.yaml が SoT（Phase 11 / ADR 0034）。
+const moveStatsCat = ch<MoveStatsCatalog>("regulations/champions/moves.yaml");
 const itemsCat = ch<ItemsCatalog>("catalog/items.yaml");
 const abilitiesCat = ch<AbilitiesCatalog>("catalog/abilities.yaml");
 const typesCat = ch<TypesCatalog>("catalog/types.yaml");
@@ -126,6 +133,8 @@ requireNames("types", typesCat.types);
 // Phase 10）。安定 id は `<game>-<reg>`（例 `champions/m-a.yaml` → `champions-m-a`）で導出し、RegulationId
 // リテラル・生成 `regulations/<id>/` を不変に保つ（ソースのレイアウトだけ変え型・生成の同一性は壊さない）。
 const REG_DIR = join(CH, "regulations");
+// per-game 共有ファイル（reg ではない・Phase 11 の技メタ `moves.yaml` 等）はレギュ列挙から除外する。
+const REG_SHARED_FILES = new Set(["moves.yaml"]);
 const regs: Record<string, Record<string, unknown>> = {};
 for (const game of readdirSync(REG_DIR, { withFileTypes: true })
   .filter((e) => e.isDirectory())
@@ -133,7 +142,7 @@ for (const game of readdirSync(REG_DIR, { withFileTypes: true })
   .sort()) {
   const gameDir = join(REG_DIR, game);
   for (const file of readdirSync(gameDir)
-    .filter((f) => f.endsWith(".yaml"))
+    .filter((f) => f.endsWith(".yaml") && !REG_SHARED_FILES.has(f))
     .sort()) {
     const id = `${game}-${file.replace(/\.yaml$/, "")}`;
     regs[id] = parseYaml(readFileSync(join(gameDir, file), "utf8")) as Record<string, unknown>;
@@ -155,13 +164,21 @@ for (const t of TYPES) {
   };
 }
 
-// --- moves（name + 技メタとも catalog/moves.yaml 由来・raw 非依存・ADR 0026） ------------------
-// 技威力等を PokeAPI raw から導出しない（PokeAPI は Champions 非対応）。SoT は skill-authored catalog。
+// --- moves（id + 名前のみ・catalog/moves.yaml 由来・名前はゲーム非依存・Phase 11） ----------------
 const moveEntries: Record<string, unknown> = {};
-for (const [m, meta] of Object.entries(movesCat.moves)) {
+for (const [m, name] of Object.entries(movesCat.moves)) {
   moveEntries[m] = {
     id: m,
-    name: { en: meta.en, ja: meta.ja },
+    name: { en: name.en, ja: name.ja },
+  };
+}
+
+// --- move stats（per-game 技メタ・regulations/champions/moves.yaml 由来・Champions 固有値・ADR 0034） ---
+// 技威力等を PokeAPI raw から導出しない（PokeAPI は Champions 非対応・ADR 0026 の核は不変）。技メタの欠落は
+// 下流の satisfies で生成段 tsc が弾く。catalog の名前 id と技メタ id の集合が一致することを検証する。
+const moveStatsEntries: Record<string, unknown> = {};
+for (const [m, meta] of Object.entries(moveStatsCat.moves)) {
+  moveStatsEntries[m] = {
     type: meta.type,
     damageClass: meta.damageClass,
     power: meta.power ?? null,
@@ -169,6 +186,21 @@ for (const [m, meta] of Object.entries(movesCat.moves)) {
     pp: meta.pp,
     priority: meta.priority,
   };
+}
+// 名前カタログと技メタの id 集合の整合（どちらか欠けは authoring 漏れ）。
+for (const m of Object.keys(movesCat.moves)) {
+  if (!(m in moveStatsCat.moves)) {
+    throw new Error(
+      `move '${m}' has a name in catalog/moves.yaml but no stats in regulations/champions/moves.yaml`,
+    );
+  }
+}
+for (const m of Object.keys(moveStatsCat.moves)) {
+  if (!(m in movesCat.moves)) {
+    throw new Error(
+      `move '${m}' has stats in regulations/champions/moves.yaml but no name in catalog/moves.yaml`,
+    );
+  }
 }
 
 // --- abilities（catalog/abilities.yaml を正本に id のみ生成・name は持たない・Phase 10） ------
@@ -375,6 +407,12 @@ emit(
 emit(
   "moves.ts",
   `import type { MoveBase } from "../../src/types/move.ts";\n\nexport const moveDex = ${lit(moveEntries)} as const satisfies Record<string, MoveBase>;\n\nexport type MoveDex = typeof moveDex;\nexport type MoveId = keyof MoveDex;\n`,
+);
+// per-game 技メタ dex（regulations/champions/moves.ts・Champions 固有値・Phase 11 / ADR 0034）。
+mkdirSync(join(OUT, "regulations", "champions"), { recursive: true });
+emit(
+  join("regulations", "champions", "moves.ts"),
+  `import type { MoveStats } from "../../../../src/types/move.ts";\n\nexport const moveStatsDex = ${lit(moveStatsEntries)} as const satisfies Record<string, MoveStats>;\n\nexport type MoveStatsDex = typeof moveStatsDex;\n`,
 );
 emit(
   "abilities.ts",

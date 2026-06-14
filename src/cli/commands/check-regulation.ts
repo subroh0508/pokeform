@@ -29,9 +29,13 @@ const readCatalogSet = (file: string, key: string): Set<string> => {
   return new Set(Object.keys(y[key] ?? {}));
 };
 
+// per-game 共有ファイル（reg ではない・Phase 11 の技メタ `moves.yaml` 等）はレギュ列挙から除外する。
+const REG_SHARED_FILES = new Set(["moves.yaml"]);
+
 /**
  * path（ファイル / ディレクトリ）から対象 regulation YAML を列挙する。ゲームグルーピング後
  * （`regulations/<game>/<reg>.yaml`・Phase 10）に追従し、ディレクトリ指定時は配下を**再帰**走査する。
+ * per-game 共有の技メタ `moves.yaml`（Phase 11）は reg ではないので除外する。
  */
 const regFiles = (path: string): string[] => {
   const stat = statSync(path);
@@ -41,7 +45,7 @@ const regFiles = (path: string): string[] => {
     .flatMap((entry) => {
       const child = join(path, entry.name);
       if (entry.isDirectory()) return regFiles(child);
-      return entry.name.endsWith(".yaml") ? [child] : [];
+      return entry.name.endsWith(".yaml") && !REG_SHARED_FILES.has(entry.name) ? [child] : [];
     });
 };
 

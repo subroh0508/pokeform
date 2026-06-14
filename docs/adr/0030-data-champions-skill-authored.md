@@ -13,7 +13,7 @@ date: 2026-06-13
 の `materialize`（append/既存尊重）も「**hand-authored 修正を保護**」と書いてきた。
 
 これらの語は「人間が手作業でエディタに書く」と読めるが、実際の著述主体は **`survey-regulation` /
-`author-individual` を実行する AI エージェント**である。AI が [ADR 0026](./0026-pokeapi-not-champions-legality-source.md)
+`author-individual` を実行する AI エージェント**である。AI が [ADR 0026](./archive/0026-pokeapi-not-champions-legality-source.md)
 の方針どおり Serebii 等を閲覧し、出典付きで YAML へ転記している。語と実態が乖離しており、「人間が直接
 エディタで編集してよい」とも誤読される。誤った直編集は出典との同期・再現性（同じ skill を再実行すれば
 同じ結果に収束する性質）を壊す。

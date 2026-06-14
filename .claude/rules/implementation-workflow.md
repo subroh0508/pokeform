@@ -57,7 +57,7 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
   作業では、着手前に **`pnpm fetch:data` を回して `data/raw` を完全化してから** `generate` する。
   **メイン側からの cp は worktree 作業では部分的になりうる**（取得済みの種だけ cp され取りこぼす）ため、
   全量の完全性が要るデータ系作業では cp でなく `fetch:data` を優先する（learning #94 / #96 反復）。
-  `check:regulation` は参照整合 / schema のみで `data/raw` 非依存（learnset 照合は撤去・ADR 0026・[[data-pipeline]]）。
+  `check:regulation` は参照整合 / schema のみで `data/raw` 非依存（learnset 照合は撤去・ADR 0034 = ADR 0026 改訂・[[data-pipeline]]）。
 - **成功条件**: worktree が作成され、対象 branch が origin/main 起点で checkout 済み。
 - **fallback**: 既に同名 worktree / branch があれば再利用（再作成しない）。stash した変更は最終フェーズ後に
   `git stash pop` する余地を残す。

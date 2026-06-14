@@ -55,5 +55,5 @@ PokeAPI に無し」記述を「ja 取得元 = PokeAPI names」へ改める。
 - **ja を skill-authored で人手著述継続（ADR 0025 の現状解釈）**: 決定論パイプラインで取得が止まり、186 種族規模で
   非現実的。PokeAPI に正確な ja があるのに使わないのは無駄。
 - **Serebii から ja を取る**: Serebii Champions ページに日本語名が無いため不可。
-- **技メタも含め PokeAPI を名前以外の正にする**: [ADR 0026](./0026-pokeapi-not-champions-legality-source.md)
+- **技メタも含め PokeAPI を名前以外の正にする**: [ADR 0026](./archive/0026-pokeapi-not-champions-legality-source.md)
   で却下済み。本 ADR は**名前のみ** PokeAPI を取得元にし、技メタ / legality は Serebii 第一優先を維持する。
