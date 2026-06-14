@@ -47,6 +47,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #98 | 03 Phase 4 Haiku 取得 SubAgent + Workflow fan-out（層2・`.workflow` ゲート除外・read-only Explore） | 2026-06-14 | 03-survey-regulation-rework/phase-04 | draft | [2026-06-14-pr-98.md](./2026-06-14-pr-98.md) |
 | #100 | 03 Phase 5 修正 SubAgent + 自己修復ループ（層3・K回上限+dedup+進捗ゼロ停止・write/read-only 権限分離・workflow() ネスト再利用） | 2026-06-14 | 03-survey-regulation-rework/phase-05 | draft | [2026-06-14-pr-100.md](./2026-06-14-pr-100.md) |
 | #102 | 03 Phase 6 survey-regulation SKILL 全面改訂（決定論スクレイパー + 自己修復・allowed-tools 整理・cross-agent フォールバック・26 種 end-to-end 実証） | 2026-06-14 | 03-survey-regulation-rework/phase-06 | draft | [2026-06-14-pr-102.md](./2026-06-14-pr-102.md) |
+| #104 | plan 03 へ 3 phase 挿入（per-reg 持ち物 legality / per-reg species name 削除 / メガ決定論取り込み）+ M-A 投入を Phase 10 へ renumber・cross-plan 追従 | 2026-06-14 | 03-survey-regulation-rework | draft | [2026-06-14-pr-104.md](./2026-06-14-pr-104.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
