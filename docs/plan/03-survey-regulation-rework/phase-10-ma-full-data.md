@@ -1,4 +1,4 @@
-# Phase 7 — M-A 全データ投入（全186種 + 全 movepool）
+# Phase 10 — M-A 全データ投入（全186種 + 全 movepool）
 
 > 本 phase は 02-data-model-redesign の旧 phase-20（M-A 全データ投入）を移動・改稿したもの。投入手段を
 > **03 で構築した新パイプライン（決定論スクレイパー + Haiku 取得 fan-out + 自己修復ループ）**経由へ更新した点が
@@ -6,8 +6,8 @@
 
 ## 目的 / スコープ
 
-03 で刷新した取得パイプライン（Phase 1-6：決定論 cheerio パーサ + Haiku 取得 SubAgent + 修正 SubAgent 自己修復 +
-全面改訂済み `survey-regulation` skill）を使って、レギュレーション M-A で解禁されている**全種族・全技・全持ち物・
+03 で刷新した取得パイプライン（Phase 1-9：決定論 cheerio パーサ + Haiku 取得 SubAgent + 修正 SubAgent 自己修復 +
+全面改訂済み `survey-regulation` skill + per-reg 持ち物 legality + メガ決定論取り込み）を使って、レギュレーション M-A で解禁されている**全種族・全技・全持ち物・
 全メガ**を全量投入し M-A を完成させる。技の出自は **Serebii 第一優先・PokeAPI learnset 非依存**（ADR 0026）。
 日本語名は PokeAPI names から補完（03 Phase 3）。
 
@@ -22,15 +22,18 @@
   - `check:regulation` 緑（参照整合 / schema・learnset 照合は ADR 0026 で撤去済み）→ `generate:data` 再生成 →
     `pokemon-data-reviewer` レビュー。
 - スコープ外: M-B 以降の正確データ（未公開・暫定維持）。新機能・新 rule。01-mvp の機能拡張。スキーマ / generate の
-  再設計（02 で確定済み）。スクレイパー / skill の実装（03 Phase 1-6 で完了済み）。
+  再設計（02 で確定済み）。スクレイパー / skill / legality / メガ取り込みの実装（03 Phase 1-9 で完了済み）。
 
 ## 前提（依存）
 
-- **03 Phase 1-6 完了**（本計画群）。新パイプラインが揃っていること:
+- **03 Phase 1-9 完了**（本計画群）。新パイプラインと legality / メガ / 生成整備が揃っていること:
   - Phase 1-2: 決定論パーサ純関数 + fetch-serebii キャッシュ + items スクレイパー。
   - Phase 3: `serebii-to-catalog` 転記 + PokeAPI names による ja 補完 + ADR + rule 更新。
   - Phase 4-5: Haiku 取得 SubAgent + Workflow fan-out + 修正 SubAgent 自己修復ループ。
   - Phase 6: `survey-regulation` skill 全面改訂 + cross-agent パリティ + 数十種での end-to-end 実証。
+  - Phase 7: per-reg 持ち物 legality（メガストーン保持ルール = base は全件・メガ形態は対応ストーンのみ・`megaSpecies` リンク）。
+  - Phase 8: per-reg species から不要な種族名 ja/en を削除。
+  - Phase 9: メガ関連の決定論自動取り込み（`megaLinks` / per-reg `mega[]` / `megaSpecies` を自動著述・全量投入でメガが落ちない）。
 - **02-data-model-redesign 完了**（マージ済み）。確定済みの土台:
   - 新スキーマ（種族キー = 解禁・per-species `moves`/`mega[]`・block 記法）と `check:regulation` ゲート（02 Phase 5-6）。
   - 技の出自 = Serebii 第一優先・learnset 照合撤去・技メタ catalog SoT（02 Phase 12 / ADR 0026）。
