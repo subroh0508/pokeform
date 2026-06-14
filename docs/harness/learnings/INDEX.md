@@ -52,6 +52,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #116 | per-reg species から不要な種族名 ja/en を削除（PerRegSpecies = Omit<SpeciesBase,"name">・種族名 SoT を speciesBaseDex へ一本化・純減 136 行） | 2026-06-14 | 03-survey-regulation-rework/phase-08 | draft | [2026-06-14-pr-116.md](./2026-06-14-pr-116.md) |
 | #117 | メガ関連データの決定論自動著述（megaSpeciesId 純関数・megaLinks/メガ先/per-reg mega[]/megaSpecies・ADR 0031 を 0033 で supersede し archive 退避・SKILL/rule 追従） | 2026-06-14 | 03-survey-regulation-rework/phase-09 | draft | [2026-06-14-pr-117.md](./2026-06-14-pr-117.md) |
 | #118 | plan 03 へ 3 phase 挿入（ゲームグルーピング / per-game 技メタ / 取得スキル 2 分割）+ 全投入を Phase 13 へ renumber・cross-plan/intra-doc forward 参照追従（#104 同型反復） | 2026-06-14 | 03-survey-regulation-rework | draft | [2026-06-14-pr-118.md](./2026-06-14-pr-118.md) |
+| #120 | regulations をゲームでグルーピング（`<game>/<reg>.yaml`）・生成 id `<game>-<reg>` を不変に保ち RegulationId/個体値/import を非破壊・harness-review nit で architecture.md 旧パスを同 PR 同期 | 2026-06-14 | 03-survey-regulation-rework/phase-10 | draft | [2026-06-14-pr-120.md](./2026-06-14-pr-120.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
