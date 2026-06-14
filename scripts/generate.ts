@@ -122,14 +122,22 @@ requireNames("abilities", abilitiesCat.abilities);
 requireNames("items", itemsCat.items);
 requireNames("types", typesCat.types);
 
-// レギュレーションは 1 レギュ = 1 ファイル（data/champions/regulations/<id>.yaml）。
+// レギュレーションはゲームサブディレクトリでグルーピング（data/champions/regulations/<game>/<reg>.yaml・
+// Phase 10）。安定 id は `<game>-<reg>`（例 `champions/m-a.yaml` → `champions-m-a`）で導出し、RegulationId
+// リテラル・生成 `regulations/<id>/` を不変に保つ（ソースのレイアウトだけ変え型・生成の同一性は壊さない）。
 const REG_DIR = join(CH, "regulations");
 const regs: Record<string, Record<string, unknown>> = {};
-for (const file of readdirSync(REG_DIR)
-  .filter((f) => f.endsWith(".yaml"))
+for (const game of readdirSync(REG_DIR, { withFileTypes: true })
+  .filter((e) => e.isDirectory())
+  .map((e) => e.name)
   .sort()) {
-  const id = file.replace(/\.yaml$/, "");
-  regs[id] = parseYaml(readFileSync(join(REG_DIR, file), "utf8")) as Record<string, unknown>;
+  const gameDir = join(REG_DIR, game);
+  for (const file of readdirSync(gameDir)
+    .filter((f) => f.endsWith(".yaml"))
+    .sort()) {
+    const id = `${game}-${file.replace(/\.yaml$/, "")}`;
+    regs[id] = parseYaml(readFileSync(join(gameDir, file), "utf8")) as Record<string, unknown>;
+  }
 }
 
 // --- types（全 18・name + 相性表とも catalog/types.yaml 由来・raw 非依存・Phase 10） ----------

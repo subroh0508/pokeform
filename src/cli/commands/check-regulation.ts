@@ -29,16 +29,20 @@ const readCatalogSet = (file: string, key: string): Set<string> => {
   return new Set(Object.keys(y[key] ?? {}));
 };
 
-/** path（ファイル / ディレクトリ）から対象 regulation YAML を列挙する。 */
+/**
+ * path（ファイル / ディレクトリ）から対象 regulation YAML を列挙する。ゲームグルーピング後
+ * （`regulations/<game>/<reg>.yaml`・Phase 10）に追従し、ディレクトリ指定時は配下を**再帰**走査する。
+ */
 const regFiles = (path: string): string[] => {
   const stat = statSync(path);
-  if (stat.isDirectory()) {
-    return readdirSync(path)
-      .filter((f) => f.endsWith(".yaml"))
-      .sort()
-      .map((f) => join(path, f));
-  }
-  return [path];
+  if (!stat.isDirectory()) return [path];
+  return readdirSync(path, { withFileTypes: true })
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .flatMap((entry) => {
+      const child = join(path, entry.name);
+      if (entry.isDirectory()) return regFiles(child);
+      return entry.name.endsWith(".yaml") ? [child] : [];
+    });
 };
 
 const formatIssue = (issue: RegulationIssue, lang: Lang): string => {

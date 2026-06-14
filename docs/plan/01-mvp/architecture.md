@@ -258,9 +258,9 @@ PokeAPI→要求項目の対応（**取得元** = PokeAPI / **SoT** = catalog・
 | タイプ | `pokemon.types[]` | `catalog/species.yaml`（`types`） |
 | 特性 | `pokemon.abilities[]`（隠れ特性可否は champions 側フラグ） | `catalog/species.yaml`（`abilities`） |
 | 持ち物 category | `item` エンドポイント（メガストーン含む） | `catalog/items.yaml`（`category`） |
-| **使用できる技（learnset legality）** | **PokeAPI を信頼源にしない（Champions 非対応・ADR 0026）** | `regulations/<id>.yaml` の per-species `moves`（Serebii 第一優先） |
+| **使用できる技（learnset legality）** | **PokeAPI を信頼源にしない（Champions 非対応・ADR 0026）** | `regulations/<game>/<reg>.yaml` の per-species `moves`（Serebii 第一優先） |
 | **技メタ（type / damageClass / power 等）** | **PokeAPI を信頼源にしない（ADR 0026）** | `data/champions/catalog/moves.yaml`（skill-authored） |
-| **レギュレーション解禁** | **PokeAPI に無し** | `data/champions/regulations/<id>.yaml`（per-reg 一本化・ADR 0021） |
+| **レギュレーション解禁** | **PokeAPI に無し** | `data/champions/regulations/<game>/<reg>.yaml`（per-reg 一本化・ゲームグルーピング・ADR 0021） |
 
 ---
 
@@ -305,7 +305,7 @@ pokeform/
 │  └─ generate.ts               # catalog のみ変換（raw 非依存）
 ├─ data/
 │  ├─ raw/                      # .gitignore（PokeAPI 取得キャッシュ＝materialize の転記元）
-│  ├─ champions/                # コミット・SoT: rules.yaml / regulations/<id>.yaml / catalog/{species,moves,items,abilities,types}.yaml
+│  ├─ champions/                # コミット・SoT: rules.yaml / regulations/<game>/<reg>.yaml / catalog/{species,moves,items,abilities,types}.yaml
 │  └─ generated/               # コミット: Dex 単位 .ts（types/moves/abilities/items/species/names + regulations/<id>.ts+index・値 as const → 型派生）
 └─ team/                        # サンプル兼ユーザー置き場
    ├─ individuals/*.yaml

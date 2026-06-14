@@ -1,6 +1,6 @@
 /**
  * serebii-to-catalog.ts — `scrape-serebii` の中間 JSON（種族 = `ParsedSpecies` / 持ち物 = `ParsedItems`）を
- * `data/champions/catalog/*.yaml` と `regulations/<id>.yaml` へ**転記**する薄い配線。抽出・変換ロジックは
+ * `data/champions/catalog/*.yaml` と `regulations/<game>/<reg>.yaml` へ**転記**する薄い配線。抽出・変換ロジックは
  * `src/codegen/serebii/to-catalog.ts`（純関数・テスト100%）に委譲し、本スクリプトは fs / YAML I/O のみ
  * （coverage 除外・[[testing]]）。
  *
@@ -52,13 +52,25 @@ function readJson<T>(path: string | undefined): T {
   return JSON.parse(text) as T;
 }
 
-/** regId（`champions-m-a` または `m-a`）→ regulations ファイルパス。実在優先。 */
+/**
+ * regId（`champions-m-a` または `m-a`）→ regulations ファイルパス。ゲームグルーピング後のレイアウト
+ * `regulations/<game>/<reg>.yaml`（Phase 10）。`<game>-<reg>` 形式は `<game>/<reg>.yaml`、ゲーム省略形
+ * （`m-a`）は champions ゲーム配下と解釈する。実在優先。
+ */
 function regPath(regId: string): string {
-  const direct = join(REG, `${regId}.yaml`);
-  if (existsSync(direct)) return direct;
-  const prefixed = join(REG, `champions-${regId}.yaml`);
-  if (existsSync(prefixed)) return prefixed;
-  throw new Error(`regulation not found: ${regId} (looked for ${direct} / ${prefixed})`);
+  // `champions-m-a` → ["champions", "m-a"] / `m-a` → champions ゲーム配下と解釈。
+  const dashIndex = regId.indexOf("-");
+  const candidates: string[] = [];
+  if (dashIndex > 0) {
+    const game = regId.slice(0, dashIndex);
+    const reg = regId.slice(dashIndex + 1);
+    candidates.push(join(REG, game, `${reg}.yaml`));
+  }
+  candidates.push(join(REG, "champions", `${regId}.yaml`));
+  for (const candidate of candidates) {
+    if (existsSync(candidate)) return candidate;
+  }
+  throw new Error(`regulation not found: ${regId} (looked for ${candidates.join(" / ")})`);
 }
 
 /** doc を読み込む（コメント保持の parseDocument）。 */
