@@ -9,6 +9,7 @@ items:
     ja: リザードナイトＸ
     en: Charizardite X
     megaStoneFor: charizard
+    megaSpecies: charizard-mega-x
     category: mega-stones
   rocky-helmet:
     ja: ゴツゴツメット
@@ -258,14 +259,17 @@ items:
     ja: リザードナイトＹ
     en: Charizardite Y
     megaStoneFor: charizard
+    megaSpecies: charizard-mega-y
     category: mega-stones
   garchompite:
     ja: ガブリアスナイト
     en: Garchompite
     megaStoneFor: garchomp
+    megaSpecies: garchomp-mega
     category: mega-stones
   gengarite:
     ja: ゲンガナイト
     en: Gengarite
     megaStoneFor: gengar
+    megaSpecies: gengar-mega
     category: mega-stones

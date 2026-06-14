@@ -1,4 +1,8 @@
 import type { ItemId } from "../../data/generated/items.ts";
+import type {
+  RegulationDex as _RegulationDex,
+  RegulationId as _RegulationId,
+} from "../../data/generated/regulations/index.ts";
 import type { SpeciesBase } from "./species.ts";
 
 /**
@@ -28,3 +32,10 @@ export interface RegulationBase {
 export type { RegulationDex, RegulationId } from "../../data/generated/regulations/index.ts";
 /** 生成済みの regulationDex（値）/ RegulationDex（型）/ RegulationId を re-export する。 */
 export { regulationDex } from "../../data/generated/regulations/index.ts";
+
+/**
+ * レギュレーション `R` の解禁持ち物プール（`RegulationBase.items` リテラルタプルの要素 union）。
+ * `HoldableItems<R,S>` の base 種族分岐がグローバル `ItemId` でなく per-reg 解禁プールへ絞るために使う
+ * （per-reg item legality・ADR 0021 の解禁判定モデルの忠実な適用）。
+ */
+export type RegulationItemId<R extends _RegulationId> = _RegulationDex[R]["items"][number];

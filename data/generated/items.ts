@@ -7,6 +7,7 @@ export const itemDex = {
     id: "charizardite-x",
     category: "mega-stones",
     megaStoneFor: "charizard",
+    megaSpecies: "charizard-mega-x",
   },
   "rocky-helmet": {
     id: "rocky-helmet",
@@ -256,16 +257,19 @@ export const itemDex = {
     id: "charizardite-y",
     category: "mega-stones",
     megaStoneFor: "charizard",
+    megaSpecies: "charizard-mega-y",
   },
   garchompite: {
     id: "garchompite",
     category: "mega-stones",
     megaStoneFor: "garchomp",
+    megaSpecies: "garchomp-mega",
   },
   gengarite: {
     id: "gengarite",
     category: "mega-stones",
     megaStoneFor: "gengar",
+    megaSpecies: "gengar-mega",
   },
 } as const;
 

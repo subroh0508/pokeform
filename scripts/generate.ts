@@ -57,7 +57,10 @@ interface MovesCatalog {
 interface ItemsCatalog {
   // id -> 日英名 + megaStoneFor（旧 itemMeta を各エントリへ統合・Phase 10）+ category（catalog SoT・
   // materialize が raw から転記・ADR 0027）。
-  items: Record<string, NamePair & { megaStoneFor?: string; category: string }>;
+  items: Record<
+    string,
+    NamePair & { megaStoneFor?: string; megaSpecies?: string; category: string }
+  >;
 }
 interface AbilitiesCatalog {
   // id -> 日英名。生成 abilities.ts は id のみ（name は持たない）。
@@ -186,6 +189,7 @@ for (const [i, meta] of Object.entries(itemsCat.items)) {
     category: meta.category,
   };
   if (meta.megaStoneFor) entry.megaStoneFor = meta.megaStoneFor;
+  if (meta.megaSpecies) entry.megaSpecies = meta.megaSpecies;
   itemEntries[i] = entry;
 }
 

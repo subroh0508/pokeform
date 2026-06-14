@@ -1,0 +1,10 @@
+lang: en
+# garchomp は champions-m-a の roster にいる（種族・特性・持ち物・合計66 は正当）。
+# ただし psystrike は garchomp の習得技でない（ミュウツー専用技）→ 技だけが不正。
+species: garchomp
+regulations: [champions-m-a]
+nature: { up: attack, down: spAttack }
+ability: rough-skin
+item: leftovers
+points: { hp: 2, attack: 32, defense: 0, spAttack: 0, spDefense: 0, speed: 32 }
+moves: [earthquake, dragon-claw, psystrike, swords-dance]

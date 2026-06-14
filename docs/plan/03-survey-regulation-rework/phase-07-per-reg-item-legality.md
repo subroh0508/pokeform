@@ -36,21 +36,23 @@
 
 ## タスク
 
-- [ ] `src/types/regulation.ts`: `RegulationItemId<R> = RegulationDex[R]["items"][number]` を新設・export。
-- [ ] `src/types/item.ts`: `ItemBase` に `megaSpecies?: SpeciesId`（メガ形態 SpeciesId）を追加。
-- [ ] `scripts/generate.ts`: `itemDex` 出力に `megaSpecies` を含める（items 生成箇所）。`materialize` は触らない
+- [x] `src/types/regulation.ts`: `RegulationItemId<R> = RegulationDex[R]["items"][number]` を新設・export。
+- [x] `src/types/item.ts`: `ItemBase` に `megaSpecies?`（メガ形態 SpeciesId・既存 `megaStoneFor` と同じく素の
+      `string`。global SpeciesId への自己参照を避ける慣習に倣う）を追加。
+- [x] `scripts/generate.ts`: `itemDex` 出力に `megaSpecies` を含める（items 生成箇所）。`materialize` は触らない
       （`megaSpecies` は skill 著述 / Phase 9 由来で PokeAPI 非由来）。
-- [ ] `data/champions/catalog/items.yaml`: 既存メガストーンへ `megaSpecies`（→メガ形態 SpeciesId）を手動付与。
-- [ ] `src/types/individual.ts`: `HoldableItems<R,S>` の `"any"` 分岐を差し替え:
-  - [ ] `MegaStoneOf<S>`（`ItemDex[I] extends { megaSpecies: S }` なストーン id）を追加。
-  - [ ] `[MegaStoneOf<S>] extends [never] ? RegulationItemId<R> : MegaStoneOf<S> & RegulationItemId<R>`。
-  - [ ] `Extract`（per-species 明示リスト）分岐は現状維持。`ItemDex`/`ItemId` を `data/generated/items.ts` から import。
-- [ ] enforcement で型エラー化する fixture を解禁持ち物へ修正（dual-reg 個体の交差プールは
-      `{charizardite-x, choice-scarf, leftovers}`・代替持ち物の最終選定はユーザーに1回確認）:
-  - [ ] `src/types/individual.test.ts`（16/27/43 行の rocky-helmet/life-orb・34 行 expect）。
-  - [ ] `team/individuals/{garchomp,dragapult,hydreigon}.yaml`（非解禁 → 解禁へ・説明コメントも追従）。
-  - [ ] `team/_demo/garchomp-bad-move.yaml`（rocky-helmet → leftovers・「psystrike のみ不正」のデモ単一性を維持）。
-- [ ] `pnpm generate:data` 再生成（`itemDex` に `megaSpecies` 反映）→ `pnpm verify` 緑。
+- [x] `data/champions/catalog/items.yaml`: 既存メガストーン4件へ `megaSpecies`（→メガ形態 SpeciesId）を手動付与。
+- [x] `src/types/individual.ts`: `HoldableItems<R,S>` の `"any"` 分岐を差し替え:
+  - [x] `MegaStoneOf<S>`（`ItemDex[I] extends { megaSpecies: S }` なストーン id）を追加。
+  - [x] `[MegaStoneOf<S>] extends [never] ? RegulationItemId<R> : MegaStoneOf<S> & RegulationItemId<R>`。
+  - [x] `Extract`（per-species 明示リスト）分岐は現状維持。`ItemDex`/`ItemId` を `data/generated/items.ts` から import。
+- [x] enforcement で型エラー化する fixture を解禁持ち物へ修正（dual-reg 3 個体は M-A 単独へ絞り、
+      代替持ち物をオーケストレーター確定値で適用: garchomp=focus-sash / dragapult=lum-berry /
+      hydreigon=choice-scarf + nasty-plot→u-turn）:
+  - [x] `src/types/individual.test.ts`（rocky-helmet/life-orb → focus-sash/lum-berry・expect 追従）。
+  - [x] `team/individuals/{garchomp,dragapult,hydreigon}.yaml`（非解禁 → 解禁へ・説明コメントも追従）。
+  - [x] `team/_demo/garchomp-bad-move.yaml`（PR 内で新規作成・item=leftovers・「psystrike のみ不正」のデモ単一性を維持）。
+- [x] `pnpm generate:data` 再生成（`itemDex` に `megaSpecies` 反映）→ `pnpm verify` 緑。
 
 ## この Phase で育てるハーネス（rule・skill）
 
@@ -58,6 +60,13 @@
   （per-reg item legality は 0021 の解禁判定モデルの忠実な適用で新たなトレードオフではない）。「`"any"` の意味を
   グローバル → per-reg プールへ確定」を 0021 Consequences か本 phase doc に決定として記録。判定が揺れる場合のみ
   `adr-new` を検討。
+
+> **決定の記録（本 phase で確定）**: `SpeciesBase.items` の `"any"` は、これまで `HoldableItems<R,S>` で
+> **グローバル `ItemId`**（append-only 全カタログ）へ解決していたが、本 phase で **そのレギュレーション `R` の
+> 解禁持ち物プール `RegulationItemId<R>`** へ解決する意味に確定した。さらにメガ形態種族（`MegaStoneOf<S>` が
+> 非 `never`）は **対応するメガストーン 1 個のみ**（`MegaStoneOf<S> & RegulationItemId<R>`）に絞る。これは
+> [ADR 0021](../../adr/0021-per-regulation-species-and-legality.md) の per-regulation 解禁判定モデルの忠実な適用で
+> あり、新たなトレードオフを伴わないため新規 ADR は起こさない（判定が揺れた場合のみ `adr-new` を検討）。
 
 ## 受け入れ基準
 

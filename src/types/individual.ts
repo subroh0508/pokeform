@@ -1,9 +1,10 @@
-import type { ItemId } from "../../data/generated/items.ts";
+import type { ItemDex, ItemId } from "../../data/generated/items.ts";
 import type { RegulationDex, RegulationId } from "../../data/generated/regulations/index.ts";
 import { speciesBaseDex } from "../../data/generated/species-base.ts";
 import { calcRealStats } from "../domain/calc-stats.ts";
 import type { Invalid } from "./brand.ts";
 import type { NatureSpec } from "./nature.ts";
+import type { RegulationItemId } from "./regulation.ts";
 import type { SpeciesBase } from "./species.ts";
 import type { PointAllocation, RealStats } from "./stats.ts";
 
@@ -79,12 +80,29 @@ export type ValidAbility<
   A extends string,
 > = A extends SpeciesEntryOf<R, S>["abilities"][number] ? A : AbilityNotAvailable<R, S, A>;
 
-/** `R` の種族 `S` の持ち物制約から許容される持ち物 ID 集合（`"any"` は全 `ItemId`）。 */
+/**
+ * 種族 `S` がメガ形態のとき、その形態に対応するメガストーン id（`ItemDex[I].megaSpecies` が `S` を指す）。
+ * base 種族や非メガ形態では `never`（マッチ無し）。X/Y を区別するため `megaStoneFor`（base）ではなく
+ * `megaSpecies`（メガ形態 SpeciesId）で引く。
+ */
+export type MegaStoneOf<S extends string> = {
+  [I in ItemId]: ItemDex[I] extends { readonly megaSpecies: S } ? I : never;
+}[ItemId];
+
+/**
+ * `R` の種族 `S` の持ち物制約から許容される持ち物 ID 集合。`"any"` は per-reg 解禁プールへ接続する
+ * （per-reg item legality・ADR 0021）:
+ * - **base（メガシンカ前）種族**: `RegulationItemId<R>`（R の解禁プール全件・全メガストーン含む）。
+ * - **メガ形態種族**（charizard-mega-x 等・`MegaStoneOf<S>` が非 `never`）: 対応するメガストーン 1 個のみ
+ *   （通常持ち物・他形態ストーン不可。`& RegulationItemId<R>` で R 未解禁ストーンも弾く）。
+ */
 export type HoldableItems<R extends RegulationId, S extends SpeciesIdIn<R>> = SpeciesEntryOf<
   R,
   S
 >["items"] extends "any"
-  ? ItemId
+  ? [MegaStoneOf<S>] extends [never]
+    ? RegulationItemId<R>
+    : MegaStoneOf<S> & RegulationItemId<R>
   : Extract<SpeciesEntryOf<R, S>["items"], readonly ItemId[]>[number];
 
 /** 持ち物 `I` を `R` の種族 `S` で検証し、持てない持ち物ならブランド型へ写像する。 */

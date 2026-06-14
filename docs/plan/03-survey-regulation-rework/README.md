@@ -35,7 +35,7 @@ flowchart TD
 - [x] [Phase 4 — Haiku 取得 SubAgent + Workflow fan-out（層2・HTML を読まない・冪等キャッシュ）](./phase-04-haiku-fetch-fanout.md)
 - [x] [Phase 5 — 修正 SubAgent + 自己修復ループ（層3・K 回上限・エスカレーション）](./phase-05-self-healing-loop.md)
 - [x] [Phase 6 — SKILL.md 全面改訂 + cross-agent パリティ + ツール整備](./phase-06-skill-rewrite-and-parity.md)
-- [ ] [Phase 7 — per-reg 持ち物 legality（メガストーン保持ルール = base 全件 / メガ形態 = 対応ストーンのみ・megaSpecies リンク）](./phase-07-per-reg-item-legality.md)
+- [x] [Phase 7 — per-reg 持ち物 legality（メガストーン保持ルール = base 全件 / メガ形態 = 対応ストーンのみ・megaSpecies リンク）](./phase-07-per-reg-item-legality.md)
 - [ ] [Phase 8 — per-reg species から不要な種族名 ja/en を削除（speciesBaseDex に集約）](./phase-08-per-reg-species-name-trim.md)
 - [ ] [Phase 9 — メガ関連の決定論自動取り込み（megaLinks / mega[] / megaSpecies 自動著述・ADR 0031 supersede）](./phase-09-deterministic-mega-capture.md)
 - [ ] [Phase 10 — M-A 全データ投入（全186種 + 全 movepool・新パイプライン経由・旧 02 phase-20）](./phase-10-ma-full-data.md)
