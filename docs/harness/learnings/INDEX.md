@@ -50,6 +50,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #104 | plan 03 へ 3 phase 挿入（per-reg 持ち物 legality / per-reg species name 削除 / メガ決定論取り込み）+ M-A 投入を Phase 10 へ renumber・cross-plan 追従 | 2026-06-14 | 03-survey-regulation-rework | draft | [2026-06-14-pr-104.md](./2026-06-14-pr-104.md) |
 | #114 | per-reg 持ち物 legality + メガストーン保持ルールの型強制（HoldableItems の "any" を per-reg プールへ・MegaStoneOf/megaSpecies・dual-reg 3 個体を M-A 単独へ） | 2026-06-14 | 03-survey-regulation-rework/phase-07 | draft | [2026-06-14-pr-114.md](./2026-06-14-pr-114.md) |
 | #116 | per-reg species から不要な種族名 ja/en を削除（PerRegSpecies = Omit<SpeciesBase,"name">・種族名 SoT を speciesBaseDex へ一本化・純減 136 行） | 2026-06-14 | 03-survey-regulation-rework/phase-08 | draft | [2026-06-14-pr-116.md](./2026-06-14-pr-116.md) |
+| #117 | メガ関連データの決定論自動著述（megaSpeciesId 純関数・megaLinks/メガ先/per-reg mega[]/megaSpecies・ADR 0031 を 0033 で supersede し archive 退避・SKILL/rule 追従） | 2026-06-14 | 03-survey-regulation-rework/phase-09 | draft | [2026-06-14-pr-117.md](./2026-06-14-pr-117.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
