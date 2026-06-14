@@ -1,9 +1,13 @@
-# Serebii 第一優先の調査・全量 materialize 手順（詳細）
+# Serebii 第一優先の調査・決定論スクレイパー・全量 materialize 手順（詳細）
 
 `survey-regulation` skill 本体（[SKILL.md](../SKILL.md)）が参照する詳細手順。**チャンピオンズ解禁データの
-情報源の役割・関係性（第一優先 / 補助裏取り / 構造データ取得元）の SoT**であり、Serebii を第一優先の正とする
-理由・主ソース URL パターン・全 learnable 技の全量 materialize の機構を定める。技の出自は Serebii 第一優先に
-一本化し、PokeAPI learnset への照合はしない（PokeAPI は Champions 非対応・ADR 0026）。データ仕様（取得元 / SoT /
+情報源の役割・関係性（第一優先 / 補助裏取り / 構造データ取得元）・決定論スクレイパー（層1-3）の機構の SoT**
+であり、Serebii を第一優先の正とする理由・主ソース URL パターン・**決定論スクレイパーの DOM / slug 正規化 /
+latin-1 / 自己検証 exit code・層2-3 の Workflow 自己修復の機構**・全 learnable 技の全量 materialize の機構を
+定める。取得は **HTML を LLM コンテキストに載せず決定論スクレイパーの exit code で判定**し（トークン最小化）、
+取りこぼし種は層2-3 / 最終 WebFetch fallback で吸収する。技の出自は Serebii 第一優先に一本化し、PokeAPI
+learnset への照合はしない（PokeAPI は Champions 非対応・ADR 0026）。3 層ハイブリッドの「なぜ」は
+[ADR 0031](../../../../docs/adr/0031-deterministic-serebii-scraper-hybrid-layers.md)、データ仕様（取得元 / SoT /
 転記の対応表）の正本は [[data-pipeline]]。
 
 ## 情報源の役割・関係性（SoT）
@@ -83,6 +87,48 @@
   日本語名 ja は `materialize`（PokeAPI vendor）に委ねる。メガ linking は Serebii メガ名 → catalog メガ id が
   決定論変換できないため自動化しない（authoring 層へエスカレーション）。
 
+## 層2-3 の機構（Workflow 自己修復・Claude 固有）
+
+層1（決定論スクレイパー）を多種へ適用する取得加速・自動修復を **Claude 固有の Workflow** で行う
+（[ADR 0031](../../../../docs/adr/0031-deterministic-serebii-scraper-hybrid-layers.md)）。正しさは層1 に宿るため、
+これらは最適化に過ぎず、Codex / 素の CLI は層1 逐次 + 人手修正で同じ成果へ収束する（cross-agent フォールバック）。
+
+### 層2 — 取得 fan-out（[`workflows/fetch-fanout.workflow`](../workflows/fetch-fanout.workflow)）
+
+roster（解禁種族 slug 配列）を **礼儀バッチ（既定 6 件・`parallel()`）で fan-out** し、各 slug を **read-only な
+Haiku 取得 SubAgent**（`agentType: "Explore"`）が担う。方針は「**判断するな・スクリプトを呼べ**」=
+`scrape-serebii.ts species <slug>` を Bash 実行し **exit code だけで判定**する（HTML を LLM コンテキストに載せない）。
+exit 2（キャッシュ未取得）は `fetch-serebii.ts species <slug>` → 再 scrape、exit 0 は成功（冪等キャッシュ
+`data/raw/serebii/` で再実行 skip）、exit 3/4 は `{slug, stage, status, missingFields, rawHtmlPath}` の構造化失敗
+レポートへ集約する。返り値 `{ ok, failed, counts }`（counts = total / ok / failed / dropped）。
+
+- 呼び出し（Claude のみ）: `Workflow({ scriptPath: ".claude/skills/survey-regulation/workflows/fetch-fanout.workflow", args: <slug配列 or {roster, batchSize}> })`。
+- `counts` と失敗種は roster-source doc の進捗・成功/失敗記録へ転記する。失敗種は層3 / 人手へエスカレーション。
+
+### 層3 — 修正 SubAgent + 自己修復ループ（[`workflows/self-heal.workflow`](../workflows/self-heal.workflow)）
+
+層2 の構造化失敗レポート（exit 3/4）を、**修正 SubAgent（Sonnet+・write 権限・既定 agentType）**が自動修復する
+ループ。ループは「**取得 → 失敗集約 → 修正 → 失敗種のみ再 fan-out**」で、修正 SubAgent は層1 の純関数パーサ
+（`src/codegen/serebii/parse.ts` / `normalize.ts` / `schema.ts`）の**セレクタ / 正規化を一般化して直し**、当該失敗
+ページの最小化 fixture（`__fixtures__/serebii-<slug>.html`）+ 回帰テストを足して `pnpm verify`（型 / カバレッジ
+100% / Biome）を緑化する。方針 = 「**セレクタを一般化せよ・その種専用ハックを避けよ・既存テストを壊すな・失敗
+ケースをテスト化せよ**」。同一パーサ欠陥は複数種で出るため、**欠陥シグネチャ（stage + status + missingFields）で
+バッチ**して 1 修正 SubAgent に集約する。
+
+- **権限分離**: 取得 SubAgent = read-only（層2 が `Explore` で起動）/ 修正 SubAgent = write（層3 が既定 agentType
+  で起動 = Edit/Write/Bash 可）。パーサ修正とテスト追加はこの層だけが行う。
+- **無限ループ防止**: 同一 slug の修復試行を **K 回上限（`maxRepair`・既定 3・1〜5 クランプ）** で打ち切り、dedup
+  （同一 slug は 1 ラウンド 1 回計上 / 1 グループも verify 緑にできなければ停止）で収束させる。収束しない種は
+  `escalated` として返り、roster-source doc に「未確定（人手エスカレーション）」として記録 → 最終 WebFetch fallback。
+- 呼び出し（Claude のみ）: `Workflow({ scriptPath: ".claude/skills/survey-regulation/workflows/self-heal.workflow", args: <slug配列 or {roster, maxRepair, batchSize}> })`。
+  返り値 `{ ok, escalated, counts }`（counts = total / ok / escalated / rounds）。
+
+### cross-agent フォールバック（層2-3 非対称の吸収）
+
+層2-3 は Claude 固有（Workflow）。Codex / 素の CLI では **人が `parse.ts` を直して fixture テストを足す**に縮退する
+だけで成果は同一（正しさは層1 = テスト済み純関数に宿る・[[cross-agent]]）。Workflow / Agent を allowed-tools に
+持たないツールでも層1（共有 npm script）で完結することが、本パイプラインが cross-agent で破綻しない必須条件。
+
 ## 日本語名は PokeAPI `names` から補完する（ja 取得元）
 
 Serebii Champions ページに**日本語名は無い**。日本語名 ja の取得元は **PokeAPI `names`（ja-Hrkt 優先・
@@ -133,13 +179,19 @@ per-reg `items` 予約キーへ反映する:
 
 ## レギュ更新時の routine（M-B 以降）
 
-新レギュレーション公開・既存レギュ更新時は同じ順序で再実行する:
+新レギュレーション公開・既存レギュ更新時は決定論パイプラインで再実行する:
 
-1. Serebii Champions 図鑑 + items.shtml を主ソースに解禁種族 / 各種族全技 / 持ち物を取得（Game8 等で件数検証）。
-2. `<id>-roster-source.md` に出典付きで記録。
-3. catalog へ append-only 追記（種族 / 技 / 持ち物 / 特性・特性漏れ = 生成エラーに注意）。
-4. per-reg YAML を新スキーマ（種族キー = 解禁・per-species `moves` 全量・`items` 予約キー・block 記法）で記述。
-5. `fetch:data`（PokeAPI から構造データ取得・learnset 照合はしない）→ `materialize`（raw → catalog へ構造データ
-   `dex` / `types` / `stats` / `abilities` / `category` を転記・append/既存尊重・ADR 0027）→ `check:regulation`
-   0 終了（参照整合 / schema）→ `generate:data`（raw 非依存・catalog のみ変換）→ `verify` 緑。**fetch:data →
-   materialize の順序保証は本 skill の責務**（スクリプトは raw 不在で fail-fast するだけ・ADR 0027）。
+1. **roster 確定**（WebFetch・Serebii Champions 索引 + items.shtml）: 解禁種族 slug 配列・解禁持ち物・メガ
+   membership を確定。総数は Game8 等で**機械的件数比較**に縮退して裏取りする。
+2. **層1-3 取得**: Claude は `Workflow(self-heal.workflow, args: roster)`（層2 fan-out → 層3 自己修復）。Codex /
+   素の CLI は各 slug を `fetch:serebii` → `scrape:serebii` 逐次 + 人手で `parse.ts` 修正。**HTML を LLM に
+   載せず exit code で判定**。`counts` / `escalated` を `<id>-roster-source.md` に記録。
+3. **`serebii:catalog`**: 層1 中間 JSON から Serebii 由来（種族 / 全技 / 技メタ / メガ先 / per-reg 解禁 / en）を
+   catalog / regulations へ append / 既存尊重で転記。
+4. **`fetch:data` → `materialize`**: 構造データ（`dex` / `types` / `stats` / `abilities` / `category`）と日本語名
+   ja（PokeAPI `names`・ADR 0032）を catalog へ転記（append / 既存尊重・ADR 0027）。**順序保証は本 skill の責務**
+   （スクリプトは raw 不在で fail-fast するだけ・ADR 0027）。特性 id は materialize 後に `abilities.yaml` へ集約。
+5. **メガ linking + per-reg 仕上げ**（手動）: `megaLinks` / per-reg `mega[]`（決定論変換不能）と `name` / `period`
+   / `items` 予約キーを手で著述。`escalated` 種は最終 WebFetch fallback で目視 + fixture 追加。
+6. **検証 / 再生成**: `check:regulation` 0 終了（参照整合 / schema・learnset 照合はしない・ADR 0026）→
+   `generate:data`（raw 非依存・catalog のみ変換）→ `verify` 緑。
