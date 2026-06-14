@@ -57,7 +57,7 @@ docs/harness/   自己改良ループ（learnings）+ rules-index.md（生成）
 - 作業単位は `docs/plan/` のフェーズ。各フェーズは受け入れ基準を満たし `pnpm verify` が**緑**で前進する。
 - アーキ決定（技術選定・パターン採用・不可逆なトレードオフ）をしたら **`adr-new` skill で ADR を残す**。→ `adr.md`
 - ハーネス資産（rules / skills / templates / AGENTS.md / CLAUDE.md / .githooks）を変えるときは cross-agent パリティを保つ。→ `cross-agent.md`
-- PR は `.github/pull_request_template.md`（ソース）/ `.github/PULL_REQUEST_TEMPLATE/harness.md`（ハーネス改修）を使う。
+- PR は `.github/pull_request_template.md`（ソース）/ `.github/PULL_REQUEST_TEMPLATE/harness.md`（ハーネス改修）/ `.github/PULL_REQUEST_TEMPLATE/plan.md`（計画起票・plan doc / renumber / cross-plan move）を使う。
 - **ブランチ命名**: `<type>/<scope>-<purpose>`。例 = フェーズ実装 `harness/phase-NN-<slug>` / ソース機能 `feat/<slug>` / 修正 `fix/<slug>` / learning 集約 `harness/learnings-batch-YYYY-WW` / 個別ハーネス改修 `harness/<purpose>`。
 
 ## skill（手順・チェックリスト・最小概要）
