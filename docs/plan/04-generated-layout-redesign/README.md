@@ -17,7 +17,7 @@ flowchart TD
 
 ## フェーズ一覧（この順で実施）
 
-- [ ] [Phase 1 — ADR 起票（generated/YAML ディレクトリ再編 + 名前 SoT を languages へ / メガ独立 spec エンティティ・ADR 0025/0032/0034 追補）](./phase-01-adr-layout-and-mega-entity.md)
+- [x] [Phase 1 — ADR 起票（generated/YAML ディレクトリ再編 + 名前 SoT を languages へ / メガ独立 spec エンティティ・ADR 0025/0032/0034 追補）](./phase-01-adr-layout-and-mega-entity.md)
 - [ ] [Phase 2 — コア実装（YAML 新ツリー移行 + generate.ts 全面改修 + materialize/fetch/serebii-to-catalog 追従 + 型レイヤ + 14 consumer + 公開API + テスト fixture・verify 緑）](./phase-02-core-rewrite.md)
 - [ ] [Phase 3 — ハーネス追従（rules / skills / architecture / docs・cross-agent パリティ・パス参照一掃）](./phase-03-harness-followup.md)
 
