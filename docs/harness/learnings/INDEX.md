@@ -60,6 +60,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #128 | plan 04 Phase 1: ADR 0035（generated/YAML を specs/languages/per-reg の 3 軸へ再編・名前 SoT を languages へ）/ 0036（メガ独立 spec エンティティ）起票・ADR 0025/0032/0034 を supersede し archive 退避＋inbound 全件追従 | 2026-06-20 | 04-generated-layout-redesign/phase-01 | draft | [2026-06-20-pr-128.md](./2026-06-20-pr-128.md) |
 | #133 | plan 04 Phase 2: generated/YAML を 3 軸直交レイアウトへコア実装移行（codegen 全面改修・型・14 consumer・メガ独立 spec）・reg-aware 型機構を無回帰で維持・値不変・生成 raw 非依存。tsc 先行実験で spread 合成の narrow 温存を de-risk | 2026-06-20 | 04-generated-layout-redesign/phase-02 | draft | [2026-06-20-pr-133.md](./2026-06-20-pr-133.md) |
 | #135 | plan 04 Phase 3: 新レイアウト（specs/languages/per-reg・メガ独立 spec）へ rule 3 + skill 4 + architecture/data README/AGENTS + 計画 README を追従し旧パス一掃。MVP 設計 doc は supersede redirect 注記で現行 SoT へ誘導。harness-review blocking 0（reverseEn 架空シンボルを fix） | 2026-06-20 | 04-generated-layout-redesign/phase-03 | draft | [2026-06-20-pr-135.md](./2026-06-20-pr-135.md) |
+| #137 | plan 04 へ配置最終化 3 件を新 Phase 4-6（src/generated 移動 / レギュ名 SoT を languages へ / メガ items legality）として 1 phase = 1 PR で追加・OVERVIEW/README/mermaid/rollup 追従・先行 plan 03 を ✅ 完了化。harness-review blocking 0（新旧 Phase 4 番号 2 義 + 05/06 依存粒度ズレを non-blocking/nit） | 2026-06-20 | 04-generated-layout-redesign | draft | [2026-06-20-pr-137.md](./2026-06-20-pr-137.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
