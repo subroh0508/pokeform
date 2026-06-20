@@ -1,6 +1,7 @@
 // 生成物（scripts/generate.ts 出力）。手書き編集しない。data/champions・data/languages を直し再生成する。
 import type { RegulationBase } from "../../../types/regulation.ts";
 import type { PerRegSpecies } from "../../../types/species.ts";
+import { regulationNames } from "../../languages/regulations.ts";
 import { megaSpecsDex } from "../mega-specs.ts";
 import { speciesSpecsDex } from "../species-specs.ts";
 import { items } from "./items.ts";
@@ -291,10 +292,7 @@ export type SpeciesId = keyof SpeciesDex;
 
 export const championsMA = {
   id: "champions-m-a",
-  name: {
-    en: "Champions Regulation M-A",
-    ja: "チャンピオンズ レギュレーションM-A",
-  },
+  name: regulationNames["champions-m-a"].name,
   period: {
     start: "2026-04-08",
     end: "2026-06-17",

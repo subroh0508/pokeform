@@ -9,8 +9,8 @@ const catalog: RegulationCatalog = {
 
 describe("validateRegulation", () => {
   it("正当なレギュレーションは問題なし（参照整合・schema のみ検証）", () => {
+    // レギュ名は languages（regulations.yaml）が SoT で record に `name` を含まない（予約キーから除外・ADR 0035）。
     const reg = {
-      name: { en: "M-A", ja: "M-A" },
       period: { start: "2026-04-08", end: null },
       items: ["life-orb", "charizardite-x"],
       garchomp: { moves: ["earthquake", "dragon-claw"] },

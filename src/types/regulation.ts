@@ -17,6 +17,8 @@ import type { PerRegSpecies } from "./species.ts";
  */
 export interface RegulationBase {
   readonly id: string;
+  /** レギュ名。SoT は languages（`regulationNames`・`data/languages/regulations.yaml`）で generate が合成する
+   *  （名前は index.yaml / specs に持たせない・構造と直交・ADR 0035）。 */
   readonly name: { readonly en: string; readonly ja: string };
   /** 開催期間。`start` 必須・`end` は開催中なら `null`。 */
   readonly period: { readonly start: string; readonly end: string | null };

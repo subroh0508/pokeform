@@ -1,7 +1,4 @@
-# data/champions/m-a/index.yaml — レギュレーション m-a のメタ（name/period）。レギュ名は languages 列挙の例外でここに同居。
-name:
-  en: Champions Regulation M-A
-  ja: チャンピオンズ レギュレーションM-A
+# data/champions/m-a/index.yaml — レギュレーション m-a のメタ（period のみ）。レギュ名は languages（regulations.yaml）が SoT。
 period:
   start: 2026-04-08
   end: 2026-06-17

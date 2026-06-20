@@ -57,12 +57,13 @@ const regDirs = (path: string): string[] => {
 /** split された per-reg ファイルを domain が期待する 1 レコードへ再構成する。 */
 const loadRegRecord = (dir: string): Record<string, unknown> => {
   const rd = <T>(file: string): T => parseYaml(readFileSync(join(dir, file), "utf8")) as T;
-  const index = rd<{ name: unknown; period: unknown }>("index.yaml");
+  // レギュ名は languages（regulations.yaml）が SoT で index.yaml は period のみ（ADR 0035）。
+  const index = rd<{ period: unknown }>("index.yaml");
   const species = rd<{ species: string[] }>("species.yaml").species ?? [];
   const items = rd<{ items: string[] }>("items.yaml").items ?? [];
   const mega = rd<{ mega: Record<string, string[]> }>("mega.yaml").mega ?? {};
   const speciesMoves = rd<{ moves: Record<string, string[]> }>("species-moves.yaml").moves ?? {};
-  const record: Record<string, unknown> = { name: index.name, period: index.period, items };
+  const record: Record<string, unknown> = { period: index.period, items };
   for (const sid of species) {
     const block: { moves: string[]; mega?: string[] } = { moves: speciesMoves[sid] ?? [] };
     if (mega[sid]) block.mega = mega[sid];

@@ -70,7 +70,6 @@ interface MoveStatsYaml {
   priority: number;
 }
 interface RegIndexYaml {
-  name: NamePair;
   period: { start: string; end: string | null };
 }
 
@@ -100,6 +99,11 @@ const langAbilities = rd<{ abilities: Record<string, NamePair> }>(
   join(LANG, "abilities.yaml"),
 ).abilities;
 const langTypes = rd<{ types: Record<string, NamePair> }>(join(LANG, "types.yaml")).types;
+// レギュ名は languages の SoT（id = `<game>-<reg>`・例 champions-m-a）。specs に id を持たないため
+// 突き合わせは regs 構築後（解禁ディレクトリから導出した reg id 集合）に行う。
+const langRegulations = rd<{ regulations: Record<string, NamePair> }>(
+  join(LANG, "regulations.yaml"),
+).regulations;
 
 const TYPES = Object.keys(typeSpecs);
 const abilitySet = new Set(abilityList);
@@ -288,6 +292,13 @@ for (const r of regs) {
   }
 }
 
+// レギュ名の突き合わせ（languages/regulations の id 集合 = reg id 集合・ja/en 完備）。
+requireNames(
+  "regulations",
+  regs.map((r) => r.id),
+  langRegulations,
+);
+
 /** プロパティアクセス式を組む（識別子なら dot・ハイフン等を含むなら bracket・biome useLiteralKeys 整合）。 */
 const acc = (obj: string, key: string): string =>
   /^[A-Za-z_$][\w$]*$/.test(key) ? `${obj}.${key}` : `${obj}[${JSON.stringify(key)}]`;
@@ -344,6 +355,7 @@ const langFiles: [string, string, Record<string, NamePair>][] = [
   ["moves", "moveNames", langMoves],
   ["abilities", "abilityNames", langAbilities],
   ["types", "typeNames", langTypes],
+  ["regulations", "regulationNames", langRegulations],
 ];
 for (const [file, name, map] of langFiles) {
   emit(
@@ -395,19 +407,14 @@ for (const r of regs) {
     }
   }
   const speciesDexBody = `{\n${[...baseLines, ...megaLines].join("\n")}\n}`;
-  const meta = {
-    id: r.id,
-    name: r.meta.name,
-    period: { start: r.meta.period.start, end: r.meta.period.end ?? null },
-  };
-  const metaLit = lit(meta).replace(
-    /\n\}$/,
-    ",\n  species,\n  items,\n  mega: Object.values(mega).flat(),\n  speciesDex,\n}",
-  );
+  // レギュ名は languages（regulationNames）由来で合成（名前 SoT は languages・ADR 0035）。
+  const periodLit = lit({ start: r.meta.period.start, end: r.meta.period.end ?? null });
+  const metaLit = `{\n  id: ${JSON.stringify(r.id)},\n  name: ${acc("regulationNames", r.id)}.name,\n  period: ${periodLit},\n  species,\n  items,\n  mega: Object.values(mega).flat(),\n  speciesDex,\n}`;
   emit(
     join(dir, "index.ts"),
     `import type { RegulationBase } from "../../../types/regulation.ts";\n` +
       `import type { PerRegSpecies } from "../../../types/species.ts";\n` +
+      `import { regulationNames } from "../../languages/regulations.ts";\n` +
       `import { megaSpecsDex } from "../mega-specs.ts";\n` +
       `import { speciesSpecsDex } from "../species-specs.ts";\n` +
       `import { items } from "./items.ts";\n` +
