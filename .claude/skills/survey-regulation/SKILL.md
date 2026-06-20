@@ -148,7 +148,7 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
   出たら、その id 群は **catalog に未登録**＝ PokeAPI 構造データ・名前が未取得である。
 - 不足 id があれば **先に [`update-catalog`](../update-catalog/SKILL.md) を回して catalog を揃える**
   （`fetch:data` → `materialize` + 特性 id 集約）。不足 id を列挙して update-catalog に渡し、構造データ・ja を
-  catalog へ取り込んでから本 skill の続き（手順 5-6）へ戻る。大量投入（全種族投入 = `04-generated-layout-redesign` の全量投入 phase 等）で catalog の取りこぼし
+  catalog へ取り込んでから本 skill の続き（手順 5-6）へ戻る。大量投入（全種族投入など）で catalog の取りこぼし
   （特性追記漏れ等）を防ぐ関門がこのチェックポイント。
 - 参照整合が 0 終了（不足なし）なら catalog は揃っているので手順 5 へ進む。
 

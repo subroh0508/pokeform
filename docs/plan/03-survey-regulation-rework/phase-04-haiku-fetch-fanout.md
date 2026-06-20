@@ -12,7 +12,7 @@
     成功種は冪等キャッシュ（`data/raw/serebii/`）で再実行不要。失敗種（exit 3/4）は構造化レポートに集約。
   - 進捗・成功/失敗カウントを roster-source doc に記録（現行 doc 化要件と整合）。
   - SKILL.md に層2 手順を追記。
-- スコープ外: 修正 SubAgent / 自己修復ループ（Phase 5）・SKILL 全面改訂（Phase 6）・全186種実投入（04 Phase 4）。
+- スコープ外: 修正 SubAgent / 自己修復ループ（Phase 5）・SKILL 全面改訂（Phase 6）・全186種実投入（後続計画群 06）。
 
 ## 前提（依存）
 

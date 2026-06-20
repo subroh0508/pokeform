@@ -26,7 +26,7 @@
   - `.claude/rules/data-pipeline.md` / `references/serebii-sourcing.md` の責務分担記述を 2 skill 体制へ更新。
 - スコープ外:
   - 機械ゲート（`check:regulation` 等）の新規実装（既存の参照整合を土台にする・再実装しない）。
-  - 全種族投入そのもの（04 Phase 4）。catalog/regulations のデータ内容変更。
+  - 全種族投入そのもの（後続計画群 06）。catalog/regulations のデータ内容変更。
 
 ## 前提（依存）
 
@@ -83,6 +83,6 @@
 - **チェックポイントは既存ゲートを土台に**: 新規バリデータを実装せず、`check:regulation` の参照整合（catalog 未登録
   id を非0終了で報告）を入口にして「不足 id → catalog skill を回せ」と誘導する手順にする（機械ゲート非再実装・
   [[skill-authoring]]）。
-- **全種族投入（04 Phase 4）はこの 2 skill 体制で行う**: catalog skill で PokeAPI 構造データを揃え、regulations
+- **全種族投入（後続計画群 06）はこの 2 skill 体制で行う**: catalog skill で PokeAPI 構造データを揃え、regulations
   skill で Champions 全解禁を投入する。チェックポイントが大量投入時の catalog 取りこぼし（特性追記漏れ等）を防ぐ。
 - skill 名は仮称。最終名は `skill-creator` 実行時に description=trigger の観点で確定する。

@@ -63,9 +63,9 @@ flowchart TD
 - スキル作成・改修は `skill-creator`、ADR は `adr-new`（[[skill-authoring]] / [[adr]]）。層2-3 の SubAgent
   オーケストレーションは Workflow スクリプトで実装する（OVERVIEW 設計方針）。
 - Phase 7-9 は survey-regulation の動作確認で判明した是正（per-reg 持ち物 legality・per-reg species name 削除・
-  メガ決定論取り込み）。全種族投入（04 Phase 4）の前段として、legality 強制とメガ自動取り込みを揃える。
+  メガ決定論取り込み）。全種族投入（後続 [06-ma-full-data](../06-ma-full-data/README.md)）の前段として、legality 強制とメガ自動取り込みを揃える。
 - Phase 10-12 はデータレイアウト整備（ゲームグルーピング・per-game 技メタ・取得スキル 2 分割）。全種族投入
-  （04 Phase 4）の手前で、`regulations/champions/` レイアウト・`catalog`(名前)/`regulations`(技メタ) の責務分離・
+  （後続 [06-ma-full-data](../06-ma-full-data/README.md)）の手前で、`regulations/champions/` レイアウト・`catalog`(名前)/`regulations`(技メタ) の責務分離・
   catalog 取得 / regulations 取得スキルの分割を確定させる de-risk（learning #59/#76 の「全量投入の手前で仕組みを
   確定」と同型）。
 - **技仕様の Champions 対応は 05 へ**: 前作から変更された技仕様（PP の 8/12/16/20 化・power・type）の是正は、当初
