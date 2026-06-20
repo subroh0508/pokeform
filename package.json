@@ -3,6 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
+  "bin": {
+    "pokeform": "src/cli/index.ts"
+  },
   "engines": {
     "node": ">=24"
   },
@@ -12,13 +15,34 @@
     "test:cov": "vitest run --coverage",
     "lint": "biome check .",
     "format": "biome check --write .",
-    "verify": "pnpm typecheck && pnpm test:cov && pnpm lint",
+    "verify": "pnpm typecheck && pnpm test:cov && pnpm lint && pnpm check:yaml-style",
+    "pokeform": "node src/cli/index.ts",
+    "compile": "node src/cli/index.ts compile",
+    "check:party": "node src/cli/index.ts check:party",
+    "check:individual": "node src/cli/index.ts check:individual",
+    "check:regulation": "node src/cli/index.ts check:regulation",
+    "check:yaml-style": "node src/cli/index.ts check:yaml-style",
+    "analyze:coverage": "node src/cli/index.ts analyze:coverage",
+    "fetch:data": "node scripts/fetch-pokeapi.ts",
+    "fetch:serebii": "node scripts/fetch-serebii.ts",
+    "materialize": "node scripts/materialize.ts",
+    "scrape:serebii": "node scripts/scrape-serebii.ts",
+    "serebii:catalog": "node scripts/serebii-to-catalog.ts",
+    "generate:data": "node scripts/generate.ts",
     "gen:rules-index": "node scripts/gen-rules-index.ts",
     "prepare": "git config core.hooksPath .githooks && node scripts/gen-rules-index.ts"
   },
+  "dependencies": {
+    "cac": "^7.0.0",
+    "gray-matter": "^4.0.3",
+    "tinyglobby": "^0.2.17",
+    "yaml": "^2.9.0"
+  },
   "devDependencies": {
-    "@biomejs/biome": "2.4.16",
+    "@biomejs/biome": "2.5.0",
+    "@types/node": "^25.9.3",
     "@vitest/coverage-v8": "4.1.8",
+    "cheerio": "^1.2.0",
     "typescript": "6.0.3",
     "vitest": "4.1.8"
   }

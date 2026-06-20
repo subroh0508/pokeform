@@ -29,7 +29,7 @@ src/codegen/    YAML/MD → *.generated.ts + tsc 実行・診断整形
 src/cli/        cac ルーティング・各コマンド
 scripts/        fetch-pokeapi.ts / generate.ts / gen-rules-index.ts
 data/raw/       PokeAPI キャッシュ（.gitignore）
-data/champions/ 手動管理（rules/regulation/overrides.yaml・コミット）
+data/champions/ skill 著述（rules.yaml/regulations/catalog・SoT・人間直編集 NG・コミット）
 data/generated/ 生成データ（型 + 値・コミット）
 docs/plan/      実装計画（01-mvp/architecture.md が規約正本）
 docs/adr/       アーキ決定の不変ログ
@@ -53,10 +53,11 @@ docs/harness/   自己改良ループ（learnings）+ rules-index.md（生成）
 
 ## 進め方
 
+- **実装指示・機能要望を受けたら、着手の前に必ず `plans-new` skill を一度経由する**（入口）。指示を OVERVIEW にまとめ 6 基準で 1 phase = 1 PR に分割してから着手へ繋ぐ。trivial な単発編集・会話的応答のみ例外。→ `planning.md` / ADR `0020`
 - 作業単位は `docs/plan/` のフェーズ。各フェーズは受け入れ基準を満たし `pnpm verify` が**緑**で前進する。
 - アーキ決定（技術選定・パターン採用・不可逆なトレードオフ）をしたら **`adr-new` skill で ADR を残す**。→ `adr.md`
 - ハーネス資産（rules / skills / templates / AGENTS.md / CLAUDE.md / .githooks）を変えるときは cross-agent パリティを保つ。→ `cross-agent.md`
-- PR は `.github/pull_request_template.md`（ソース）/ `.github/PULL_REQUEST_TEMPLATE/harness.md`（ハーネス改修）を使う。
+- PR は `.github/pull_request_template.md`（ソース）/ `.github/PULL_REQUEST_TEMPLATE/harness.md`（ハーネス改修）/ `.github/PULL_REQUEST_TEMPLATE/plan.md`（計画起票・plan doc / renumber / cross-plan move）を使う。
 - **ブランチ命名**: `<type>/<scope>-<purpose>`。例 = フェーズ実装 `harness/phase-NN-<slug>` / ソース機能 `feat/<slug>` / 修正 `fix/<slug>` / learning 集約 `harness/learnings-batch-YYYY-WW` / 個別ハーネス改修 `harness/<purpose>`。
 
 ## skill（手順・チェックリスト・最小概要）
@@ -65,6 +66,7 @@ skill は両ツール共有（canonical `.claude/skills/<name>/` + `.agents/skil
 
 現行 skill:
 
+- **`plans-new`** — **実装の入口**。実装指示をブラッシュアップし `docs/plan/NN-{slug}/OVERVIEW.md` にまとめ、6 基準で 1 phase = 1 PR に分割する。1 PR 妥当なら issue + `implementation-workflow`、複数なら計画群を起こして `start-phase` / `implementation-workflow` へ繋ぐ。→ `planning.md`
 - **`start-phase`** — phase doc を読み依存・必要な rule/skill・受け入れ基準を整理して着手準備を整える。
 - **`verify`** — `pnpm verify`（型 / テスト / カバレッジ / Lint）を実行し結果を要約。失敗時は最初の失敗箇所を指摘。
 - **`finish-phase`** — `verify` で検証し受け入れ基準を照合・進捗更新、ADR / レトロの起動を促してフェーズを締める。

@@ -1,0 +1,10 @@
+lang: en
+# いかく持ちの特殊アタッカー。りゅうせいぐん主体。
+# M-A / M-B いずれも未解禁（regulations: []）。fan-out なし = 無制約のデモ個体。
+species: salamence
+regulations: []
+nature: { up: spAttack, down: attack }
+ability: intimidate
+item: life-orb
+points: { hp: 2, attack: 0, defense: 0, spAttack: 32, spDefense: 0, speed: 32 }
+moves: [draco-meteor, fire-blast, hydro-pump, roost]

@@ -17,10 +17,10 @@
 
 ## フェーズ一覧（この順で実施）
 
-- [ ] [Phase 0 — 足場 + 実数値計算（calc-stats）](./phase-00-scaffold.md)
-- [ ] [Phase 1 — データ生成 + 一貫性/技範囲チェック（MVP コア）](./phase-01-data-and-coverage.md)
-- [ ] [Phase 2 — 個体 tsc 検証層](./phase-02-individual-typecheck.md)
-- [ ] [Phase 3 — ステータス調整の壁打ち](./phase-03-stat-tuning.md)
+- [x] [Phase 0 — 足場 + 実数値計算（calc-stats）](./phase-00-scaffold.md)
+- [x] [Phase 1 — データ生成 + 一貫性/技範囲チェック（MVP コア）](./phase-01-data-and-coverage.md)
+- [x] [Phase 2 — 個体 tsc 検証層](./phase-02-individual-typecheck.md)
+- [x] [Phase 3 — ステータス調整の壁打ち](./phase-03-stat-tuning.md)
 
 ## 全体の受け入れ基準
 
@@ -31,6 +31,6 @@
 
 ## クロスエージェント / ハーネス連携
 
-- 本計画で追加する利用者向けスキル（`review-party` / `author-individual` / `stat`）は、ハーネスの共有方針に従い **canonical `.claude/skills/<name>/` + `.agents/skills/<name>` symlink** で、**`skill-creator` skill を使って作成**（`skill-authoring.md`）。
+- 本計画で追加する利用者向けスキル（`review-party` / `author-individual` / `stat-tuning`）は、ハーネスの共有方針に従い **canonical `.claude/skills/<name>/` + `.agents/skills/<name>` symlink** で、**`skill-creator` skill を使って作成**（`skill-authoring.md`）。
 - 各フェーズは対応する rule（`testing` / `data-pipeline` / `cli-and-io` / `type-conventions` / `tsc-verification` / `game-spec`）を確定させながら進める。
 - 完了条件は共通して「`pnpm verify` 緑 + 該当 rule/skill の確定」。

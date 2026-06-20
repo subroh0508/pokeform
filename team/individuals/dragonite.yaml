@@ -1,0 +1,9 @@
+lang: ja
+# マルチスケイル + しんそくの汎用アタッカー。たべのこしで対面維持。
+species: カイリュー
+regulations: [champions-m-a, champions-m-b]
+nature: { up: こうげき, down: とくこう }
+ability: マルチスケイル
+item: たべのこし
+points: { HP: 4, こうげき: 32, ぼうぎょ: 0, とくこう: 0, とくぼう: 0, すばやさ: 30 }
+moves: [じしん, げきりん, しんそく, はねやすめ]

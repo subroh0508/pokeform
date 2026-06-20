@@ -29,8 +29,9 @@ flowchart LR
    [採用 / 見送り / 撤去](../../.claude/rules/harness-meta-criteria.md) を判定して
    改修 PR / ADR / feedback 追記へ振り分ける。**merge は人間 approve**。
 
-> **位置づけ**: 本ループは「**仕掛けの設置**」。実際に回り始めるのは MVP 実装で最初の PR が出てから
-> （その時点で gh 権限 / ADR / 型・カバレッジゲートが揃う）。設置 ≠ 即時稼働。
+> **位置づけ**: 本ループは**稼働中**。`00-harness-setup` の整備完了後、MVP（`01-mvp`）以降の各 PR で
+> `pr-retrospective` が learning を生成し（`learnings/` に多数蓄積済み）、`harness-meta` が集約してハーネスへ
+> 書き戻している。最新の learning / status は [`learnings/INDEX.md`](./learnings/INDEX.md) を参照。
 
 ## 構成
 
@@ -45,18 +46,18 @@ flowchart LR
 | [`.claude/skills/pr-retrospective/`](../../.claude/skills/pr-retrospective/) | learning 生成 skill（canonical） |
 | [`.claude/skills/harness-meta/`](../../.claude/skills/harness-meta/) | 集約→書き戻し skill（canonical） |
 
-## 運用メモ（統合・前方参照）
+## 運用メモ
 
-設置時点では一部の依存（Phase 4 ADR / Phase 8 finish-phase / Phase 7 CLAUDE.md）が未完のため、
-以下は**メモ（前方参照）**として記す。各依存フェーズで実体に反映する。
+`00-harness-setup` の整備完了に伴い、かつて前方参照だった依存（ADR / finish-phase / CLAUDE.md）はすべて
+実体に反映済み。現在の運用は次のとおり:
 
 - **ブランチ命名**: learning の集約 PR は `harness/learnings-batch-YYYY-WW`（週次 / 件数閾値）、
-  個別のハーネス改修 PR は `harness/<purpose>`。命名規約は Phase 7 で `branch-naming.md` rule 化を検討。
-- **起動導線**: 自動起動は不採用（将来送り）。手動起動、または `finish-phase` skill（Phase 8）末尾の
-  「PR merge 後に `pr-retrospective` を起動」促しに乗せる（実装は Phase 8）。
-- **ADR 連携**: `🚀 Try` のアーキ決定は `[adr]` 提案 → Phase 4 の `adr-new` で起票。
-  本ループ導入自体は ADR `0015-kpt-retrospective-loop` としてバックフィル（Phase 4 で起票）。
-- **CLAUDE.md**: 本ループの要約を Phase 7 で `CLAUDE.md` / `AGENTS.md` に追記する。
+  個別のハーネス改修 PR は `harness/<purpose>`（命名規約は `AGENTS.md` / [[cross-agent]]）。
+- **起動導線**: 自動起動は不採用（将来送り）。手動起動、または `finish-phase` skill 末尾の
+  「PR merge 後に `pr-retrospective` を起動」促しに乗せる。
+- **ADR 連携**: `🚀 Try` のアーキ決定は `[adr]` 提案 → `adr-new` で起票。
+  本ループ導入自体は ADR [`0015-kpt-retrospective-loop`](../adr/0015-kpt-retrospective-loop.md)。
+- **CLAUDE.md**: 本ループの要約は `CLAUDE.md` / `AGENTS.md` に反映済み。
 - **集約 / dry-run**: batch 集約は週次 or 件数閾値（既定 10）。リスキー変更は軽量 dry-run メモのみ
   （定量 dry-run は不採用）。
 

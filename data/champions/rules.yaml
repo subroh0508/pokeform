@@ -1,0 +1,12 @@
+# data/champions/rules.yaml — PokeAPI に無いゲーム計算定数の唯一のソース（skill 著述・コミット）。
+# 正本のゲーム仕様は .claude/rules/game-spec.md / docs/plan/01-mvp/architecture.md。
+# Lv50・個体値31 固定を代入済みの実数値計算式の定数を持つ。
+level: 50
+iv: 31
+points:
+  total: 66 # 能力ポイント合計
+  maxPerStat: 32 # 1 能力あたり上限
+natureMod:
+  up: 1.1
+  neutral: 1.0
+  down: 0.9

@@ -1,0 +1,9 @@
+lang: en
+# こだわりスカーフで上から制圧する特殊アタッカー。浮遊で地面を透かす（M-A 解禁）。とんぼがえりで対面操作。
+species: hydreigon
+regulations: [champions-m-a]
+nature: { up: spAttack, down: attack }
+ability: levitate
+item: choice-scarf
+points: { hp: 2, attack: 0, defense: 0, spAttack: 32, spDefense: 0, speed: 32 }
+moves: [dark-pulse, draco-meteor, fire-blast, u-turn]

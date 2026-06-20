@@ -51,7 +51,9 @@ flowchart LR
 
 「**種族値が一意に定まる粒度 = 1種族**」を `SpeciesId`（kebab-case の安定キー）とする。フォルム/リージョン/メガで種族値が変わるものは別 `SpeciesId`（例 `charizard`, `charizard-mega-x`, `rotom-wash`, `tauros-paldea-aqua`）。
 
-巨大 union の分配コストを避けるため、**`interface SpeciesDex` のプロパティアクセス（`SpeciesDex[S]`）主体**で制約する。
+巨大 union の分配コストを避けるため、**`SpeciesDex[S]` のプロパティアクセス主体**で制約する。
+
+> **実装上の materialize（Phase 1 で確定）**: 以下の `interface SpeciesDex { ... }` / `interface MoveDex { ... }` 等のコード例は**型の形（shape）の図示**であり、生成物の実ファイル構成ではない。`data/generated/<dex>.ts` は値 `export const xxxDex = { ... } as const` を出力し、そこから **`type XxxDex = typeof xxxDex` / `type XxxId = keyof XxxDex` を派生**して**値と型を単一ソース化**する（型と値を別ファイルに二重管理しない）。親型 `XxxBase` への適合は `satisfies`（acyclic な types/moves/abilities）または `Assignable<Record<string, XxxBase>, XxxDex>`（`megaEvolvesTo`/`megaStoneFor` が派生 `SpeciesId` を自己参照する species/items）で検証する。詳細は [[type-conventions]] / [[data-pipeline]]。
 
 **英名/日本語名の両対応**: 種族名・タイプ・技・特性・持ち物はすべて**英名（kebab-case の安定 ID = 型キー）と日本語名の対応を型として持つ**。ID を型キーに使うのは安定性（PokeAPI 由来・改名されにくい・union キーに適する）のため。日本語名は ① 各エントリの `name` プロパティ ② 名前変換マップ型 `JaName<Id>` / `IdByJaName<"ピカチュウ">` の双方向リテラル型で引けるようにし、YAML を日本語名でも英名でも記述できるようにする（codegen が解決）。
 
@@ -75,7 +77,7 @@ export interface SpeciesBase {
   moves: readonly MoveId[];                       // MoveDex のキー
   items: "any" | readonly ItemId[];              // ItemDex のキー、または "any"
   megaEvolvesTo?: SpeciesId;
-  regulations: readonly RegulationId[];          // 解禁レギュレーション
+  // 解禁レギュレーションは種族側に持たない。per-regulation（regulationDex[R].species）が正本（A案・ADR 0021）。
 }
 
 // data/generated/species.ts — 各種族を子型として specialize し SpeciesDex に集約（生成）
@@ -88,7 +90,6 @@ export interface SpeciesDex {
     abilities: readonly ["static","lightning-rod"];
     moves: readonly ["volt-tackle","thunderbolt","iron-tail","quick-attack", /* ... */];
     items: "any";
-    regulations: readonly ["champions-m-a","champions-m-b"];
   };
   "charizard-mega-x": SpeciesBase & {
     dex: 6; id: "charizard-mega-x";
@@ -98,14 +99,15 @@ export interface SpeciesDex {
     abilities: readonly ["tough-claws"];
     moves: readonly ["flare-blitz","dragon-claw", /* ... */];
     items: "any";
-    regulations: readonly ["champions-m-a"];
   };
   // ... 全種族
 }
 export type SpeciesId = keyof SpeciesDex;   // 技の MoveId = keyof MoveDex と同じ導出
 ```
 
-PokeAPI は `names`（localized, language=`ja`/`ja-Hrkt`）を各リソースに持つため、日本語名は生成段で自動付与する（手動データ不要）。CLI 出力（`analyze:coverage` の表など）も日本語名で表示する。
+日本語名は生成段で自動付与し、CLI 出力（`analyze:coverage` の表など）も日本語名で表示する。
+
+> **更新（02-data-model-redesign Phase 10 / ADR 0025）**: 名前の SoT は PokeAPI ではなく **`data/champions/catalog/*.yaml`（`id → { ja, en }`・手書き）** へ移行した。`generate.ts` は名前 / タイプ相性について PokeAPI を読まず YAML を変換する。また **abilities / items の生成 dex は `name` を持たない**（id のみ + items は `category?`/`megaStoneFor?`。名前は catalog YAML と `names.ts` 逆引きが持つ）。本節以下の `AbilityBase`/`ItemBase` の `name` を含む例は MVP 当時のもので、現行は [[type-conventions]] / [[data-pipeline]] を正本とする。
 
 #### 技の型: 親型 `MoveBase` + 技ごとの子型（`MoveDex` で ID キー集約）
 
@@ -207,7 +209,7 @@ export function defineIndividual<S extends SpeciesId>(species: S, spec: Individu
 
 - **per-stat ≤32**: 生成した `type PointValue = 0|1|…|32`。
 - **合計66**: codegen が各個体の合計を算出し、生成 TS に `satisfies PointTotalMustBe66<computedSum>` を埋める。型レベルで `computedSum extends 66` を検証（型レベル算術の重さを codegen 側に逃がす）。
-- **パーティ**: メンバーをタプルで生成し、`UniqueSpecies<T>`（同種族重複）, タプル長 ≤6, `NotLegalInRegulation<S,R>`（各メンバーの `regulations` にパーティ宣言レギュが含まれるか）を型制約。
+- **パーティ**: メンバーをタプルで生成し、`UniqueSpecies<T>`（同種族重複）, タプル長 ≤6, `NotLegalInRegulation<S,R>`（メンバー base 種族 `S` がパーティ宣言レギュ `R` の解禁集合 `regulationDex[R].species` に含まれるか）を型制約（A案・ADR 0021）。
 
 ### 実装値の自動計算
 
@@ -215,33 +217,51 @@ export function defineIndividual<S extends SpeciesId>(species: S, spec: Individu
 
 ### データ生成パイプライン（vendor）
 
+3 系統の情報源（① Serebii 第一優先 / ② 補助裏取り / ③ PokeAPI 構造データ）が、**skill 著述の辺**（① + ② →
+`survey-regulation`）と**機械転記の辺**（③ → `fetch:data` → raw → `materialize`）の **2 系統で catalog に合流**する。
+情報源の役割・関係性の SoT は [`survey-regulation` の `references/serebii-sourcing.md`](../../../.claude/skills/survey-regulation/references/serebii-sourcing.md)。
+
 ```mermaid
 flowchart LR
-    F["scripts/fetch-pokeapi.ts"] --> RAW["data/raw/<br/>(.gitignore・PokeAPI キャッシュ)"]
-    subgraph CH["data/champions/ (コミット・手動管理)"]
+    SB["① Serebii Champions 図鑑 / items.shtml<br/>第一優先=正（解禁種族 / 全技 / 技メタ / 解禁持ち物）"]
+    AUX["② Game8 / Victory Road / Bulbapedia<br/>補助=件数裏取り"]
+    API["③ PokeAPI<br/>構造データ取得元（種族値 / タイプ / 特性 / dex / category）"]
+
+    SB -->|skill 著述| SR["survey-regulation skill<br/>突き合わせ・著述"]
+    AUX -.->|件数突き合わせ| SR
+    API -->|機械転記| F["scripts/fetch-pokeapi.ts"]
+    F --> RAW["data/raw/<br/>(.gitignore・取得キャッシュ)"]
+    RAW --> M["scripts/materialize.ts<br/>raw→catalog 転記・fail-fast"]
+
+    subgraph CH["data/champions/ (コミット・skill-authored・SoT)"]
+        CAT["catalog/*.yaml<br/>名前 + 構造データ(種族値/タイプ/特性/dex/category)"]
+        REG["regulations/&lt;game&gt;/&lt;reg&gt;.yaml<br/>解禁種族・per-species moves<br/>+ &lt;game&gt;/moves.yaml(per-game 技メタ)"]
         R["rules.yaml<br/>能力ポイント 66/32・計算式定数"]
-        REG["regulation.yaml<br/>各レギュの解禁許可リスト"]
-        OV["overrides.yaml<br/>習得技/特性の世代差・上書き"]
     end
-    RAW --> GEN["scripts/generate.ts"]
-    CH --> GEN
-    GEN --> OUT["data/generated/ (コミット)<br/>species.ts(型) + species.data.ts(値)"]
+
+    SR -->|skill 著述の辺| CAT
+    SR -->|skill 著述の辺| REG
+    M -->|機械転記の辺| CAT
+    CH --> GEN["scripts/generate.ts<br/>(raw 非依存)"]
+    GEN --> OUT["data/generated/ (コミット)<br/>Dex 単位 .ts（値 as const → 型派生・単一ソース）"]
 ```
 
-> `data/champions/*.yaml` は PokeAPI に無い情報（能力ポイント・解禁レギュ等）の唯一のソース。`generate.ts` が raw と champions を合成して `data/generated/` を出力する。
+> `data/champions/catalog/*.yaml` は**名前 + 構造データの SoT**（名前に加え、構造データ＝種族値 / タイプ / 特性 / 図鑑番号 / category を含む・ADR 0027）。**技メタ（type/power 等）は per-game の `regulations/champions/moves.yaml` が SoT**（Champions 固有値・ADR 0034）。**①②（skill 著述）**は `survey-regulation` が catalog / regulations へ著述し（Serebii 第一優先・ADR 0034）、**③（PokeAPI 構造データ）**は `materialize.ts` が raw → catalog へ機械転記する（fail-fast・append/既存尊重）。`generate.ts` は **catalog のみを変換**し raw を読まない（決定論的）。
 
-PokeAPI→要求項目の対応:
+PokeAPI→要求項目の対応（**取得元** = PokeAPI / **SoT** = catalog・転記は `materialize`・ADR 0027）:
 
-| 要求項目 | PokeAPI ソース |
-|---|---|
-| 全国図鑑番号・種族名 | `pokemon-species`, `pokemon.id` |
-| フォルム/リージョン/メガ | `pokemon-form`, variety 群 |
-| 種族値 | `pokemon.stats[].base_stat` |
-| 覚える技 | `pokemon.moves[]`（version_group で世代を絞り、`overrides.yaml` で補正） |
-| タイプ | `pokemon.types[]` |
-| 特性 | `pokemon.abilities[]`（隠れ特性可否は champions 側フラグ） |
-| 持ち物 | `item` エンドポイント（メガストーン含む） |
-| **レギュレーション解禁** | **PokeAPI に無し → `data/champions/regulation.yaml`** |
+| 要求項目 | 取得元（PokeAPI） | SoT（generate 入力） |
+|---|---|---|
+| 全国図鑑番号・種族名 | `pokemon-species`, `pokemon.id` | `catalog/species.yaml`（`dex` / 名前） |
+| フォルム/リージョン/メガ | `pokemon-form`, variety 群 | `catalog/species.yaml`（slug / `megaLinks`） |
+| 種族値 | `pokemon.stats[].base_stat` | `catalog/species.yaml`（`stats`） |
+| タイプ | `pokemon.types[]` | `catalog/species.yaml`（`types`） |
+| 特性 | `pokemon.abilities[]`（隠れ特性可否は champions 側フラグ） | `catalog/species.yaml`（`abilities`） |
+| 持ち物 category | `item` エンドポイント（メガストーン含む） | `catalog/items.yaml`（`category`） |
+| **使用できる技（learnset legality）** | **PokeAPI を信頼源にしない（Champions 非対応・ADR 0034）** | `regulations/<game>/<reg>.yaml` の per-species `moves`（Serebii 第一優先） |
+| **技名（ja / en）** | **Serebii 表示名 / ja は PokeAPI names（ADR 0032）** | `data/champions/catalog/moves.yaml`（名前 SoT・ゲーム非依存） |
+| **技メタ（type / damageClass / power 等）** | **PokeAPI を信頼源にしない（ADR 0034）** | `data/champions/regulations/champions/moves.yaml`（per-game・Champions 固有値） |
+| **レギュレーション解禁** | **PokeAPI に無し** | `data/champions/regulations/<game>/<reg>.yaml`（per-reg 一本化・ゲームグルーピング・ADR 0021） |
 
 ---
 
@@ -282,11 +302,12 @@ pokeform/
 │     └─ commands/              # check-individual / check-party / analyze-coverage / compile / typecheck / stat
 ├─ scripts/
 │  ├─ fetch-pokeapi.ts
-│  └─ generate.ts
+│  ├─ materialize.ts            # raw→catalog 構造データ転記（fail-fast・append/既存尊重・ADR 0027）
+│  └─ generate.ts               # catalog のみ変換（raw 非依存）
 ├─ data/
-│  ├─ raw/                      # .gitignore
-│  ├─ champions/                # コミット: rules.yaml / regulation.yaml / overrides.yaml
-│  └─ generated/               # コミット: species.ts / species.data.ts
+│  ├─ raw/                      # .gitignore（PokeAPI 取得キャッシュ＝materialize の転記元）
+│  ├─ champions/                # コミット・SoT: rules.yaml / regulations/<game>/<reg>.yaml / catalog/{species,moves,items,abilities,types}.yaml
+│  └─ generated/               # コミット: Dex 単位 .ts（types/moves/abilities/items/species/names + regulations/<id>.ts+index・値 as const → 型派生）
 └─ team/                        # サンプル兼ユーザー置き場
    ├─ individuals/*.yaml
    └─ parties/*.md
@@ -351,7 +372,7 @@ members:
 | `pokeform check:individual <path>` | 個体整合: 覚えない技・使えない特性・存在しないフォルム・性格 up=down・ポイント 66/32。codegen→tsc | Phase 2 |
 | `pokeform compile <path>` | YAML/MD → `*.generated.ts` 出力（検証の前処理） | Phase 2 |
 | `pokeform typecheck <path>` | compile → `tsc -p tsconfig.generated.json --noEmit` → 診断整形 | Phase 2 |
-| `pokeform stat <path>` | 個体の実数値計算表示（壁打ち補助） | 将来 |
+| `pokeform stat <path>` | 個体の実数値・性格補正・ポイント配分・耐久指数を表示（壁打ち補助・`--lang`） | **Phase 3** |
 
 `package.json` scripts に `check:party` / `check:individual` / `analyze:coverage` / `typecheck` / `generate:data` を割り当て。
 
@@ -366,9 +387,9 @@ members:
 ## 実装フェーズ
 
 - **Phase 0 — 足場**: pnpm init / tsconfig 2種 / biome / vitest / cac。`src/types/stats.ts`・`type-chart.ts` 静的型。`domain/calc-stats.ts` + テスト（後述の検証式を実装）。
-- **Phase 1 — データ生成 + MVP**: `scripts/fetch-pokeapi.ts` + `generate.ts` で**全種族**の `species.ts`/`species.data.ts` 生成。`io/load-party.ts` + `resolve-paths.ts`。`domain/coverage.ts` + `type-effectiveness.ts`。CLI `analyze:coverage`、`check:party`（参照解決・重複・未解禁・体数 = 一貫性チェック）。→ **要求 MVP 達成**。
+- **Phase 1 — データ生成 + MVP**: `scripts/fetch-pokeapi.ts` + `generate.ts` で `data/generated/` の Dex 群を生成（MVP は代表種サブセット + 全 18 タイプ。`catalog/*.yaml` を広げれば全種族へ拡張可）。`io/load-party.ts` + `resolve-paths.ts`。`domain/coverage.ts` + `type-effectiveness.ts`。CLI `analyze:coverage`、`check:party`（参照解決・重複・未解禁・体数 = 一貫性チェック）。→ **要求 MVP 達成**。
 - **Phase 2 — 個体 tsc 検証層**: `codegen/emit-individual-ts.ts` / `emit-party-ts.ts` / `run-tsc.ts`。`tsconfig.generated.json`。ジェネリック種族制約 `SpeciesDex[S]` の本格運用。`check:individual` / `compile` / `typecheck`。ブランドエラー型で診断可読化。
-- **Phase 3 — 将来**: `pokeform stat`、耐久ライン逆算（「○○の××を確定耐え」からポイント逆算）等のステータス調整壁打ち。
+- **Phase 3 — ステータス調整の壁打ち**: `pokeform stat`（実数値・性格補正・ポイント配分・耐久指数表示）、耐久/火力指数（`domain/stat-indices.ts`）、ダメージ式（`domain/damage.ts`・確定数判定の範囲）、ポイント逆算（`domain/stat-tuning.ts`・「○○の××を確定耐え」「素早さ□□抜き」→ 合計66/各≤32 で解探索・実現不能は報告）と調整提案。耐久/火力指数・ダメージ式・逆算の定義は [[game-spec]] を参照。本格ダメージ計算（乱数16段の確定数表・急所・補正）は将来計画 `02-<slug>` へ。
 
 ---
 
@@ -377,7 +398,7 @@ members:
 1. **tsc のみ検証（Zod 不採用）**: 構造制約（技/特性/フォルム/性格/重複/レギュ）は型で自然に弾ける。合計66 のみ型レベル算術が重いため、codegen が合計を算出し型注釈に埋める方式で逃がす。診断可読性は ① ブランドエラー型名 ② 生成 TS の `@source` コメント→YAML 行マッピングで担保。
 2. **生成データのコミット（vendor）**: リポジトリは肥大化するが、オフライン・決定論性・CI 速度を優先。`data/raw` のみ gitignore。
 3. **巨大 `SpeciesId` union**: tsc 性能懸念があるため `SpeciesDex[S]` のプロパティアクセス主体で union 分配を回避。問題化したらモジュール分割で対応。
-4. **メガの二重表現**: 個体は素種族で定義（直感性）、`megaEvolvesTo` リンクでメガ後種族値/タイプを分析参照（正確さ）。整合は overrides で管理。
+4. **メガの二重表現**: 個体は素種族で定義（直感性）、`megaEvolvesTo` リンクでメガ後種族値/タイプを分析参照（正確さ）。メガ先エントリも catalog に種族値/タイプ/特性を持ち、`megaLinks` で base と結ぶ（ADR 0022 / 0027）。
 
 ---
 

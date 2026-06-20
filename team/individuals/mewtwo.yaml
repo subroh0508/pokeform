@@ -1,0 +1,9 @@
+lang: en
+# 伝説枠（Restricted）。M-A / M-B いずれも未解禁（regulations: []）。M-A 構築に混ぜると未解禁検出されるデモ用。
+species: mewtwo
+regulations: []
+nature: { up: spAttack, down: attack }
+ability: pressure
+item: life-orb
+points: { hp: 2, attack: 0, defense: 0, spAttack: 32, spDefense: 0, speed: 32 }
+moves: [psystrike, fire-blast, ice-beam, thunderbolt]

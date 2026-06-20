@@ -21,6 +21,11 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 ワークフローに統一する（[ADR 0018](../../docs/adr/0018-implementation-workflow-orchestrator.md)）。
 例外は trivial な単発編集や会話的応答のみで、フェーズ単位の実装ではこれを既定とする。
 
+> **入口は [`plans-new`](../skills/plans-new/SKILL.md)**（[[planning]]）。生の実装指示はまず `plans-new` が
+> OVERVIEW 化 → 6 基準で分割し、その**産出物（GitHub issue または `docs/plan/NN-{slug}/` の phase doc）を
+> 本ワークフローが消費**して Phase 0〜9 を駆動する。計画化（1→多）は `plans-new`、1 本の PR の実装ライフ
+> サイクルは本 skill、と役割を分ける（[ADR 0020](../../docs/adr/0020-plans-new-entry-point.md)）。
+
 ## 設計の核（なぜこの形か）
 
 この skill は**既存 skill を束ねるオーケストレーター**であり、新規ロジックは最小に保つ。理由は、
@@ -46,6 +51,13 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 - **手順**: `git fetch origin main` → unstaged があれば `git stash push -u` →
   `git worktree add <abs-path> -b <branch> origin/main`。branch 名は命名規約（`<type>/<scope>-<purpose>`、
   [AGENTS.md](../../AGENTS.md) / [[cross-agent]]）に従う。worktree パスは**絶対パス**で扱う。
+  worktree 作成後は **`pnpm install` を実行**してから検証する（git worktree は node_modules を共有しないため、
+  各 worktree で依存を導入しないと `pnpm verify` が失敗する）。同様に **`data/raw`（gitignore・PokeAPI キャッシュ）も
+  worktree 間で共有されない**。`generate:data` で raw（種族値 / タイプ / 特性 / 持ち物 category）が要るデータ系
+  作業では、着手前に **`pnpm fetch:data` を回して `data/raw` を完全化してから** `generate` する。
+  **メイン側からの cp は worktree 作業では部分的になりうる**（取得済みの種だけ cp され取りこぼす）ため、
+  全量の完全性が要るデータ系作業では cp でなく `fetch:data` を優先する（learning #94 / #96 反復）。
+  `check:regulation` は参照整合 / schema のみで `data/raw` 非依存（learnset 照合は撤去・ADR 0034 = ADR 0026 改訂・[[data-pipeline]]）。
 - **成功条件**: worktree が作成され、対象 branch が origin/main 起点で checkout 済み。
 - **fallback**: 既に同名 worktree / branch があれば再利用（再作成しない）。stash した変更は最終フェーズ後に
   `git stash pop` する余地を残す。
@@ -81,7 +93,11 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 
 - **手順**: redaction / secrets 混入なし（[[redaction]]）、cross-agent パリティ（canonical +
   symlink/copy 一致、[[cross-agent]]）、生成物（`data/generated/**` 等）への手編集なし、命名規約準拠、
-  受け入れ基準の充足を点検する。
+  受け入れ基準の充足を点検する。あわせて、**rule が `architecture.md` を正本と宣言しつつ数式・仕様を
+  追記する場合、同一 PR で `architecture.md` を同期しているか**を点検する（rule が正本に先行する doc-data
+  乖離の再発防止）。あわせて、phase doc に紐づく実装 PR では **README 進捗・doc 同期コミットを当該
+  フィーチャー PR に同梱したか**（Phase 8「README 進捗・doc 同期の取り込み方」と対。オーケストレーター
+  主導マージで進捗が main 未反映・別 PR へ分離するのを防ぐ・learning #82 / #102）を点検する。
 - **成功条件**: 規約違反ゼロ。
 - **fallback**: scope 縮小指示が出た場合は `git reset --soft` でコミットを巻き直し、scope を絞り直す。
 
@@ -109,6 +125,10 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
   [[code-review]]）。
 - **不変条件（Generator/Evaluator 独立）**: 本 skill（実装 = Generator）はレビュー観点を**再実装せず**、
   評価は必ず別 skill（Evaluator）を `Agent` で起動して得る。自己採点で代替しない。
+- **不変条件（worker/orchestrator マージ同期点）**: ワーカーとオーケストレーターを分業する運用では、
+  ワーカーは**レビュー fix を Draft 解除前に取り込んでから** `READY_FOR_MERGE` を報告し、その報告に
+  **fix 込みの最終 HEAD SHA** を含める。オーケストレーターは**マージ対象がその SHA であることを照合**して
+  からマージする（レビュー fix のマージ取りこぼし防止）。
 
 ### Phase 7 — マージ（auto-merge・Phase 3 のゲートに委譲）
 
@@ -129,6 +149,13 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 - **成功条件**: README 進捗が更新され、learning が生成済み。
 - **不変条件**: ADR 採番・レトロ生成・README 更新は各専任 skill の責務。本 skill は**起動・委譲のみ**で
   再実装しない（idempotent: 既に `- [x]` / learning 有りなら二重実行しない）。
+- **進捗更新の二層（finish-phase に委譲）**: README 進捗は **(a) サブ README の対象 phase チェック**
+  （`- [ ]`→`- [x]`）に加え、計画の状況が変わったとき **(b) トップ `docs/plan/README.md` の status
+  ロールアップ表**（🚧 進行中 / ✅ 完了・分数は付けない）も更新する。いずれも `finish-phase` 手順 4 の責務。
+- **README 進捗・doc 同期の取り込み方**: 進捗・doc 同期コミットは**フィーチャー PR に同梱してからマージ**するか、
+  別 follow-up PR に切り出す（オーケストレーター主導マージで同期が main 未反映になるのを防ぐ）。ただし
+  **`docs/plan` の phase doc に紐づかない単発ハーネス PR は finish-phase の README 進捗更新をスキップ可**
+  （想定外パスの正規化）。
 
 ### Phase 9 — Worktree 削除（Phase 0 とペア）
 
@@ -151,11 +178,34 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
   **Phase 0 と Phase 9 はペア**・未マージ時は強制削除しない。
 - **auto-merge 委譲**: マージゲートは Phase 3（ADR 0017）に委譲。独自マージ規約を導入しない。
 
+## ワーカー分業時の運用ノート（worker/orchestrator split・任意）
+
+Phase 6 の「worker/orchestrator マージ同期点」不変条件のとおり、実装を**別ワーカー**（別セッション / 別プロセスの
+エージェント）に委ね、本ワークフローを駆動する側がオーケストレーターになる分業を取ることがある。これは並行
+オーケストレーションの*機構*（下記「取り込まないもの」）ではなく**ワーカーへのタスク委譲の作法**であり、特定の
+端末多重化ツール（tmux 等）やそのコマンドに依存しない一般則として、反復して観測された摩擦（learning
+#72 / #73 / #77）への運用ノートを次に残す:
+
+- **編集は小さく分割して適用するようワーカーへ着手時に指示する**。単一の巨大編集は長考でストールしやすい
+  （観測例: 1 ファイルの一括編集で約47分ハング）。大きな rule / skill / データ整形は段階的に適用させる。
+- **ワーカーの権限モードは安全な操作を自動許可する `auto` 相当にする**。編集だけ自動許可する `acceptEdits` 相当だと
+  ファイル編集は自動でも **Bash は都度承認**になり、`git status/log/diff`・`gh ... view`・`ls`・`grep` 等の安全な
+  確認コマンドで承認が頻発して停滞する。ワーカーを **`auto` 権限モードで起動**すれば read-only コマンドの都度承認
+  摩擦を避けられる（個別の broad な権限を `.claude/settings.json` へ書く必要はない）。
+- **進捗検知はワーカーの出力スクレイプより `gh pr list --head <branch>` / PR の `headRefOid` 変化で行う**。
+  出力スクレイプは**オーケストレーター自身がワーカーへ送った指示文**にマッチして誤検知しやすい。
+- **ソース / YAML / データファイルの確認も `Read` ツールで行うようワーカーへ指示する**。`cat` / `grep` による
+  内容読みは、その後 `Edit` / `Write` する直前に `Read` し直しになり二度手間になる（編集ツールは事前 `Read` を
+  要求するため）。検索や存在確認に `grep` を使うのは可だが、編集予定のファイルは最初から `Read` で開く
+  （learning #114 / #116 反復）。
+- **マージ同期点**（既出・不変条件）: ワーカーはレビュー fix を Draft 解除前に取り込んで `READY_FOR_MERGE` を
+  **最終 HEAD SHA 付き**で報告し、オーケストレーターはその SHA を照合してからマージする。
+
 ## 取り込まないもの
 
-参考にした多段ワークフローの「Plan/Epic frontmatter 同期・roadmap ミラー・PR ポーリング・複数 pane
-オーケストレーション」は pokeform に該当機構が無いため**取り込まない**。進捗反映は `finish-phase` の
-README 進捗更新で代替し、学びは `pr-retrospective` が担う。
+参考にした多段ワークフローの「Plan/Epic frontmatter 同期・roadmap ミラー・PR ポーリング・複数エージェント
+並行オーケストレーション*機構*」は pokeform に該当機構が無いため**取り込まない**（上のノートは機構でなく委譲の
+作法）。進捗反映は `finish-phase` の README 進捗更新で代替し、学びは `pr-retrospective` が担う。
 
 ## 関連
 
