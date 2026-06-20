@@ -10,7 +10,7 @@
 # 将来のマルチステージ化（build/publish 用）の指針:
 #   - 下記 `base` を共有ステージとして使い、
 #   - `FROM base AS build` で `pnpm build`（dist 生成）→
-#   - `FROM node:24-slim AS runtime` に dist と本番依存のみコピー、
+#   - `FROM node:26-slim AS runtime` に dist と本番依存のみコピー、
 #     のように deps/build/runtime を分離できる構造にしている。
 #   ライブラリ用途のため現時点では dev/CI 用の単一ステージのみ実装。
 
