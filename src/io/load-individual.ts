@@ -11,8 +11,8 @@ import type { BaseStats, PointAllocation, StatKey } from "../types/stats.ts";
 /**
  * 1 体の個体 YAML を読み、種族値・性格・ポイント配分を ID 正規化済みで返す薄い I/O 層
  * （カバレッジ対象外）。名称解決は codegen/normalize（resolveName 越し・テスト済み）に委譲し、
- * 種族値は reg 不変の `speciesBaseDex`（派生 base view）から引く。`stat` コマンドが実数値・指数表示に
- * 使う（[[cli-and-io]]）。
+ * 種族値は reg 不変の `speciesStructuralDex`（base + mega 統合の構造ルックアップ）から、表示名は
+ * `languages`（名前 SoT・ADR 0035）から引く。`stat` コマンドが実数値・指数表示に使う（[[cli-and-io]]）。
  */
 
 /** 読み込んだ個体（表示名 + 種族値 + 性格 + ポイント配分）。 */

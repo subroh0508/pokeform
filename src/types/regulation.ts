@@ -21,7 +21,7 @@ export interface RegulationBase {
   /** 開催期間。`start` 必須・`end` は開催中なら `null`。 */
   readonly period: { readonly start: string; readonly end: string | null };
   /** そのレギュの種族 dex（per-reg `moves`/`abilities`/`items` を含む legality の型正本）。種族名
-   *  （`name`）は持たない（SoT は `speciesBaseDex`・Phase 8 の dedup）。 */
+   *  （`name`）は持たない（SoT は languages・構造と直交・ADR 0035）。 */
   readonly speciesDex: Readonly<Record<string, PerRegSpecies>>;
   /** 構築に使える base 種族（`speciesDex` のキー部分集合）。 */
   readonly species: readonly string[];
