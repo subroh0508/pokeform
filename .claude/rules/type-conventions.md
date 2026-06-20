@@ -13,22 +13,23 @@ description: 型表現の統一パターン（`XxxBase` + `XxxDex` + `XxxId = ke
 
 エントリ種別ごとに**3 点セット**を定義する:
 
-- **親型 `XxxBase`**: 構造的に共通な形（`id` / その他フィールド）。`name: { en; ja }` は **species / moves / types のみ**が持つ。**abilities / items は `name` を持たない**（生成 dex は id のみ + items は `category?`/`megaStoneFor?`。名前の SoT は `data/champions/catalog/{abilities,items}.yaml`・効果フィールドは後続で足す前提・Phase 10）。**`MoveBase` は id + name のみ**で、技メタ（type/damageClass/power/accuracy/pp/priority）は per-game の `MoveStats` 型へ分離する（Champions 固有値・名前はゲーム非依存・Phase 11 / ADR 0034）。
+- **親型 `XxxBase`（specs・構造・name 無し）**: 構造的に共通な形（`id` / その他フィールド）。**生成 specs dex（`SpeciesSpec` / `MegaSpec` / `MoveStats` / type-specs / item-specs / ability-specs）はいずれも `name` を持たない**（名前は languages へ分離・ADR 0035）。`SpeciesSpec` は dex/types/baseStats/abilities + `megaEvolvesTo?`、`MegaSpec` は dex/types/baseStats/ability + `baseSpecies` 逆参照（ADR 0036）、`MoveStats` は per-game 技メタ（type/damageClass/power/accuracy/pp/priority・Champions 固有値・ADR 0034）、type-specs は `damageTo`、item-specs は `category?`/`megaStoneFor?`、ability-specs は id のみ。
+- **名前は別エンティティ `NameEntry`（languages・ゲーム非依存）**: 全エンティティの名前は `data/generated/languages/*.ts` の `id → { id, name: { ja, en } }`（`satisfies Record<string, NameEntry>`）に一本化する。構造（specs）と名前（languages）を直交させ、species / moves / types の dex 埋め込みと abilities / items の id-only という不均一を解消した（ADR 0035）。
 - **`XxxDex`**: 各エントリを ID キーに集約した型（`XxxDex[Id]` でルックアップ）。生成物では値
   `export const xxxDex = {...} as const` から **`type XxxDex = typeof xxxDex` で派生**し、値と型を
   単一ソース化する（手書き interface でなく derive・親型適合は `satisfies` / `Assignable` で検証）。
 - **`XxxId = keyof XxxDex`**: ID の union を `Dex` から導出する。
 
-対象は `MoveDex`/`MoveId`（名前・catalog 由来）・`TypeDex`/`PokemonType`・`AbilityDex`/`AbilityId`・`ItemDex`/`ItemId`。技メタは別系統 `moveStatsDex`（`satisfies Record<string, MoveStats>`・per-game `regulations/champions/moves.ts`・Phase 11）で持つ。巨大 union の分配コストを避けるため、**制約はプロパティアクセス主体**で行う（union を直接配らない）。
+構造 specs の対象は `speciesSpecsDex`（`SpeciesSpec`）・`megaSpecsDex`（`MegaSpec`）・`moveSpecsDex`（`MoveStats`・per-game 技メタ・`data/generated/champions/move-specs.ts`）・`typeSpecsDex`/`PokemonType`・`abilitySpecsDex`/`AbilityId`・`itemSpecsDex`/`ItemId`。名前は `speciesNames` / `moveNames` / `typeNames` 等（`NameEntry`・`data/generated/languages/*.ts`）。巨大 union の分配コストを避けるため、**制約はプロパティアクセス主体**で行う（union を直接配らない）。
 
 ## 種族型は per-regulation（reg-aware 制約・ADR `0021`）
 
 種族の習得技はレギュレーションごとに異なりうるため、**種族 dex は per-regulation** で生成する（global 単一 `SpeciesDex`/`SpeciesId` は廃止・[[data-pipeline]]）:
 
-- **per-reg 種族 dex**: `data/generated/regulations/<id>/species.ts` の `speciesDex`（`as const satisfies Record<string, SpeciesBase>`）/ `SpeciesId = keyof speciesDex`。`RegulationDex[R]["speciesDex"]` から引ける（レギュメタに同梱）。
-- **reg-aware アクセサ**（`src/types/individual.ts`）: `SpeciesDexOf<R> = RegulationDex[R]["speciesDex"]` / `SpeciesIdIn<R> = keyof SpeciesDexOf<R> & string`。エントリ参照は `SpeciesEntryOf<R,S> = SpeciesDexOf<R>[S] & SpeciesBase`（generic `R` での深い indexed access の限界回避。`& SpeciesBase` でキー存在を保証し narrow リテラルは交差で温存）。
+- **per-reg 種族 dex**: `data/generated/champions/<reg>/index.ts` の `speciesDex`（`as const satisfies Record<string, PerRegSpecies>`）/ `SpeciesId = keyof speciesDex`。`index.ts` が `species-specs` ＋ `mega-specs` ＋ per-reg `species-moves` ＋ per-reg `mega` を**実行時合成**して narrow リテラルを作る（`$ref` 不使用・generate 合成・ADR 0035）。`RegulationDex[R]["speciesDex"]` から引ける（レギュメタに同梱）。
+- **reg-aware アクセサ**（`src/types/individual.ts`）: `SpeciesDexOf<R> = RegulationDex[R]["speciesDex"]` / `SpeciesIdIn<R> = keyof SpeciesDexOf<R> & string`。エントリ参照は `SpeciesEntryOf<R,S> = SpeciesDexOf<R>[S] & PerRegSpecies`（generic `R` での深い indexed access の限界回避。`& PerRegSpecies` でキー存在を保証し narrow リテラルは交差で温存）。
 - **reg-aware 制約**: `ValidMove<R,S,M>` / `ValidMoves` / `ValidAbility<R,S,A>` / `ValidItem<R,S,I>` / `HoldableItems<R,S>` / `IndividualSpec<R,S>` は `R` 付き。ブランドエラー型（`MoveNotLearnedBy<R,S,M>` 等）に `R` を表示する。パーティ制約 `ConstrainParty<T,R>` は per-reg roster（`RegulationDex[R]["species"]`）を、メンバーの宣言レギュ整合は `MemberDeclaresRegulation<R,Regs,S>` を使う（[[cli-and-io]]）。
-- **reg 不変フィールド**（種族値 / タイプ / 日英名 / メガ先 = `SpeciesBaseInfo`）は派生 base view `speciesBaseDex`（`data/generated/species-base.ts`・全種族）に切り出し、実数値計算・名前表示・coverage はこれを引く。型の正本は per-reg のまま（base view は runtime ルックアップ専用）。`megaEvolvesTo` / `megaStoneFor` は per-reg dex 側で legality を見るため素の `string`（global `SpeciesId` への自己参照を避ける）。
+- **reg 不変フィールド**（種族値 / タイプ / メガ先）は **specs（`speciesSpecsDex` / `megaSpecsDex`）** に、**名前は languages（`speciesNamesAll`）** に置く。実数値計算・coverage は specs を、名前表示は languages を引く（レギュ非依存・構造と名前を直交化・旧 `speciesBaseDex`（`species-base.ts`）派生 base view は廃止・ADR 0035）。`megaEvolvesTo`（base → メガ前方参照）/ `baseSpecies`（メガ → base 逆参照・ADR 0036）は per-reg dex 側で legality を見るため素の `string`（global `SpeciesId` への自己参照を避ける）。
 
 ## 種族の粒度
 
@@ -37,8 +38,8 @@ description: 型表現の統一パターン（`XxxBase` + `XxxDex` + `XxxId = ke
 ## 日英名と逆引き
 
 - すべて**英名（kebab-case の安定 ID）を型キー**にする。ID を型キーにするのは安定性（改名されにくい）のため。
-- **名前の SoT は `data/champions/catalog/*.yaml`**（`id → { ja, en }`・types は + `damageTo`・Phase 10）。`generate.ts` は名前について `data/raw`（PokeAPI）を読まず YAML を変換する。species / moves / types は生成 dex の各エントリ `name.ja` に持ち、**abilities / items は生成 dex に name を持たない**（catalog YAML が唯一の名前ソース）。
-- 逆引き（日本語名 → ID）は `data/generated/names.ts`（`speciesIdByJa` / `moveIdByJa` / `abilityIdByJa` / `itemIdByJa` / `typeIdByJa`）に生成し、catalog YAML の `ja` 由来で作る。YAML を日英どちらでも書けるのはこの逆引きを codegen が使うため（[[data-pipeline]] / [[cli-and-io]]）。
+- **名前の SoT は `data/languages/*.yaml`**（`id → { ja, en }`・ゲーム非依存・ADR 0035）。`generate.ts` は名前について `data/raw`（PokeAPI）を読まず languages YAML を変換し、`data/generated/languages/*.ts`（`speciesNames` / `moveNames` 等・`NameEntry`）を出力する。**全エンティティの生成 specs dex は name を持たない**（languages が唯一の名前ソース・構造と名前を直交）。
+- 逆引き（日本語名 → ID）は **専用 `names.ts` を持たず、languages forward マップ（`{ id, name }`）から consumer が実行時導出**する（`load-party` / `normalize`・`speciesNamesAll` 等を逆引き・ADR 0035）。YAML を日英どちらでも書けるのはこの逆引きを loader が使うため（[[data-pipeline]] / [[cli-and-io]]）。
 
 ## 整合（ID 単一ソース）
 

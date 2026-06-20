@@ -29,8 +29,9 @@ src/codegen/    YAML/MD → *.generated.ts + tsc 実行・診断整形
 src/cli/        cac ルーティング・各コマンド
 scripts/        fetch-pokeapi.ts / generate.ts / gen-rules-index.ts
 data/raw/       PokeAPI キャッシュ（.gitignore）
-data/champions/ skill 著述（rules.yaml/regulations/catalog・SoT・人間直編集 NG・コミット）
-data/generated/ 生成データ（型 + 値・コミット）
+data/champions/ skill 著述・構造 SoT（rules.yaml / *-specs.yaml / <reg>/・人間直編集 NG・コミット）
+data/languages/ skill 著述・名前 SoT（*.yaml = id→{ja,en}・ゲーム非依存・コミット）
+data/generated/ 生成データ（champions/*-specs + champions/<reg>/ + languages/・型 + 値・コミット）
 docs/plan/      実装計画（01-mvp/architecture.md が規約正本）
 docs/adr/       アーキ決定の不変ログ
 docs/harness/   自己改良ループ（learnings）+ rules-index.md（生成）

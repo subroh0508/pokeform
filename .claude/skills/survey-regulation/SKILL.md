@@ -3,16 +3,17 @@ name: survey-regulation
 description: >-
   ポケモンチャンピオンズの**レギュレーション解禁情報を、決定論スクレイパー（層1）+ Workflow 自己修復（層2-3・
   Claude 固有）で Serebii 第一優先に取得**し、各種族の**使用可能技を全件（curate せず全量）**・解禁持ち物を全件、
-  出典付きで doc 化して、解禁エンティティ（種族 / 技 / 持ち物 / メガ）を `data/champions/catalog/*.yaml`
-  （append-only）と `data/champions/regulations/<game>/<reg>.yaml`（例 `champions/m-a.yaml`・種族キー = 解禁・per-species `moves` 全量・block 記法）
-  へ反映する手順 skill。HTML を LLM コンテキストに載せず exit code で判定し（トークン最小化）、取りこぼし種は
+  出典付きで doc 化して、解禁エンティティ（種族 / 技 / 持ち物 / メガ）を構造 specs（`data/champions/*-specs.yaml`・
+  append-only）+ 名前 languages（`data/languages/*.yaml`）と per-reg ディレクトリ `data/champions/<reg>/{index,species,
+  items,mega,species-moves}.yaml`（例 `m-a/`・解禁種族 / per-species `moves` 全量 / メガ・block 記法）へ反映する
+  手順 skill。HTML を LLM コンテキストに載せず exit code で判定し（トークン最小化）、取りこぼし種は
   自己修復 / 最終 WebFetch fallback で吸収する。技の出自は Serebii 第一優先へ一本化（PokeAPI は Champions 非対応で
   learnset 照合しない・ADR 0026）。「M-A の解禁データを集めて」「レギュレーション <id> の解禁種族・全技・持ち物を
   調べて投入して」「新レギュの解禁情報を取得して」「survey-regulation <id>」「M-B が公開されたので反映して」
   「レギュ情報を更新して」と言われたとき、または per-regulation データ（`02-data-model-redesign`）を新規投入 /
   更新 / レギュ更新時に routine 実行したいときに使う。生成 / 検証は `generate:data` / `check:regulation` /
-  `verify` に委譲し、機械ゲート（型 / カバレッジ / Biome）は再実装しない。PokeAPI 構造データ / 日本語名の catalog
-  取り込みは `update-catalog` へ委譲（こちらは Champions 解禁の取得・投入が責務）。利用者パーティの点検は
+  `verify` に委譲し、機械ゲート（型 / カバレッジ / Biome）は再実装しない。PokeAPI 構造データ / 日本語名の specs /
+  languages 取り込みは `update-catalog` へ委譲（こちらは Champions 解禁の取得・投入が責務）。利用者パーティの点検は
   `review-party`、生成データの妥当性レビューは `pokemon-data-reviewer` agent を使う。
 allowed-tools: Bash(pnpm *), Bash(node scripts/*), Bash(node src/cli/*), Workflow, Agent, Read, Write, Edit, WebFetch, WebSearch
 ---
@@ -22,11 +23,11 @@ allowed-tools: Bash(pnpm *), Bash(node scripts/*), Bash(node src/cli/*), Workflo
 ポケモンチャンピオンズはレギュレーションごとに解禁される**種族・技・持ち物・メガシンカ**が変化する。
 この情報は PokeAPI に無く（[[data-pipeline]]）、外部の対戦情報サイト（Serebii）にしか無い。本 skill は、その
 解禁情報を **決定論スクレイパー（層1）+ Workflow 自己修復（層2-3）で Serebii 第一優先に取得**し、各種族の
-**使用可能技を全件**・解禁持ち物を全件、再現可能な形で doc 化して、`02-data-model-redesign` で定めた
-per-regulation データ構造（種族キー = 解禁・per-species `moves` 全量・block 記法・ADR 0021 / 0022 / 0023）へ
-反映する手順を定型化する。M-A だけでなく **M-B 以降や将来のレギュレーション更新で routine として繰り返し使う**。
+**使用可能技を全件**・解禁持ち物を全件、再現可能な形で doc 化して、per-regulation データ構造（1 レギュ = 1
+ディレクトリ・解禁種族 / per-species `moves` 全量 / メガを split ファイルへ・block 記法・ADR 0021 / 0022 / 0023 /
+0035）へ反映する手順を定型化する。M-A だけでなく **M-B 以降や将来のレギュレーション更新で routine として繰り返し使う**。
 
-> データ構造の正本は [[data-pipeline]]（catalog / per-reg の扱い）と
+> データ構造の正本は [[data-pipeline]]（specs / languages / per-reg の扱い）と
 > [`docs/plan/02-data-model-redesign/OVERVIEW.md`](../../../docs/plan/02-data-model-redesign/OVERVIEW.md)、
 > 解禁判定モデルの「なぜ」は [ADR 0021](../../../docs/adr/0021-per-regulation-species-and-legality.md)（記録方法は
 > ADR 0022・generate 責務 / 検証位置は ADR 0023・技メタ / legality を PokeAPI から外す決定は ADR 0026・3 層
@@ -64,9 +65,10 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
   `4` 件数・健全性違反。stderr に `{slug, stage, missingFields, rawHtmlPath}` の 1 行 JSON 診断。**HTML 本文は
   読まない**（LLM コンテキストに載せない＝トークン最小化）。
 - **メガ linking は決定論で自動著述する**（[ADR 0033](../../../docs/adr/0033-deterministic-mega-auto-authoring.md)）。
-  base slug 既知 + メガ名の枝サフィックス（`""`/`X`/`Y`）から `serebii:catalog` が `megaLinks` / メガ先種族
-  エントリ / per-reg `mega[]` / メガストーンの `megaSpecies` を著述する。`Mega ` 接頭の無い特殊形（Primal 等）・
-  未知 id だけ escalation（diagnostic）に残るので、手順 5 で **escalation の有無を確認**する（通常メガは手動著述不要）。
+  base slug 既知 + メガ名の枝サフィックス（`""`/`X`/`Y`）から `serebii:catalog` が `species-specs` の `megaEvolvesTo` /
+  `mega-specs` の `baseSpecies` 逆参照 / per-reg `<reg>/mega.yaml` / メガストーンの `megaSpecies` を著述する。
+  `Mega ` 接頭の無い特殊形（Primal 等）・未知 id だけ escalation（diagnostic）に残るので、手順 5 で **escalation の
+  有無を確認**する（通常メガは手動著述不要）。
 
 ### cross-agent フォールバック（正しさは層1 に宿る）
 
@@ -88,12 +90,16 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
 - **出力**:
   - `docs/plan/<plan>/<id>-roster-source.md`（情報源・検証日・矛盾解消・取得 counts / escalated 種・各種族全技 /
     持ち物全件の出典付き記録）。
-  - `data/champions/catalog/{species,moves,items,abilities}.yaml` への **Serebii 由来データの append-only 追記**
-    （エンティティ key + 英名 en・持ち物は全件。構造データ / 日本語名 ja は `update-catalog` が埋める）。
-  - `data/champions/regulations/<game>/<reg>.yaml`（例 `champions/m-a.yaml`・id `champions-m-a` は `<game>-<reg>` 導出）（`name` / `period` / `items` 予約キー + **トップレベル種族キー = 解禁**・
-    各種族キー下に **`moves` 全量** + メガ種族に `mega[]`・block 記法）+ per-game 技メタ `regulations/champions/moves.yaml`（ADR 0034）。
-  - 構造データ（`dex` / `types` / `stats` / `abilities` / `category`）と日本語名 ja の catalog 取り込みは
-    [`update-catalog`](../update-catalog/SKILL.md) へ委譲（catalog 更新チェックポイント経由・ADR 0027 / 0032）。
+  - 構造 specs（`data/champions/{species,move,item,ability,mega}-specs.yaml`）への **Serebii 由来データの
+    append-only 追記**（エンティティ key + per-game 技メタ `move-specs` + メガ `mega-specs` の `baseSpecies`。
+    日本語名 ja / 英名 en は `data/languages/*.yaml`・構造データ（dex/types/baseStats/abilities/category）は
+    `update-catalog` が埋める）。
+  - per-reg ディレクトリ `data/champions/<reg>/{index,species,items,mega,species-moves}.yaml`（例 `m-a/`・id
+    `champions-m-a` は `<game>-<reg>` 導出）= `index.yaml`（`name` / `period`）/ `species.yaml`（解禁種族 id 配列）/
+    `items.yaml`（解禁持ち物 id 配列・全件）/ `species-moves.yaml`（種族キーごとの **`moves` 全量**）/ `mega.yaml`
+    （種族キーごとの解禁メガ id 配列）・block 記法。
+  - 構造データ（`dex` / `types` / `baseStats` / `abilities` / `category`）と日本語名 ja の specs / languages 取り込みは
+    [`update-catalog`](../update-catalog/SKILL.md) へ委譲（specs 更新チェックポイント経由・ADR 0027 / 0032 / 0035）。
   - `check:regulation` が参照整合 / schema で 0 終了すること（覚えない技照合はしない・ADR 0026）。
   - 再生成された `data/generated/**` と `pnpm verify` 緑。
 
@@ -128,60 +134,63 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
 進捗・成功/失敗記録へ転記する。**冪等キャッシュ**（`data/raw/serebii/`）により再実行は成功種を skip する。
 `escalated` 種は手順 7 の**最終 WebFetch fallback**で吸収する。
 
-### 3. catalog / regulations へ転記する（serebii:catalog）
+### 3. specs / per-reg へ転記する（serebii:catalog）
 
 **`pnpm serebii:catalog`** で、層1 の中間 JSON から **Serebii 由来データ**（種族 / 各種族の全技 / 技メタ /
-メガ先 / per-reg 解禁 / 英名 en）を catalog（`species` / `moves` / `items`）と `regulations/<game>/<reg>.yaml` へ
+メガ先 / per-reg 解禁 / 英名 en）を specs（`species-specs` / `move-specs` の技メタ / `mega-specs` の `baseSpecies` /
+`item-specs`）・per-reg ディレクトリ（`<reg>/{species,items,mega,species-moves}.yaml`）・languages（en）へ
 **append / 既存尊重**で転記する（skill 著述値・既存値は上書きせず conflict 提示）。**構造データ（`dex` / `types` /
-`stats` / `abilities` / `category`）と日本語名 ja は書かない**（手順 4 の `materialize` が埋める）。
+`baseStats` / `abilities` / `category`）と日本語名 ja は書かない**（手順 4 の `materialize` が埋める）。
 
-### 4. catalog 構造データ・日本語名を揃える（catalog 更新チェックポイント → update-catalog へ委譲）
+### 4. specs 構造データ・日本語名を揃える（specs 更新チェックポイント → update-catalog へ委譲）
 
 本 skill は **Champions 解禁データ（Serebii 由来）の取得**が責務で、**PokeAPI 由来の構造データ（種族値 / タイプ /
-特性 id / 図鑑番号 / 持ち物 category）と日本語名 ja の catalog 取り込みは [`update-catalog`](../update-catalog/SKILL.md)
+特性 id / 図鑑番号 / 持ち物 category）と日本語名 ja の specs / languages 取り込みは [`update-catalog`](../update-catalog/SKILL.md)
 へ委譲する**（取得元 = Serebii / PokeAPI で取得スキルを分離・手順を二重記述しない）。**learnset 照合はしない**
 （PokeAPI は Champions 非対応・ADR 0026）。技の出自は手順 1-2 の Serebii 取得で担保済み。
 
-**catalog 更新チェックポイント**（regulations が参照する id が catalog に揃っているかを確認する関門）:
+**specs 更新チェックポイント**（per-reg が参照する id が specs に揃っているかを確認する関門）:
 
-- **`pnpm check:regulation data/champions/regulations`** を回す。参照整合エラー（「未登録の種族 / 持ち物 / 技」）が
-  出たら、その id 群は **catalog に未登録**＝ PokeAPI 構造データ・名前が未取得である。
-- 不足 id があれば **先に [`update-catalog`](../update-catalog/SKILL.md) を回して catalog を揃える**
+- **`pnpm check:regulation data/champions`** を回す（per-reg ディレクトリ群を再帰検出して検証）。参照整合エラー
+  （「未登録の種族 / 持ち物 / 技」）が出たら、その id 群は **specs に未登録**＝ PokeAPI 構造データ・名前が未取得である。
+- 不足 id があれば **先に [`update-catalog`](../update-catalog/SKILL.md) を回して specs / languages を揃える**
   （`fetch:data` → `materialize` + 特性 id 集約）。不足 id を列挙して update-catalog に渡し、構造データ・ja を
-  catalog へ取り込んでから本 skill の続き（手順 5-6）へ戻る。大量投入（全種族投入など）で catalog の取りこぼし
+  取り込んでから本 skill の続き（手順 5-6）へ戻る。大量投入（全種族投入など）で specs の取りこぼし
   （特性追記漏れ等）を防ぐ関門がこのチェックポイント。
-- 参照整合が 0 終了（不足なし）なら catalog は揃っているので手順 5 へ進む。
+- 参照整合が 0 終了（不足なし）なら specs は揃っているので手順 5 へ進む。
 
 > **なぜ委譲するか**: 構造データ + 名前は **reg / ゲーム非依存**（種族そのものの事実）で、Champions 解禁データとは
 > 取得元・更新頻度が異なる。`update-catalog` が PokeAPI 系統を、本 skill が Serebii 系統を担い、境界を明快にする
-> （[[data-pipeline]] / 名前 = catalog / 技メタ = per-game regulations の境界は ADR 0034）。
+> （[[data-pipeline]] / 構造 = specs / 名前 = languages / 技メタ = per-game move-specs の境界は ADR 0034 / 0035）。
 
-### 5. per-reg `mega[]` 確認 + per-reg 予約キーを仕上げる
+### 5. per-reg `mega` 確認 + per-reg メタを仕上げる
 
-メガ linking は手順 2（`serebii:catalog`）が決定論で自動著述するので、ここでは確認と残りの仕上げに絞る:
+メガ linking は手順 3（`serebii:catalog`）が決定論で自動著述するので、ここでは確認と残りの仕上げに絞る:
 
-- **メガ linking 確認**: `species.yaml` の `megaLinks` / メガ先種族エントリ、per-reg 種族の `mega[]`、メガストーンの
-  `megaSpecies` は `serebii:catalog` が自動著述済み（[ADR 0033](../../../docs/adr/0033-deterministic-mega-auto-authoring.md)）。
+- **メガ linking 確認**: `species-specs.yaml` の `megaEvolvesTo` / `mega-specs.yaml` の `baseSpecies` 逆参照、per-reg
+  `<reg>/mega.yaml` の解禁メガ、メガストーンの `megaSpecies` は `serebii:catalog` が自動著述済み
+  （[ADR 0033](../../../docs/adr/0033-deterministic-mega-auto-authoring.md) / 独立 mega-specs は [ADR 0036](../../../docs/adr/0036-mega-independent-spec-entity.md)）。
   `serebii:catalog` の **escalation diagnostic**（`Mega ` 接頭の無い特殊形 = Primal 等・未知 id）が出た種だけ手動著述する
   （通常の `Mega <Base>[ X|Y]` は手動不要）。
-- **per-reg 予約キー**: `regulations/<game>/<reg>.yaml` の `name` / `period`（開催中は `period.end` を `null`）/ `items`
-  予約キー（解禁持ち物 全件）を確認・補う。トップレベル種族キーの存在 = 解禁（`allow.{...}` ラッパーは使わない）。
+- **per-reg メタ**: `<reg>/index.yaml` の `name` / `period`（開催中は `period.end` を `null`）と `<reg>/items.yaml`
+  （解禁持ち物 全件）を確認・補う。`<reg>/species.yaml` の id 存在 = 解禁（`allow.{...}` ラッパーは使わない）。
 
 ### 6. roster-source doc を書き、検証して再生成する（委譲）
 
 - **`docs/plan/<plan>/<id>-roster-source.md`** に記録する（再現可能性のため）: 権威ある事実（総数 / メガ数 /
   期間 / 形式条件）と各出典 URL・**検証日**、ソース間差異と解消、手順 2 の取得 `counts` / `escalated` 種、各種族の
   使用可能技 全件・解禁持ち物 全件の出典。確定が難所なら未確定部分を明記する。
-- **`pnpm check:regulation data/champions/regulations`**（authoring 時ゲート・参照整合 / schema を非0終了で検出・
-  ADR 0023。覚えない技照合はしない・ADR 0026）→ **`pnpm generate:data`**（catalog YAML → TS 変換・**raw 非依存**・
-  catalog 参照切れ / 技メタ・構造データ欠落は生成段エラー・ADR 0027）→ [`verify`](../verify/SKILL.md)（`pnpm verify`）。
+- **`pnpm check:regulation data/champions`**（authoring 時ゲート・per-reg ディレクトリ群を再帰検出・参照整合 /
+  schema を非0終了で検出・ADR 0023。覚えない技照合はしない・ADR 0026）→ **`pnpm generate:data`**（specs / languages /
+  per-reg YAML → TS 変換・合成・**raw 非依存**・参照切れ / 技メタ・構造データ欠落 / id 集合不一致は生成段エラー・
+  ADR 0027 / 0035）→ [`verify`](../verify/SKILL.md)（`pnpm verify`）。
   CLI で解禁判定を end-to-end 確認したいときは `node src/cli/index.ts check:party <party.md>`（解禁種 = exit0 /
   未解禁混入 = exit1）。**機械ゲートは再実装せず委譲**する（[[skill-authoring]]）。
 
 ### 7. 最終 fallback: escalated 種を目視で吸収する（WebFetch）
 
 層3 / 逐次実行でも収束しない `escalated` 種（DOM 揺れ・フォルム slug の取得失敗 = exit 2 等）だけを、
-`https://www.serebii.net/pokedex-champions/<species>/` を **WebFetch して目視**し、catalog / per-reg を手で著述する。
+`https://www.serebii.net/pokedex-champions/<species>/` を **WebFetch して目視**し、specs / per-reg を手で著述する。
 あわせて当該ページの最小化 fixture（`__fixtures__/serebii-<slug>.html`）+ 回帰テストを足して層1 パーサを一般化し
 （層3 と同じ手当て）、次回からは決定論経路に乗せる。WebFetch はこの**最終 fallback と手順 1 の roster 確定に縮小**
 する（各種族の技テーブル全件取得は層1-3 が担うため、目視抽出は例外ケースに限定）。
@@ -201,14 +210,15 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
   照合は撤去した（ADR 0026）。`check:regulation` は参照整合 / schema のみ。技の出自は手順 1-2 の Serebii 取得
   （層1 の自己検証）に依存する。技メタ（type / power 等）も Serebii で確定し、構造欠落のみ生成段 tsc が弾く。
 - **append-only を守る**: 没収された種・技・**非解禁持ち物**（M-A の life-orb / assault-vest / rocky-helmet 等）も
-  catalog から消さない。解禁/非解禁の現況は per-reg の種族キー存在 / `items` 予約キーが表す。
+  specs から消さない。解禁/非解禁の現況は per-reg の `<reg>/species.yaml` id 存在 / `<reg>/items.yaml` が表す。
 - **メガ linking は決定論で自動著述**: base slug 既知 + メガ名の枝サフィックス（`""`/`X`/`Y`）から `serebii:catalog`
-  が `megaLinks` / メガ先種族エントリ / per-reg `mega[]` / メガストーンの `megaSpecies` を append/既存尊重で書く
-  （[ADR 0033](../../../docs/adr/0033-deterministic-mega-auto-authoring.md)）。`Mega ` 接頭の無い特殊形（Primal 等）・
-  未知 id だけ escalation（diagnostic）に残り手順 5 で手当する。通常メガを手で著述しようとしない。
+  が `species-specs` の `megaEvolvesTo` / `mega-specs` の `baseSpecies` / per-reg `<reg>/mega.yaml` / メガストーンの
+  `megaSpecies` を append/既存尊重で書く（[ADR 0033](../../../docs/adr/0033-deterministic-mega-auto-authoring.md) /
+  独立 mega-specs は [ADR 0036](../../../docs/adr/0036-mega-independent-spec-entity.md)）。`Mega ` 接頭の無い特殊形
+  （Primal 等）・未知 id だけ escalation（diagnostic）に残り手順 5 で手当する。通常メガを手で著述しようとしない。
 - **複数フォルム種の slug**: 地域フォルム・バトルフォルム・メガ先は PokeAPI / Serebii slug が `<name>-<form>`。
   default slug が意図と違う種・Serebii で別 URL になるフォルム（例: rotom 系）は手順 7 の fallback で吸収する。
-- **生成物を手編集しない**: `data/generated/**` は触らず catalog / per-reg を直して再生成する（[[data-pipeline]]）。
+- **生成物を手編集しない**: `data/generated/**` は触らず specs / languages / per-reg を直して再生成する（[[data-pipeline]]）。
 - **機械ゲート / レビュー観点を再実装しない**: 検証は `verify` / `check:regulation`、生成データの妥当性は
   `pokemon-data-reviewer` agent、利用者パーティ点検は `review-party`（[[skill-authoring]]）。
 - **redaction**: doc へ外部リンク・引用を書き出す前に [[redaction]] を点検する（Secrets / PII 非混入）。
@@ -224,10 +234,12 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
   [ADR 0022](../../../docs/adr/0022-per-regulation-species-keyed-moves.md)（記録方法・block 記法）/
   [ADR 0023](../../../docs/adr/0023-generate-transformer-and-check-regulation.md)（generate 責務 / `check:regulation`）/
   [ADR 0034](../../../docs/adr/archive/0034-move-meta-per-game-sot.md)（PokeAPI を legality / 技メタの信頼源にしない・技メタ per-game SoT・ADR 0026 改訂）/
-  [ADR 0027](../../../docs/adr/0027-structural-data-catalog-sot.md)（構造データ SoT を catalog へ・`materialize` 新設）/
+  [ADR 0027](../../../docs/adr/0027-structural-data-catalog-sot.md)（構造データ SoT をソース YAML へ・`materialize` 新設）/
+  [ADR 0035](../../../docs/adr/0035-specs-languages-layout-redesign.md)（specs / languages / per-reg の 3 軸直交・名前 SoT を languages へ）/
+  [ADR 0036](../../../docs/adr/0036-mega-independent-spec-entity.md)（メガ独立 spec エンティティ）/
   [ADR 0031](../../../docs/adr/archive/0031-deterministic-serebii-scraper-hybrid-layers.md)（決定論スクレイパー + 3 層ハイブリッド）/
   [ADR 0032](../../../docs/adr/archive/0032-japanese-name-source-pokeapi-names.md)（日本語名 ja は PokeAPI names）。
-- catalog 取得（PokeAPI 構造データ + 名前・委譲先）: [`update-catalog`](../update-catalog/SKILL.md)。
+- specs / languages 取得（PokeAPI 構造データ + 名前・委譲先）: [`update-catalog`](../update-catalog/SKILL.md)。
 - 検証 / 生成: [`verify`](../verify/SKILL.md) / `pnpm check:regulation` / `pnpm generate:data`。
 - 利用者パーティ点検: [`review-party`](../review-party/SKILL.md) / 生成データ妥当性: `pokemon-data-reviewer` agent。
 - skill 作成方針・cross-agent: [[skill-authoring]] / [[cross-agent]] / [[redaction]]。
