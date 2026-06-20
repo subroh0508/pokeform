@@ -27,9 +27,12 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const RAW = join(ROOT, "data", "raw");
 const API = "https://pokeapi.co/api/v2";
 
-/** catalog/*.yaml をまとめて読むための最小形（fetch は列挙だけ要る）。 */
-const readCatalog = <T>(root: string, file: string): T =>
-  parseYaml(readFileSync(join(root, "data", "champions", "catalog", file), "utf8")) as T;
+/** data/champions/<file>（構造 specs）を読む（fetch は id 列挙だけ要る）。 */
+const readChampions = <T>(root: string, file: string): T =>
+  parseYaml(readFileSync(join(root, "data", "champions", file), "utf8")) as T;
+/** data/languages/<file>（名前マップ）を読む（名前補完取得の対象判定用）。 */
+const readLang = <T>(root: string, file: string): T =>
+  parseYaml(readFileSync(join(root, "data", "languages", file), "utf8")) as T;
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
@@ -78,26 +81,28 @@ async function fetchNamesInto(category: string, name: string): Promise<void> {
 }
 
 async function main(): Promise<void> {
-  // catalog は id → { ja, en } マップ（Phase 10）。構造データ取得は id（キー）の列挙が要る。
-  const { pokemon } = readCatalog<{ pokemon: Record<string, unknown> }>(ROOT, "species.yaml");
-  const { items } = readCatalog<{ items: Record<string, { ja?: string; en?: string }> }>(
+  // 構造 specs は id→構造マップ。構造データ取得は id（キー）の列挙が要る（base + mega 両方を取る）。
+  const { species } = readChampions<{ species: Record<string, unknown> }>(
     ROOT,
-    "items.yaml",
+    "species-specs.yaml",
   );
-  const { moves } = readCatalog<{ moves: Record<string, { ja?: string; en?: string }> }>(
+  const { mega } = readChampions<{ mega: Record<string, unknown> }>(ROOT, "mega-specs.yaml");
+  const { items } = readChampions<{ items: Record<string, unknown> }>(ROOT, "item-specs.yaml");
+  // 名前マップ（languages）は名前補完取得の対象判定（ja/en 欠落エントリのみ）に使う。
+  const { moves } = readLang<{ moves: Record<string, { ja?: string; en?: string }> }>(
     ROOT,
     "moves.yaml",
   );
-  const { abilities } = readCatalog<{ abilities: Record<string, { ja?: string; en?: string }> }>(
+  const { abilities } = readLang<{ abilities: Record<string, { ja?: string; en?: string }> }>(
     ROOT,
     "abilities.yaml",
   );
 
-  // pokemon 本体（種族値 / タイプ / 特性 id / names）+ 種族（全国図鑑番号 / names）。
-  for (const slug of Object.keys(pokemon)) {
+  // pokemon 本体（種族値 / タイプ / 特性 id / names）+ 種族（全国図鑑番号 / names）。base + mega を列挙。
+  for (const slug of [...Object.keys(species), ...Object.keys(mega)]) {
     const poke = await fetchInto("pokemon", slug);
-    const species = (poke.species as { name: string }).name;
-    await fetchInto("pokemon-species", species);
+    const sp = (poke.species as { name: string }).name;
+    await fetchInto("pokemon-species", sp);
   }
 
   // item は category + names のソース。

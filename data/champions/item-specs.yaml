@@ -1,0 +1,141 @@
+# data/champions/item-specs.yaml — 持ち物の構造データ（category/megaStoneFor?/megaSpecies?・name 抜き）。
+# 名前は data/languages/items.yaml が SoT。
+items:
+  charizardite-x:
+    megaStoneFor: charizard
+    megaSpecies: charizard-mega-x
+    category: mega-stones
+  rocky-helmet:
+    category: held-items
+  life-orb:
+    category: held-items
+  leftovers:
+    category: held-items
+  assault-vest:
+    category: held-items
+  choice-scarf:
+    category: choice
+  black-belt:
+    category: type-enhancement
+  black-glasses:
+    category: type-enhancement
+  bright-powder:
+    category: held-items
+  charcoal:
+    category: type-enhancement
+  dragon-fang:
+    category: type-enhancement
+  fairy-feather:
+    category: held-items
+  focus-band:
+    category: held-items
+  focus-sash:
+    category: held-items
+  hard-stone:
+    category: type-enhancement
+  kings-rock:
+    category: held-items
+  light-ball:
+    category: species-specific
+  magnet:
+    category: type-enhancement
+  mental-herb:
+    category: held-items
+  metal-coat:
+    category: type-enhancement
+  miracle-seed:
+    category: type-enhancement
+  mystic-water:
+    category: type-enhancement
+  never-melt-ice:
+    category: type-enhancement
+  poison-barb:
+    category: type-enhancement
+  quick-claw:
+    category: held-items
+  scope-lens:
+    category: held-items
+  sharp-beak:
+    category: type-enhancement
+  shell-bell:
+    category: held-items
+  silk-scarf:
+    category: type-enhancement
+  silver-powder:
+    category: type-enhancement
+  soft-sand:
+    category: type-enhancement
+  spell-tag:
+    category: type-enhancement
+  twisted-spoon:
+    category: type-enhancement
+  white-herb:
+    category: held-items
+  aspear-berry:
+    category: medicine
+  babiri-berry:
+    category: type-protection
+  charti-berry:
+    category: type-protection
+  cheri-berry:
+    category: medicine
+  chesto-berry:
+    category: medicine
+  chilan-berry:
+    category: type-protection
+  chople-berry:
+    category: type-protection
+  coba-berry:
+    category: type-protection
+  colbur-berry:
+    category: type-protection
+  haban-berry:
+    category: type-protection
+  kasib-berry:
+    category: type-protection
+  kebia-berry:
+    category: type-protection
+  leppa-berry:
+    category: medicine
+  lum-berry:
+    category: medicine
+  occa-berry:
+    category: type-protection
+  oran-berry:
+    category: medicine
+  passho-berry:
+    category: type-protection
+  payapa-berry:
+    category: type-protection
+  pecha-berry:
+    category: medicine
+  persim-berry:
+    category: medicine
+  rawst-berry:
+    category: medicine
+  rindo-berry:
+    category: type-protection
+  roseli-berry:
+    category: type-protection
+  shuca-berry:
+    category: type-protection
+  sitrus-berry:
+    category: medicine
+  tanga-berry:
+    category: type-protection
+  wacan-berry:
+    category: type-protection
+  yache-berry:
+    category: type-protection
+  charizardite-y:
+    megaStoneFor: charizard
+    megaSpecies: charizard-mega-y
+    category: mega-stones
+  garchompite:
+    megaStoneFor: garchomp
+    megaSpecies: garchomp-mega
+    category: mega-stones
+  gengarite:
+    megaStoneFor: gengar
+    megaSpecies: gengar-mega
+    category: mega-stones

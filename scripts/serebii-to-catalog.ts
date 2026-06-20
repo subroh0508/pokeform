@@ -1,20 +1,19 @@
 /**
  * serebii-to-catalog.ts — `scrape-serebii` の中間 JSON（種族 = `ParsedSpecies` / 持ち物 = `ParsedItems`）を
- * `data/champions/catalog/*.yaml` と `regulations/<game>/<reg>.yaml` へ**転記**する薄い配線。抽出・変換ロジックは
- * `src/codegen/serebii/to-catalog.ts`（純関数・テスト100%）に委譲し、本スクリプトは fs / YAML I/O のみ
- * （coverage 除外・[[testing]]）。
+ * 新ツリー（`data/champions/*-specs.yaml` 構造 + `data/languages/*.yaml` 名前 + `data/champions/<reg>/*` 解禁）へ
+ * **転記**する薄い配線。抽出・変換ロジックは `src/codegen/serebii/to-catalog.ts`（純関数・テスト100%）に委譲し、
+ * 本スクリプトは fs / YAML I/O のみ（coverage 除外・[[testing]]）。
  *
- * 設計（層分離・本 phase の ADR）:
- * - **append/既存尊重**: 既存 skill-authored 値は上書きせず、未設定欄のみ転記する（`planFields` 再利用・
- *   差異は conflict 提示・ADR 0027）。構造データ（dex/types/stats/abilities/category）と日英名 ja は**空で
- *   残し**、後段 `materialize`（PokeAPI vendor）が埋める。本スクリプトは Serebii 由来の権威データ（技メタ /
- *   メガストーンのメガ先 / per-reg 解禁）と en・エンティティ key を書く。
- * - **per-reg moves（per-species）は既存種族エントリを保護**: 既に解禁種族として存在する場合はその `moves` を
- *   触らない（中間 JSON が部分集合でも上書き縮小しない）。新規種族のみ Serebii 全件で `moves` を著述する。
- * - **メガ linking は決定論で自動著述**: base slug は既知のため、Serebii のメガ名の枝サフィックス（`""`/`X`/`Y`）
- *   だけ拾えば `<baseslug>-mega[-x|-y]` を組める（`megaSpeciesId`）。megaLinks / メガ先種族エントリ / per-reg
- *   `mega` / メガストーンの `megaSpecies` を append/既存尊重で著述する。`Mega ` 接頭の無い特殊形（Primal 等）・
- *   未知 id だけ自動著述せず escalation（diagnostic）に残す（ADR 0031 を supersede）。
+ * 設計（層分離・ADR 0035/0036）:
+ * - **append/既存尊重**: 既存 skill-authored 値は上書きせず未設定欄のみ転記（`planFields` 再利用・conflict 提示・
+ *   ADR 0027）。構造データ（dex/types/stats/abilities/category）と日本語名 ja は**空で残し**、後段 `materialize`
+ *   が埋める。本スクリプトは Serebii 由来の権威データ（技メタ / メガストーンのメガ先 / per-reg 解禁）と en・
+ *   エンティティ key を書く。
+ * - **3 軸直交の書き分け**: 構造 = `*-specs.yaml`（key を作り materialize に委ねる）/ 名前 en = `languages/*.yaml`
+ *   / 解禁 = `<reg>/{species,items,mega,species-moves}.yaml`。
+ * - **per-reg moves は既存種族エントリを保護**（中間 JSON が部分集合でも上書き縮小しない・新規種族のみ全件著述）。
+ * - **メガ linking は決定論で自動著述**（`megaSpeciesId`・base slug 既知 + 枝サフィックスから `<slug>-mega[-x|-y]`）。
+ *   `Mega ` 接頭の無い特殊形（Primal 等）は escalation（自動著述しない）。
  *
  * 使い方（実行順: `fetch-serebii` → `scrape-serebii` → 本スクリプト → `fetch:data` → `materialize` →
  * `check:regulation` → `generate:data`）:
@@ -22,10 +21,10 @@
  * - `node scripts/serebii-to-catalog.ts items <regId> [jsonPath]`
  *   `jsonPath` 省略 / `-` で stdin から中間 JSON を読む。
  */
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { type Document, parseDocument, type YAMLMap } from "yaml";
+import { type Document, parseDocument, type YAMLMap, type YAMLSeq } from "yaml";
 import { planFields } from "../src/codegen/materialize.ts";
 import type { ParsedItems, ParsedSpecies } from "../src/codegen/serebii/parse.ts";
 import {
@@ -41,8 +40,8 @@ import {
 } from "../src/codegen/serebii/to-catalog.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const CAT = join(ROOT, "data", "champions", "catalog");
-const REG = join(ROOT, "data", "champions", "regulations");
+const CH = join(ROOT, "data", "champions");
+const LANG = join(ROOT, "data", "languages");
 
 let conflictCount = 0;
 const warn = (msg: string): void => process.stderr.write(`[serebii-to-catalog] ${msg}\n`);
@@ -53,40 +52,16 @@ function readJson<T>(path: string | undefined): T {
   return JSON.parse(text) as T;
 }
 
-/**
- * regId（`champions-m-a` または `m-a`）→ regulations ファイルパス。ゲームグルーピング後のレイアウト
- * `regulations/<game>/<reg>.yaml`（Phase 10）。`<game>-<reg>` 形式は `<game>/<reg>.yaml`、ゲーム省略形
- * （`m-a`）は champions ゲーム配下と解釈する。実在優先。
- */
-function regPath(regId: string): string {
-  // `champions-m-a` → ["champions", "m-a"] / `m-a` → champions ゲーム配下と解釈。
+/** regId（`champions-m-a` または `m-a`）→ レギュディレクトリ（`data/champions/<reg>`）。実在を確認する。 */
+function regDir(regId: string): string {
   const dashIndex = regId.indexOf("-");
   const candidates: string[] = [];
-  if (dashIndex > 0) {
-    const game = regId.slice(0, dashIndex);
-    const reg = regId.slice(dashIndex + 1);
-    candidates.push(join(REG, game, `${reg}.yaml`));
+  if (dashIndex > 0) candidates.push(join(CH, regId.slice(dashIndex + 1)));
+  candidates.push(join(CH, regId));
+  for (const c of candidates) {
+    if (existsSync(c) && statSync(c).isDirectory()) return c;
   }
-  candidates.push(join(REG, "champions", `${regId}.yaml`));
-  for (const candidate of candidates) {
-    if (existsSync(candidate)) return candidate;
-  }
-  throw new Error(`regulation not found: ${regId} (looked for ${candidates.join(" / ")})`);
-}
-
-/**
- * regId → ゲーム名（per-game 共有ファイル `regulations/<game>/moves.yaml` の置き場）。`regPath` と同じ解釈で、
- * `<game>-<reg>.yaml` が実在するならその `<game>`、省略形（`m-a` 等）は `champions` 既定。`indexOf("-")` の素朴
- * 分割は短縮形を `m` 等へ誤分割するため実在優先で解決する（regPath と一貫・Phase 11）。
- */
-function regGame(regId: string): string {
-  const dashIndex = regId.indexOf("-");
-  if (dashIndex > 0) {
-    const game = regId.slice(0, dashIndex);
-    const reg = regId.slice(dashIndex + 1);
-    if (existsSync(join(REG, game, `${reg}.yaml`))) return game;
-  }
-  return "champions";
+  throw new Error(`regulation dir not found: ${regId} (looked for ${candidates.join(" / ")})`);
 }
 
 /** doc を読み込む（コメント保持の parseDocument）。 */
@@ -94,12 +69,17 @@ const loadDoc = (file: string): Document => parseDocument(readFileSync(file, "ut
 
 /**
  * `map` 配下の `id` エントリへ `fresh` を append/既存尊重で適用する。新規 key は block の空 map から作って
- * fill する（`fresh` が非空のため `{}` flow にはならない）。fill / 新規作成があれば true。
+ * fill する。`fresh` が空でも空 map（`{}`）を作るため、構造 placeholder（materialize 委譲）用に許容する。
  */
 function upsert(doc: Document, map: YAMLMap, id: string, fresh: Record<string, unknown>): boolean {
   let node = map.get(id) as YAMLMap | undefined;
   let changed = false;
   if (node === undefined) {
+    if (Object.keys(fresh).length === 0) {
+      // 構造 placeholder（fresh 空）= null 値で key だけ登録（materialize が後で構造を埋める・空 flow `{}` 回避）。
+      map.set(id, doc.createNode(null));
+      return true;
+    }
     node = doc.createNode({}) as YAMLMap;
     map.set(id, node);
     changed = true;
@@ -118,6 +98,14 @@ function upsert(doc: Document, map: YAMLMap, id: string, fresh: Record<string, u
   return changed;
 }
 
+/** 列（YAMLSeq）へ id を append（未登録のみ・昇順は維持しない＝既存順を尊重）。追加があれば true。 */
+function appendToList(doc: Document, seq: YAMLSeq, id: string): boolean {
+  const existing = (seq.toJS(doc) as string[]) ?? [];
+  if (existing.includes(id)) return false;
+  seq.add(doc.createNode(id));
+  return true;
+}
+
 /** doc が変更されていれば書き戻す（無変更なら round-trip 再整形を避けて git diff を最小化）。 */
 function writeIf(file: string, doc: Document, changed: boolean): void {
   if (changed) writeFileSync(file, doc.toString());
@@ -125,79 +113,120 @@ function writeIf(file: string, doc: Document, changed: boolean): void {
 
 function transcribeSpecies(slug: string, regId: string, jsonPath: string | undefined): void {
   const p = readJson<ParsedSpecies>(jsonPath);
+  const dir = regDir(regId);
 
-  // メガ自動著述プラン（決定論変換・null は escalations へ分離・[ADR 0024] のメガ運用）。
+  // メガ自動著述プラン（決定論変換・null は escalations へ分離・ADR 0024 のメガ運用）。
   const auth = megaAuthoring(slug, p);
 
-  // --- catalog: species（base）+ メガ先種族エントリ（en のみ・構造は materialize が後埋め）+ megaLinks ---
-  const speciesFile = join(CAT, "species.yaml");
-  const speciesDoc = loadDoc(speciesFile);
-  const pokemon = speciesDoc.get("pokemon") as YAMLMap;
-  let speciesChanged = upsert(speciesDoc, pokemon, slug, speciesCatalogFields(p));
-  for (const e of auth.speciesEntries) {
-    speciesChanged = upsert(speciesDoc, pokemon, e.id, { en: e.en }) || speciesChanged;
-  }
+  // --- 構造 placeholder（species-specs / mega-specs）: key を作り materialize に構造を委ねる ---
+  const speciesSpecsFile = join(CH, "species-specs.yaml");
+  const speciesSpecsDoc = loadDoc(speciesSpecsFile);
+  const speciesSpecsMap = speciesSpecsDoc.get("species") as YAMLMap;
+  let speciesSpecsChanged = upsert(speciesSpecsDoc, speciesSpecsMap, slug, {});
+  // base の megaEvolvesTo（append-only union）。
   if (auth.ids.length > 0) {
-    // megaLinks（top-level map）へ append-only union（既存メガ先を消さない）。
-    let megaLinks = speciesDoc.get("megaLinks") as YAMLMap | undefined;
-    if (megaLinks === undefined) {
-      megaLinks = speciesDoc.createNode({}) as YAMLMap;
-      speciesDoc.set("megaLinks", megaLinks);
-      speciesChanged = true;
-    }
-    const links = megaLinks.toJS(speciesDoc) as Record<string, string[]>;
-    const existing = links[slug] ?? [];
-    const merged = sortedUnion(existing, auth.ids);
-    if (merged.length !== existing.length) {
-      megaLinks.set(slug, speciesDoc.createNode(merged));
-      speciesChanged = true;
+    const node = speciesSpecsMap.get(slug, true) as YAMLMap | null;
+    if (node && typeof node === "object" && "set" in node) {
+      const cur = (node.toJS(speciesSpecsDoc) as { megaEvolvesTo?: string[] }).megaEvolvesTo ?? [];
+      const merged = sortedUnion(cur, auth.ids);
+      if (merged.length !== cur.length) {
+        (node as YAMLMap).set("megaEvolvesTo", speciesSpecsDoc.createNode(merged));
+        speciesSpecsChanged = true;
+      }
     }
   }
-  writeIf(speciesFile, speciesDoc, speciesChanged);
+  writeIf(speciesSpecsFile, speciesSpecsDoc, speciesSpecsChanged);
 
-  // 技名（id + en）は catalog/moves.yaml（名前はゲーム非依存・Phase 11）。
-  const movesFile = join(CAT, "moves.yaml");
+  const megaSpecsFile = join(CH, "mega-specs.yaml");
+  const megaSpecsDoc = loadDoc(megaSpecsFile);
+  const megaSpecsMap = megaSpecsDoc.get("mega") as YAMLMap;
+  let megaSpecsChanged = false;
+  for (const e of auth.speciesEntries) {
+    // baseSpecies は決定論（slug）。dex/types/stats/ability は materialize / authoring が埋める。
+    megaSpecsChanged =
+      upsert(megaSpecsDoc, megaSpecsMap, e.id, { baseSpecies: slug }) || megaSpecsChanged;
+  }
+  writeIf(megaSpecsFile, megaSpecsDoc, megaSpecsChanged);
+
+  // --- 名前 en（languages: species / mega） ---
+  const langSpeciesFile = join(LANG, "species.yaml");
+  const langSpeciesDoc = loadDoc(langSpeciesFile);
+  const langSpeciesMap = langSpeciesDoc.get("species") as YAMLMap;
+  const langSpeciesChanged = upsert(langSpeciesDoc, langSpeciesMap, slug, speciesCatalogFields(p));
+  writeIf(langSpeciesFile, langSpeciesDoc, langSpeciesChanged);
+
+  if (auth.speciesEntries.length > 0) {
+    const langMegaFile = join(LANG, "mega.yaml");
+    const langMegaDoc = loadDoc(langMegaFile);
+    const langMegaMap = langMegaDoc.get("mega") as YAMLMap;
+    let langMegaChanged = false;
+    for (const e of auth.speciesEntries) {
+      langMegaChanged = upsert(langMegaDoc, langMegaMap, e.id, { en: e.en }) || langMegaChanged;
+    }
+    writeIf(langMegaFile, langMegaDoc, langMegaChanged);
+  }
+
+  // --- 技名 en（languages/moves）+ 技メタ（move-specs・top-level・Champions 固有値・ADR 0034） ---
+  const langMovesFile = join(LANG, "moves.yaml");
+  const langMovesDoc = loadDoc(langMovesFile);
+  const langMovesMap = langMovesDoc.get("moves") as YAMLMap;
+  let langMovesChanged = false;
+  for (const m of p.moves) {
+    langMovesChanged =
+      upsert(langMovesDoc, langMovesMap, m.id, { ...moveNameFields(m) }) || langMovesChanged;
+  }
+  writeIf(langMovesFile, langMovesDoc, langMovesChanged);
+
+  const moveSpecsFile = join(CH, "move-specs.yaml");
+  const moveSpecsDoc = loadDoc(moveSpecsFile);
+  const moveSpecsMap = moveSpecsDoc.get("moves") as YAMLMap;
+  let moveSpecsChanged = false;
+  for (const m of p.moves) {
+    moveSpecsChanged =
+      upsert(moveSpecsDoc, moveSpecsMap, m.id, { ...moveStatsFields(m) }) || moveSpecsChanged;
+  }
+  writeIf(moveSpecsFile, moveSpecsDoc, moveSpecsChanged);
+
+  // --- 特性: id を ability-specs（list）へ append + en を languages/abilities へ ---
+  const abilitySpecsFile = join(CH, "ability-specs.yaml");
+  const abilitySpecsDoc = loadDoc(abilitySpecsFile);
+  const abilitySpecsSeq = abilitySpecsDoc.get("abilities") as YAMLSeq;
+  const langAbilitiesFile = join(LANG, "abilities.yaml");
+  const langAbilitiesDoc = loadDoc(langAbilitiesFile);
+  const langAbilitiesMap = langAbilitiesDoc.get("abilities") as YAMLMap;
+  let abilitySpecsChanged = false;
+  let langAbilitiesChanged = false;
+  for (const id of abilityIds(p)) {
+    abilitySpecsChanged = appendToList(abilitySpecsDoc, abilitySpecsSeq, id) || abilitySpecsChanged;
+    langAbilitiesChanged =
+      upsert(langAbilitiesDoc, langAbilitiesMap, id, { en: abilityEnFromId(id) }) ||
+      langAbilitiesChanged;
+  }
+  writeIf(abilitySpecsFile, abilitySpecsDoc, abilitySpecsChanged);
+  writeIf(langAbilitiesFile, langAbilitiesDoc, langAbilitiesChanged);
+
+  // --- per-reg: roster（species.yaml）+ per-species moves（species-moves.yaml）+ mega（mega.yaml） ---
+  const rosterFile = join(dir, "species.yaml");
+  const rosterDoc = loadDoc(rosterFile);
+  const rosterSeq = rosterDoc.get("species") as YAMLSeq;
+  const movesFile = join(dir, "species-moves.yaml");
   const movesDoc = loadDoc(movesFile);
   const movesMap = movesDoc.get("moves") as YAMLMap;
-  let movesChanged = false;
-  for (const m of p.moves) {
-    movesChanged = upsert(movesDoc, movesMap, m.id, { ...moveNameFields(m) }) || movesChanged;
-  }
-  writeIf(movesFile, movesDoc, movesChanged);
-
-  // 技メタ（type/damageClass/power 等）は per-game の regulations/<game>/moves.yaml（Champions 固有値・ADR 0034）。
-  const moveStatsFile = join(REG, regGame(regId), "moves.yaml");
-  const moveStatsDoc = loadDoc(moveStatsFile);
-  const moveStatsMap = moveStatsDoc.get("moves") as YAMLMap;
-  let moveStatsChanged = false;
-  for (const m of p.moves) {
-    moveStatsChanged =
-      upsert(moveStatsDoc, moveStatsMap, m.id, { ...moveStatsFields(m) }) || moveStatsChanged;
-  }
-  writeIf(moveStatsFile, moveStatsDoc, moveStatsChanged);
-
-  const abilitiesFile = join(CAT, "abilities.yaml");
-  const abilitiesDoc = loadDoc(abilitiesFile);
-  const abilitiesMap = abilitiesDoc.get("abilities") as YAMLMap;
-  let abilitiesChanged = false;
-  for (const id of abilityIds(p)) {
-    abilitiesChanged =
-      upsert(abilitiesDoc, abilitiesMap, id, { en: abilityEnFromId(id) }) || abilitiesChanged;
-  }
-  writeIf(abilitiesFile, abilitiesDoc, abilitiesChanged);
-
-  // --- regulation: per-species moves + mega[]（既存種族は保護・新規のみ全件著述） ---
-  const file = regPath(regId);
-  const regDoc = loadDoc(file);
-  if (regDoc.has(slug)) {
+  if (movesMap.has(slug)) {
     warn(
       `reg ${regId}: species '${slug}' already allowed — leaving its moves/mega untouched (既存尊重)`,
     );
   } else {
-    const entry: Record<string, unknown> = { moves: regMoveIds(p) };
-    if (auth.ids.length > 0) entry.mega = auth.ids;
-    regDoc.set(slug, regDoc.createNode(entry));
-    writeFileSync(file, regDoc.toString());
+    if (appendToList(rosterDoc, rosterSeq, slug)) writeFileSync(rosterFile, rosterDoc.toString());
+    movesMap.set(slug, movesDoc.createNode(regMoveIds(p)));
+    writeFileSync(movesFile, movesDoc.toString());
+    if (auth.ids.length > 0) {
+      const megaFile = join(dir, "mega.yaml");
+      const megaDoc = loadDoc(megaFile);
+      const megaMap = megaDoc.get("mega") as YAMLMap;
+      megaMap.set(slug, megaDoc.createNode(auth.ids));
+      writeFileSync(megaFile, megaDoc.toString());
+    }
   }
 
   // --- 決定論変換できなかったメガ（Primal 等・非 `Mega ` 形）だけ escalation（自動著述しない） ---
@@ -210,20 +239,29 @@ function transcribeSpecies(slug: string, regId: string, jsonPath: string | undef
 
 function transcribeItems(regId: string, jsonPath: string | undefined): void {
   const parsed = readJson<ParsedItems>(jsonPath);
+  const dir = regDir(regId);
 
-  // --- catalog: items（en + megaStoneFor を転記・ja / category は materialize が埋める） ---
-  const itemsFile = join(CAT, "items.yaml");
-  const itemsDoc = loadDoc(itemsFile);
-  const itemsMap = itemsDoc.get("items") as YAMLMap;
-  let itemsChanged = false;
+  // --- item-specs（megaStoneFor / megaSpecies・category は materialize）+ languages/items（en） ---
+  const itemSpecsFile = join(CH, "item-specs.yaml");
+  const itemSpecsDoc = loadDoc(itemSpecsFile);
+  const itemSpecsMap = itemSpecsDoc.get("items") as YAMLMap;
+  const langItemsFile = join(LANG, "items.yaml");
+  const langItemsDoc = loadDoc(langItemsFile);
+  const langItemsMap = langItemsDoc.get("items") as YAMLMap;
+  let itemSpecsChanged = false;
+  let langItemsChanged = false;
   for (const it of parsed.items) {
-    itemsChanged = upsert(itemsDoc, itemsMap, it.id, { ...itemCatalogFields(it) }) || itemsChanged;
+    const { en, ...structural } = itemCatalogFields(it); // en → languages / 残り（megaStoneFor 等）→ specs
+    itemSpecsChanged =
+      upsert(itemSpecsDoc, itemSpecsMap, it.id, { ...structural }) || itemSpecsChanged;
+    langItemsChanged = upsert(langItemsDoc, langItemsMap, it.id, { en }) || langItemsChanged;
   }
-  writeIf(itemsFile, itemsDoc, itemsChanged);
+  writeIf(itemSpecsFile, itemSpecsDoc, itemSpecsChanged);
+  writeIf(langItemsFile, langItemsDoc, langItemsChanged);
 
-  // --- regulation: items 予約キーへ union 追記（append-only・既存解禁を消さない） ---
-  const file = regPath(regId);
-  const regDoc = loadDoc(file);
+  // --- per-reg: items（list）へ union 追記（append-only・既存解禁を消さない） ---
+  const itemsFile = join(dir, "items.yaml");
+  const regDoc = loadDoc(itemsFile);
   const existing = (regDoc.toJS() as { items?: string[] }).items ?? [];
   const merged = sortedUnion(
     existing,
@@ -231,7 +269,7 @@ function transcribeItems(regId: string, jsonPath: string | undefined): void {
   );
   if (merged.length !== existing.length) {
     regDoc.set("items", regDoc.createNode(merged));
-    writeFileSync(file, regDoc.toString());
+    writeFileSync(itemsFile, regDoc.toString());
   }
 }
 

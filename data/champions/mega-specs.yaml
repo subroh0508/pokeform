@@ -1,0 +1,59 @@
+# data/champions/mega-specs.yaml — メガ形態の独立 spec（dex/types/stats/ability/baseSpecies・name 抜き）。
+# メガは base 種族から分離した独立エンティティ（ADR 0036）。名前は data/languages/mega.yaml。
+mega:
+  charizard-mega-x:
+    dex: 6
+    types:
+      - fire
+      - dragon
+    stats:
+      H: 78
+      A: 130
+      B: 111
+      C: 130
+      D: 85
+      S: 100
+    ability: tough-claws
+    baseSpecies: charizard
+  charizard-mega-y:
+    dex: 6
+    types:
+      - fire
+      - flying
+    stats:
+      H: 78
+      A: 104
+      B: 78
+      C: 159
+      D: 115
+      S: 100
+    ability: drought
+    baseSpecies: charizard
+  garchomp-mega:
+    dex: 445
+    types:
+      - dragon
+      - ground
+    stats:
+      H: 108
+      A: 170
+      B: 115
+      C: 120
+      D: 95
+      S: 92
+    ability: sand-force
+    baseSpecies: garchomp
+  gengar-mega:
+    dex: 94
+    types:
+      - ghost
+      - poison
+    stats:
+      H: 60
+      A: 65
+      B: 80
+      C: 170
+      D: 95
+      S: 130
+    ability: shadow-tag
+    baseSpecies: gengar

@@ -1,0 +1,158 @@
+# data/champions/type-specs.yaml — タイプ相性 damageTo（非 1.0 のみ・generate が 1.0 補完）。名前は data/languages/types.yaml。
+types:
+  normal:
+    damageTo:
+      rock: 0.5
+      ghost: 0
+      steel: 0.5
+  fire:
+    damageTo:
+      fire: 0.5
+      water: 0.5
+      grass: 2
+      ice: 2
+      bug: 2
+      rock: 0.5
+      dragon: 0.5
+      steel: 2
+  water:
+    damageTo:
+      fire: 2
+      water: 0.5
+      grass: 0.5
+      ground: 2
+      rock: 2
+      dragon: 0.5
+  electric:
+    damageTo:
+      water: 2
+      electric: 0.5
+      grass: 0.5
+      ground: 0
+      flying: 2
+      dragon: 0.5
+  grass:
+    damageTo:
+      fire: 0.5
+      water: 2
+      grass: 0.5
+      poison: 0.5
+      ground: 2
+      flying: 0.5
+      bug: 0.5
+      rock: 2
+      dragon: 0.5
+      steel: 0.5
+  ice:
+    damageTo:
+      fire: 0.5
+      water: 0.5
+      grass: 2
+      ice: 0.5
+      ground: 2
+      flying: 2
+      dragon: 2
+      steel: 0.5
+  fighting:
+    damageTo:
+      normal: 2
+      ice: 2
+      poison: 0.5
+      flying: 0.5
+      psychic: 0.5
+      bug: 0.5
+      rock: 2
+      ghost: 0
+      dark: 2
+      steel: 2
+      fairy: 0.5
+  poison:
+    damageTo:
+      grass: 2
+      poison: 0.5
+      ground: 0.5
+      rock: 0.5
+      ghost: 0.5
+      steel: 0
+      fairy: 2
+  ground:
+    damageTo:
+      fire: 2
+      electric: 2
+      grass: 0.5
+      poison: 2
+      flying: 0
+      bug: 0.5
+      rock: 2
+      steel: 2
+  flying:
+    damageTo:
+      electric: 0.5
+      grass: 2
+      fighting: 2
+      bug: 2
+      rock: 0.5
+      steel: 0.5
+  psychic:
+    damageTo:
+      fighting: 2
+      poison: 2
+      psychic: 0.5
+      dark: 0
+      steel: 0.5
+  bug:
+    damageTo:
+      fire: 0.5
+      grass: 2
+      fighting: 0.5
+      poison: 0.5
+      flying: 0.5
+      psychic: 2
+      ghost: 0.5
+      dark: 2
+      steel: 0.5
+      fairy: 0.5
+  rock:
+    damageTo:
+      fire: 2
+      ice: 2
+      fighting: 0.5
+      ground: 0.5
+      flying: 2
+      bug: 2
+      steel: 0.5
+  ghost:
+    damageTo:
+      normal: 0
+      psychic: 2
+      ghost: 2
+      dark: 0.5
+  dragon:
+    damageTo:
+      dragon: 2
+      steel: 0.5
+      fairy: 0
+  dark:
+    damageTo:
+      fighting: 0.5
+      psychic: 2
+      ghost: 2
+      dark: 0.5
+      fairy: 0.5
+  steel:
+    damageTo:
+      fire: 0.5
+      water: 0.5
+      electric: 0.5
+      ice: 2
+      rock: 2
+      steel: 0.5
+      fairy: 2
+  fairy:
+    damageTo:
+      fire: 0.5
+      fighting: 2
+      poison: 0.5
+      dragon: 2
+      dark: 2
+      steel: 0.5

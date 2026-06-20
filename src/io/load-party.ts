@@ -3,10 +3,9 @@ import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import matter from "gray-matter";
 import { parse as parseYaml } from "yaml";
-import { itemDex } from "../../data/generated/items.ts";
-import { moveDex } from "../../data/generated/moves.ts";
-import { itemIdByJa, moveIdByJa, speciesIdByJa } from "../../data/generated/names.ts";
-import { speciesBaseDex } from "../../data/generated/species-base.ts";
+import { itemSpecsDex } from "../../data/generated/champions/item-specs.ts";
+import { moveSpecsDex } from "../../data/generated/champions/move-specs.ts";
+import { itemNames, moveNames, speciesNamesAll } from "../../data/generated/languages/index.ts";
 import type { ResolvedMember, ResolvedParty } from "../domain/party-analysis.ts";
 import { type NameMaps, resolveName } from "../domain/resolve-names.ts";
 import type { IndividualFile, Lang, PartyFrontmatter } from "../types/party.ts";
@@ -14,12 +13,26 @@ import type { IndividualFile, Lang, PartyFrontmatter } from "../types/party.ts";
 /**
  * パーティ Markdown と個体 YAML を読み、パス解決 + 名称 ID 正規化済みの ResolvedParty へ変換する
  * 薄い I/O 層（カバレッジ対象外）。名称解決の純ロジックは domain/resolve-names、検証 / 分析は
- * domain/party-analysis が担う（[[cli-and-io]]）。生成済み逆引きマップで日英入力を ID へ寄せる。
+ * domain/party-analysis が担う（[[cli-and-io]]）。ja→id 逆引きは languages の forward マップから実行時導出する
+ * （名前 SoT は languages・ADR 0035）。id 集合（legality 解決用）は specs dex から取る。
  */
 
-const speciesMaps: NameMaps = { idByJa: speciesIdByJa, ids: new Set(Object.keys(speciesBaseDex)) };
-const moveMaps: NameMaps = { idByJa: moveIdByJa, ids: new Set(Object.keys(moveDex)) };
-const itemMaps: NameMaps = { idByJa: itemIdByJa, ids: new Set(Object.keys(itemDex)) };
+/** languages forward マップ（id→{ id, name:{ ja } }）から ja→id 逆引きを作る。 */
+const reverseJa = (m: Record<string, { name: { ja: string } }>): Record<string, string> =>
+  Object.fromEntries(Object.entries(m).map(([id, e]) => [e.name.ja, id]));
+
+const speciesMaps: NameMaps = {
+  idByJa: reverseJa(speciesNamesAll),
+  ids: new Set(Object.keys(speciesNamesAll)),
+};
+const moveMaps: NameMaps = {
+  idByJa: reverseJa(moveNames),
+  ids: new Set(Object.keys(moveSpecsDex)),
+};
+const itemMaps: NameMaps = {
+  idByJa: reverseJa(itemNames),
+  ids: new Set(Object.keys(itemSpecsDex)),
+};
 
 /** 読み込んだパーティ（表示名 + 解決済みパーティ本体）。 */
 export interface LoadedParty {

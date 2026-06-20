@@ -31,10 +31,13 @@ export type PokemonType =
 /** 1 タイプの全防御タイプに対する攻撃倍率表。複合タイプは各倍率の積で算出する。 */
 export type TypeChart = { readonly [K in PokemonType]: TypeMultiplier };
 
-/** 相性表エントリの親型（統一パターンの XxxBase）。子型は Phase 1 で specialize する。 */
-export interface TypeBase {
+/**
+ * タイプ相性 spec エントリの親型（統一パターンの XxxBase）。`data/generated/champions/type-specs.ts`
+ * （`typeSpecsDex`）が派生する。**名前は持たない**（名前の SoT は `data/languages/types.yaml`・ADR 0035）。
+ * coverage / 相性計算はこの `damageTo` を引き、表示名は `languages/types.ts` を引く。
+ */
+export interface TypeSpec {
   readonly id: PokemonType;
-  readonly name: { readonly en: string; readonly ja: string };
   /** この攻撃タイプが各防御タイプへ与える倍率。 */
   readonly damageTo: TypeChart;
 }

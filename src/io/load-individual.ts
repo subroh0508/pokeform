@@ -1,10 +1,11 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { parse as parseYaml } from "yaml";
-import { speciesBaseDex } from "../../data/generated/species-base.ts";
+import { speciesNamesAll } from "../../data/generated/languages/index.ts";
 import { toSpeciesId, toStatKey } from "../codegen/normalize.ts";
 import type { NatureSpec } from "../types/nature.ts";
 import type { IndividualFile, Lang } from "../types/party.ts";
+import { speciesStructuralDex } from "../types/species.ts";
 import type { BaseStats, PointAllocation, StatKey } from "../types/stats.ts";
 
 /**
@@ -39,11 +40,15 @@ export const loadIndividual = async (path: string): Promise<LoadedIndividual> =>
   const lang: Lang = ind.lang ?? "ja";
   const speciesId = toSpeciesId(ind.species, lang);
   const entry =
-    speciesId === null ? undefined : (speciesBaseDex as Record<string, unknown>)[speciesId];
+    speciesId === null ? undefined : (speciesStructuralDex as Record<string, unknown>)[speciesId];
   if (speciesId === null || entry === undefined) {
     throw new Error(`unknown species '${ind.species}' in ${path}`);
   }
   const { baseStats } = entry as { baseStats: BaseStats };
+  // 名前は構造から分離（SoT は languages・ADR 0035）。base + メガ統合マップから引く。
+  const nameEntry = (speciesNamesAll as Record<string, { name: { ja: string; en: string } }>)[
+    speciesId
+  ];
 
   const points = zeroPoints();
   for (const [rawKey, value] of Object.entries(ind.points ?? {})) {
@@ -55,7 +60,7 @@ export const loadIndividual = async (path: string): Promise<LoadedIndividual> =>
   const down = toStatKey(ind.nature.down, lang) ?? "spAttack";
 
   return {
-    name: (entry as { name: { ja: string; en: string } }).name[lang],
+    name: nameEntry ? nameEntry.name[lang] : speciesId,
     speciesId,
     baseStats,
     nature: { up, down } as NatureSpec,

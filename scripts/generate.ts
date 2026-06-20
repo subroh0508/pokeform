@@ -1,14 +1,19 @@
 /**
- * generate.ts — `data/champions/`（手動・catalog SoT）を変換して `data/generated/`（コミット）へ
- * 型 + 値を出力する。vendor 方式（ADR 0012）の生成段。**PokeAPI 取得キャッシュは一切読まない**（構造
- * データ（種族値 / タイプ / 特性 id / 図鑑番号 / 持ち物 category）の SoT も catalog YAML へ移設済み・ADR 0027）。
- * キャッシュ → catalog の転記は専任 `scripts/materialize.ts` が担い、generate は catalog のみを変換する。
+ * generate.ts — `data/champions/`（構造 specs・skill 著述）+ `data/languages/`（名前・ゲーム非依存）を
+ * 変換して `data/generated/`（コミット）へ型 + 値を出力する。vendor 方式（ADR 0012）の生成段。
+ * **PokeAPI 取得キャッシュは一切読まない**（構造データ SoT も specs YAML へ移設済み・ADR 0027/0035）。
+ * キャッシュ → specs/languages の転記は専任 `scripts/materialize.ts` が担い、generate は YAML のみを変換する。
  *
- * 出力: types / moves / abilities / items / species-base（reg 不変 base view）/ regulations（1 レギュ =
- * 1 ディレクトリ・per-reg 種族 dex を同梱）/ names。各 Dex は
- * `as const satisfies Record<string, XxxBase>` から `type XxxDex = typeof xxxDex` /
- * `XxxId = keyof XxxDex` を派生（値と型を単一ソース化・[[type-conventions]]）。生成後に
- * Biome で整形して機械ゲート（biome check）と一致させる。手書き編集しない（champions を直す）。
+ * レイアウト（ADR 0035/0036・3 軸直交 = 構造 specs / 名前 languages / レギュ解禁 per-reg）:
+ *   champions/{species,mega,item,ability,move,type}-specs.ts（構造・name 無し）
+ *   champions/<reg>/{index,species,items,mega,species-moves}.ts（per-reg・index が speciesDex を合成）
+ *   champions/index.ts（regulationDex 集約）
+ *   languages/{species,mega,items,moves,abilities,types}.ts（id→{ id, name:{ ja, en } }）+ index.ts
+ *
+ * 各 Dex は `as const satisfies Record<string, XxxBase>` から型を派生（値と型を単一ソース化・
+ * [[type-conventions]]）。reg-aware 型機構（`ValidMove<R,S,M>` 等）は per-reg `index.ts` が base/mega specs +
+ * species-moves + per-reg mega を**実行時合成**した narrow リテラル `speciesDex` から成立する（ADR 0021/0024）。
+ * 生成後に Biome 整形して機械ゲート（biome check）と一致させる。手書き編集しない（YAML を直し再生成する）。
  *
  * 実行: `pnpm generate:data`（ネットワーク不要・決定論的・raw 非依存）。
  */
@@ -20,30 +25,43 @@ import { parse as parseYaml } from "yaml";
 
 const ROOT = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
 const CH = join(ROOT, "data", "champions");
+const LANG = join(ROOT, "data", "languages");
 const OUT = join(ROOT, "data", "generated");
+const CHOUT = join(OUT, "champions");
+const LANGOUT = join(OUT, "languages");
 
-/** カタログ共通の日英名（名前の SoT は catalog YAML・Phase 10）。 */
 interface NamePair {
   ja: string;
   en: string;
 }
-/** 種族の構造データ（catalog SoT・materialize が raw から転記・ADR 0027）。 */
-interface SpeciesStructural {
+interface Stats {
+  H: number;
+  A: number;
+  B: number;
+  C: number;
+  D: number;
+  S: number;
+}
+interface SpeciesSpecYaml {
   dex: number;
   types: string[];
-  stats: { H: number; A: number; B: number; C: number; D: number; S: number };
+  stats: Stats;
   abilities: string[];
+  megaEvolvesTo?: string[];
 }
-interface SpeciesCatalog {
-  // id -> 日英名 + 構造データ（種族値 / タイプ / 特性 id / 図鑑番号）。catalog が SoT（ADR 0027）。
-  pokemon: Record<string, NamePair & SpeciesStructural>;
-  // 1 base 種族 -> メガ先 SpeciesId の配列（1 種族複数メガを許容・ADR 0022）。
-  megaLinks?: Record<string, string[]>;
+interface MegaSpecYaml {
+  dex: number;
+  types: string[];
+  stats: Stats;
+  ability: string;
+  baseSpecies: string;
 }
-interface MoveStatsMeta {
-  // per-game 技メタ（type / damageClass / power / accuracy / pp / priority）。技の数値は Champions 固有調整が
-  // あり得るため per-game の regulations/champions/moves.yaml が SoT（ADR 0034・ADR 0026 の核「PokeAPI を信頼源に
-  // しない」は不変で、所在を catalog → per-game へ精緻化）。
+interface ItemSpecYaml {
+  category?: string;
+  megaStoneFor?: string;
+  megaSpecies?: string;
+}
+interface MoveStatsYaml {
   type: string;
   damageClass: string;
   power: number | null;
@@ -51,134 +69,132 @@ interface MoveStatsMeta {
   pp: number;
   priority: number;
 }
-interface MovesCatalog {
-  // id -> 日英名のみ（名前はゲーム非依存なので catalog が SoT・Phase 11）。技メタは MoveStatsCatalog が持つ。
-  moves: Record<string, NamePair>;
+interface RegIndexYaml {
+  name: NamePair;
+  period: { start: string; end: string | null };
 }
-interface MoveStatsCatalog {
-  // id -> 技メタ（per-game 共有・regulations/champions/moves.yaml が SoT・Phase 11 / ADR 0034）。
-  moves: Record<string, MoveStatsMeta>;
-}
-interface ItemsCatalog {
-  // id -> 日英名 + megaStoneFor（旧 itemMeta を各エントリへ統合・Phase 10）+ category（catalog SoT・
-  // materialize が raw から転記・ADR 0027）。
-  items: Record<
-    string,
-    NamePair & { megaStoneFor?: string; megaSpecies?: string; category: string }
-  >;
-}
-interface AbilitiesCatalog {
-  // id -> 日英名。生成 abilities.ts は id のみ（name は持たない）。
-  abilities: Record<string, NamePair>;
-}
-interface TypesCatalog {
-  // id -> 日英名 + 攻撃側相性倍率 damageTo（非 1.0 のみ記録・generate が 1.0 を補完・Phase 10）。
-  types: Record<string, NamePair & { damageTo?: Record<string, number> }>;
-}
-/**
- * レギュレーション YAML（ADR 0022・block 記法）。`name` / `period` / `items` は予約キー。
- * それ以外のトップレベルキーは**種族 ID = 解禁種族**（キーの存在 = allow）で、値は `SpeciesAllow`。
- * 予約キーと種族キーを同階層で混在させるため、parse 後は `Record<string, unknown>` として読み、
- * 予約キーを `RESERVED_REG_KEYS` で仕分ける。
- */
-interface SpeciesAllow {
-  moves: string[];
-  // メガ運用種族のメガ先 SpeciesId 配列（複数メガ可）。
-  mega?: string[];
-}
-const RESERVED_REG_KEYS = new Set(["name", "period", "items"]);
-/** レギュレーション YAML の種族 ID キー（予約キー以外）を列挙する。 */
-const regSpeciesKeys = (r: Record<string, unknown>): string[] =>
-  Object.keys(r).filter((k) => !RESERVED_REG_KEYS.has(k));
-/** 種族キーの解禁内容（moves / mega）を取り出す。 */
-const speciesAllowOf = (r: Record<string, unknown>, sid: string): SpeciesAllow =>
-  r[sid] as SpeciesAllow;
 
-const ch = <T>(file: string): T => parseYaml(readFileSync(join(CH, file), "utf8")) as T;
+const rd = <T>(file: string): T => parseYaml(readFileSync(file, "utf8")) as T;
 
 /** オブジェクトを TS リテラルとして直列化（Biome が後段で整形する）。 */
 const lit = (value: unknown): string => JSON.stringify(value, null, 2);
 
-const speciesCat = ch<SpeciesCatalog>("catalog/species.yaml");
-const movesCat = ch<MovesCatalog>("catalog/moves.yaml");
-// 技メタ（per-game 共有）は regulations/champions/moves.yaml が SoT（Phase 11 / ADR 0034）。
-const moveStatsCat = ch<MoveStatsCatalog>("regulations/champions/moves.yaml");
-const itemsCat = ch<ItemsCatalog>("catalog/items.yaml");
-const abilitiesCat = ch<AbilitiesCatalog>("catalog/abilities.yaml");
-const typesCat = ch<TypesCatalog>("catalog/types.yaml");
+// --- 入力（構造 specs・data/champions） --------------------------------------
+const speciesSpecs = rd<{ species: Record<string, SpeciesSpecYaml> }>(
+  join(CH, "species-specs.yaml"),
+).species;
+const megaSpecs = rd<{ mega: Record<string, MegaSpecYaml> }>(join(CH, "mega-specs.yaml")).mega;
+const itemSpecs = rd<{ items: Record<string, ItemSpecYaml> }>(join(CH, "item-specs.yaml")).items;
+const abilityList = rd<{ abilities: string[] }>(join(CH, "ability-specs.yaml")).abilities;
+const moveSpecs = rd<{ moves: Record<string, MoveStatsYaml> }>(join(CH, "move-specs.yaml")).moves;
+const typeSpecs = rd<{ types: Record<string, { damageTo?: Record<string, number> }> }>(
+  join(CH, "type-specs.yaml"),
+).types;
 
-// 種族 slug 一覧（catalog/species.yaml の pokemon キー）。
-const speciesSlugs = Object.keys(speciesCat.pokemon);
-// 18 タイプの id 集合（catalog/types.yaml のキー = 旧ハードコード列挙の置き換え）。
-const TYPES = Object.keys(typesCat.types);
+// --- 入力（名前 languages・data/languages） ----------------------------------
+const langSpecies = rd<{ species: Record<string, NamePair> }>(join(LANG, "species.yaml")).species;
+const langMega = rd<{ mega: Record<string, NamePair> }>(join(LANG, "mega.yaml")).mega;
+const langItems = rd<{ items: Record<string, NamePair> }>(join(LANG, "items.yaml")).items;
+const langMoves = rd<{ moves: Record<string, NamePair> }>(join(LANG, "moves.yaml")).moves;
+const langAbilities = rd<{ abilities: Record<string, NamePair> }>(
+  join(LANG, "abilities.yaml"),
+).abilities;
+const langTypes = rd<{ types: Record<string, NamePair> }>(join(LANG, "types.yaml")).types;
 
-// authoring ゲート: 各 catalog エントリに ja/en が揃っているか検証（名前の SoT は catalog YAML・
-// 欠落は非0終了で弾く・Phase 10）。
-const requireNames = (kind: string, m: Record<string, { ja?: string; en?: string }>): void => {
-  for (const [id, v] of Object.entries(m)) {
-    if (!v?.ja || !v?.en) {
-      throw new Error(
-        `catalog ${kind} '${id}' is missing ja/en name (catalog YAML is the name SoT)`,
-      );
-    }
+const TYPES = Object.keys(typeSpecs);
+const abilitySet = new Set(abilityList);
+
+// --- authoring ゲート: 名前突き合わせ（languages の id 集合 = specs の id 集合・ja/en 完備） ---------
+const requireNames = (
+  kind: string,
+  ids: readonly string[],
+  names: Record<string, NamePair>,
+): void => {
+  const nameIds = new Set(Object.keys(names));
+  for (const id of ids) {
+    const n = names[id];
+    if (!n) throw new Error(`languages/${kind}: '${id}' has no name entry (name SoT is languages)`);
+    if (!n.ja || !n.en) throw new Error(`languages/${kind}: '${id}' missing ja/en`);
+    nameIds.delete(id);
+  }
+  if (nameIds.size > 0) {
+    throw new Error(`languages/${kind}: orphan name ids without spec: ${[...nameIds].join(", ")}`);
   }
 };
-requireNames("species", speciesCat.pokemon);
-requireNames("moves", movesCat.moves);
-requireNames("abilities", abilitiesCat.abilities);
-requireNames("items", itemsCat.items);
-requireNames("types", typesCat.types);
+requireNames("species", Object.keys(speciesSpecs), langSpecies);
+requireNames("mega", Object.keys(megaSpecs), langMega);
+requireNames("items", Object.keys(itemSpecs), langItems);
+requireNames("moves", Object.keys(moveSpecs), langMoves);
+requireNames("abilities", abilityList, langAbilities);
+requireNames("types", TYPES, langTypes);
 
-// レギュレーションはゲームサブディレクトリでグルーピング（data/champions/regulations/<game>/<reg>.yaml・
-// Phase 10）。安定 id は `<game>-<reg>`（例 `champions/m-a.yaml` → `champions-m-a`）で導出し、RegulationId
-// リテラル・生成 `regulations/<id>/` を不変に保つ（ソースのレイアウトだけ変え型・生成の同一性は壊さない）。
-const REG_DIR = join(CH, "regulations");
-// per-game 共有ファイル（reg ではない・Phase 11 の技メタ `moves.yaml` 等）はレギュ列挙から除外する。
-const REG_SHARED_FILES = new Set(["moves.yaml"]);
-const regs: Record<string, Record<string, unknown>> = {};
-for (const game of readdirSync(REG_DIR, { withFileTypes: true })
-  .filter((e) => e.isDirectory())
-  .map((e) => e.name)
-  .sort()) {
-  const gameDir = join(REG_DIR, game);
-  for (const file of readdirSync(gameDir)
-    .filter((f) => f.endsWith(".yaml") && !REG_SHARED_FILES.has(f))
-    .sort()) {
-    const id = `${game}-${file.replace(/\.yaml$/, "")}`;
-    regs[id] = parseYaml(readFileSync(join(gameDir, file), "utf8")) as Record<string, unknown>;
+// 参照整合: 種族 / メガの特性が ability 集合に存在するか（append-only catalog の担保）。
+for (const [id, s] of Object.entries(speciesSpecs)) {
+  for (const a of s.abilities) {
+    if (!abilitySet.has(a)) throw new Error(`species '${id}' ability '${a}' not in ability-specs`);
+  }
+}
+for (const [id, m] of Object.entries(megaSpecs)) {
+  if (!abilitySet.has(m.ability)) {
+    throw new Error(`mega '${id}' ability '${m.ability}' not in ability-specs`);
   }
 }
 
-// --- types（全 18・name + 相性表とも catalog/types.yaml 由来・raw 非依存・Phase 10） ----------
-const typeEntries: Record<string, unknown> = {};
-for (const t of TYPES) {
-  const c = typesCat.types[t];
-  // 非 1.0 のみ記録された damageTo を、全タイプ 1.0 で初期化したうえで上書きする。
-  const to: Record<string, number> = {};
-  for (const d of TYPES) to[d] = 1;
-  for (const [d, m] of Object.entries(c.damageTo ?? {})) to[d] = m;
-  typeEntries[t] = {
-    id: t,
-    name: { en: c.en, ja: c.ja },
-    damageTo: to,
+/** 能力ポイント表記 H/A/B/C/D/S を生成形（hp/attack/...）へ写す。 */
+const toBaseStats = (s: Stats): Record<string, number> => ({
+  hp: s.H,
+  attack: s.A,
+  defense: s.B,
+  spAttack: s.C,
+  spDefense: s.D,
+  speed: s.S,
+});
+
+// --- champions/species-specs ------------------------------------------------
+const speciesSpecEntries: Record<string, unknown> = {};
+for (const [id, s] of Object.entries(speciesSpecs)) {
+  const e: Record<string, unknown> = {
+    dex: s.dex,
+    id,
+    types: s.types,
+    baseStats: toBaseStats(s.stats),
+    abilities: s.abilities,
+  };
+  if (s.megaEvolvesTo && s.megaEvolvesTo.length > 0) e.megaEvolvesTo = s.megaEvolvesTo;
+  speciesSpecEntries[id] = e;
+}
+
+// --- champions/mega-specs ---------------------------------------------------
+const megaSpecEntries: Record<string, unknown> = {};
+for (const [id, m] of Object.entries(megaSpecs)) {
+  megaSpecEntries[id] = {
+    dex: m.dex,
+    id,
+    types: m.types,
+    baseStats: toBaseStats(m.stats),
+    ability: m.ability,
+    baseSpecies: m.baseSpecies,
   };
 }
 
-// --- moves（id + 名前のみ・catalog/moves.yaml 由来・名前はゲーム非依存・Phase 11） ----------------
-const moveEntries: Record<string, unknown> = {};
-for (const [m, name] of Object.entries(movesCat.moves)) {
-  moveEntries[m] = {
-    id: m,
-    name: { en: name.en, ja: name.ja },
-  };
+// --- champions/item-specs ---------------------------------------------------
+const itemSpecEntries: Record<string, unknown> = {};
+for (const [id, meta] of Object.entries(itemSpecs)) {
+  const e: Record<string, unknown> = { id };
+  if (meta.category) e.category = meta.category;
+  if (meta.megaStoneFor) e.megaStoneFor = meta.megaStoneFor;
+  if (meta.megaSpecies) e.megaSpecies = meta.megaSpecies;
+  itemSpecEntries[id] = e;
 }
 
-// --- move stats（per-game 技メタ・regulations/champions/moves.yaml 由来・Champions 固有値・ADR 0034） ---
-// 技威力等を PokeAPI raw から導出しない（PokeAPI は Champions 非対応・ADR 0026 の核は不変）。技メタの欠落は
-// 下流の satisfies で生成段 tsc が弾く。catalog の名前 id と技メタ id の集合が一致することを検証する。
-const moveStatsEntries: Record<string, unknown> = {};
-for (const [m, meta] of Object.entries(moveStatsCat.moves)) {
-  moveStatsEntries[m] = {
+// --- champions/ability-specs ------------------------------------------------
+const abilitySpecEntries: Record<string, unknown> = {};
+for (const a of [...abilityList].sort()) abilitySpecEntries[a] = { id: a };
+
+// --- champions/move-specs (per-game 技メタ・Champions 固有値・ADR 0034) ---------
+const moveSpecEntries: Record<string, unknown> = {};
+for (const [m, meta] of Object.entries(moveSpecs)) {
+  moveSpecEntries[m] = {
     type: meta.type,
     damageClass: meta.damageClass,
     power: meta.power ?? null,
@@ -187,94 +203,95 @@ for (const [m, meta] of Object.entries(moveStatsCat.moves)) {
     priority: meta.priority,
   };
 }
-// 名前カタログと技メタの id 集合の整合（どちらか欠けは authoring 漏れ）。
-for (const m of Object.keys(movesCat.moves)) {
-  if (!(m in moveStatsCat.moves)) {
-    throw new Error(
-      `move '${m}' has a name in catalog/moves.yaml but no stats in regulations/champions/moves.yaml`,
-    );
-  }
-}
-for (const m of Object.keys(moveStatsCat.moves)) {
-  if (!(m in movesCat.moves)) {
-    throw new Error(
-      `move '${m}' has stats in regulations/champions/moves.yaml but no name in catalog/moves.yaml`,
-    );
-  }
+
+// --- champions/type-specs (全 18・非 1.0 のみ記録された damageTo を 1.0 補完) ------
+const typeSpecEntries: Record<string, unknown> = {};
+for (const t of TYPES) {
+  const to: Record<string, number> = {};
+  for (const d of TYPES) to[d] = 1;
+  for (const [d, m] of Object.entries(typeSpecs[t]?.damageTo ?? {})) to[d] = m;
+  typeSpecEntries[t] = { id: t, damageTo: to };
 }
 
-// --- abilities（catalog/abilities.yaml を正本に id のみ生成・name は持たない・Phase 10） ------
-// 効果定義は後続フェーズで足す前提で生成ファイル自体は残す。種族の特性はこの id を参照する。
-// 参照整合: 各種族の特性（catalog SoT・ADR 0027）が abilities カタログに存在することを検証する。
-const abilitySet = new Set(Object.keys(abilitiesCat.abilities));
-for (const slug of speciesSlugs) {
-  for (const a of speciesCat.pokemon[slug].abilities) {
-    if (!abilitySet.has(a)) {
-      throw new Error(
-        `ability '${a}' of '${slug}' not in catalog/abilities.yaml (append-only catalog)`,
-      );
+// --- languages（forward マップ id→{ id, name }） ------------------------------
+const nameEntries = (m: Record<string, NamePair>): Record<string, unknown> => {
+  const out: Record<string, unknown> = {};
+  for (const [id, n] of Object.entries(m)) out[id] = { id, name: { en: n.en, ja: n.ja } };
+  return out;
+};
+
+// --- regulations（per-reg・ゲームサブディレクトリ）---------------------------
+// 安定 id は `<game>-<reg>`（dir `champions/m-a` → `champions-m-a`）。reg 共有ファイル（reg でない）はない
+// （技メタは move-specs に移行済み）。各 reg dir は index/species/items/mega/species-moves を持つ。
+const REG_GAMES = readdirSync(CH, { withFileTypes: true })
+  .filter((e) => e.isDirectory())
+  .map((e) => e.name)
+  .filter((name) => {
+    // reg dir のみ（index.yaml を持つ）。specs/languages は CH 直下のファイル・LANG は別ツリー。
+    try {
+      return readdirSync(join(CH, name)).includes("index.yaml");
+    } catch {
+      return false;
     }
-  }
-}
-const abilityEntries: Record<string, unknown> = {};
-for (const a of Object.keys(abilitiesCat.abilities).sort()) {
-  abilityEntries[a] = { id: a };
-}
+  })
+  .sort();
 
-// --- items（id-only + category(catalog) + megaStoneFor(yaml)・name は持たない・Phase 10/ADR 0027） --
-const itemEntries: Record<string, unknown> = {};
-for (const [i, meta] of Object.entries(itemsCat.items)) {
-  const entry: Record<string, unknown> = {
-    id: i,
-    category: meta.category,
+interface RegData {
+  id: string;
+  dir: string;
+  game: string;
+  reg: string;
+  meta: RegIndexYaml;
+  species: string[];
+  items: string[];
+  mega: Record<string, string[]>;
+  speciesMoves: Record<string, string[]>;
+}
+const GAME = "champions";
+const regs: RegData[] = REG_GAMES.map((reg) => {
+  const dir = join(CH, reg);
+  return {
+    id: `${GAME}-${reg}`,
+    dir,
+    game: GAME,
+    reg,
+    meta: rd<RegIndexYaml>(join(dir, "index.yaml")),
+    species: rd<{ species: string[] }>(join(dir, "species.yaml")).species,
+    items: rd<{ items: string[] }>(join(dir, "items.yaml")).items,
+    mega: rd<{ mega: Record<string, string[]> }>(join(dir, "mega.yaml")).mega ?? {},
+    speciesMoves: rd<{ moves: Record<string, string[]> }>(join(dir, "species-moves.yaml")).moves,
   };
-  if (meta.megaStoneFor) entry.megaStoneFor = meta.megaStoneFor;
-  if (meta.megaSpecies) entry.megaSpecies = meta.megaSpecies;
-  itemEntries[i] = entry;
-}
+});
 
-// --- regulations（per-reg・1 レギュ = 1 ディレクトリ + index 集約。解禁判定の正本・ADR 0021） -----
-// レギュメタ（regEntries）は name/period/解禁集合のみ。per-reg 習得技は別途 perRegSpecies（種族 dex）が持つ。
-// 参照整合: 解禁集合の id がカタログに存在することを生成段で検証する（append-only マスターの担保）。
-const speciesIdSet = new Set(speciesSlugs);
-const itemIdSet = new Set(Object.keys(itemsCat.items));
-const moveCatSet = new Set(Object.keys(movesCat.moves));
-const regEntries: Record<string, Record<string, unknown>> = {};
-for (const [id, reg] of Object.entries(regs)) {
-  // 種族キー（解禁種族）・解禁 mega（per-species mega の和集合）・解禁技（per-species moves の和集合）を集計。
-  const speciesKeys = regSpeciesKeys(reg);
-  const items = (reg.items as string[] | undefined) ?? [];
-  const megaSet = new Set<string>();
-  const movesUnion = new Set<string>();
-  for (const sid of speciesKeys) {
-    const allow = speciesAllowOf(reg, sid);
-    for (const mv of allow.moves) movesUnion.add(mv);
-    for (const mg of allow.mega ?? []) megaSet.add(mg);
-  }
-  const mega = [...megaSet];
-  const check = (kind: string, ids: string[], pool: Set<string>): void => {
+// 参照整合（解禁 id が catalog に存在・append-only マスターの担保）。
+const speciesIdSet = new Set(Object.keys(speciesSpecs));
+const megaIdSet = new Set(Object.keys(megaSpecs));
+const itemIdSet = new Set(Object.keys(itemSpecs));
+const moveIdSet = new Set(Object.keys(moveSpecs));
+for (const r of regs) {
+  const check = (kind: string, ids: readonly string[], pool: Set<string>): void => {
     for (const v of ids) {
-      if (!pool.has(v)) {
-        throw new Error(`regulation '${id}' ${kind} '${v}' not in catalog (append-only catalog)`);
-      }
+      if (!pool.has(v)) throw new Error(`regulation '${r.id}' ${kind} '${v}' not in catalog`);
     }
   };
-  check("species", speciesKeys, speciesIdSet);
-  check("mega", mega, speciesIdSet);
-  check("items", items, itemIdSet);
-  check("moves", [...movesUnion], moveCatSet);
-  // メタは species / items / mega（解禁集合）のみ。per-reg 習得技は perRegSpecies が持つ（ADR 0021）。
-  const name = reg.name as { en: string; ja: string };
-  const period = reg.period as { start: string; end: string | null };
-  regEntries[id] = {
-    id,
-    name,
-    period: { start: period.start, end: period.end ?? null },
-    species: speciesKeys,
-    items,
-    mega,
-  };
+  check("species", r.species, speciesIdSet);
+  check("items", r.items, itemIdSet);
+  for (const [sid, ms] of Object.entries(r.mega)) {
+    if (!speciesIdSet.has(sid))
+      throw new Error(`regulation '${r.id}' mega base '${sid}' not roster`);
+    check("mega", ms, megaIdSet);
+  }
+  for (const [sid, mv] of Object.entries(r.speciesMoves)) {
+    if (!speciesIdSet.has(sid))
+      throw new Error(`regulation '${r.id}' moves species '${sid}' unknown`);
+    check("moves", mv, moveIdSet);
+  }
 }
+
+/** プロパティアクセス式を組む（識別子なら dot・ハイフン等を含むなら bracket・biome useLiteralKeys 整合）。 */
+const acc = (obj: string, key: string): string =>
+  /^[A-Za-z_$][\w$]*$/.test(key) ? `${obj}.${key}` : `${obj}[${JSON.stringify(key)}]`;
+
 /** "champions-m-a" -> "championsMA"（per-reg const 名）。 */
 const camel = (id: string): string =>
   id
@@ -282,195 +299,147 @@ const camel = (id: string): string =>
     .map((p, i) => (i === 0 ? p : p.charAt(0).toUpperCase() + p.slice(1)))
     .join("");
 
-// --- species（reg 不変 info）------------------------------------
-// reg 不変フィールド（dex/name/types/baseStats/abilities/megaEvolvesTo）を全種族ぶん用意し、
-// per-reg dex / species-base / names の素材にする。per-reg の習得技は YAML 由来（per-reg dex 構築時に採用）。
-const speciesInfo: Record<string, Record<string, unknown>> = {};
-for (const slug of speciesSlugs) {
-  // 名前・種族値・タイプ・特性・図鑑番号とも catalog/species.yaml 由来（構造データ SoT を raw から
-  // catalog へ移設・materialize が転記・ADR 0027）。generate は raw を読まない。
-  const cat = speciesCat.pokemon[slug];
-  const name = { en: cat.en, ja: cat.ja };
-  // 能力ポイント表記 H/A/B/C/D/S を生成形（hp/attack/defense/spAttack/spDefense/speed）へ写す。
-  const base = {
-    hp: cat.stats.H,
-    attack: cat.stats.A,
-    defense: cat.stats.B,
-    spAttack: cat.stats.C,
-    spDefense: cat.stats.D,
-    speed: cat.stats.S,
-  };
-  const info: Record<string, unknown> = {
-    dex: cat.dex,
-    id: slug,
-    name,
-    types: cat.types,
-    baseStats: base,
-    abilities: cat.abilities,
-  };
-  const mega = speciesCat.megaLinks?.[slug];
-  if (mega && mega.length > 0) info.megaEvolvesTo = mega;
-  speciesInfo[slug] = info;
-}
-
-// --- species-base（reg 不変フィールドのみの派生 base view・全種族） -----------
-// 実数値計算・名前表示・coverage はレギュ非依存のためこの base view を引く（設計判断5・per-reg 化）。
-const speciesBaseEntries: Record<string, unknown> = {};
-for (const [id, e] of Object.entries(speciesInfo)) {
-  const s = e as Record<string, unknown>;
-  const base: Record<string, unknown> = {
-    dex: s.dex,
-    id: s.id,
-    name: s.name,
-    types: s.types,
-    baseStats: s.baseStats,
-  };
-  if (s.megaEvolvesTo) base.megaEvolvesTo = s.megaEvolvesTo;
-  speciesBaseEntries[id] = base;
-}
-
-// --- per-regulation species dex（roster ∪ mega 先・per-reg 習得技を含む legality 正本） ----------
-// トップレベル種族キー: moves は YAML 由来をそのまま採用（変換専任・ADR 0023）。覚えない技の検証は
-// authoring 時ゲート check:regulation が担う（generate は検証しない）。megaEvolvesTo は per-reg の mega（配列）。
-// mega 先のみの種族（種族キーでない）: moves は base 種族の per-reg moves を継承する（同一 movepool・ADR 0024）。
-const perRegSpecies: Record<string, Record<string, unknown>> = {};
-for (const [id, reg] of Object.entries(regs)) {
-  const speciesKeys = regSpeciesKeys(reg);
-  const keySet = new Set(speciesKeys);
-  // mega 先 -> base 種族キーの逆引き（base の per-reg moves を継承するため・ADR 0024）。
-  const megaToBase: Record<string, string> = {};
-  for (const sid of speciesKeys) {
-    for (const mg of speciesAllowOf(reg, sid).mega ?? []) megaToBase[mg] = sid;
-  }
-  const rosterIds = [...new Set([...speciesKeys, ...Object.keys(megaToBase)])];
-  const dex: Record<string, unknown> = {};
-  for (const sid of rosterIds) {
-    const info = speciesInfo[sid];
-    if (!info) throw new Error(`regulation '${id}' roster species '${sid}' missing from catalog`);
-    let moves: string[];
-    let megaEvolvesTo: string[] | undefined;
-    if (keySet.has(sid)) {
-      // generate は変換専任（ADR 0023）。覚えない技の検証は authoring 時ゲート check:regulation が担う。
-      const allow = speciesAllowOf(reg, sid);
-      moves = allow.moves;
-      if (allow.mega && allow.mega.length > 0) megaEvolvesTo = allow.mega;
-    } else {
-      // mega 先のみ: base 種族の per-reg moves を継承する（実ゲームは技を base 形態に登録・同一 movepool・ADR 0024）。
-      moves = speciesAllowOf(reg, megaToBase[sid]).moves;
-    }
-    // name（ja/en）は per-reg dex には載せない（種族名 SoT は speciesBaseDex・Phase 8 の dedup）。
-    const entry: Record<string, unknown> = {
-      dex: info.dex,
-      id: info.id,
-      types: info.types,
-      baseStats: info.baseStats,
-      abilities: info.abilities,
-      moves,
-      items: "any",
-    };
-    if (megaEvolvesTo) entry.megaEvolvesTo = megaEvolvesTo;
-    dex[sid] = entry;
-  }
-  perRegSpecies[id] = dex;
-}
-
-// --- names（ja 名 -> id の逆引き・ランタイム正規化用） ----------------------
-// 生成 dex が name を持つ species/moves/types は dex から、id-only の abilities/items は
-// catalog YAML（名前の SoT・Phase 10）から ja を引く。
-const jaMap = (entries: Record<string, unknown>): Record<string, string> => {
-  const out: Record<string, string> = {};
-  for (const [id, e] of Object.entries(entries)) {
-    out[(e as { name: { ja: string } }).name.ja] = id;
-  }
-  return out;
-};
-const jaMapCat = (m: Record<string, { ja: string }>): Record<string, string> => {
-  const out: Record<string, string> = {};
-  for (const [id, v] of Object.entries(m)) out[v.ja] = id;
-  return out;
-};
-
-// --- emit ------------------------------------------------------------------
-mkdirSync(OUT, { recursive: true });
-mkdirSync(join(OUT, "regulations"), { recursive: true });
+// --- emit -------------------------------------------------------------------
+mkdirSync(CHOUT, { recursive: true });
+mkdirSync(LANGOUT, { recursive: true });
 const header =
-  "// 生成物（scripts/generate.ts 出力）。手書き編集しない。raw/champions を直し再生成する。\n";
-
+  "// 生成物（scripts/generate.ts 出力）。手書き編集しない。data/champions・data/languages を直し再生成する。\n";
 const emit = (file: string, body: string): void => {
-  writeFileSync(join(OUT, file), header + body);
+  const abs = join(OUT, file);
+  mkdirSync(dirname(abs), { recursive: true });
+  writeFileSync(abs, header + body);
 };
 
+// champions/*-specs.ts
 emit(
-  "types.ts",
-  `import type { TypeBase } from "../../src/types/type-chart.ts";\n\nexport const typeDex = ${lit(typeEntries)} as const satisfies Record<string, TypeBase>;\n\nexport type TypeDex = typeof typeDex;\n`,
+  join("champions", "species-specs.ts"),
+  `import type { SpeciesSpec } from "../../../src/types/species.ts";\n\nexport const speciesSpecsDex = ${lit(speciesSpecEntries)} as const satisfies Record<string, SpeciesSpec>;\n\nexport type SpeciesSpecsDex = typeof speciesSpecsDex;\nexport type SpeciesSpecId = keyof SpeciesSpecsDex;\n`,
 );
 emit(
-  "moves.ts",
-  `import type { MoveBase } from "../../src/types/move.ts";\n\nexport const moveDex = ${lit(moveEntries)} as const satisfies Record<string, MoveBase>;\n\nexport type MoveDex = typeof moveDex;\nexport type MoveId = keyof MoveDex;\n`,
-);
-// per-game 技メタ dex（regulations/champions/moves.ts・Champions 固有値・Phase 11 / ADR 0034）。
-mkdirSync(join(OUT, "regulations", "champions"), { recursive: true });
-emit(
-  join("regulations", "champions", "moves.ts"),
-  `import type { MoveStats } from "../../../../src/types/move.ts";\n\nexport const moveStatsDex = ${lit(moveStatsEntries)} as const satisfies Record<string, MoveStats>;\n\nexport type MoveStatsDex = typeof moveStatsDex;\n`,
+  join("champions", "mega-specs.ts"),
+  `import type { MegaSpec } from "../../../src/types/species.ts";\n\nexport const megaSpecsDex = ${lit(megaSpecEntries)} as const satisfies Record<string, MegaSpec>;\n\nexport type MegaSpecsDex = typeof megaSpecsDex;\nexport type MegaSpecId = keyof MegaSpecsDex;\n`,
 );
 emit(
-  "abilities.ts",
-  `import type { AbilityBase } from "../../src/types/ability.ts";\n\nexport const abilityDex = ${lit(abilityEntries)} as const satisfies Record<string, AbilityBase>;\n\nexport type AbilityDex = typeof abilityDex;\nexport type AbilityId = keyof AbilityDex;\n`,
+  join("champions", "item-specs.ts"),
+  `import type { Assignable } from "../../../src/types/assert.ts";\nimport type { ItemBase } from "../../../src/types/item.ts";\n\nexport const itemSpecsDex = ${lit(itemSpecEntries)} as const;\n\nexport type ItemSpecsDex = typeof itemSpecsDex;\nexport type ItemId = keyof ItemSpecsDex;\n\n// 適合検証（megaSpecies が派生 SpeciesId を指すため inline satisfies を避け分離する）。\nexport type _ItemConforms = Assignable<Record<string, ItemBase>, ItemSpecsDex>;\n`,
 );
 emit(
-  "items.ts",
-  `import type { Assignable } from "../../src/types/assert.ts";\nimport type { ItemBase } from "../../src/types/item.ts";\n\nexport const itemDex = ${lit(itemEntries)} as const;\n\nexport type ItemDex = typeof itemDex;\nexport type ItemId = keyof ItemDex;\n\n// 適合検証（megaStoneFor が派生 SpeciesId を指すため inline satisfies を避け分離する）。\nexport type _ItemConforms = Assignable<Record<string, ItemBase>, ItemDex>;\n`,
+  join("champions", "ability-specs.ts"),
+  `import type { AbilityBase } from "../../../src/types/ability.ts";\n\nexport const abilitySpecsDex = ${lit(abilitySpecEntries)} as const satisfies Record<string, AbilityBase>;\n\nexport type AbilitySpecsDex = typeof abilitySpecsDex;\nexport type AbilityId = keyof AbilitySpecsDex;\n`,
 );
-// species-base: reg 不変 base view（全種族・派生）。
 emit(
-  "species-base.ts",
-  `import type { SpeciesBaseInfo } from "../../src/types/species.ts";\n\nexport const speciesBaseDex = ${lit(speciesBaseEntries)} as const satisfies Record<string, SpeciesBaseInfo>;\n\nexport type SpeciesBaseDex = typeof speciesBaseDex;\nexport type SpeciesBaseId = keyof SpeciesBaseDex;\n`,
+  join("champions", "move-specs.ts"),
+  `import type { MoveStats } from "../../../src/types/move.ts";\n\nexport const moveSpecsDex = ${lit(moveSpecEntries)} as const satisfies Record<string, MoveStats>;\n\nexport type MoveSpecsDex = typeof moveSpecsDex;\nexport type MoveId = keyof MoveSpecsDex;\n`,
 );
-// regulations: 1 レギュ = 1 ディレクトリ。<id>/species.ts（per-reg dex）+ <id>/index.ts（メタ）。
-// 集約 index.ts が regulationDex に集める。
-for (const [id, entry] of Object.entries(regEntries)) {
-  mkdirSync(join(OUT, "regulations", id), { recursive: true });
+emit(
+  join("champions", "type-specs.ts"),
+  `import type { TypeSpec } from "../../../src/types/type-chart.ts";\n\nexport const typeSpecsDex = ${lit(typeSpecEntries)} as const satisfies Record<string, TypeSpec>;\n\nexport type TypeSpecsDex = typeof typeSpecsDex;\n`,
+);
+
+// languages/*.ts
+const langFiles: [string, string, Record<string, NamePair>][] = [
+  ["species", "speciesNames", langSpecies],
+  ["mega", "megaNames", langMega],
+  ["items", "itemNames", langItems],
+  ["moves", "moveNames", langMoves],
+  ["abilities", "abilityNames", langAbilities],
+  ["types", "typeNames", langTypes],
+];
+for (const [file, name, map] of langFiles) {
   emit(
-    join("regulations", id, "species.ts"),
-    `import type { PerRegSpecies } from "../../../../src/types/species.ts";\n\nexport const speciesDex = ${lit(perRegSpecies[id])} as const satisfies Record<string, PerRegSpecies>;\n\nexport type SpeciesDex = typeof speciesDex;\nexport type SpeciesId = keyof SpeciesDex;\n`,
-  );
-  // メタに speciesDex（import 参照）を同梱して RegulationDex[R]["speciesDex"] から引けるようにする。
-  const metaBody = lit(entry).replace(/\n\}$/, ",\n  speciesDex,\n}");
-  emit(
-    join("regulations", id, "index.ts"),
-    `import type { RegulationBase } from "../../../../src/types/regulation.ts";\nimport { speciesDex } from "./species.ts";\n\nexport { speciesDex };\nexport type { SpeciesDex, SpeciesId } from "./species.ts";\n\nexport const ${camel(id)} = ${metaBody} as const satisfies RegulationBase;\n`,
+    join("languages", `${file}.ts`),
+    `import type { NameEntry } from "../../../src/types/name.ts";\n\nexport const ${name} = ${lit(nameEntries(map))} as const satisfies Record<string, NameEntry>;\n\nexport type ${name.charAt(0).toUpperCase() + name.slice(1)} = typeof ${name};\n`,
   );
 }
 {
-  const ids = Object.keys(regEntries);
-  const imports = ids.map((id) => `import { ${camel(id)} } from "./${id}/index.ts";`).join("\n");
-  const members = ids.map((id) => `  ${JSON.stringify(id)}: ${camel(id)},`).join("\n");
+  const imports = langFiles
+    .map(([file, name]) => `import { ${name} } from "./${file}.ts";`)
+    .join("\n");
+  const names = langFiles.map(([, name]) => name);
   emit(
-    join("regulations", "index.ts"),
+    join("languages", "index.ts"),
+    `${imports}\n\nexport { ${names.join(", ")} };\n\n// base + メガ名を統合した forward マップ（種族表示名の実行時ルックアップ用）。\nexport const speciesNamesAll = { ...speciesNames, ...megaNames };\n`,
+  );
+}
+
+// champions/<reg>/{species,items,mega,species-moves,index}.ts
+for (const r of regs) {
+  const dir = join("champions", r.reg);
+  emit(join(dir, "species.ts"), `export const species = ${lit(r.species)} as const;\n`);
+  emit(join(dir, "items.ts"), `export const items = ${lit(r.items)} as const;\n`);
+  emit(join(dir, "mega.ts"), `export const mega = ${lit(r.mega)} as const;\n`);
+  emit(
+    join(dir, "species-moves.ts"),
+    `export const speciesMoves = ${lit(r.speciesMoves)} as const;\n`,
+  );
+
+  // index.ts: base/mega specs + species-moves + per-reg mega を実行時合成して speciesDex を作る。
+  // narrow リテラル（reg-aware 型機構の素材）は spread 合成で保たれる（tsc 検証済み）。
+  // base 種族エントリは spread でなく明示フィールド参照で組む（global megaEvolvesTo の漏れを避け、per-reg
+  // mega のみを megaEvolvesTo にする・ADR 0024。narrow リテラルは明示参照でも保たれる・tsc 検証済み）。
+  const baseLines = r.species.map((sid) => {
+    const k = JSON.stringify(sid);
+    const sp = acc("speciesSpecsDex", sid);
+    const megaPart =
+      r.mega[sid] && r.mega[sid].length > 0 ? `, megaEvolvesTo: ${acc("mega", sid)}` : "";
+    return `  ${k}: { id: ${sp}.id, dex: ${sp}.dex, types: ${sp}.types, baseStats: ${sp}.baseStats, abilities: ${sp}.abilities, moves: ${acc("speciesMoves", sid)}, items: "any"${megaPart} },`;
+  });
+  const megaLines: string[] = [];
+  for (const [sid, ms] of Object.entries(r.mega)) {
+    for (const mid of ms) {
+      const k = JSON.stringify(mid);
+      const mp = acc("megaSpecsDex", mid);
+      megaLines.push(
+        `  ${k}: { id: ${mp}.id, dex: ${mp}.dex, types: ${mp}.types, baseStats: ${mp}.baseStats, abilities: [${mp}.ability], moves: ${acc("speciesMoves", sid)}, items: "any" },`,
+      );
+    }
+  }
+  const speciesDexBody = `{\n${[...baseLines, ...megaLines].join("\n")}\n}`;
+  const meta = {
+    id: r.id,
+    name: r.meta.name,
+    period: { start: r.meta.period.start, end: r.meta.period.end ?? null },
+  };
+  const metaLit = lit(meta).replace(
+    /\n\}$/,
+    ",\n  species,\n  items,\n  mega: Object.values(mega).flat(),\n  speciesDex,\n}",
+  );
+  emit(
+    join(dir, "index.ts"),
+    `import type { RegulationBase } from "../../../../src/types/regulation.ts";\n` +
+      `import type { PerRegSpecies } from "../../../../src/types/species.ts";\n` +
+      `import { megaSpecsDex } from "../mega-specs.ts";\n` +
+      `import { speciesSpecsDex } from "../species-specs.ts";\n` +
+      `import { items } from "./items.ts";\n` +
+      `import { mega } from "./mega.ts";\n` +
+      `import { speciesMoves } from "./species-moves.ts";\n` +
+      `import { species } from "./species.ts";\n\n` +
+      `export { species, items, mega, speciesMoves };\n\n` +
+      `export const speciesDex = ${speciesDexBody} as const satisfies Record<string, PerRegSpecies>;\n\n` +
+      `export type SpeciesDex = typeof speciesDex;\nexport type SpeciesId = keyof SpeciesDex;\n\n` +
+      `export const ${camel(r.id)} = ${metaLit} as const satisfies RegulationBase;\n`,
+  );
+}
+
+// champions/index.ts: regulationDex 集約。
+{
+  const imports = regs
+    .map((r) => `import { ${camel(r.id)} } from "./${r.reg}/index.ts";`)
+    .join("\n");
+  const members = regs.map((r) => `  ${JSON.stringify(r.id)}: ${camel(r.id)},`).join("\n");
+  emit(
+    join("champions", "index.ts"),
     `${imports}\n\nexport const regulationDex = {\n${members}\n} as const;\n\nexport type RegulationDex = typeof regulationDex;\nexport type RegulationId = keyof RegulationDex;\n`,
   );
 }
-emit(
-  "names.ts",
-  `// ja 表示名 -> 安定 ID の逆引きマップ（ランタイム正規化用・[[cli-and-io]]）。\n` +
-    `export const speciesIdByJa = ${lit(jaMap(speciesInfo))} as const;\n` +
-    `export const moveIdByJa = ${lit(jaMap(moveEntries))} as const;\n` +
-    `export const abilityIdByJa = ${lit(jaMapCat(abilitiesCat.abilities))} as const;\n` +
-    `export const itemIdByJa = ${lit(jaMapCat(itemsCat.items))} as const;\n` +
-    `export const typeIdByJa = ${lit(jaMap(typeEntries))} as const;\n`,
-);
 
 // Biome で整形して機械ゲート（biome check）と一致させる。
 execFileSync(
   "node",
   [join(ROOT, "node_modules", "@biomejs", "biome", "bin", "biome"), "check", "--write", OUT],
-  {
-    cwd: ROOT,
-    stdio: "inherit",
-  },
+  { cwd: ROOT, stdio: "inherit" },
 );
 
 console.log(
-  `[generate] wrote ${Object.keys(speciesInfo).length} species, ${Object.keys(moveEntries).length} moves, ${TYPES.length} types`,
+  `[generate] wrote ${Object.keys(speciesSpecs).length} species + ${Object.keys(megaSpecs).length} mega, ${Object.keys(moveSpecs).length} moves, ${TYPES.length} types, ${regs.length} regulations`,
 );

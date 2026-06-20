@@ -1,29 +1,44 @@
-import { abilityDex } from "../../data/generated/abilities.ts";
-import { itemDex } from "../../data/generated/items.ts";
-import { moveDex } from "../../data/generated/moves.ts";
+import { abilitySpecsDex } from "../../data/generated/champions/ability-specs.ts";
+import { itemSpecsDex } from "../../data/generated/champions/item-specs.ts";
+import { moveSpecsDex } from "../../data/generated/champions/move-specs.ts";
 import {
-  abilityIdByJa,
-  itemIdByJa,
-  moveIdByJa,
-  speciesIdByJa,
-} from "../../data/generated/names.ts";
-import { speciesBaseDex } from "../../data/generated/species-base.ts";
+  abilityNames,
+  itemNames,
+  moveNames,
+  speciesNamesAll,
+} from "../../data/generated/languages/index.ts";
 import { type NameMaps, resolveName } from "../domain/resolve-names.ts";
 import type { Lang } from "../types/party.ts";
 import type { StatKey } from "../types/stats.ts";
 
 /**
  * codegen が個体 YAML / パーティ MD の生の名称（日本語名 or 英名 ID）を**安定 ID へ正規化**する
- * ヘルパ（薄い変換層・カバレッジ対象外）。種族 / 特性 / 持ち物 / 技は生成済み逆引きマップ越しに
- * `resolveName`（domain・テスト済み）へ委譲し、能力値キーは本モジュールの静的マップで解決する
- * （6 能力は PokeAPI 由来でなくゲーム固定のため）。解決不能は `null` を返し、呼び出し側が生成 TS に
- * 不正値を埋めて tsc に弾かせる（[[tsc-verification]] の「codegen は常に成功し tsc が検出」）。
+ * ヘルパ（薄い変換層・カバレッジ対象外）。種族 / 特性 / 持ち物 / 技は languages の forward マップから
+ * 実行時導出した ja→id 逆引き越しに `resolveName`（domain・テスト済み）へ委譲し、能力値キーは本モジュールの
+ * 静的マップで解決する（6 能力は PokeAPI 由来でなくゲーム固定のため）。解決不能は `null` を返し、呼び出し側が
+ * 生成 TS に不正値を埋めて tsc に弾かせる（[[tsc-verification]] の「codegen は常に成功し tsc が検出」）。
  */
 
-const speciesMaps: NameMaps = { idByJa: speciesIdByJa, ids: new Set(Object.keys(speciesBaseDex)) };
-const abilityMaps: NameMaps = { idByJa: abilityIdByJa, ids: new Set(Object.keys(abilityDex)) };
-const itemMaps: NameMaps = { idByJa: itemIdByJa, ids: new Set(Object.keys(itemDex)) };
-const moveMaps: NameMaps = { idByJa: moveIdByJa, ids: new Set(Object.keys(moveDex)) };
+/** languages forward マップ（id→{ id, name:{ ja } }）から ja→id 逆引きを作る。 */
+const reverseJa = (m: Record<string, { name: { ja: string } }>): Record<string, string> =>
+  Object.fromEntries(Object.entries(m).map(([id, e]) => [e.name.ja, id]));
+
+const speciesMaps: NameMaps = {
+  idByJa: reverseJa(speciesNamesAll),
+  ids: new Set(Object.keys(speciesNamesAll)),
+};
+const abilityMaps: NameMaps = {
+  idByJa: reverseJa(abilityNames),
+  ids: new Set(Object.keys(abilitySpecsDex)),
+};
+const itemMaps: NameMaps = {
+  idByJa: reverseJa(itemNames),
+  ids: new Set(Object.keys(itemSpecsDex)),
+};
+const moveMaps: NameMaps = {
+  idByJa: reverseJa(moveNames),
+  ids: new Set(Object.keys(moveSpecsDex)),
+};
 
 const idOrNull = (raw: string, lang: Lang, maps: NameMaps): string | null => {
   const r = resolveName(raw, lang, maps);

@@ -1,0 +1,89 @@
+# data/languages/species.yaml — base 種族の日英名（id→{ja,en}・名前 SoT・ADR 0035）。
+species:
+  garchomp:
+    ja: ガブリアス
+    en: Garchomp
+  dragonite:
+    ja: カイリュー
+    en: Dragonite
+  salamence:
+    ja: ボーマンダ
+    en: Salamence
+  metagross:
+    ja: メタグロス
+    en: Metagross
+  rotom-wash:
+    ja: ウォッシュロトム
+    en: Wash Rotom
+  charizard:
+    ja: リザードン
+    en: Charizard
+  mewtwo:
+    ja: ミュウツー
+    en: Mewtwo
+  dragapult:
+    ja: ドラパルト
+    en: Dragapult
+  hydreigon:
+    ja: サザンドラ
+    en: Hydreigon
+  aggron:
+    ja: ボスゴドラ
+    en: Aggron
+  alakazam:
+    ja: フーディン
+    en: Alakazam
+  arcanine:
+    ja: ウインディ
+    en: Arcanine
+  blastoise:
+    ja: カメックス
+    en: Blastoise
+  chandelure:
+    ja: シャンデラ
+    en: Chandelure
+  corviknight:
+    ja: アーマーガア
+    en: Corviknight
+  decidueye:
+    ja: ジュナイパー
+    en: Decidueye
+  excadrill:
+    ja: ドリュウズ
+    en: Excadrill
+  garganacl:
+    ja: キョジオーン
+    en: Garganacl
+  gengar:
+    ja: ゲンガー
+    en: Gengar
+  greninja:
+    ja: ゲッコウガ
+    en: Greninja
+  heracross:
+    ja: ヘラクロス
+    en: Heracross
+  krookodile:
+    ja: ワルビアル
+    en: Krookodile
+  lucario:
+    ja: ルカリオ
+    en: Lucario
+  meowscarada:
+    ja: マスカーニャ
+    en: Meowscarada
+  milotic:
+    ja: ミロカロス
+    en: Milotic
+  quaquaval:
+    ja: ウェーニバル
+    en: Quaquaval
+  skeledirge:
+    ja: ラウドボーン
+    en: Skeledirge
+  talonflame:
+    ja: ファイアロー
+    en: Talonflame
+  tyranitar:
+    ja: バンギラス
+    en: Tyranitar
