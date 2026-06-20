@@ -1,0 +1,8 @@
+# data/languages/regulations.yaml — レギュレーション名の日英名（id→{ja,en}）。名前 SoT は languages に一本化（ADR 0035）。
+regulations:
+  champions-m-a:
+    ja: チャンピオンズ レギュレーションM-A
+    en: Champions Regulation M-A
+  champions-m-b:
+    ja: チャンピオンズ レギュレーションM-B
+    en: Champions Regulation M-B

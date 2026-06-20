@@ -7,8 +7,9 @@
  * ファイル読込・YAML パースは io / cli 層（薄い glue）が担う（[[cli-and-io]]）。
  */
 
-/** 予約キー（種族キーでない）。それ以外のトップレベルキー = 解禁種族（ADR 0022）。 */
-export const RESERVED_REGULATION_KEYS: ReadonlySet<string> = new Set(["name", "period", "items"]);
+/** 予約キー（種族キーでない）。それ以外のトップレベルキー = 解禁種族（ADR 0022）。
+ *  レギュ名は languages（regulations.yaml）が SoT で index.yaml に `name` を持たないため予約キーから外す（ADR 0035）。 */
+export const RESERVED_REGULATION_KEYS: ReadonlySet<string> = new Set(["period", "items"]);
 
 /** 検証に必要なカタログの最小集合（id の存在確認用）。 */
 export interface RegulationCatalog {

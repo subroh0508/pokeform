@@ -4,10 +4,11 @@ import { abilityNames } from "./abilities.ts";
 import { itemNames } from "./items.ts";
 import { megaNames } from "./mega.ts";
 import { moveNames } from "./moves.ts";
+import { regulationNames } from "./regulations.ts";
 import { speciesNames } from "./species.ts";
 import { typeNames } from "./types.ts";
 
-export { abilityNames, itemNames, megaNames, moveNames, speciesNames, typeNames };
+export { abilityNames, itemNames, megaNames, moveNames, regulationNames, speciesNames, typeNames };
 
 // base + メガ名を統合した forward マップ（種族表示名の実行時ルックアップ用）。
 export const speciesNamesAll = { ...speciesNames, ...megaNames };
