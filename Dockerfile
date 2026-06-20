@@ -10,13 +10,13 @@
 # 将来のマルチステージ化（build/publish 用）の指針:
 #   - 下記 `base` を共有ステージとして使い、
 #   - `FROM base AS build` で `pnpm build`（dist 生成）→
-#   - `FROM node:24-slim AS runtime` に dist と本番依存のみコピー、
+#   - `FROM node:26-slim AS runtime` に dist と本番依存のみコピー、
 #     のように deps/build/runtime を分離できる構造にしている。
 #   ライブラリ用途のため現時点では dev/CI 用の単一ステージのみ実装。
 
 # ベースは Node の Debian slim イメージ。slim はネイティブ依存の互換性が alpine（musl）より高い。
 # タグの Node メジャーは .node-version（Node の SoT）に整合させ、更新は Dependabot（docker エコシステム）で追従する。
-FROM node:24-slim AS base
+FROM node:26-slim AS base
 
 # pnpm は corepack を使わず直接インストールする（ADR 0005）。版は固定せず最新を取り、
 # 依存の再現性は pnpm-lock.yaml で担保する（ADR 0008）。
