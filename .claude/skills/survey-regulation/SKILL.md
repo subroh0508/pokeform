@@ -223,10 +223,10 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
 - 決定の「なぜ」: [ADR 0021](../../../docs/adr/0021-per-regulation-species-and-legality.md)（解禁判定）/
   [ADR 0022](../../../docs/adr/0022-per-regulation-species-keyed-moves.md)（記録方法・block 記法）/
   [ADR 0023](../../../docs/adr/0023-generate-transformer-and-check-regulation.md)（generate 責務 / `check:regulation`）/
-  [ADR 0034](../../../docs/adr/0034-move-meta-per-game-sot.md)（PokeAPI を legality / 技メタの信頼源にしない・技メタ per-game SoT・ADR 0026 改訂）/
+  [ADR 0034](../../../docs/adr/archive/0034-move-meta-per-game-sot.md)（PokeAPI を legality / 技メタの信頼源にしない・技メタ per-game SoT・ADR 0026 改訂）/
   [ADR 0027](../../../docs/adr/0027-structural-data-catalog-sot.md)（構造データ SoT を catalog へ・`materialize` 新設）/
   [ADR 0031](../../../docs/adr/archive/0031-deterministic-serebii-scraper-hybrid-layers.md)（決定論スクレイパー + 3 層ハイブリッド）/
-  [ADR 0032](../../../docs/adr/0032-japanese-name-source-pokeapi-names.md)（日本語名 ja は PokeAPI names）。
+  [ADR 0032](../../../docs/adr/archive/0032-japanese-name-source-pokeapi-names.md)（日本語名 ja は PokeAPI names）。
 - catalog 取得（PokeAPI 構造データ + 名前・委譲先）: [`update-catalog`](../update-catalog/SKILL.md)。
 - 検証 / 生成: [`verify`](../verify/SKILL.md) / `pnpm check:regulation` / `pnpm generate:data`。
 - 利用者パーティ点検: [`review-party`](../review-party/SKILL.md) / 生成データ妥当性: `pokemon-data-reviewer` agent。
