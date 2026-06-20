@@ -24,7 +24,7 @@ flowchart TD
 - [x] [Phase 2 — コア実装（YAML 新ツリー移行 + generate.ts 全面改修 + materialize/fetch/serebii-to-catalog 追従 + 型レイヤ + 14 consumer + 公開API + テスト fixture・verify 緑）](./phase-02-core-rewrite.md)
 - [x] [Phase 3 — ハーネス追従（rules / skills / architecture / docs・cross-agent パリティ・パス参照一掃）](./phase-03-harness-followup.md)
 - [ ] [Phase 4 — 生成物を `data/generated/` から `src/generated/` へ移動（emit ルート + consumer パス + ツール glob 除外・旧パス一掃）](./phase-04-generated-into-src.md)
-- [ ] [Phase 5 — レギュ名 `name:{ja,en}` を `data/languages/` へ移し名前 SoT を一本化（languages 列挙の例外解消）](./phase-05-regulation-name-to-languages.md)
+- [x] [Phase 5 — レギュ名 `name:{ja,en}` を `data/languages/` へ移し名前 SoT を一本化（languages 列挙の例外解消）](./phase-05-regulation-name-to-languages.md)
 - [ ] [Phase 6 — メガ可能種の `items` を対応メガストーンのみに型制約（`ItemNotHeldBy` で他持ち物をブランド）](./phase-06-mega-item-legality.md)
 
 > 計画群全体の受け入れ基準は [`OVERVIEW.md` の「受け入れ基準」節](./OVERVIEW.md#受け入れ基準) を参照。
