@@ -10,7 +10,7 @@ date: 2026-06-13
 
 [ADR 0012](./0012-vendor-pokeapi-data.md) の vendor 方式では、`generate.ts` が種族値・タイプ・特性 id・
 全国図鑑番号・持ち物 category といった構造データを `data/raw`（PokeAPI キャッシュ）から直読していた。
-[ADR 0025](./0025-catalog-name-and-type-chart-sot.md) で名前 / タイプ相性の SoT を catalog YAML へ、
+[ADR 0025](./archive/0025-catalog-name-and-type-chart-sot.md) で名前 / タイプ相性の SoT を catalog YAML へ、
 [ADR 0026](./archive/0026-pokeapi-not-champions-legality-source.md) で技メタ / legality を catalog / Serebii へ移した
 結果、`generate.ts` が raw を読むのは**構造データだけ**になり、構造データの SoT が「PokeAPI 由来の生成過程に
 暗黙にある」状態が残っていた。
