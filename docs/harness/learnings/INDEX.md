@@ -61,6 +61,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #133 | plan 04 Phase 2: generated/YAML を 3 軸直交レイアウトへコア実装移行（codegen 全面改修・型・14 consumer・メガ独立 spec）・reg-aware 型機構を無回帰で維持・値不変・生成 raw 非依存。tsc 先行実験で spread 合成の narrow 温存を de-risk | 2026-06-20 | 04-generated-layout-redesign/phase-02 | draft | [2026-06-20-pr-133.md](./2026-06-20-pr-133.md) |
 | #135 | plan 04 Phase 3: 新レイアウト（specs/languages/per-reg・メガ独立 spec）へ rule 3 + skill 4 + architecture/data README/AGENTS + 計画 README を追従し旧パス一掃。MVP 設計 doc は supersede redirect 注記で現行 SoT へ誘導。harness-review blocking 0（reverseEn 架空シンボルを fix） | 2026-06-20 | 04-generated-layout-redesign/phase-03 | draft | [2026-06-20-pr-135.md](./2026-06-20-pr-135.md) |
 | #137 | plan 04 へ配置最終化 3 件を新 Phase 4-6（src/generated 移動 / レギュ名 SoT を languages へ / メガ items legality）として 1 phase = 1 PR で追加・OVERVIEW/README/mermaid/rollup 追従・先行 plan 03 を ✅ 完了化。harness-review blocking 0（新旧 Phase 4 番号 2 義 + 05/06 依存粒度ズレを non-blocking/nit） | 2026-06-20 | 04-generated-layout-redesign | draft | [2026-06-20-pr-137.md](./2026-06-20-pr-137.md) |
+| #139 | plan 04 Phase 4: 生成物配置を data/generated → src/generated へ移動（git mv 中心 62 files・値不変）・ツール glob を三分割（vitest coverage / biome lint 除外 + tsconfig 型検査継続でブランド機構保持）・生成物コミット継続（ADR 0012）。実装中 API 障害で worker idle 化し orchestrator が commit→PR→review→merge 代行。code-review blocking 0 nit 1（biome formatter 非除外） | 2026-06-20 | 04-generated-layout-redesign/phase-04 | draft | [2026-06-20-pr-139.md](./2026-06-20-pr-139.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
