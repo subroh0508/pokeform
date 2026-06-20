@@ -1,10 +1,16 @@
-# Phase 13 — M-A 全データ投入（全186種 + 全 movepool）
+# Phase 4 — M-A 全データ投入（全186種 + 全 movepool）
 
 > 本 phase は 02-data-model-redesign の旧 phase-20（M-A 全データ投入）を移動・改稿したもの。投入手段を
-> **03 で構築した新パイプライン（決定論スクレイパー + Haiku 取得 fan-out + 自己修復ループ）**経由へ更新した点が
-> 旧 doc から変わっている（旧 doc の「`survey-regulation` skill の WebFetch 全量 materialize」は本計画群で刷新済み）。
-> あわせて、本 phase の手前に追加したデータレイアウト整備（Phase 10 ゲームグルーピング `regulations/champions/`・
-> Phase 11 per-game 技メタ `regulations/champions/moves.yaml`・Phase 12 取得スキル 2 分割）の最終形で投入する。
+> **03-survey-regulation-rework で構築した新パイプライン（決定論スクレイパー + Haiku 取得 fan-out + 自己修復ループ）**経由へ
+> 更新した点が旧 doc から変わっている（旧 doc の「`survey-regulation` skill の WebFetch 全量 materialize」は刷新済み）。
+> あわせて 03 のデータレイアウト整備（ゲームグルーピング `regulations/champions/`・per-game 技メタ・取得スキル 2 分割）の上で投入する。
+>
+> **本 phase は本計画群（04）の前段 [Phase 1-3](./README.md) で再編した新レイアウト**
+> （specs / languages / per-reg 4 オブジェクト・`data/champions/m-a/*` / `data/languages/*`）**と、04 着手前に完了する
+> [03-survey-regulation-rework の Phase 13（技仕様の Champions 対応）](../03-survey-regulation-rework/phase-13-move-spec-champions-fix.md) で
+> 値を是正済みの move-specs の上で実施する**（投入時の技メタは Champions 実値で正しい）。
+> 以下の本文中の旧レイアウト表記（`catalog/*` / `regulations/champions/m-a.yaml`）は
+> [04 OVERVIEW の実装指針](./OVERVIEW.md#実装指針) の新ツリー対応に読み替える。
 
 ## 目的 / スコープ
 
@@ -28,7 +34,8 @@
 
 ## 前提（依存）
 
-- **03 Phase 1-12 完了**（本計画群）。新パイプラインと legality / メガ / レイアウト整備 / 生成整備が揃っていること:
+- **本計画群（04）の Phase 1-3 完了**。generated / YAML が新レイアウト（specs / languages / per-reg 4 オブジェクト・メガ独立エンティティ）へ再編済みで、投入はこの最終レイアウト上で行う。
+- **03-survey-regulation-rework 完了（Phase 1-13）**。特に **Phase 13（技仕様の Champions 対応）**で move-specs（技メタ）の PP（8/12/16/20）・power・type が Champions 実値へ是正済みで、全量投入時に誤った技メタが広がらない。新パイプラインと legality / メガ / レイアウト整備 / 生成整備が揃っていること:
   - Phase 1-2: 決定論パーサ純関数 + fetch-serebii キャッシュ + items スクレイパー。
   - Phase 3: `serebii-to-catalog` 転記 + PokeAPI names による ja 補完 + ADR + rule 更新。
   - Phase 4-5: Haiku 取得 SubAgent + Workflow fan-out + 修正 SubAgent 自己修復ループ。

@@ -16,7 +16,7 @@
     取得元を PokeAPI names に定める」。
   - `data-pipeline.md`（取得元/SoT 表・ja 取得元更新）/ `serebii-sourcing.md`（DOM 構造・slug 正規化・latin-1・
     accuracy の SoT 追記）。**SKILL.md は層1 手順へ最小改訂**（全面改訂は Phase 6）。
-- スコープ外: SubAgent / Workflow（Phase 4-5）・SKILL 全面改訂（Phase 6）・全186種投入（Phase 13）。
+- スコープ外: SubAgent / Workflow（Phase 4-5）・SKILL 全面改訂（Phase 6）・全186種投入（04 Phase 4）。
 
 ## 前提（依存）
 
