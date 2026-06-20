@@ -25,7 +25,7 @@ flowchart TD
 - [x] [Phase 3 — ハーネス追従（rules / skills / architecture / docs・cross-agent パリティ・パス参照一掃）](./phase-03-harness-followup.md)
 - [x] [Phase 4 — 生成物を `data/generated/` から `src/generated/` へ移動（emit ルート + consumer パス + ツール glob 除外・旧パス一掃）](./phase-04-generated-into-src.md)
 - [x] [Phase 5 — レギュ名 `name:{ja,en}` を `data/languages/` へ移し名前 SoT を一本化（languages 列挙の例外解消）](./phase-05-regulation-name-to-languages.md)
-- [ ] [Phase 6 — メガ可能種の `items` を対応メガストーンのみに型制約（`ItemNotHeldBy` で他持ち物をブランド）](./phase-06-mega-item-legality.md)
+- [x] [Phase 6 — メガ可能種の `items` を対応メガストーンのみに型制約（`ItemNotHeldBy` で他持ち物をブランド）](./phase-06-mega-item-legality.md)
 
 > 計画群全体の受け入れ基準は [`OVERVIEW.md` の「受け入れ基準」節](./OVERVIEW.md#受け入れ基準) を参照。
 > **依存は一方通行**: 先行する [03-survey-regulation-rework](../03-survey-regulation-rework/README.md)（取得刷新・Phase 1-12）を完了 → 本計画群（04・Phase 1-6 レイアウト再編 + 配置最終化）→ [05-move-master-scraper-refactor](../05-move-master-scraper-refactor/README.md)（技マスター取得 + 役割分割 + skill 再編）→ [06-ma-full-data](../06-ma-full-data/README.md)（全種族投入）。前計画へ戻る依存は無い。**全種族投入（旧 Phase 4）は本計画群から 06 へ分離した**（本計画群の Phase 4-6 は別テーマ = 生成物配置 / 名前 SoT / メガ items legality）。

@@ -93,9 +93,12 @@ export type MegaStoneOf<S extends string> = {
 /**
  * `R` の種族 `S` の持ち物制約から許容される持ち物 ID 集合。`"any"` は per-reg 解禁プールへ接続する
  * （per-reg item legality・ADR 0021）:
- * - **base（メガシンカ前）種族**: `RegulationItemId<R>`（R の解禁プール全件・全メガストーン含む）。
- * - **メガ形態種族**（charizard-mega-x 等・`MegaStoneOf<S>` が非 `never`）: 対応するメガストーン 1 個のみ
- *   （通常持ち物・他形態ストーン不可。`& RegulationItemId<R>` で R 未解禁ストーンも弾く）。
+ * - **非メガ base 種族**（`items: "any"`）: `RegulationItemId<R>`（R の解禁プール全件）。
+ * - **メガ可能 base 種族**（`items` が対応メガストーンのタプル・Phase 6）: そのストーン群のみ（generate が
+ *   per-reg 解禁メガ形態の `megaSpecies` リンクから決定論導出して emit・例 charizard →
+ *   `["charizardite-x", "charizardite-y"]`）。`"any"` でないため下の Extract 分岐で絞る。
+ * - **メガ形態種族**（charizard-mega-x 等・`items: "any"` かつ `MegaStoneOf<S>` が非 `never`）: 対応する
+ *   メガストーン 1 個のみ（`& RegulationItemId<R>` で R 未解禁ストーンも弾く）。
  */
 export type HoldableItems<R extends RegulationId, S extends SpeciesIdIn<R>> = SpeciesEntryOf<
   R,
