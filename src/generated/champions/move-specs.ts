@@ -1,5 +1,5 @@
 // 生成物（scripts/generate.ts 出力）。手書き編集しない。data/champions・data/languages を直し再生成する。
-import type { MoveStats } from "../../../src/types/move.ts";
+import type { MoveStats } from "../../types/move.ts";
 
 export const moveSpecsDex = {
   earthquake: {

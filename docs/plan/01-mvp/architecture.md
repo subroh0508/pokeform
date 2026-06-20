@@ -21,7 +21,7 @@
 
 1. **型チェックは「tsc のみ」で行う（Zod 等の実行時バリデーションは採用しない）**。YAML/Markdown を codegen で `.generated.ts` に変換し、`tsc --noEmit` を唯一の検証ゲートにする。
 2. **Linter = Biome**（formatter 一体・設定 1ファイル）。
-3. **PokeAPI データは vendor 方式**（ビルド時取得→整形→`data/generated/` をコミット）。**MVP 時点で全国図鑑の全種族分を生成**しておく（オフライン・決定論的・CI 高速）。
+3. **PokeAPI データは vendor 方式**（ビルド時取得→整形→`src/generated/` をコミット）。**MVP 時点で全国図鑑の全種族分を生成**しておく（オフライン・決定論的・CI 高速）。
 4. **テストカバレッジ閾値は最初から 100%**（lines/branches/functions/statements すべて 100）。コーディングエージェントによる実装前提のため、最初から最高基準を強制する。
 5. **レビューは機械ゲートと意味的レビューの二層**。型/カバレッジ/Biome は Git hooks + CI の機械ゲートで強制し、その上に **PR マージ前の意味的レビュー**を `code-review`（ソース用）/ `harness-review`（ハーネス資産用）の 2 skill で重ねる（観点が本質的に異なるため分割）。機械ゲート緑 ＋ レビュー承認で auto-merge する。詳細はハーネス計画 [00-harness-setup Phase 3](../00-harness-setup/phase-03-code-review.md) / ADR `0017-semantic-code-review-skills`。
 
@@ -53,12 +53,12 @@ flowchart LR
 
 巨大 union の分配コストを避けるため、**`SpeciesDex[S]` のプロパティアクセス主体**で制約する。
 
-> **実装上の materialize（Phase 1 で確定）**: 以下の `interface SpeciesDex { ... }` / `interface MoveDex { ... }` 等のコード例は**型の形（shape）の図示**であり、生成物の実ファイル構成ではない。`data/generated/<dex>.ts` は値 `export const xxxDex = { ... } as const` を出力し、そこから **`type XxxDex = typeof xxxDex` / `type XxxId = keyof XxxDex` を派生**して**値と型を単一ソース化**する（型と値を別ファイルに二重管理しない）。親型 `XxxBase` への適合は `satisfies`（acyclic な types/moves/abilities）または `Assignable<Record<string, XxxBase>, XxxDex>`（`megaEvolvesTo`/`megaStoneFor` が派生 `SpeciesId` を自己参照する species/items）で検証する。詳細は [[type-conventions]] / [[data-pipeline]]。
+> **実装上の materialize（Phase 1 で確定）**: 以下の `interface SpeciesDex { ... }` / `interface MoveDex { ... }` 等のコード例は**型の形（shape）の図示**であり、生成物の実ファイル構成ではない。`src/generated/<dex>.ts` は値 `export const xxxDex = { ... } as const` を出力し、そこから **`type XxxDex = typeof xxxDex` / `type XxxId = keyof XxxDex` を派生**して**値と型を単一ソース化**する（型と値を別ファイルに二重管理しない）。親型 `XxxBase` への適合は `satisfies`（acyclic な types/moves/abilities）または `Assignable<Record<string, XxxBase>, XxxDex>`（`megaEvolvesTo`/`megaStoneFor` が派生 `SpeciesId` を自己参照する species/items）で検証する。詳細は [[type-conventions]] / [[data-pipeline]]。
 
 **英名/日本語名の両対応**: 種族名・タイプ・技・特性・持ち物はすべて**英名（kebab-case の安定 ID = 型キー）と日本語名の対応を型として持つ**。ID を型キーに使うのは安定性（PokeAPI 由来・改名されにくい・union キーに適する）のため。日本語名は ① 各エントリの `name` プロパティ ② 名前変換マップ型 `JaName<Id>` / `IdByJaName<"ピカチュウ">` の双方向リテラル型で引けるようにし、YAML を日本語名でも英名でも記述できるようにする（codegen が解決）。
 
 ```ts
-// data/generated/names.ts （生成）— 双方向の名称マップ
+// src/generated/names.ts （生成）— 双方向の名称マップ
 export type SpeciesName   = { en: "Pikachu"; ja: "ピカチュウ" } /* | ... 各種族 */;
 export type TypeName      = { electric: { en: "Electric"; ja: "でんき" } /* | ... 18種 */ };
 export type MoveName      = { "volt-tackle": { en: "Volt Tackle"; ja: "ボルテッカー" } /* ... */ };
@@ -80,7 +80,7 @@ export interface SpeciesBase {
   // 解禁レギュレーションは種族側に持たない。per-regulation（regulationDex[R].species）が正本（A案・ADR 0021）。
 }
 
-// data/generated/species.ts — 各種族を子型として specialize し SpeciesDex に集約（生成）
+// src/generated/species.ts — 各種族を子型として specialize し SpeciesDex に集約（生成）
 export interface SpeciesDex {
   pikachu: SpeciesBase & {
     dex: 25; id: "pikachu";
@@ -107,7 +107,7 @@ export type SpeciesId = keyof SpeciesDex;   // 技の MoveId = keyof MoveDex と
 
 日本語名は生成段で自動付与し、CLI 出力（`analyze:coverage` の表など）も日本語名で表示する。
 
-> **更新（ADR 0025 → ADR 0035 / 0036）**: 上記 `data/generated/names.ts` / `SpeciesDex` に `name` を埋め込む MVP 当時の表現は**現行レイアウトに置き換わった**。名前の SoT は生成 dex 埋め込みでも catalog でもなく **`data/languages/*.yaml`（`id → { ja, en }`・ゲーム非依存・ADR 0035）** へ一本化し、**全エンティティの生成 specs dex は `name` を持たない**（構造 specs と名前 languages を直交）。逆引き（ja → id）は専用 `names.ts` を廃し **languages forward マップから実行時導出**する。メガは base 種族から分離した**独立 spec `mega-specs`**（`baseSpecies` 逆参照・ADR 0036）。本節以下の `name` を含む型例・`data/generated/names.ts` / `data/champions/catalog/*` への言及はすべて MVP 当時のもので、現行は [[type-conventions]] / [[data-pipeline]] と ADR 0035 / 0036 を正本とする。
+> **更新（ADR 0025 → ADR 0035 / 0036）**: 上記 `src/generated/names.ts` / `SpeciesDex` に `name` を埋め込む MVP 当時の表現は**現行レイアウトに置き換わった**。名前の SoT は生成 dex 埋め込みでも catalog でもなく **`data/languages/*.yaml`（`id → { ja, en }`・ゲーム非依存・ADR 0035）** へ一本化し、**全エンティティの生成 specs dex は `name` を持たない**（構造 specs と名前 languages を直交）。逆引き（ja → id）は専用 `names.ts` を廃し **languages forward マップから実行時導出**する。メガは base 種族から分離した**独立 spec `mega-specs`**（`baseSpecies` 逆参照・ADR 0036）。本節以下の `name` を含む型例・`src/generated/names.ts` / `data/champions/catalog/*` への言及はすべて MVP 当時のもので、現行は [[type-conventions]] / [[data-pipeline]] と ADR 0035 / 0036 を正本とする。
 
 #### 技の型: 親型 `MoveBase` + 技ごとの子型（`MoveDex` で ID キー集約）
 
@@ -126,7 +126,7 @@ export interface MoveBase {
   priority: number;
 }
 
-// data/generated/moves.ts — 各技を子型として specialize し MoveDex に集約（生成）
+// src/generated/moves.ts — 各技を子型として specialize し MoveDex に集約（生成）
 export interface MoveDex {
   "volt-tackle": MoveBase & {
     id: "volt-tackle"; name: { en: "Volt Tackle"; ja: "ボルテッカー" };
@@ -156,7 +156,7 @@ export interface TypeBase {
   // 攻撃時の対被攻撃タイプ倍率（防御タイプ ID → 0|0.5|1|2）。複合は積で算出
   damageTo: Record<string, 0 | 0.5 | 1 | 2>;
 }
-// data/generated/types.ts（生成）
+// src/generated/types.ts（生成）
 export interface TypeDex {
   electric: TypeBase & {
     id: "electric"; name: { en: "Electric"; ja: "でんき" };
@@ -166,7 +166,7 @@ export interface TypeDex {
 }
 export type PokemonType = keyof TypeDex;   // 既存の PokemonType union はこれに統一
 
-// src/types/ability.ts + data/generated/abilities.ts
+// src/types/ability.ts + src/generated/abilities.ts
 export interface AbilityBase { id: string; name: { en: string; ja: string }; }
 export interface AbilityDex {
   static: AbilityBase & { id: "static"; name: { en: "Static"; ja: "せいでんき" } };
@@ -174,7 +174,7 @@ export interface AbilityDex {
 }
 export type AbilityId = keyof AbilityDex;
 
-// src/types/item.ts + data/generated/items.ts
+// src/types/item.ts + src/generated/items.ts
 export interface ItemBase {
   id: string; name: { en: string; ja: string };
   category?: string;                 // メガストーン等の分類
@@ -245,7 +245,7 @@ flowchart LR
     M -->|機械転記の辺| SPECS
     M -->|機械転記の辺| LANG
     CH --> GEN["scripts/generate.ts<br/>(raw 非依存・合成)"]
-    GEN --> OUT["data/generated/ (コミット)<br/>champions/*-specs + champions/&lt;reg&gt;/ + languages/<br/>Dex 単位 .ts（値 as const → 型派生・単一ソース）"]
+    GEN --> OUT["src/generated/ (コミット)<br/>champions/*-specs + champions/&lt;reg&gt;/ + languages/<br/>Dex 単位 .ts（値 as const → 型派生・単一ソース）"]
 ```
 
 > `data/champions/*-specs.yaml` は**構造データの SoT**（種族値 / タイプ / 特性 / 図鑑番号 / category・name 無し・ADR 0027 / 0035）、`data/languages/*.yaml` は**名前の SoT**（`id → { ja, en }`・ゲーム非依存・ADR 0035）。**技メタ（type/power 等）は per-game の `move-specs.yaml` が SoT**（Champions 固有値・ADR 0034 / 0035）、**メガは独立 spec `mega-specs.yaml`**（`baseSpecies` 逆参照・ADR 0036）。**①②（skill 著述）**は `survey-regulation` が specs / per-reg へ著述し（Serebii 第一優先・ADR 0034）、**③（PokeAPI 構造データ）**は `materialize.ts` が raw → specs / languages へ機械転記する（fail-fast・append/既存尊重）。`generate.ts` は **specs / languages / per-reg を変換・合成**し raw を読まない（決定論的）。
@@ -391,7 +391,7 @@ members:
 ## 実装フェーズ
 
 - **Phase 0 — 足場**: pnpm init / tsconfig 2種 / biome / vitest / cac。`src/types/stats.ts`・`type-chart.ts` 静的型。`domain/calc-stats.ts` + テスト（後述の検証式を実装）。
-- **Phase 1 — データ生成 + MVP**: `scripts/fetch-pokeapi.ts` + `generate.ts` で `data/generated/` の Dex 群を生成（MVP は代表種サブセット + 全 18 タイプ。`*-specs.yaml` / `languages/*.yaml` を広げれば全種族へ拡張可）。`io/load-party.ts` + `resolve-paths.ts`。`domain/coverage.ts` + `type-effectiveness.ts`。CLI `analyze:coverage`、`check:party`（参照解決・重複・未解禁・体数 = 一貫性チェック）。→ **要求 MVP 達成**。
+- **Phase 1 — データ生成 + MVP**: `scripts/fetch-pokeapi.ts` + `generate.ts` で `src/generated/` の Dex 群を生成（MVP は代表種サブセット + 全 18 タイプ。`*-specs.yaml` / `languages/*.yaml` を広げれば全種族へ拡張可）。`io/load-party.ts` + `resolve-paths.ts`。`domain/coverage.ts` + `type-effectiveness.ts`。CLI `analyze:coverage`、`check:party`（参照解決・重複・未解禁・体数 = 一貫性チェック）。→ **要求 MVP 達成**。
 - **Phase 2 — 個体 tsc 検証層**: `codegen/emit-individual-ts.ts` / `emit-party-ts.ts` / `run-tsc.ts`。`tsconfig.generated.json`。ジェネリック種族制約 `SpeciesDex[S]` の本格運用。`check:individual` / `compile` / `typecheck`。ブランドエラー型で診断可読化。
 - **Phase 3 — ステータス調整の壁打ち**: `pokeform stat`（実数値・性格補正・ポイント配分・耐久指数表示）、耐久/火力指数（`domain/stat-indices.ts`）、ダメージ式（`domain/damage.ts`・確定数判定の範囲）、ポイント逆算（`domain/stat-tuning.ts`・「○○の××を確定耐え」「素早さ□□抜き」→ 合計66/各≤32 で解探索・実現不能は報告）と調整提案。耐久/火力指数・ダメージ式・逆算の定義は [[game-spec]] を参照。本格ダメージ計算（乱数16段の確定数表・急所・補正）は将来計画 `02-<slug>` へ。
 

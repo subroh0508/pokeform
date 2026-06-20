@@ -1,8 +1,8 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { parse as parseYaml } from "yaml";
-import { speciesNamesAll } from "../../data/generated/languages/index.ts";
 import { toSpeciesId, toStatKey } from "../codegen/normalize.ts";
+import { speciesNamesAll } from "../generated/languages/index.ts";
 import type { NatureSpec } from "../types/nature.ts";
 import type { IndividualFile, Lang } from "../types/party.ts";
 import { speciesStructuralDex } from "../types/species.ts";

@@ -1,6 +1,6 @@
-import type { RegulationDex, RegulationId } from "../../data/generated/champions/index.ts";
-import type { ItemId, ItemSpecsDex } from "../../data/generated/champions/item-specs.ts";
 import { calcRealStats } from "../domain/calc-stats.ts";
+import type { RegulationDex, RegulationId } from "../generated/champions/index.ts";
+import type { ItemId, ItemSpecsDex } from "../generated/champions/item-specs.ts";
 import type { Invalid } from "./brand.ts";
 import type { NatureSpec } from "./nature.ts";
 import type { RegulationItemId } from "./regulation.ts";

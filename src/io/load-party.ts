@@ -3,11 +3,11 @@ import { readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import matter from "gray-matter";
 import { parse as parseYaml } from "yaml";
-import { itemSpecsDex } from "../../data/generated/champions/item-specs.ts";
-import { moveSpecsDex } from "../../data/generated/champions/move-specs.ts";
-import { itemNames, moveNames, speciesNamesAll } from "../../data/generated/languages/index.ts";
 import type { ResolvedMember, ResolvedParty } from "../domain/party-analysis.ts";
 import { type NameMaps, resolveName } from "../domain/resolve-names.ts";
+import { itemSpecsDex } from "../generated/champions/item-specs.ts";
+import { moveSpecsDex } from "../generated/champions/move-specs.ts";
+import { itemNames, moveNames, speciesNamesAll } from "../generated/languages/index.ts";
 import type { IndividualFile, Lang, PartyFrontmatter } from "../types/party.ts";
 
 /**

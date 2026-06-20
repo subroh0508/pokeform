@@ -92,7 +92,7 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 ### Phase 4 — セルフ検証
 
 - **手順**: redaction / secrets 混入なし（[[redaction]]）、cross-agent パリティ（canonical +
-  symlink/copy 一致、[[cross-agent]]）、生成物（`data/generated/**` 等）への手編集なし、命名規約準拠、
+  symlink/copy 一致、[[cross-agent]]）、生成物（`src/generated/**` 等）への手編集なし、命名規約準拠、
   受け入れ基準の充足を点検する。あわせて、**rule が `architecture.md` を正本と宣言しつつ数式・仕様を
   追記する場合、同一 PR で `architecture.md` を同期しているか**を点検する（rule が正本に先行する doc-data
   乖離の再発防止）。あわせて、phase doc に紐づく実装 PR では **README 進捗・doc 同期コミットを当該

@@ -101,7 +101,7 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
   - 構造データ（`dex` / `types` / `baseStats` / `abilities` / `category`）と日本語名 ja の specs / languages 取り込みは
     [`update-catalog`](../update-catalog/SKILL.md) へ委譲（specs 更新チェックポイント経由・ADR 0027 / 0032 / 0035）。
   - `check:regulation` が参照整合 / schema で 0 終了すること（覚えない技照合はしない・ADR 0026）。
-  - 再生成された `data/generated/**` と `pnpm verify` 緑。
+  - 再生成された `src/generated/**` と `pnpm verify` 緑。
 
 ## 手順
 
@@ -218,7 +218,7 @@ script）を正しさの核**に据え、(1) HTML を LLM に載せず **exit co
   （Primal 等）・未知 id だけ escalation（diagnostic）に残り手順 5 で手当する。通常メガを手で著述しようとしない。
 - **複数フォルム種の slug**: 地域フォルム・バトルフォルム・メガ先は PokeAPI / Serebii slug が `<name>-<form>`。
   default slug が意図と違う種・Serebii で別 URL になるフォルム（例: rotom 系）は手順 7 の fallback で吸収する。
-- **生成物を手編集しない**: `data/generated/**` は触らず specs / languages / per-reg を直して再生成する（[[data-pipeline]]）。
+- **生成物を手編集しない**: `src/generated/**` は触らず specs / languages / per-reg を直して再生成する（[[data-pipeline]]）。
 - **機械ゲート / レビュー観点を再実装しない**: 検証は `verify` / `check:regulation`、生成データの妥当性は
   `pokemon-data-reviewer` agent、利用者パーティ点検は `review-party`（[[skill-authoring]]）。
 - **redaction**: doc へ外部リンク・引用を書き出す前に [[redaction]] を点検する（Secrets / PII 非混入）。

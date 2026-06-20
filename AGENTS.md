@@ -27,11 +27,11 @@ src/domain/     ドメインロジック（calc-stats / type-effectiveness / cov
 src/io/         YAML/MD ローダ・パス解決
 src/codegen/    YAML/MD → *.generated.ts + tsc 実行・診断整形
 src/cli/        cac ルーティング・各コマンド
+src/generated/  生成データ（champions/*-specs + champions/<reg>/ + languages/・型 + 値・コミット）
 scripts/        fetch-pokeapi.ts / generate.ts / gen-rules-index.ts
 data/raw/       PokeAPI キャッシュ（.gitignore）
 data/champions/ skill 著述・構造 SoT（rules.yaml / *-specs.yaml / <reg>/・人間直編集 NG・コミット）
 data/languages/ skill 著述・名前 SoT（*.yaml = id→{ja,en}・ゲーム非依存・コミット）
-data/generated/ 生成データ（champions/*-specs + champions/<reg>/ + languages/・型 + 値・コミット）
 docs/plan/      実装計画（01-mvp/architecture.md が規約正本）
 docs/adr/       アーキ決定の不変ログ
 docs/harness/   自己改良ループ（learnings）+ rules-index.md（生成）
@@ -48,7 +48,7 @@ docs/harness/   自己改良ループ（learnings）+ rules-index.md（生成）
 - **カバレッジ 100%**（lines/branches/functions/statements）。ドメインロジックは完全網羅、薄い層は明示除外。テストは**プロダクションコードと同階層にコロケーション**。→ `testing.md`
 - **Linter = Biome**（設定 1 ファイル）。
 - **型は `XxxBase` + `XxxDex` + `XxxId = keyof XxxDex` で統一**。種族粒度は「種族値が一意 = 1 種族」。英名 ID をキー・日本語名を `name.ja`、逆引きマップで日英両対応。→ `type-conventions.md`
-- **PokeAPI は vendor 方式**（取得 → 整形 → `data/generated/` をコミット）。`data/raw` のみ gitignore。→ `data-pipeline.md` / ADR `0012`
+- **PokeAPI は vendor 方式**（取得 → 整形 → `src/generated/` をコミット）。`data/raw` のみ gitignore。→ `data-pipeline.md` / ADR `0012`
 - **入力言語はファイル単位で `lang: ja|en` 宣言**。表示言語は `--lang`（独立）。問題検出時は**非0終了**。→ `cli-and-io.md` / ADR `0014`
 - **ゲーム数値**: Lv50 / 個体値31 固定、能力ポイント 合計66・各 ≤32、性格 ±10%、実数値は**二重 floor**、レギュ M 系（メガ可 / テラス・ダイマ不可）。→ `game-spec.md`
 

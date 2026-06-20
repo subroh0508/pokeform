@@ -3,7 +3,7 @@ import type { PokemonType, TypeMultiplier } from "../types/type-chart.ts";
 /**
  * タイプ相性の純関数（I/O 非依存）。第9世代準拠の静的相性表（攻撃→防御の基本倍率）を
  * もとに、単/複合タイプへの倍率を算出する。複合タイプは各倍率の積（テラス不可で変動要素なし）。
- * 相性表データは `data/generated/types.ts`（TypeDex）が唯一のソース。正本は
+ * 相性表データは `src/generated/types.ts`（TypeDex）が唯一のソース。正本は
  * docs/plan/01-mvp/architecture.md / .claude/rules/game-spec.md。
  */
 

@@ -12,7 +12,7 @@
 - **Champions 仕様**: Lv50・個体値31 固定、能力ポイント 66/32、HP/非HP の二重 floor 計算式、性格 ±10%、メガ可・テラス/ダイマ不可。
 - **tsc のみ検証**: YAML/MD → codegen `.generated.ts` → `tsc --noEmit` で不正個体/パーティを弾く。
 - **型表現**: `XxxBase` + `XxxDex` + `XxxId = keyof XxxDex` を種族/タイプ/技/特性/持ち物で統一。種族値が一意に定まる粒度＝1 種族。日英 `name` 両対応。
-- **データ**: PokeAPI を vendor（`data/generated/` コミット）。Champions 固有（能力ポイント・解禁）は `data/champions/` 手動。
+- **データ**: PokeAPI を vendor（`src/generated/` コミット）。Champions 固有（能力ポイント・解禁）は `data/champions/` 手動。
 - **入力**: 個体 YAML（`lang: ja|en` ファイル単位宣言）/ パーティ frontmatter 付き Markdown。
 
 ## フェーズ一覧（この順で実施）

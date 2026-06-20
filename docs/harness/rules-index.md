@@ -24,7 +24,6 @@
 | `AGENTS.md` | `code-review.md` |
 | `CLAUDE.md` | `code-review.md` |
 | `data/**` | `data-pipeline.md`, `game-spec.md` |
-| `data/generated/**` | `type-conventions.md` |
 | `docs/**` | `code-review.md` |
 | `docs/harness/**` | `redaction.md` |
 | `docs/harness/learnings/**` | `retrospective-format.md` |
@@ -34,6 +33,7 @@
 | `src/cli/**` | `cli-and-io.md` |
 | `src/codegen/**` | `tsc-verification.md` |
 | `src/domain/**` | `game-spec.md` |
+| `src/generated/**` | `type-conventions.md` |
 | `src/io/**` | `cli-and-io.md` |
 | `src/types/**` | `tsc-verification.md`, `type-conventions.md` |
 
@@ -62,4 +62,4 @@
 | `skill-authoring.md` | `.claude/skills/**`<br>`.agents/skills/**` | skill の新規作成・改修は `skill-creator` skill の利用を必須化する方針（手書きで SKILL.md を起こさない・description=trigger・≤500 行・標準構成・canonical + symlink 配置）。.claude/skills/ や .agents/skills/ を扱うとき適用する。 |
 | `testing.md` | `**/*.test.ts` | テストの規約（Vitest・カバレッジ100%・境界重点・プロダクションコードと同階層にコロケーション・fixture は近傍 __fixtures__/）。`*.test.ts` を扱うとき適用する。 |
 | `tsc-verification.md` | `src/codegen/**`<br>`src/types/**` | 「検証は tsc のみ」方針（Zod 不採用）・YAML→codegen→`tsc --noEmit`・ブランドエラー型の命名・合計66 は codegen 算出。src/codegen/ や src/types/ を扱うとき適用する。 |
-| `type-conventions.md` | `src/types/**`<br>`data/generated/**` | 型表現の統一パターン（`XxxBase` + `XxxDex` + `XxxId = keyof XxxDex`）・種族粒度（種族値が一意 = 1 種族）・日英 name と逆引きマップ。src/types/ や data/generated/ を扱うとき適用する。 |
+| `type-conventions.md` | `src/types/**`<br>`src/generated/**` | 型表現の統一パターン（`XxxBase` + `XxxDex` + `XxxId = keyof XxxDex`）・種族粒度（種族値が一意 = 1 種族）・日英 name と逆引きマップ。src/types/ や src/generated/ を扱うとき適用する。 |

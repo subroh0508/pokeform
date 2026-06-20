@@ -1,5 +1,5 @@
-import { regulationDex } from "../../../data/generated/champions/index.ts";
 import { type PartyIssue, validateParty } from "../../domain/party-analysis.ts";
+import { regulationDex } from "../../generated/champions/index.ts";
 import { loadParty } from "../../io/load-party.ts";
 import { resolveInputFiles } from "../../io/resolve-paths.ts";
 import type { Lang } from "../../types/party.ts";

@@ -1,6 +1,6 @@
 /**
  * タイプ相性の骨格型。18 タイプの union（PokemonType）と、相性表エントリの親型（TypeBase）を定義する。
- * 実データ（TypeDex の各タイプ子型・倍率）は Phase 1 で `data/generated/` に生成する。
+ * 実データ（TypeDex の各タイプ子型・倍率）は Phase 1 で `src/generated/` に生成する。
  * 統一パターン（XxxBase + XxxDex + XxxId = keyof XxxDex）は .claude/rules/type-conventions.md を参照。
  */
 
@@ -32,7 +32,7 @@ export type PokemonType =
 export type TypeChart = { readonly [K in PokemonType]: TypeMultiplier };
 
 /**
- * タイプ相性 spec エントリの親型（統一パターンの XxxBase）。`data/generated/champions/type-specs.ts`
+ * タイプ相性 spec エントリの親型（統一パターンの XxxBase）。`src/generated/champions/type-specs.ts`
  * （`typeSpecsDex`）が派生する。**名前は持たない**（名前の SoT は `data/languages/types.yaml`・ADR 0035）。
  * coverage / 相性計算はこの `damageTo` を引き、表示名は `languages/types.ts` を引く。
  */

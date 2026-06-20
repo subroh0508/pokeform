@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { typeSpecsDex } from "../../data/generated/champions/type-specs.ts";
+import { typeSpecsDex } from "../generated/champions/type-specs.ts";
 import { chart } from "./__fixtures__/chart.ts";
 import { buildChart, effectiveness } from "./type-effectiveness.ts";
 
