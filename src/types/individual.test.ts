@@ -13,7 +13,8 @@ describe("defineIndividual", () => {
     const individual = defineIndividual("champions-m-a", "garchomp", {
       nature: garchomp.nature,
       ability: "rough-skin",
-      item: "focus-sash",
+      // garchomp は m-a でメガ可能種のため items は garchompite のみ（Phase 6・ItemNotHoldableBy）。
+      item: "garchompite",
       points: garchomp.points,
       moves: ["earthquake", "dragon-claw", "stone-edge", "swords-dance"],
     });
@@ -24,14 +25,14 @@ describe("defineIndividual", () => {
     const individual = defineIndividual("champions-m-a", "garchomp", {
       nature: garchomp.nature,
       ability: "sand-veil",
-      item: "lum-berry",
+      item: "garchompite",
       points: garchomp.points,
       moves: ["outrage"],
     });
     expect(individual.regulation).toBe("champions-m-a");
     expect(individual.species).toBe("garchomp");
     expect(individual.ability).toBe("sand-veil");
-    expect(individual.item).toBe("lum-berry");
+    expect(individual.item).toBe("garchompite");
     expect(individual.moves).toEqual(["outrage"]);
   });
 
@@ -40,7 +41,7 @@ describe("defineIndividual", () => {
     const real = defineIndividual("champions-m-a", "garchomp", {
       nature: gardevoir.nature,
       ability: "rough-skin",
-      item: "lum-berry",
+      item: "garchompite",
       points: gardevoir.points,
       moves: [],
     }).realStats;
