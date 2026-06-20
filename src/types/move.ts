@@ -3,7 +3,7 @@ import type { PokemonType } from "./type-chart.ts";
 /**
  * 技の per-game 技メタ型 `MoveStats`。名前（id + 日英名・ゲーム非依存）は構造から分離し
  * `data/languages/moves.yaml`（`moveNames`）が SoT、技メタは Champions 固有値（`data/champions/
- * move-specs.yaml` が SoT・ADR 0034）。`MoveSpecsDex`/`MoveId` は `data/generated/champions/move-specs.ts`
+ * move-specs.yaml` が SoT・ADR 0034）。`MoveSpecsDex`/`MoveId` は `src/generated/champions/move-specs.ts`
  * が `as const satisfies Record<string, MoveStats>` から派生する。統一パターンは
  * .claude/rules/type-conventions.md を参照。
  */

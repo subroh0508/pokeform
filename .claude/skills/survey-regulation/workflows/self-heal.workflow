@@ -110,7 +110,7 @@ const fixPrompt = (signature, failures) => {
 
 ## 直す対象（層1・テスト100%の純関数のみ）
 - \`src/codegen/serebii/parse.ts\`（DOM 抽出）/ \`normalize.ts\`（id 正規化）/ \`schema.ts\`（自己検証 stage）。
-- 取得・配線（\`scripts/*.ts\`）や生成物（\`data/generated/**\`）は触らない。
+- 取得・配線（\`scripts/*.ts\`）や生成物（\`src/generated/**\`）は触らない。
 
 ## 手順（厳守）
 1. 失敗 HTML（上記 rawHtmlPath を Read。latin-1）と層1 ソースを読み、なぜ ${missing.join("/") || "当該欄"} が取れない/不健全かを特定する。

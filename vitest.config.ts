@@ -11,6 +11,9 @@ export default defineConfig({
       exclude: [
         "**/*.test.ts",
         "**/__fixtures__/**",
+        // 生成物（scripts/generate.ts 出力）。値の写しでありロジックを持たないため
+        // カバレッジ対象外（[[testing]] の「生成物は明示除外」・配置は data/generated → src/generated）。
+        "src/generated/**",
         "src/cli/**",
         // codegen のトップレベルは薄い配線で除外。判断分岐を持つ純関数を切り出した
         // `src/codegen/serebii/**`（parse / schema / normalize）は 100% ゲートで網羅する（[[testing]]）。

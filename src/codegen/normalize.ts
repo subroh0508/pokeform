@@ -1,13 +1,13 @@
-import { abilitySpecsDex } from "../../data/generated/champions/ability-specs.ts";
-import { itemSpecsDex } from "../../data/generated/champions/item-specs.ts";
-import { moveSpecsDex } from "../../data/generated/champions/move-specs.ts";
+import { type NameMaps, resolveName } from "../domain/resolve-names.ts";
+import { abilitySpecsDex } from "../generated/champions/ability-specs.ts";
+import { itemSpecsDex } from "../generated/champions/item-specs.ts";
+import { moveSpecsDex } from "../generated/champions/move-specs.ts";
 import {
   abilityNames,
   itemNames,
   moveNames,
   speciesNamesAll,
-} from "../../data/generated/languages/index.ts";
-import { type NameMaps, resolveName } from "../domain/resolve-names.ts";
+} from "../generated/languages/index.ts";
 import type { Lang } from "../types/party.ts";
 import type { StatKey } from "../types/stats.ts";
 

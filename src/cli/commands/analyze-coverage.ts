@@ -1,10 +1,10 @@
-import { itemSpecsDex } from "../../../data/generated/champions/item-specs.ts";
-// 攻撃範囲分析は per-game 技メタ（type/damageClass）を引く（Champions 固有値・ADR 0034）。
-import { moveSpecsDex } from "../../../data/generated/champions/move-specs.ts";
-import { typeSpecsDex } from "../../../data/generated/champions/type-specs.ts";
 import { analyzeCoverage, type CoverageReport } from "../../domain/coverage.ts";
 import { toCoverageMembers } from "../../domain/party-analysis.ts";
 import { buildChart } from "../../domain/type-effectiveness.ts";
+import { itemSpecsDex } from "../../generated/champions/item-specs.ts";
+// 攻撃範囲分析は per-game 技メタ（type/damageClass）を引く（Champions 固有値・ADR 0034）。
+import { moveSpecsDex } from "../../generated/champions/move-specs.ts";
+import { typeSpecsDex } from "../../generated/champions/type-specs.ts";
 import { loadParty } from "../../io/load-party.ts";
 import { resolveInputFiles } from "../../io/resolve-paths.ts";
 import type { Lang } from "../../types/party.ts";

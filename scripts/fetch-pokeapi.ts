@@ -16,7 +16,7 @@
  * 使わない（ADR 0026 不変）。既に日英名が揃うエントリは取得しない（決定論・最小取得）。
  *
  * 実行: `pnpm fetch:data`（ネットワーク必須）。取得後は raw キャッシュ固定で generate.ts が
- * 決定論的に data/generated を出力する。スコープ（全種族 vs サブセット）は catalog/*.yaml が制御する。
+ * 決定論的に src/generated を出力する。スコープ（全種族 vs サブセット）は catalog/*.yaml が制御する。
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";

@@ -1,12 +1,12 @@
-import { speciesNamesAll } from "../../data/generated/languages/index.ts";
-import { typeNames } from "../../data/generated/languages/types.ts";
+import { speciesNamesAll } from "../generated/languages/index.ts";
+import { typeNames } from "../generated/languages/types.ts";
 import type { Lang } from "../types/party.ts";
 import type { StatKey } from "../types/stats.ts";
 import type { PokemonType } from "../types/type-chart.ts";
 
 /**
  * CLI 表示ヘルパ（薄い層・カバレッジ対象外）。表示言語 `--lang` に従って生成済み名前マップ
- * （`data/generated/languages/*`・名前 SoT は languages・ADR 0035）の日英 `name` を引く。入力ファイルの
+ * （`src/generated/languages/*`・名前 SoT は languages・ADR 0035）の日英 `name` を引く。入力ファイルの
  * `lang` とは独立（[[cli-and-io]]）。
  */
 

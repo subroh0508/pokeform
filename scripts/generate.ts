@@ -1,6 +1,6 @@
 /**
  * generate.ts — `data/champions/`（構造 specs・skill 著述）+ `data/languages/`（名前・ゲーム非依存）を
- * 変換して `data/generated/`（コミット）へ型 + 値を出力する。vendor 方式（ADR 0012）の生成段。
+ * 変換して `src/generated/`（コミット）へ型 + 値を出力する。vendor 方式（ADR 0012）の生成段。
  * **PokeAPI 取得キャッシュは一切読まない**（構造データ SoT も specs YAML へ移設済み・ADR 0027/0035）。
  * キャッシュ → specs/languages の転記は専任 `scripts/materialize.ts` が担い、generate は YAML のみを変換する。
  *
@@ -26,7 +26,7 @@ import { parse as parseYaml } from "yaml";
 const ROOT = resolvePath(dirname(fileURLToPath(import.meta.url)), "..");
 const CH = join(ROOT, "data", "champions");
 const LANG = join(ROOT, "data", "languages");
-const OUT = join(ROOT, "data", "generated");
+const OUT = join(ROOT, "src", "generated");
 const CHOUT = join(OUT, "champions");
 const LANGOUT = join(OUT, "languages");
 
@@ -313,27 +313,27 @@ const emit = (file: string, body: string): void => {
 // champions/*-specs.ts
 emit(
   join("champions", "species-specs.ts"),
-  `import type { SpeciesSpec } from "../../../src/types/species.ts";\n\nexport const speciesSpecsDex = ${lit(speciesSpecEntries)} as const satisfies Record<string, SpeciesSpec>;\n\nexport type SpeciesSpecsDex = typeof speciesSpecsDex;\nexport type SpeciesSpecId = keyof SpeciesSpecsDex;\n`,
+  `import type { SpeciesSpec } from "../../types/species.ts";\n\nexport const speciesSpecsDex = ${lit(speciesSpecEntries)} as const satisfies Record<string, SpeciesSpec>;\n\nexport type SpeciesSpecsDex = typeof speciesSpecsDex;\nexport type SpeciesSpecId = keyof SpeciesSpecsDex;\n`,
 );
 emit(
   join("champions", "mega-specs.ts"),
-  `import type { MegaSpec } from "../../../src/types/species.ts";\n\nexport const megaSpecsDex = ${lit(megaSpecEntries)} as const satisfies Record<string, MegaSpec>;\n\nexport type MegaSpecsDex = typeof megaSpecsDex;\nexport type MegaSpecId = keyof MegaSpecsDex;\n`,
+  `import type { MegaSpec } from "../../types/species.ts";\n\nexport const megaSpecsDex = ${lit(megaSpecEntries)} as const satisfies Record<string, MegaSpec>;\n\nexport type MegaSpecsDex = typeof megaSpecsDex;\nexport type MegaSpecId = keyof MegaSpecsDex;\n`,
 );
 emit(
   join("champions", "item-specs.ts"),
-  `import type { Assignable } from "../../../src/types/assert.ts";\nimport type { ItemBase } from "../../../src/types/item.ts";\n\nexport const itemSpecsDex = ${lit(itemSpecEntries)} as const;\n\nexport type ItemSpecsDex = typeof itemSpecsDex;\nexport type ItemId = keyof ItemSpecsDex;\n\n// 適合検証（megaSpecies が派生 SpeciesId を指すため inline satisfies を避け分離する）。\nexport type _ItemConforms = Assignable<Record<string, ItemBase>, ItemSpecsDex>;\n`,
+  `import type { Assignable } from "../../types/assert.ts";\nimport type { ItemBase } from "../../types/item.ts";\n\nexport const itemSpecsDex = ${lit(itemSpecEntries)} as const;\n\nexport type ItemSpecsDex = typeof itemSpecsDex;\nexport type ItemId = keyof ItemSpecsDex;\n\n// 適合検証（megaSpecies が派生 SpeciesId を指すため inline satisfies を避け分離する）。\nexport type _ItemConforms = Assignable<Record<string, ItemBase>, ItemSpecsDex>;\n`,
 );
 emit(
   join("champions", "ability-specs.ts"),
-  `import type { AbilityBase } from "../../../src/types/ability.ts";\n\nexport const abilitySpecsDex = ${lit(abilitySpecEntries)} as const satisfies Record<string, AbilityBase>;\n\nexport type AbilitySpecsDex = typeof abilitySpecsDex;\nexport type AbilityId = keyof AbilitySpecsDex;\n`,
+  `import type { AbilityBase } from "../../types/ability.ts";\n\nexport const abilitySpecsDex = ${lit(abilitySpecEntries)} as const satisfies Record<string, AbilityBase>;\n\nexport type AbilitySpecsDex = typeof abilitySpecsDex;\nexport type AbilityId = keyof AbilitySpecsDex;\n`,
 );
 emit(
   join("champions", "move-specs.ts"),
-  `import type { MoveStats } from "../../../src/types/move.ts";\n\nexport const moveSpecsDex = ${lit(moveSpecEntries)} as const satisfies Record<string, MoveStats>;\n\nexport type MoveSpecsDex = typeof moveSpecsDex;\nexport type MoveId = keyof MoveSpecsDex;\n`,
+  `import type { MoveStats } from "../../types/move.ts";\n\nexport const moveSpecsDex = ${lit(moveSpecEntries)} as const satisfies Record<string, MoveStats>;\n\nexport type MoveSpecsDex = typeof moveSpecsDex;\nexport type MoveId = keyof MoveSpecsDex;\n`,
 );
 emit(
   join("champions", "type-specs.ts"),
-  `import type { TypeSpec } from "../../../src/types/type-chart.ts";\n\nexport const typeSpecsDex = ${lit(typeSpecEntries)} as const satisfies Record<string, TypeSpec>;\n\nexport type TypeSpecsDex = typeof typeSpecsDex;\n`,
+  `import type { TypeSpec } from "../../types/type-chart.ts";\n\nexport const typeSpecsDex = ${lit(typeSpecEntries)} as const satisfies Record<string, TypeSpec>;\n\nexport type TypeSpecsDex = typeof typeSpecsDex;\n`,
 );
 
 // languages/*.ts
@@ -348,7 +348,7 @@ const langFiles: [string, string, Record<string, NamePair>][] = [
 for (const [file, name, map] of langFiles) {
   emit(
     join("languages", `${file}.ts`),
-    `import type { NameEntry } from "../../../src/types/name.ts";\n\nexport const ${name} = ${lit(nameEntries(map))} as const satisfies Record<string, NameEntry>;\n\nexport type ${name.charAt(0).toUpperCase() + name.slice(1)} = typeof ${name};\n`,
+    `import type { NameEntry } from "../../types/name.ts";\n\nexport const ${name} = ${lit(nameEntries(map))} as const satisfies Record<string, NameEntry>;\n\nexport type ${name.charAt(0).toUpperCase() + name.slice(1)} = typeof ${name};\n`,
   );
 }
 {
@@ -406,8 +406,8 @@ for (const r of regs) {
   );
   emit(
     join(dir, "index.ts"),
-    `import type { RegulationBase } from "../../../../src/types/regulation.ts";\n` +
-      `import type { PerRegSpecies } from "../../../../src/types/species.ts";\n` +
+    `import type { RegulationBase } from "../../../types/regulation.ts";\n` +
+      `import type { PerRegSpecies } from "../../../types/species.ts";\n` +
       `import { megaSpecsDex } from "../mega-specs.ts";\n` +
       `import { speciesSpecsDex } from "../species-specs.ts";\n` +
       `import { items } from "./items.ts";\n` +

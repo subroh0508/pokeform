@@ -6,7 +6,7 @@
  * `satisfies ConstrainParty<...>` で参照し、違反を tsc が弾く（[[tsc-verification]]）。
  */
 
-import type { RegulationDex, RegulationId } from "../../data/generated/champions/index.ts";
+import type { RegulationDex, RegulationId } from "../generated/champions/index.ts";
 import type { Invalid } from "./brand.ts";
 import type { SpeciesIdIn } from "./individual.ts";
 

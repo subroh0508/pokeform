@@ -98,7 +98,7 @@ category）と `languages/*.yaml` の**日本語名 ja** を転記する（**app
   が throw する（手順 3 の補足）。大量投入時の取りこぼしが最も多い箇所。
 - **specs↔languages の id 対応**: 構造（specs）に id を足したら名前（languages）にも同 id を入れる（id 集合不一致は
   `generate.ts` が生成段で弾く・ADR 0035）。
-- **生成物を手編集しない**: `data/generated/**` は触らず specs / languages を直して再生成する（[[data-pipeline]]）。
+- **生成物を手編集しない**: `src/generated/**` は触らず specs / languages を直して再生成する（[[data-pipeline]]）。
 - **機械ゲートを再実装しない**: 検証は `generate:data` / `verify`、生成データの妥当性は `pokemon-data-reviewer`
   agent（[[skill-authoring]]）。
 - **cross-agent**: 本 skill は npm script の逐次実行のみで Claude 固有機構（Workflow）を持たない。Codex / 素の CLI
