@@ -55,6 +55,8 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #120 | regulations をゲームでグルーピング（`<game>/<reg>.yaml`）・生成 id `<game>-<reg>` を不変に保ち RegulationId/個体値/import を非破壊・harness-review nit で architecture.md 旧パスを同 PR 同期 | 2026-06-14 | 03-survey-regulation-rework/phase-10 | draft | [2026-06-14-pr-120.md](./2026-06-14-pr-120.md) |
 | #122 | 技メタを per-game へ移転（`catalog/moves.yaml` → `regulations/champions/moves.yaml`・`MoveBase`/`MoveStats` 分離・219 技等価移設）・ADR 0026 を 0034 へ supersede し archive 退避 | 2026-06-14 | 03-survey-regulation-rework/phase-11 | draft | [2026-06-14-pr-122.md](./2026-06-14-pr-122.md) |
 | #123 | 取得スキルを 2 分割（`update-catalog` 新設で PokeAPI 構造データ + 名前の catalog 取り込みを分離 / survey-regulation を Champions 取得へ refocus + catalog 更新チェックポイント追加）・harness-review blocking 0 nit 1 でクリーン通過・ADR 不要（境界 0027/0034 確立済） | 2026-06-14 | 03-survey-regulation-rework/phase-12 | draft | [2026-06-14-pr-123.md](./2026-06-14-pr-123.md) |
+| #125 | plan 群再構成（技マスター専用取得 + スクレイパー役割分割を `05` 新設・M-A 全種族投入を `06` 独立・`04` をレイアウト再編へ純化・`03` Phase 13 を 05 へ吸収）・依存を 03→04→05→06 の一方通行へ整理・cross-plan dangling 一掃 | 2026-06-20 | 04/05/06 (plan 再構成) | draft | [2026-06-20-pr-125.md](./2026-06-20-pr-125.md) |
+| #126 | dep-update #89（biome 2.4.16→2.5.0）の biome.json 追従漏れ是正（`biome migrate` で `$schema` を 2.5.0・非推奨 `recommended` を `preset:"recommended"` へ）・biome check の info を 2→0 | 2026-06-20 | — | draft | [2026-06-20-pr-126.md](./2026-06-20-pr-126.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
