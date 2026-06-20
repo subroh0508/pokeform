@@ -10,7 +10,7 @@ Phase 1 で確定した設計に沿って、ソース YAML・codegen・型・con
   - **パイプライン追従**: `materialize`（構造→specs / ja→languages）・`fetch-pokeapi`（列挙元）・`serebii-to-catalog`（書き出し先）・`check:regulation`/`check:yaml-style`（走査パス）。
   - **型レイヤ**（`src/types/**`）: specs/languages 型（`NameEntry`・新 `MegaSpec`・`SpeciesBaseInfo` から name 除去）。**individual.ts/party.ts の reg-aware 制約・ブランドエラーを保全**（`RegulationDex[R]["speciesDex"]` 形を維持）。
   - **14 consumer + 公開 API**: 名前参照を languages へ（`cli/format.ts`・`io/load-individual.ts`）・逆引きを languages forward から導出（`io/load-party.ts`・`codegen/normalize.ts`）・import パス・`src/index.ts` の export・テスト fixture（`__fixtures__/chart.ts`・`type-effectiveness.test.ts`）。
-- スコープ外: ADR 起票（Phase 1）。rule/skill/architecture/docs 追従（Phase 3）。技仕様の値是正・全種族投入（03 Phase 13/14）。
+- スコープ外: ADR 起票（Phase 1）。rule/skill/architecture/docs 追従（Phase 3）。技仕様の値是正（後続計画群 05）・全種族投入（後続計画群 06）。
 
 ## 前提（依存）
 
@@ -50,4 +50,4 @@ Phase 1 で確定した設計に沿って、ソース YAML・codegen・型・con
 
 - **最大リスク = reg-aware 型機構の破壊**。`m-a/index.ts` の `speciesDex` 合成が `PerRegSpecies` 形（moves/abilities/items/megaEvolvesTo）を維持できないと individual/party の制約・ブランドエラーが崩れる。型の回帰確認（覚えない技でブランドエラー）を必須チェックに置く。
 - **大 diff（>1000 行）を 1 PR 許容**: YAML 移行 + codegen + 型 + consumer が密結合で意味ある分割が困難なため（[[planning]] の例外）。レビュー容易性のため、ソース/生成物差分（`git mv` 中心）と型/consumer 差分を分けて説明する。
-- 名前 SoT 所在移動は **値を変えない**（移行のみ）。技仕様の値是正（PP/power/type）は別 phase（03 Phase 13）。本 phase で値を直さない。
+- 名前 SoT 所在移動は **値を変えない**（移行のみ）。技仕様の値是正（PP/power/type）は後続計画群 05（技マスター専用取得経路）。本 phase で値を直さない。

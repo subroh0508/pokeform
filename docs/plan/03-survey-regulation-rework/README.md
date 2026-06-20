@@ -4,14 +4,15 @@
 （cheerio）+ Haiku 取得 SubAgent + 修正 SubAgent 自己修復（ハイブリッド3層）**へ刷新する計画群。トークン消費の
 削減と正確性の向上を狙う。動作確認で判明した是正（per-reg 持ち物 legality・per-reg species name 削除・メガ決定論
 取り込み）を Phase 7-9、データレイアウト整備（ゲームグルーピング・per-game 技メタ・取得スキル 2 分割）を Phase 10-12
-として追加し、**最終 Phase 13 で技仕様の Champions 対応（PP 8/12/16/20・power/type の誤り是正）**を行う。
+として追加した。本計画群は **Phase 12 で完結**する（取得パイプライン刷新 + データレイアウト整備）。
 
-> **全種族投入（M-A 全186種）の位置づけ**: 02-data-model-redesign の旧 phase-20「M-A 全データ投入」は、新パイプラインで
-> かつ**新しい generated/YAML レイアウトの上で**実行すべきため、別計画群
-> [`04-generated-layout-redesign`](../04-generated-layout-redesign/README.md) の**最終 phase（Phase 4）**へ移動した。
-> **依存は一方通行**: 本計画群（03）を最後の Phase 13（技仕対応）まで完了 → 04（generated/YAML 再編 + その上での全種族投入）
-> の順。順序は **03（…→ Phase 13 技仕対応）→ 04（Phase 1-3 再編 → Phase 4 全種族投入）**。Phase 13 は現行レイアウト上で
-> 技メタを是正し、04 のレイアウト再編が値を保ったまま新ツリーへ移行する。
+> **後続計画群への一方通行**: 本計画群（03・取得パイプライン刷新）完了後、技仕様の Champions 対応（技マスターの値是正）
+> とスクレイパー役割分割・skill オーケストレーター化は後続
+> [`05-move-master-scraper-refactor`](../05-move-master-scraper-refactor/README.md) が、M-A 全186種の全量投入は
+> [`06-ma-full-data`](../06-ma-full-data/README.md) が担う。順序は **03（取得刷新・Phase 1-12）→ 04（generated/YAML
+> レイアウト再編）→ 05（技マスター取得 + 役割分割 + skill 再編）→ 06（全種族投入）** の一方通行。
+> **旧 03 Phase 13（技メタ値の手動是正）は 05 の技マスター専用取得経路へ吸収して廃止した**（手動是正の代わりに専用
+> 取得で根本解決）。
 
 > 設計の正本は [`OVERVIEW.md`](./OVERVIEW.md)（ゴール / 背景 / 設計方針 / 実装指針 / スコープ外 /
 > 計画群全体の受け入れ基準）。規約は [`.claude/rules/data-pipeline.md`](../../../.claude/rules/data-pipeline.md) /
@@ -33,8 +34,7 @@ flowchart TD
     P9 --> P10
     P10 --> P11[phase-11 — 技メタを per-game へ移転]
     P11 --> P12[phase-12 — 取得スキル 2 分割 + catalog チェックポイント]
-    P12 --> P13[phase-13 — 技仕様の Champions 対応（PP 8/12/16/20・power/type 是正・03 最終）]
-    P13 --> PLAN04[次計画群 04-generated-layout-redesign（再編 → 全種族投入）]
+    P12 --> PLAN04[次計画群 04-generated-layout-redesign（レイアウト再編）→ 05（技マスター取得 + 役割分割）→ 06（全種族投入）]
 ```
 
 ## フェーズ一覧（この順で実施）
@@ -51,9 +51,8 @@ flowchart TD
 - [x] [Phase 10 — regulations をゲームグルーピング（`regulations/champions/m-(a|b).yaml`）](./phase-10-game-grouped-regulations.md)
 - [x] [Phase 11 — 技メタを per-game へ移転（catalog = 名前 / `regulations/champions/moves.yaml` = 技メタ・ADR 0026 改訂）](./phase-11-per-game-move-meta.md)
 - [x] [Phase 12 — 取得スキルを 2 分割（catalog 取得 / regulations 取得）+ catalog 更新チェックポイント](./phase-12-update-skill-split.md)
-- [ ] [Phase 13 — 技仕様の Champions 対応（PP 8/12/16/20・power/type の誤り是正・Serebii 第一優先・03 最終・現行レイアウト）](./phase-13-move-spec-champions-fix.md)
 
-> **全種族投入（M-A 全186種）は本計画群ではなく [`04-generated-layout-redesign` の Phase 4](../04-generated-layout-redesign/phase-04-ma-full-data.md)** で実施する（04 のレイアウト再編後の新ツリー上で投入）。
+> **全種族投入（M-A 全186種）は本計画群ではなく後続計画群 [`06-ma-full-data`](../06-ma-full-data/README.md)** で実施する（04 のレイアウト再編 → 05 の技マスター取得 + 役割分割を経た新ツリー + 整理済みパイプライン上で投入）。技仕様の Champions 対応は [`05-move-master-scraper-refactor`](../05-move-master-scraper-refactor/README.md) が担う。
 
 > 計画群全体の受け入れ基準は [`OVERVIEW.md` の「受け入れ基準」節](./OVERVIEW.md#受け入れ基準) を参照。
 
@@ -69,10 +68,10 @@ flowchart TD
   （04 Phase 4）の手前で、`regulations/champions/` レイアウト・`catalog`(名前)/`regulations`(技メタ) の責務分離・
   catalog 取得 / regulations 取得スキルの分割を確定させる de-risk（learning #59/#76 の「全量投入の手前で仕組みを
   確定」と同型）。
-- Phase 13（技仕様の Champions 対応・本計画群の最終 phase）は、前作から変更された技仕様（PP の 8/12/16/20 化・power・
-  type）の誤りを Serebii 第一優先で是正する phase。**現行レイアウト上で実施**し（04 着手前）、続く 04 のレイアウト
-  再編が是正済みの値を保ったまま新ツリー（`move-specs`）へ移行する。全種族投入（04 Phase 4）の前に技メタを正すことで、
-  誤った技メタが全186種・全 movepool へ広がるのを防ぐ（「全量投入の手前で値を正す」de-risk）。
-- **全種族投入は 04 へ移動**: 02 の旧 phase-20（M-A 全データ投入）は [`04-generated-layout-redesign` の Phase 4](../04-generated-layout-redesign/phase-04-ma-full-data.md)
-  で、新パイプライン経由・**04 再編後の新レイアウト**・Phase 13 是正済みの技メタの上で全186種を投入する。依存を一方通行
-  （03 → 04）に保つため、全量投入を 03 へ戻さず 04 の最終 phase に置いた。
+- **技仕様の Champions 対応は 05 へ**: 前作から変更された技仕様（PP の 8/12/16/20 化・power・type）の是正は、当初
+  本計画群の Phase 13（現行レイアウト上での手動是正）として置いていたが、後続
+  [`05-move-master-scraper-refactor`](../05-move-master-scraper-refactor/README.md) の**技マスター専用取得経路**へ吸収して
+  廃止した。手動是正の代わりに Serebii 技専用ページから Champions 準拠値を取得して `move-specs` を正す（根本解決）。
+- **全種族投入は 06 へ**: 02 の旧 phase-20（M-A 全データ投入）は後続計画群
+  [`06-ma-full-data`](../06-ma-full-data/README.md) で、新パイプライン経由・**04 再編後の新レイアウト**・05 是正済みの
+  技メタの上で全186種を投入する。依存を一方通行（03 → 04 → 05 → 06）に保つため、全量投入を 03 へ戻さない。

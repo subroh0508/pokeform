@@ -8,14 +8,16 @@ pokeform の実装計画は **計画ディレクトリ単位**で分割し、各
 - ライブラリ本体（MVP）計画 → [`01-mvp/README.md`](./01-mvp/)
 - データ保持モデル再設計計画 → [`02-data-model-redesign/README.md`](./02-data-model-redesign/)
 - survey-regulation 刷新（決定論スクレイパー + 自己修復）計画 → [`03-survey-regulation-rework/README.md`](./03-survey-regulation-rework/)
-- generated / YAML ディレクトリ構成の再編（specs / languages / per-reg 分割）+ 新レイアウト上での M-A 全種族投入 計画 → [`04-generated-layout-redesign/README.md`](./04-generated-layout-redesign/)
+- generated / YAML ディレクトリ構成の再編（specs / languages / per-reg 分割）計画 → [`04-generated-layout-redesign/README.md`](./04-generated-layout-redesign/)
+- 技マスター専用取得 + スクレイパー役割分割 + survey-regulation オーケストレーター化 計画 → [`05-move-master-scraper-refactor/README.md`](./05-move-master-scraper-refactor/)
+- M-A 全種族投入（新レイアウト + 整理済みパイプライン上での全量投入）計画 → [`06-ma-full-data/README.md`](./06-ma-full-data/)
 - アーキ正本（旧 `plan.md`）→ [`01-mvp/architecture.md`](./01-mvp/architecture.md)
 
 ## 採番 / slug 規約
 
 - 計画ディレクトリは **`NN-<slug>/` 形式**（**ゼロ埋め 2 桁連番** + **kebab-case スラッグ**）。例: `00-harness-setup/`・`01-mvp/`。
-- **確定済み**: `00-harness-setup`（ハーネス）/ `01-mvp`（ライブラリ本体 MVP）/ `02-data-model-redesign`（データ保持モデル再設計）/ `03-survey-regulation-rework`（survey-regulation 刷新）/ `04-generated-layout-redesign`（generated / YAML ディレクトリ再編）。
-- **`05-<slug>/` 以降は事前スタブを作らない**。作業（テーマ）が出るたびに、その内容から slug を**都度生成**して採番する（例: 本格ダメージ計算なら `05-damage-calc/`）。
+- **確定済み**: `00-harness-setup`（ハーネス）/ `01-mvp`（ライブラリ本体 MVP）/ `02-data-model-redesign`（データ保持モデル再設計）/ `03-survey-regulation-rework`（survey-regulation 刷新）/ `04-generated-layout-redesign`（generated / YAML ディレクトリ再編）/ `05-move-master-scraper-refactor`（技マスター専用取得 + スクレイパー役割分割 + skill オーケストレーター化）/ `06-ma-full-data`（M-A 全種族投入）。
+- **`07-<slug>/` 以降は事前スタブを作らない**。作業（テーマ）が出るたびに、その内容から slug を**都度生成**して採番する（例: 本格ダメージ計算なら `07-damage-calc/`）。
 - 各計画ディレクトリ配下の Phase doc も同様に **`phase-NN-<slug>.md`**（ゼロ埋め 2 桁）。ディレクトリ直下に当該計画の `README.md`（インデックス）を置く。
 
 ## 全体進捗（計画単位の status ロールアップ）
@@ -31,6 +33,8 @@ pokeform の実装計画は **計画ディレクトリ単位**で分割し、各
 | [02-data-model-redesign](./02-data-model-redesign/README.md) | ✅ 完了 |
 | [03-survey-regulation-rework](./03-survey-regulation-rework/README.md) | 🚧 進行中 |
 | [04-generated-layout-redesign](./04-generated-layout-redesign/README.md) | ⬜ 未着手 |
+| [05-move-master-scraper-refactor](./05-move-master-scraper-refactor/README.md) | ⬜ 未着手 |
+| [06-ma-full-data](./06-ma-full-data/README.md) | ⬜ 未着手 |
 
 ## MVP の範囲
 
