@@ -87,10 +87,13 @@ export type {
 export type { RegulationBase, RegulationDex, RegulationId } from "./types/regulation.ts";
 export { regulationDex } from "./types/regulation.ts";
 export type {
-  SpeciesBase,
-  SpeciesBaseDex,
-  SpeciesBaseId,
-  SpeciesBaseInfo,
+  MegaSpec,
+  MegaSpecId,
+  MegaSpecsDex,
+  PerRegSpecies,
+  SpeciesSpec,
+  SpeciesSpecId,
+  SpeciesSpecsDex,
 } from "./types/species.ts";
-export { speciesBaseDex } from "./types/species.ts";
+export { megaSpecsDex, speciesSpecsDex, speciesStructuralDex } from "./types/species.ts";
 export type { PokemonType, TypeMultiplier } from "./types/type-chart.ts";

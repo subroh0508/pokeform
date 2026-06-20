@@ -1,11 +1,10 @@
-import type { ItemDex, ItemId } from "../../data/generated/items.ts";
-import type { RegulationDex, RegulationId } from "../../data/generated/regulations/index.ts";
-import { speciesBaseDex } from "../../data/generated/species-base.ts";
+import type { RegulationDex, RegulationId } from "../../data/generated/champions/index.ts";
+import type { ItemId, ItemSpecsDex } from "../../data/generated/champions/item-specs.ts";
 import { calcRealStats } from "../domain/calc-stats.ts";
 import type { Invalid } from "./brand.ts";
 import type { NatureSpec } from "./nature.ts";
 import type { RegulationItemId } from "./regulation.ts";
-import type { PerRegSpecies } from "./species.ts";
+import { type PerRegSpecies, speciesStructuralDex } from "./species.ts";
 import type { PointAllocation, RealStats } from "./stats.ts";
 
 /**
@@ -14,7 +13,8 @@ import type { PointAllocation, RealStats } from "./stats.ts";
  * 「tsc のみ」（Zod 不採用・[[tsc-verification]] / ADR 0010）。覚えない技・使えない特性は**宣言した
  * レギュレーション `R` の種族 dex**（`SpeciesDexOf<R>[S]`）ルックアップの union で弾き、合計66 は codegen
  * 算出値を `PointTotalMustBe66<N>` で検証する。同じ種族でも `R` ごとに習得技が異なりうる（per-reg 化・
- * ADR 0021）。実数値計算は reg 不変のため `speciesBaseDex`（派生 base view）から種族値を引く（設計判断5）。
+ * ADR 0021）。実数値計算は reg 不変のため `speciesStructuralDex`（base + mega 統合の構造ルックアップ）から
+ * 種族値を引く（設計判断5・ADR 0035）。
  */
 
 // --- reg-aware な種族 dex アクセサ ----------------------------------------------------------------
@@ -26,7 +26,7 @@ export type SpeciesIdIn<R extends RegulationId> = keyof SpeciesDexOf<R> & string
 /**
  * `R` の種族 `S` のエントリ。`& PerRegSpecies` で `moves`/`abilities`/`items` キーの存在を tsc に保証する
  * （generic R での深い indexed access の限界回避）。narrow リテラル側は交差で温存される。`PerRegSpecies` は
- * `name` を持たない per-reg 型（種族名 SoT は `speciesBaseDex`・Phase 8 の dedup）。
+ * `name` を持たない per-reg 型（種族名 SoT は languages・構造と直交・ADR 0035）。
  */
 type SpeciesEntryOf<R extends RegulationId, S extends SpeciesIdIn<R>> = SpeciesDexOf<R>[S] &
   PerRegSpecies;
@@ -87,7 +87,7 @@ export type ValidAbility<
  * `megaSpecies`（メガ形態 SpeciesId）で引く。
  */
 export type MegaStoneOf<S extends string> = {
-  [I in ItemId]: ItemDex[I] extends { readonly megaSpecies: S } ? I : never;
+  [I in ItemId]: ItemSpecsDex[I] extends { readonly megaSpecies: S } ? I : never;
 }[ItemId];
 
 /**
@@ -137,7 +137,7 @@ export interface Individual<R extends RegulationId, S extends SpeciesIdIn<R>>
 /**
  * 個体仕様から実数値（Lv50・個体値31 固定）を自動計算して確定個体を返す（公開 API・要求「実装値は
  * 自動計算」を充足）。レギュ `R` を明示し、`ability` / `item` / `moves` を `R` の種族プールで型検証する。
- * 種族値は reg 不変のため `speciesBaseDex`（派生 base view）から引く（計算は純関数 `calcRealStats`・
+ * 種族値は reg 不変のため `speciesStructuralDex`（base + mega 統合）から引く（計算は純関数 `calcRealStats`・
  * [[game-spec]] の二重 floor）。型制約により不正な特性・技はコンパイル時に弾かれる。
  */
 export const defineIndividual = <R extends RegulationId, S extends SpeciesIdIn<R>>(
@@ -145,7 +145,7 @@ export const defineIndividual = <R extends RegulationId, S extends SpeciesIdIn<R
   species: S,
   spec: IndividualSpec<R, S>,
 ): Individual<R, S> => {
-  const base = speciesBaseDex[species as keyof typeof speciesBaseDex];
+  const base = speciesStructuralDex[species as keyof typeof speciesStructuralDex];
   const realStats = calcRealStats(
     { baseStats: base.baseStats },
     { nature: spec.nature, points: spec.points },

@@ -1,7 +1,7 @@
 /**
- * 持ち物エントリの親型（統一パターンの XxxBase）。ItemDex / ItemId は
- * `data/generated/items.ts` が派生する。**名前は持たない**（名前の SoT は
- * `data/champions/catalog/items.yaml`・ja→id 逆引きは `names.ts`・Phase 10）。効果フィールドは
+ * 持ち物エントリの親型（統一パターンの XxxBase）。ItemSpecsDex / ItemId は
+ * `data/generated/champions/item-specs.ts` が派生する。**名前は持たない**（名前の SoT は
+ * `data/languages/items.yaml`・ja→id 逆引きは consumer が実行時導出・ADR 0035）。効果フィールドは
  * 後続フェーズで追加する前提で生成ファイル自体は残す。詳細は .claude/rules/type-conventions.md。
  */
 export interface ItemBase {

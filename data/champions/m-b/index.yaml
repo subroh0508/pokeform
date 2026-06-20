@@ -1,0 +1,7 @@
+# data/champions/m-b/index.yaml — レギュレーション m-b のメタ（name/period）。レギュ名は languages 列挙の例外でここに同居。
+name:
+  en: Champions Regulation M-B
+  ja: チャンピオンズ レギュレーションM-B
+period:
+  start: 2026-06-17
+  end: null

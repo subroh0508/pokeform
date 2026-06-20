@@ -1,0 +1,197 @@
+# data/languages/items.yaml — 持ち物の日英名（id→{ja,en}）。
+items:
+  charizardite-x:
+    ja: リザードナイトＸ
+    en: Charizardite X
+  rocky-helmet:
+    ja: ゴツゴツメット
+    en: Rocky Helmet
+  life-orb:
+    ja: いのちのたま
+    en: Life Orb
+  leftovers:
+    ja: たべのこし
+    en: Leftovers
+  assault-vest:
+    ja: とつげきチョッキ
+    en: Assault Vest
+  choice-scarf:
+    ja: こだわりスカーフ
+    en: Choice Scarf
+  black-belt:
+    ja: くろおび
+    en: Black Belt
+  black-glasses:
+    ja: くろいメガネ
+    en: Black Glasses
+  bright-powder:
+    ja: ひかりのこな
+    en: Bright Powder
+  charcoal:
+    ja: もくたん
+    en: Charcoal
+  dragon-fang:
+    ja: りゅうのキバ
+    en: Dragon Fang
+  fairy-feather:
+    ja: ようせいのハネ
+    en: Fairy Feather
+  focus-band:
+    ja: きあいのハチマキ
+    en: Focus Band
+  focus-sash:
+    ja: きあいのタスキ
+    en: Focus Sash
+  hard-stone:
+    ja: かたいいし
+    en: Hard Stone
+  kings-rock:
+    ja: おうじゃのしるし
+    en: King’s Rock
+  light-ball:
+    ja: でんきだま
+    en: Light Ball
+  magnet:
+    ja: じしゃく
+    en: Magnet
+  mental-herb:
+    ja: メンタルハーブ
+    en: Mental Herb
+  metal-coat:
+    ja: メタルコート
+    en: Metal Coat
+  miracle-seed:
+    ja: きせきのタネ
+    en: Miracle Seed
+  mystic-water:
+    ja: しんぴのしずく
+    en: Mystic Water
+  never-melt-ice:
+    ja: とけないこおり
+    en: Never-Melt Ice
+  poison-barb:
+    ja: どくバリ
+    en: Poison Barb
+  quick-claw:
+    ja: せんせいのツメ
+    en: Quick Claw
+  scope-lens:
+    ja: ピントレンズ
+    en: Scope Lens
+  sharp-beak:
+    ja: するどいくちばし
+    en: Sharp Beak
+  shell-bell:
+    ja: かいがらのすず
+    en: Shell Bell
+  silk-scarf:
+    ja: シルクのスカーフ
+    en: Silk Scarf
+  silver-powder:
+    ja: ぎんのこな
+    en: Silver Powder
+  soft-sand:
+    ja: やわらかいすな
+    en: Soft Sand
+  spell-tag:
+    ja: のろいのおふだ
+    en: Spell Tag
+  twisted-spoon:
+    ja: まがったスプーン
+    en: Twisted Spoon
+  white-herb:
+    ja: しろいハーブ
+    en: White Herb
+  aspear-berry:
+    ja: ナナシのみ
+    en: Aspear Berry
+  babiri-berry:
+    ja: リリバのみ
+    en: Babiri Berry
+  charti-berry:
+    ja: ヨロギのみ
+    en: Charti Berry
+  cheri-berry:
+    ja: クラボのみ
+    en: Cheri Berry
+  chesto-berry:
+    ja: カゴのみ
+    en: Chesto Berry
+  chilan-berry:
+    ja: ホズのみ
+    en: Chilan Berry
+  chople-berry:
+    ja: ヨプのみ
+    en: Chople Berry
+  coba-berry:
+    ja: バコウのみ
+    en: Coba Berry
+  colbur-berry:
+    ja: ナモのみ
+    en: Colbur Berry
+  haban-berry:
+    ja: ハバンのみ
+    en: Haban Berry
+  kasib-berry:
+    ja: カシブのみ
+    en: Kasib Berry
+  kebia-berry:
+    ja: ビアーのみ
+    en: Kebia Berry
+  leppa-berry:
+    ja: ヒメリのみ
+    en: Leppa Berry
+  lum-berry:
+    ja: ラムのみ
+    en: Lum Berry
+  occa-berry:
+    ja: オッカのみ
+    en: Occa Berry
+  oran-berry:
+    ja: オレンのみ
+    en: Oran Berry
+  passho-berry:
+    ja: イトケのみ
+    en: Passho Berry
+  payapa-berry:
+    ja: ウタンのみ
+    en: Payapa Berry
+  pecha-berry:
+    ja: モモンのみ
+    en: Pecha Berry
+  persim-berry:
+    ja: キーのみ
+    en: Persim Berry
+  rawst-berry:
+    ja: チーゴのみ
+    en: Rawst Berry
+  rindo-berry:
+    ja: リンドのみ
+    en: Rindo Berry
+  roseli-berry:
+    ja: ロゼルのみ
+    en: Roseli Berry
+  shuca-berry:
+    ja: シュカのみ
+    en: Shuca Berry
+  sitrus-berry:
+    ja: オボンのみ
+    en: Sitrus Berry
+  tanga-berry:
+    ja: タンガのみ
+    en: Tanga Berry
+  wacan-berry:
+    ja: ソクノのみ
+    en: Wacan Berry
+  yache-berry:
+    ja: ヤチェのみ
+    en: Yache Berry
+  charizardite-y:
+    ja: リザードナイトＹ
+    en: Charizardite Y
+  garchompite:
+    ja: ガブリアスナイト
+    en: Garchompite
+  gengarite:
+    ja: ゲンガナイト
+    en: Gengarite

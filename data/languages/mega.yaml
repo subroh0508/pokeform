@@ -1,0 +1,14 @@
+# data/languages/mega.yaml — メガ形態の日英名（id→{ja,en}）。
+mega:
+  charizard-mega-x:
+    ja: メガリザードンＸ
+    en: Mega Charizard X
+  charizard-mega-y:
+    ja: メガリザードンＹ
+    en: Mega Charizard Y
+  garchomp-mega:
+    ja: メガガブリアス
+    en: Mega Garchomp
+  gengar-mega:
+    ja: メガゲンガー
+    en: Mega Gengar

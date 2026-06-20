@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { typeDex } from "../../data/generated/types.ts";
+import { typeSpecsDex } from "../../data/generated/champions/type-specs.ts";
 import { chart } from "./__fixtures__/chart.ts";
 import { buildChart, effectiveness } from "./type-effectiveness.ts";
 
 describe("buildChart", () => {
-  it("TypeDex から攻撃→防御の倍率表を構築する", () => {
-    const built = buildChart(typeDex);
+  it("typeSpecsDex から攻撃→防御の倍率表を構築する", () => {
+    const built = buildChart(typeSpecsDex);
     expect(built.fire.grass).toBe(2);
     expect(built.fire.water).toBe(0.5);
     // 18 タイプすべてが攻撃キーに揃う

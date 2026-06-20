@@ -1,0 +1,4 @@
+# data/champions/m-b/mega.yaml — per-species 解禁メガ（species→mega id 配列）。
+mega:
+  charizard:
+    - charizard-mega-x

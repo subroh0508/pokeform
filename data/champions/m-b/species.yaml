@@ -1,0 +1,8 @@
+# data/champions/m-b/species.yaml — 解禁 base 種族 roster（id 列挙）。
+species:
+  - garchomp
+  - dragonite
+  - rotom-wash
+  - charizard
+  - dragapult
+  - hydreigon

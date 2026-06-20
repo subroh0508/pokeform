@@ -1,14 +1,14 @@
-import { itemDex } from "../../../data/generated/items.ts";
-// 攻撃範囲分析は per-game 技メタ（type/damageClass）を引く（Champions 固有値・Phase 11 / ADR 0034）。
-import { moveStatsDex } from "../../../data/generated/regulations/champions/moves.ts";
-import { speciesBaseDex } from "../../../data/generated/species-base.ts";
-import { typeDex } from "../../../data/generated/types.ts";
+import { itemSpecsDex } from "../../../data/generated/champions/item-specs.ts";
+// 攻撃範囲分析は per-game 技メタ（type/damageClass）を引く（Champions 固有値・ADR 0034）。
+import { moveSpecsDex } from "../../../data/generated/champions/move-specs.ts";
+import { typeSpecsDex } from "../../../data/generated/champions/type-specs.ts";
 import { analyzeCoverage, type CoverageReport } from "../../domain/coverage.ts";
 import { toCoverageMembers } from "../../domain/party-analysis.ts";
 import { buildChart } from "../../domain/type-effectiveness.ts";
 import { loadParty } from "../../io/load-party.ts";
 import { resolveInputFiles } from "../../io/resolve-paths.ts";
 import type { Lang } from "../../types/party.ts";
+import { speciesStructuralDex } from "../../types/species.ts";
 import { typeName } from "../format.ts";
 
 /**
@@ -17,7 +17,7 @@ import { typeName } from "../format.ts";
  * いずれかのパーティが脆弱（弱点集中）なら非0終了（[[cli-and-io]]）。
  */
 
-const chart = buildChart(typeDex);
+const chart = buildChart(typeSpecsDex);
 
 const printReport = (report: CoverageReport, lang: Lang): void => {
   // 防御弱点（weakCount 降順・弱点ありの行のみ）
@@ -44,7 +44,7 @@ export const runAnalyzeCoverage = async (path: string, lang: Lang): Promise<numb
   let vulnerable = false;
   for (const file of files) {
     const { name, party } = await loadParty(file);
-    const members = toCoverageMembers(party, speciesBaseDex, moveStatsDex, itemDex);
+    const members = toCoverageMembers(party, speciesStructuralDex, moveSpecsDex, itemSpecsDex);
     const report = analyzeCoverage(members, chart);
     if (report.vulnerable) vulnerable = true;
     const head = report.vulnerable

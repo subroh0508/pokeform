@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { parse as parseYaml } from "yaml";
 import {
@@ -12,41 +12,63 @@ import type { Lang } from "../../types/party.ts";
  * check:regulation コマンド本体（薄い CLI 配線・カバレッジ対象外）。検証ロジックは
  * domain/regulation-validation（純関数・テスト済み）に委譲し、ここは入出力と終了コードのみ担う。
  * 参照整合（種族 / 持ち物 / メガ / 技が catalog に存在）/ schema があれば非0終了（authoring 時ゲート・
- * [[cli-and-io]] / ADR 0023）。覚えない技（learnset legality）の照合は撤去した（ADR 0026・PokeAPI は
- * Champions 非対応で `data/raw` learnset が実態と一致しないため）。技の出自は Serebii 第一優先で
- * authoring 段に担保する（`survey-regulation` skill）。
+ * [[cli-and-io]] / ADR 0023）。覚えない技（learnset legality）の照合は撤去した（ADR 0026）。
+ *
+ * 新レイアウト（ADR 0035/0036）: 1 レギュ = 1 ディレクトリ（`data/champions/<reg>/{index,species,items,
+ * mega,species-moves}.yaml`）。catalog は specs ツリー（`*-specs.yaml`）。本配線は split された per-reg ファイルを
+ * 読んで domain が期待する 1 レコード（予約 items + 種族キー → {moves, mega}）へ**再構成**してから検証する。
  */
 
 const root = process.cwd();
 const CH = join(root, "data", "champions");
 
-const readCatalogSet = (file: string, key: string): Set<string> => {
-  // catalog は id → { ja, en } マップ（Phase 10）。参照整合に要るのは id（キー）集合のみ。
-  const y = parseYaml(readFileSync(join(CH, "catalog", file), "utf8")) as Record<
-    string,
-    Record<string, unknown>
-  >;
-  return new Set(Object.keys(y[key] ?? {}));
+/** specs YAML のトップレベルマップ / 配列（`species` / `items` / `moves` 等）のキー集合を読む。 */
+const readSpecKeys = (file: string, key: string): string[] => {
+  const y = parseYaml(readFileSync(join(CH, file), "utf8")) as Record<string, unknown>;
+  const node = y[key];
+  if (Array.isArray(node)) return node.map(String);
+  return Object.keys((node as Record<string, unknown>) ?? {});
 };
 
-// per-game 共有ファイル（reg ではない・Phase 11 の技メタ `moves.yaml` 等）はレギュ列挙から除外する。
-const REG_SHARED_FILES = new Set(["moves.yaml"]);
+/** catalog 集合（種族 = base + mega / 持ち物 / 技）を specs ツリーから組む。 */
+const buildCatalog = (): RegulationCatalog => ({
+  species: new Set([
+    ...readSpecKeys("species-specs.yaml", "species"),
+    ...readSpecKeys("mega-specs.yaml", "mega"),
+  ]),
+  items: new Set(readSpecKeys("item-specs.yaml", "items")),
+  moves: new Set(readSpecKeys("move-specs.yaml", "moves")),
+});
 
-/**
- * path（ファイル / ディレクトリ）から対象 regulation YAML を列挙する。ゲームグルーピング後
- * （`regulations/<game>/<reg>.yaml`・Phase 10）に追従し、ディレクトリ指定時は配下を**再帰**走査する。
- * per-game 共有の技メタ `moves.yaml`（Phase 11）は reg ではないので除外する。
- */
-const regFiles = (path: string): string[] => {
-  const stat = statSync(path);
-  if (!stat.isDirectory()) return [path];
+/** reg ディレクトリか（index.yaml を持つ）。 */
+const isRegDir = (dir: string): boolean =>
+  statSync(dir).isDirectory() && existsSync(join(dir, "index.yaml"));
+
+/** path（reg ディレクトリ / それらを含むディレクトリ）から対象 reg ディレクトリを列挙する。 */
+const regDirs = (path: string): string[] => {
+  if (isRegDir(path)) return [path];
   return readdirSync(path, { withFileTypes: true })
-    .sort((a, b) => a.name.localeCompare(b.name))
-    .flatMap((entry) => {
-      const child = join(path, entry.name);
-      if (entry.isDirectory()) return regFiles(child);
-      return entry.name.endsWith(".yaml") && !REG_SHARED_FILES.has(entry.name) ? [child] : [];
-    });
+    .filter((e) => e.isDirectory())
+    .map((e) => join(path, e.name))
+    .filter(isRegDir)
+    .sort();
+};
+
+/** split された per-reg ファイルを domain が期待する 1 レコードへ再構成する。 */
+const loadRegRecord = (dir: string): Record<string, unknown> => {
+  const rd = <T>(file: string): T => parseYaml(readFileSync(join(dir, file), "utf8")) as T;
+  const index = rd<{ name: unknown; period: unknown }>("index.yaml");
+  const species = rd<{ species: string[] }>("species.yaml").species ?? [];
+  const items = rd<{ items: string[] }>("items.yaml").items ?? [];
+  const mega = rd<{ mega: Record<string, string[]> }>("mega.yaml").mega ?? {};
+  const speciesMoves = rd<{ moves: Record<string, string[]> }>("species-moves.yaml").moves ?? {};
+  const record: Record<string, unknown> = { name: index.name, period: index.period, items };
+  for (const sid of species) {
+    const block: { moves: string[]; mega?: string[] } = { moves: speciesMoves[sid] ?? [] };
+    if (mega[sid]) block.mega = mega[sid];
+    record[sid] = block;
+  }
+  return record;
 };
 
 const formatIssue = (issue: RegulationIssue, lang: Lang): string => {
@@ -58,7 +80,7 @@ const formatIssue = (issue: RegulationIssue, lang: Lang): string => {
         : `  bad species block: ${issue.species} (moves array required)`;
     case "missing-species":
       return ja
-        ? `  未登録の種族: ${issue.species}（catalog/species.yaml に追記が必要）`
+        ? `  未登録の種族: ${issue.species}（species-specs.yaml に追記が必要）`
         : `  species not in catalog: ${issue.species}`;
     case "missing-item":
       return ja ? `  未登録の持ち物: ${issue.item}` : `  item not in catalog: ${issue.item}`;
@@ -75,16 +97,11 @@ const formatIssue = (issue: RegulationIssue, lang: Lang): string => {
 
 /** check:regulation を実行し、終了コード（0 = OK / 1 = 問題あり）を返す。 */
 export const runCheckRegulation = (path: string, lang: Lang): number => {
-  const catalog: RegulationCatalog = {
-    species: readCatalogSet("species.yaml", "pokemon"),
-    items: readCatalogSet("items.yaml", "items"),
-    moves: readCatalogSet("moves.yaml", "moves"),
-  };
+  const catalog = buildCatalog();
   let total = 0;
-  for (const file of regFiles(path)) {
-    const reg = parseYaml(readFileSync(file, "utf8")) as Record<string, unknown>;
-    const issues = validateRegulation(reg, catalog);
-    const name = file.replace(/^.*\//, "");
+  for (const dir of regDirs(path)) {
+    const issues = validateRegulation(loadRegRecord(dir), catalog);
+    const name = dir.replace(/^.*\//, "");
     if (issues.length === 0) {
       console.log(lang === "ja" ? `✅ ${name}: 整合` : `✅ ${name}: OK`);
       continue;
