@@ -1,7 +1,8 @@
 /**
  * fetch-fanout.workflow — survey-regulation 層2（Claude 固有・[ADR 0031](../../../../docs/adr/archive/0031-deterministic-serebii-scraper-hybrid-layers.md)）。
  *
- * roster（解禁種族 slug 配列）を受け、層1 の決定論スクレイパー（`scripts/{fetch,scrape}-serebii.ts`）を
+ * id 配列（**種族 slug = `kind:"species"` / 技 catalog id = `kind:"move"`**・ADR 0037 の技マスター専用経路）を受け、
+ * 層1 の決定論スクレイパー（`scripts/{fetch,scrape}-serebii.ts`）を
  * Haiku 取得 SubAgent へ **礼儀バッチ + Workflow `parallel()` で fan-out** するオーケストレータ。取得 SubAgent は
  * 「判断するな・スクリプトを呼べ」に縮退し、**HTML を LLM コンテキストに載せず exit code だけで判定**する
  * （read-only = Explore agentType）。成功種（exit 0）は冪等キャッシュ（`data/raw/serebii/`）で再実行 skip され、
@@ -16,15 +17,18 @@
  *
  * 使い方（Workflow ツール）:
  *   Workflow({ scriptPath: ".claude/skills/survey-regulation/workflows/fetch-fanout.workflow",
- *              args: ["garchomp", "salamence", ...] })
- *   args は slug 配列、または { roster: string[], batchSize?: number }。
+ *              args: ["garchomp", "salamence", ...] })                 // 既定 kind="species"（roster + 覚える技の一覧）
+ *   Workflow({ scriptPath: "...", args: { roster: ["earthquake", "quick-attack"], kind: "move" } }) // 技マスター
+ *   args は id 配列（kind="species" 既定）、または { roster: string[], kind?: "species"|"move", batchSize?: number }。
+ *   kind="species" は種族ページ（roster 確定 + 覚える技の名前一覧）、kind="move" は技専用ページ
+ *   `attackdex-champions/<id>.shtml`（技マスター = 技メタ全項目・ADR 0037）を取得する。
  * 返り値: { ok: string[], failed: {slug, stage, status, missingFields, rawHtmlPath}[], counts }。
  */
 
 export const meta = {
   name: "survey-regulation-fetch-fanout",
   description:
-    "Fan out the deterministic Serebii fetch+scrape (layer 1) across a roster of species slugs via read-only Haiku sub-agents; aggregate exit-0 successes and structured exit 3/4 failure reports without loading HTML into context.",
+    "Fan out the deterministic Serebii fetch+scrape (layer 1) across a roster of ids (kind=species: pokedex pages / kind=move: attackdex move-master pages, ADR 0037) via read-only Haiku sub-agents; aggregate exit-0 successes and structured exit 3/4 failure reports without loading HTML into context.",
   phases: [
     {
       title: "Fetch fan-out",
@@ -35,9 +39,11 @@ export const meta = {
   ],
 };
 
-// 入力: roster（解禁種族 slug 配列）。args に配列、または { roster, batchSize }。
+// 入力: roster（id 配列）+ kind。args に配列（kind="species" 既定）、または { roster, kind, batchSize }。
 const input = Array.isArray(args) ? { roster: args } : args || {};
 const roster = (input.roster || []).filter((s) => typeof s === "string" && s.length > 0);
+// 取得対象の種別。"species"=種族ページ（roster + 覚える技の一覧）/ "move"=技専用ページ（技マスター・ADR 0037）。
+const KIND = input.kind === "move" ? "move" : "species";
 // 礼儀バッチの同時実行キャップ（Workflow の global cap に加え、バッチ境界で Serebii への過負荷を抑える）。
 const BATCH = Math.max(1, Math.min(8, input.batchSize || 6));
 
@@ -60,26 +66,32 @@ const RESULT_SCHEMA = {
   },
 };
 
-const fetchPrompt = (slug) =>
+// kind 別の層1 コマンド（種族ページ / 技専用ページ）。scrape の exit code 契約（0/2/3/4）は両 kind で同型。
+const SCRAPE = KIND === "move" ? "scrape-serebii.ts move-master" : "scrape-serebii.ts species";
+const FETCH = KIND === "move" ? "fetch-serebii.ts move" : "fetch-serebii.ts species";
+const SUBJECT = KIND === "move" ? "技 catalog id" : "種族 slug";
+
+const fetchPrompt = (id) =>
   `あなたは Serebii Champions 解禁データの「取得 SubAgent」です。判断・抽出・要約は一切せず、層1スクリプトを呼んで exit code を報告するだけ。**HTML は絶対に読まない**（Read しない / cat しない / stdout の中間 JSON 本文も読まない）。ファイルの編集・生成もしない（read-only）。
 
-対象種族 slug: ${slug}
+対象${SUBJECT}: ${id}
 
 手順（厳守・順番どおり）:
-1. \`node scripts/scrape-serebii.ts species ${slug}; echo "exit=$?"\` を Bash で実行し、exit code を確認する。stdout の中間 JSON 本文は巨大なので読まない（exit code と、失敗時のみ末尾 stderr の 1 行 JSON だけ見る）。
+1. \`node scripts/${SCRAPE} ${id}; echo "exit=$?"\` を Bash で実行し、exit code を確認する。stdout の中間 JSON 本文は巨大なので読まない（exit code と、失敗時のみ末尾 stderr の 1 行 JSON だけ見る）。
 2. exit code で分岐:
    - **0**: 成功。status="ok" / cached=true（fetch せず通った＝キャッシュ命中）/ stage=0 / missingFields=[]。
-   - **2**: キャッシュ未取得。\`node scripts/fetch-serebii.ts species ${slug}; echo "exit=$?"\` を実行して取得 → 再度 \`node scripts/scrape-serebii.ts species ${slug}; echo "exit=$?"\` を実行し、その exit code で 0/3/4 を再判定する（再 scrape が 0 なら status="ok"・cached=false）。fetch が exit 2（取得失敗）なら status="fetch-failed"・exitCode=2。再 scrape も 2 なら status="fetch-failed"。
+   - **2**: キャッシュ未取得。\`node scripts/${FETCH} ${id}; echo "exit=$?"\` を実行して取得 → 再度 \`node scripts/${SCRAPE} ${id}; echo "exit=$?"\` を実行し、その exit code で 0/3/4 を再判定する（再 scrape が 0 なら status="ok"・cached=false）。fetch が exit 2（取得失敗）なら status="fetch-failed"・exitCode=2。再 scrape も 2 なら status="fetch-failed"。
    - **3**: status="schema-missing"。
    - **4**: status="sanity-failed"。
 3. status が "ok" 以外のとき**だけ**、直前に実行した scrape / fetch の **stderr** に出ている 1 行 JSON \`{"slug","stage","missingFields","rawHtmlPath"}\`（小さい構造化診断・HTML ではない）を読み、stage / missingFields / rawHtmlPath を結果へ転記する。
-4. StructuredOutput で結果オブジェクトを 1 つだけ返す（slug は "${slug}"）。`;
+4. StructuredOutput で結果オブジェクトを 1 つだけ返す（slug は "${id}"）。`;
 
 phase("Fetch fan-out");
 
 if (roster.length === 0) {
-  log('roster が空です。args に slug 配列を渡してください（例 ["garchomp","salamence"]）。');
+  log('roster が空です。args に id 配列を渡してください（例 ["garchomp","salamence"]）。');
 }
+log(`kind=${KIND}（${KIND === "move" ? "技専用ページ＝技マスター" : "種族ページ＝roster + 覚える技の一覧"}）`);
 
 // 礼儀バッチ: BATCH 件ずつ parallel。バッチ境界の待ち合わせ + 層1 fetch-serebii 内の sleep が Serebii への礼儀を担保。
 const results = [];
@@ -90,7 +102,7 @@ for (let i = 0; i < roster.length; i += BATCH) {
     batch.map(
       (slug) => () =>
         agent(fetchPrompt(slug), {
-          label: `fetch:${slug}`,
+          label: `fetch:${KIND}:${slug}`,
           phase: "Fetch fan-out",
           model: "haiku",
           agentType: "Explore", // read-only（Edit/Write 不可・Bash で層1スクリプトのみ実行）
