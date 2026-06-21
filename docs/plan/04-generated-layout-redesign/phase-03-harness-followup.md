@@ -9,7 +9,7 @@
   - **skills 改訂**（`skill-creator`）: `update-catalog`（転記先 specs/languages）・`survey-regulation`（書き出し先 `m-*`/specs・serebii-sourcing 参照）・`author-individual` / `stat-tuning` 等のパス参照。canonical + symlink パリティ。
   - **architecture / docs**: `docs/plan/01-mvp/architecture.md`（ディレクトリ構成・型表現節）。`data/README.md`（あれば新ツリーへ）。
   - 旧パス（`data/generated/{moves,abilities,items,species-base,types,names}.ts` / `regulations/<id>/`）・旧構造記述の参照を `git grep` で一掃。
-- スコープ外: コア実装（Phase 2）。ADR 起票（Phase 1）。技仕様値是正（後続計画群 05）・全種族投入（後続計画群 06）。
+- スコープ外: コア実装（Phase 2）。ADR 起票（Phase 1）。技仕様値是正（後続計画群 05）・全種族投入（後続計画群 XX）。
 
 ## 前提（依存）
 
@@ -43,4 +43,4 @@
 ## リスク・備考
 
 - skill のパス参照追従漏れは利用者（エージェント）の誤動作を生む。`git grep` で機械的に拾う（learning #104/#117/#122 反復の dangling 防止）。
-- 本 phase 完了で 04 計画群が完了。次は後続 [05-move-master-scraper-refactor](../05-move-master-scraper-refactor/README.md)（技マスター取得 + 役割分割 + skill 再編）→ [06-ma-full-data](../06-ma-full-data/README.md)（全種族投入）。
+- 本 phase 完了で 04 計画群が完了。次は後続 [05-move-master-scraper-refactor](../05-move-master-scraper-refactor/README.md)（技マスター取得 + 役割分割 + skill 再編）→ [XX-ma-full-data](../XX-ma-full-data/README.md)（全種族投入）。

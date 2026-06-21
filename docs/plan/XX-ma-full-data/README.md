@@ -1,11 +1,11 @@
-# 06-ma-full-data — M-A 全種族投入（実装計画インデックス）
+# XX-ma-full-data — M-A 全種族投入（実装計画インデックス）
 
 レギュレーション M-A の**全186種・全技・全持ち物・全メガ**を、整備済みの取得パイプラインと新レイアウトの上で全量投入し
 M-A を完成させる計画群。02 の旧 phase-20 を起源に複数回の cross-plan move を経て独立計画群として確定した。新規実装はせず、
 [03-survey-regulation-rework](../03-survey-regulation-rework/README.md)（取得刷新）+
 [04-generated-layout-redesign](../04-generated-layout-redesign/README.md)（レイアウト再編）+
 [05-move-master-scraper-refactor](../05-move-master-scraper-refactor/README.md)（技マスター取得 + 役割分割 + skill 再編）
-で整えた仕組みに投入を委譲する（一方通行 04 → 05 → 06）。
+で整えた仕組みに投入を委譲する（一方通行 04 → 05 → XX）。
 
 > 設計の正本は [`OVERVIEW.md`](./OVERVIEW.md)（ゴール / 背景 / 設計方針 / 実装指針 / スコープ外 / 計画群全体の受け入れ
 > 基準）。規約は [`.claude/rules/data-pipeline.md`](../../../.claude/rules/data-pipeline.md)。情報源方針は
@@ -26,7 +26,7 @@ flowchart TD
 > 計画群全体の受け入れ基準は [`OVERVIEW.md` の「受け入れ基準」節](./OVERVIEW.md#受け入れ基準) を参照。
 > **依存は一方通行**: 先行する [04-generated-layout-redesign](../04-generated-layout-redesign/README.md)（Phase 1-3 再編）
 > → [05-move-master-scraper-refactor](../05-move-master-scraper-refactor/README.md)（技マスター取得 + 役割分割）→ 本計画群
-> （06）。04 / 05 へ戻る依存は無い。
+> （XX）。04 / 05 へ戻る依存は無い。
 
 ## 補足
 

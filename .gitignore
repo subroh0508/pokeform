@@ -3,3 +3,6 @@ dist
 coverage
 data/raw
 .pokeform-build
+
+# ローカル調査メモ（リポジトリ管理外・恒久 SoT ではない）
+/docs/refactor-survey-2026-06-21.md
