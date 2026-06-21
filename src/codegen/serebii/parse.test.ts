@@ -5,8 +5,10 @@ import { describe, expect, it } from "vitest";
 import {
   decodeSerebiiHtml,
   parseItemsPage,
+  parseMegas,
   parseMoveMaster,
   parseMoves,
+  parseSpeciesBase,
   parseSpeciesPage,
   slugFromHref,
 } from "./parse.ts";
@@ -58,6 +60,62 @@ describe("parseSpeciesPage — mega / multi-form species (charizard)", () => {
 
   it("extracts each mega form's name, types, abilities and stats", () => {
     expect(p.megas).toEqual([
+      {
+        name: "Mega Charizard X",
+        types: ["fire", "dragon"],
+        abilities: ["tough-claws"],
+        stats: { H: 78, A: 130, B: 111, C: 130, D: 85, S: 100 },
+        statTotal: 634,
+      },
+      {
+        name: "Mega Charizard Y",
+        types: ["fire", "flying"],
+        abilities: ["drought"],
+        stats: { H: 78, A: 104, B: 78, C: 159, D: 115, S: 100 },
+        statTotal: 634,
+      },
+    ]);
+  });
+});
+
+describe("parseSpeciesBase — base info only (no moves / megas)", () => {
+  it("extracts en / dex / types / abilities / stats and carries no move or mega fields", () => {
+    const base = parseSpeciesBase(fixture("serebii-garchomp"));
+    expect(base).toEqual({
+      en: "Garchomp",
+      dex: 445,
+      types: ["dragon", "ground"],
+      abilities: ["sand-veil", "rough-skin"],
+      stats: { H: 108, A: 130, B: 95, C: 80, D: 85, S: 102 },
+      statTotal: 600,
+    });
+    // base 構造に moves / megas は含まれない（責務分離・名前一覧 / メガは別関数）。
+    expect(Object.keys(base).sort()).toEqual([
+      "abilities",
+      "dex",
+      "en",
+      "statTotal",
+      "stats",
+      "types",
+    ]);
+  });
+
+  it("scopes out mega abilities by cutting before the first mega anchor", () => {
+    // charizard は base 特性のみ（メガ tough-claws / drought を base が拾わない）。
+    expect(parseSpeciesBase(fixture("serebii-charizard")).abilities).toEqual([
+      "blaze",
+      "solar-power",
+    ]);
+  });
+});
+
+describe("parseMegas — mega forms only", () => {
+  it("returns an empty list for a species without mega forms", () => {
+    expect(parseMegas(fixture("serebii-garchomp"))).toEqual([]);
+  });
+
+  it("extracts each mega form (name / types / abilities / stats) from the full page", () => {
+    expect(parseMegas(fixture("serebii-charizard"))).toEqual([
       {
         name: "Mega Charizard X",
         types: ["fire", "dragon"],
