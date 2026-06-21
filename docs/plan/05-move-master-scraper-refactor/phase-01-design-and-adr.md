@@ -22,7 +22,8 @@
 
 - **04-generated-layout-redesign の Phase 1-3 完了**。`move-specs` が独立エンティティ化（`champions/move-specs.ts` /
   `data/champions/move-specs.yaml`）された新ツリーが確定していること。
-- 技の出自・技メタは **Serebii 第一優先・PokeAPI を信頼源にしない**（ADR 0026）。技メタ SoT は `move-specs`（ADR 0034）。
+- 技の出自・技メタは **Serebii 第一優先・PokeAPI を信頼源にしない**（ADR 0026 の核を継承する ADR 0035）。技メタ SoT は
+  `move-specs`（ADR 0035・旧 ADR 0034 は archive）。
 - 既存 rule: [[data-pipeline]] / [[type-conventions]] / [[skill-authoring]] / [[cross-agent]]。情報源方針:
   [`serebii-sourcing.md`](../../../.claude/skills/survey-regulation/references/serebii-sourcing.md)。
 
@@ -55,7 +56,8 @@
 
 1. 起票 ADR を読み、技マスター取得経路の SoT・DOM 契約・03 Phase 13 廃止の経緯が自己完結して読めることを確認。
 2. 設計メモの役割分割境界・skill 粒度が、Phase 2-4 のタスクと 1:1 対応することを確認（着手可能性）。
-3. ADR 参照（ADR 0026/0034 への補完/supersede）が実ファイルに解決することを `ls docs/adr/` で機械確認。
+3. ADR 参照が実ファイルに解決することを機械確認: 起票した ADR 0037 が `docs/adr/0037-*.md` に実在し、その補完先
+   ADR 0035 が `docs/adr/` アクティブに、継承元 ADR 0026/0034 が `docs/adr/archive/` に解決する（`ls docs/adr/ docs/adr/archive/`）。
 
 ## リスク・備考
 
@@ -64,3 +66,19 @@
 - ADR 0034（技メタ per-game 移設）との関係は、SoT 所在（`move-specs`）も出自（Serebii）も不変のため**補完が基本**。
   ただし「副産物抽出」→「専用取得」への取得方式変更が決定の本質に触れるなら supersede を検討する（Phase 1 で判断）。
 - 設計のみで verify への影響は無い（コードなし phase）。`pnpm verify` は緑のまま。
+
+## Phase 1 確定事項（追補）
+
+本 phase で確定し、[ADR 0037](../../adr/0037-serebii-move-master-dedicated-path.md)（設計メモ 1-4）に記録した:
+
+- **ADR 0034 補完/supersede の判断 = 補完**: SoT 所在（`move-specs`）も出自（Serebii 第一優先）も「PokeAPI を技メタ
+  信頼源にしない」核も不変で、変わるのは取得方式（副産物抽出 → 専用取得）のみのため supersede しない。補完先は
+  **現行 carrier の ADR 0035**（ADR 0026 → 0034 → 0035 と所在が精緻化され、0026/0034 は archive・核は不変）。
+- **DOM 契約（設計メモ 1）**: `https://www.serebii.net/attackdex-champions/<圧縮slug>.shtml`。抽出 = type /
+  damageClass(physical/special/status) / power / accuracy / pp / **priority（"Speed Priority"・種族ページに無い新フィールド・
+  符号付き整数 `-6`/`0`/`+1`）**。罠 = 変化技 power `--`→null・accuracy `101`→null・latin-1/CRLF。実ページ
+  （Earthquake / Quick Attack / Swords Dance / Roar）で確認済み（Earthquake PP=12 等 Champions 準拠値）。
+- **exit code 契約（設計メモ 2）**: 0 健全 / 2 取得失敗 / 3 schema 欠落（type/damageClass/pp/priority 欠落）/
+  4 件数・健全性（PP ∉ {8,12,16,20} / type・damageClass 不正 / power・accuracy 負値 / priority レンジ外）。
+- **役割分割の境界（設計メモ 3）・skill オーケストレーター化の粒度（設計メモ 4）**: ADR 0037 を正とする。
+- **03 Phase 13 廃止**: 技メタ手動是正アプローチを廃止し本専用取得経路へ吸収（README / OVERVIEW にも記録済み）。
