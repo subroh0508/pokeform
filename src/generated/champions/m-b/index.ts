@@ -74,7 +74,7 @@ export const speciesDex = {
     baseStats: megaSpecsDex["charizard-mega-x"].baseStats,
     abilities: [megaSpecsDex["charizard-mega-x"].ability],
     moves: speciesMoves.charizard,
-    items: "any",
+    items: ["charizardite-x"],
   },
 } as const satisfies Record<string, PerRegSpecies>;
 

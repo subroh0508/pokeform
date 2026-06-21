@@ -256,7 +256,7 @@ export const speciesDex = {
     baseStats: megaSpecsDex["garchomp-mega"].baseStats,
     abilities: [megaSpecsDex["garchomp-mega"].ability],
     moves: speciesMoves.garchomp,
-    items: "any",
+    items: ["garchompite"],
   },
   "charizard-mega-x": {
     id: megaSpecsDex["charizard-mega-x"].id,
@@ -265,7 +265,7 @@ export const speciesDex = {
     baseStats: megaSpecsDex["charizard-mega-x"].baseStats,
     abilities: [megaSpecsDex["charizard-mega-x"].ability],
     moves: speciesMoves.charizard,
-    items: "any",
+    items: ["charizardite-x"],
   },
   "charizard-mega-y": {
     id: megaSpecsDex["charizard-mega-y"].id,
@@ -274,7 +274,7 @@ export const speciesDex = {
     baseStats: megaSpecsDex["charizard-mega-y"].baseStats,
     abilities: [megaSpecsDex["charizard-mega-y"].ability],
     moves: speciesMoves.charizard,
-    items: "any",
+    items: ["charizardite-y"],
   },
   "gengar-mega": {
     id: megaSpecsDex["gengar-mega"].id,
@@ -283,7 +283,7 @@ export const speciesDex = {
     baseStats: megaSpecsDex["gengar-mega"].baseStats,
     abilities: [megaSpecsDex["gengar-mega"].ability],
     moves: speciesMoves.gengar,
-    items: "any",
+    items: ["gengarite"],
   },
 } as const satisfies Record<string, PerRegSpecies>;
 
