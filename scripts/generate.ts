@@ -374,6 +374,34 @@ for (const [file, name, map] of langFiles) {
   );
 }
 
+// メガ形態 id（charizard-mega-x 等）→ 対応メガストーン id（charizardite-x 等）の逆引きを 1 度だけ構築する
+// （item-specs の megaSpecies リンク）。メガ形態種族の items は対応ストーンのタプルに型制約する。
+const stonesByMegaSpecies = new Map<string, string[]>();
+for (const [iid, meta] of Object.entries(itemSpecs)) {
+  if (meta.megaSpecies) {
+    const arr = stonesByMegaSpecies.get(meta.megaSpecies) ?? [];
+    arr.push(iid);
+    stonesByMegaSpecies.set(meta.megaSpecies, arr);
+  }
+}
+// メガ形態 `mid` に対応するストーン群を引く。欠落は fail-fast（空タプル＝「どの持ち物も不可」の不正状態を
+// 防ぐ）。reg の解禁プールに無いストーンも fail-fast（データ不整合）。
+const megaFormStones = (r: RegData, mid: string): string[] => {
+  const stones = [...new Set(stonesByMegaSpecies.get(mid) ?? [])].sort();
+  if (stones.length === 0) {
+    throw new Error(
+      `regulation '${r.id}' mega form '${mid}' has no mega stone (item-specs megaSpecies link missing)`,
+    );
+  }
+  const regItems = new Set(r.items);
+  for (const s of stones) {
+    if (!regItems.has(s)) {
+      throw new Error(`regulation '${r.id}' mega stone '${s}' for '${mid}' not in reg items pool`);
+    }
+  }
+  return stones;
+};
+
 // champions/<reg>/{species,items,mega,species-moves,index}.ts
 for (const r of regs) {
   const dir = join("champions", r.reg);
@@ -395,7 +423,7 @@ for (const r of regs) {
     const megaPart =
       r.mega[sid] && r.mega[sid].length > 0 ? `, megaEvolvesTo: ${acc("mega", sid)}` : "";
     // base 種族（メガシンカ前）の items は "any"（reg 解禁プール全件・メガストーン含む）。メガストーン
-    // 専有はメガ形態種族側に課す（HoldableItems の MegaStoneOf<S> 分岐・対応ストーンのみ）。
+    // 専有はメガ形態種族側に課す（下の megaLines が対応ストーンタプルを emit する）。
     return `  ${k}: { id: ${sp}.id, dex: ${sp}.dex, types: ${sp}.types, baseStats: ${sp}.baseStats, abilities: ${sp}.abilities, moves: ${acc("speciesMoves", sid)}, items: "any"${megaPart} },`;
   });
   const megaLines: string[] = [];
@@ -403,8 +431,11 @@ for (const r of regs) {
     for (const mid of ms) {
       const k = JSON.stringify(mid);
       const mp = acc("megaSpecsDex", mid);
+      // メガ形態（メガシンカ後）種族の items は対応メガストーンのタプルに型制約する（個体が他持ち物を
+      // 持つと ItemNotHoldableBy ブランドエラー・HoldableItems の Extract 分岐で絞る）。
+      const itemsLit = lit(megaFormStones(r, mid));
       megaLines.push(
-        `  ${k}: { id: ${mp}.id, dex: ${mp}.dex, types: ${mp}.types, baseStats: ${mp}.baseStats, abilities: [${mp}.ability], moves: ${acc("speciesMoves", sid)}, items: "any" },`,
+        `  ${k}: { id: ${mp}.id, dex: ${mp}.dex, types: ${mp}.types, baseStats: ${mp}.baseStats, abilities: [${mp}.ability], moves: ${acc("speciesMoves", sid)}, items: ${itemsLit} },`,
       );
     }
   }
