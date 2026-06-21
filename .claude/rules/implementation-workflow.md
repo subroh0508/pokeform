@@ -119,7 +119,13 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
   （`.claude/**` / `AGENTS.md` / `CLAUDE.md` / `.githooks` / `docs/**`）は
   [`harness-review`](../skills/harness-review/SKILL.md)。両方含む PR は分担する。各レビュー skill は
   結果を **PR コメントとして残す**（`gh pr comment`）ので、指摘は PR 上で辿れる。
-- **成功条件**: ブロッキング（`blocking`）指摘が 0 件。
+- **レビューコメント投稿の確認（不変条件）**: レビュー Agent 完了後、**`gh pr view <N> --comments` で
+  レビュー結果の PR コメントが投稿済みであることを確認してから** Phase 7 へ進む。ブロッキングなしでも
+  `✅ ブロッキングなし` のコメントを残す（レビュー実施の記録・[code-review](../skills/code-review/SKILL.md)
+  の出力先規約）。未投稿なら投稿させてから次へ進む（レビュー Agent が `gh pr comment` を忘れて
+  レビュー記録なしでマージされる死角の再発防止）。
+- **成功条件**: ブロッキング（`blocking`）指摘が 0 件、**かつレビュー結果の PR コメントが投稿済み**
+  （ブロッキングなしでも記録が PR 上に残っている）。
 - **fallback（不変条件）**: ブロッキング指摘があれば Phase 3 へ戻って修正（**レビュー fix loop も上限 3 回**）。
   累計超過で `blocked` 記録 + 人間通知。`non-blocking` / `nit` のみならマージを妨げない（健全性の純改善基準、
   [[code-review]]）。
