@@ -6,21 +6,21 @@ moves:
     damageClass: physical
     power: 100
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   dragon-claw:
     type: dragon
     damageClass: physical
     power: 80
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   stone-edge:
     type: rock
     damageClass: physical
     power: 100
     accuracy: 80
-    pp: 5
+    pp: 8
     priority: 0
   swords-dance:
     type: normal
@@ -34,77 +34,77 @@ moves:
     damageClass: physical
     power: 120
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   fire-punch:
     type: fire
     damageClass: physical
     power: 75
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   extreme-speed:
     type: normal
     damageClass: physical
     power: 80
     accuracy: 100
-    pp: 5
+    pp: 8
     priority: 2
   draco-meteor:
     type: dragon
     damageClass: special
     power: 130
     accuracy: 90
-    pp: 5
+    pp: 8
     priority: 0
   fire-blast:
     type: fire
     damageClass: special
     power: 110
     accuracy: 85
-    pp: 5
+    pp: 8
     priority: 0
   roost:
     type: flying
     damageClass: status
     power: null
     accuracy: null
-    pp: 5
+    pp: 8
     priority: 0
   meteor-mash:
     type: steel
     damageClass: physical
     power: 90
     accuracy: 90
-    pp: 10
+    pp: 12
     priority: 0
   zen-headbutt:
     type: psychic
     damageClass: physical
     power: 80
     accuracy: 90
-    pp: 15
+    pp: 16
     priority: 0
   bullet-punch:
     type: steel
     damageClass: physical
     power: 40
     accuracy: 100
-    pp: 30
+    pp: 20
     priority: 1
   hydro-pump:
     type: water
     damageClass: special
     power: 110
     accuracy: 80
-    pp: 5
+    pp: 8
     priority: 0
   thunderbolt:
     type: electric
     damageClass: special
     power: 90
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   volt-switch:
     type: electric
@@ -118,42 +118,42 @@ moves:
     damageClass: status
     power: null
     accuracy: 85
-    pp: 15
+    pp: 16
     priority: 0
   flare-blitz:
     type: fire
     damageClass: physical
     power: 120
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   psystrike:
     type: psychic
     damageClass: special
     power: 100
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   ice-beam:
     type: ice
     damageClass: special
     power: 90
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   shadow-ball:
     type: ghost
     damageClass: special
     power: 80
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   dark-pulse:
     type: dark
     damageClass: special
     power: 80
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   nasty-plot:
     type: dark
@@ -167,7 +167,7 @@ moves:
     damageClass: physical
     power: 55
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   aerial-ace:
     type: flying
@@ -181,7 +181,7 @@ moves:
     damageClass: special
     power: 75
     accuracy: 95
-    pp: 15
+    pp: 16
     priority: 0
   aqua-jet:
     type: water
@@ -195,14 +195,14 @@ moves:
     damageClass: physical
     power: 80
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   aqua-tail:
     type: water
     damageClass: physical
     power: 90
     accuracy: 90
-    pp: 10
+    pp: 12
     priority: 0
   aura-sphere:
     type: fighting
@@ -216,14 +216,14 @@ moves:
     damageClass: physical
     power: 80
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   brave-bird:
     type: flying
     damageClass: physical
     power: 120
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   bug-bite:
     type: bug
@@ -244,7 +244,7 @@ moves:
     damageClass: physical
     power: 25
     accuracy: 100
-    pp: 30
+    pp: 20
     priority: 0
   calm-mind:
     type: psychic
@@ -258,56 +258,56 @@ moves:
     damageClass: physical
     power: 120
     accuracy: 100
-    pp: 5
+    pp: 8
     priority: 0
   crunch:
     type: dark
     damageClass: physical
     power: 80
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   curse:
     type: ghost
     damageClass: status
     power: null
     accuracy: null
-    pp: 10
+    pp: 12
     priority: 0
   darkest-lariat:
     type: dark
     damageClass: physical
     power: 85
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   dazzling-gleam:
     type: fairy
     damageClass: special
     power: 80
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   defog:
     type: flying
     damageClass: status
     power: null
     accuracy: null
-    pp: 15
+    pp: 16
     priority: 0
   destiny-bond:
     type: ghost
     damageClass: status
     power: null
     accuracy: null
-    pp: 5
+    pp: 8
     priority: 0
   disarming-voice:
     type: fairy
     damageClass: special
     power: 40
     accuracy: null
-    pp: 15
+    pp: 16
     priority: 0
   dragon-dance:
     type: dragon
@@ -321,28 +321,28 @@ moves:
     damageClass: physical
     power: 50
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   dragon-pulse:
     type: dragon
     damageClass: special
     power: 85
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   dragon-tail:
     type: dragon
     damageClass: physical
     power: 60
     accuracy: 90
-    pp: 10
+    pp: 12
     priority: -6
   drain-punch:
     type: fighting
     damageClass: physical
     power: 75
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   drill-peck:
     type: flying
@@ -356,49 +356,49 @@ moves:
     damageClass: physical
     power: 80
     accuracy: 95
-    pp: 10
+    pp: 12
     priority: 0
   dual-wingbeat:
     type: flying
     damageClass: physical
     power: 40
     accuracy: 90
-    pp: 10
+    pp: 12
     priority: 0
   earth-power:
     type: ground
     damageClass: special
     power: 90
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   electroweb:
     type: electric
     damageClass: special
     power: 55
     accuracy: 95
-    pp: 15
+    pp: 16
     priority: 0
   encore:
     type: normal
     damageClass: status
     power: null
     accuracy: 100
-    pp: 5
+    pp: 8
     priority: 0
   energy-ball:
     type: grass
     damageClass: special
     power: 90
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   expanding-force:
     type: psychic
     damageClass: special
     power: 80
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   extrasensory:
     type: psychic
@@ -412,14 +412,14 @@ moves:
     damageClass: physical
     power: 40
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 3
   fire-fang:
     type: fire
     damageClass: physical
     power: 65
     accuracy: 95
-    pp: 15
+    pp: 16
     priority: 0
   flame-charge:
     type: fire
@@ -433,14 +433,14 @@ moves:
     damageClass: special
     power: 90
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   flash-cannon:
     type: steel
     damageClass: special
     power: 80
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   flip-turn:
     type: water
@@ -454,14 +454,14 @@ moves:
     damageClass: physical
     power: 70
     accuracy: null
-    pp: 10
+    pp: 12
     priority: 0
   focus-blast:
     type: fighting
     damageClass: special
     power: 120
     accuracy: 70
-    pp: 5
+    pp: 8
     priority: 0
   grass-knot:
     type: grass
@@ -482,63 +482,63 @@ moves:
     damageClass: physical
     power: 120
     accuracy: 80
-    pp: 5
+    pp: 8
     priority: 0
   haze:
     type: ice
     damageClass: status
     power: null
     accuracy: null
-    pp: 30
+    pp: 20
     priority: 0
   heat-wave:
     type: fire
     damageClass: special
     power: 95
     accuracy: 90
-    pp: 10
+    pp: 12
     priority: 0
   heavy-slam:
     type: steel
     damageClass: physical
     power: null
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   hex:
     type: ghost
     damageClass: special
     power: 65
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   high-horsepower:
     type: ground
     damageClass: physical
     power: 95
     accuracy: 95
-    pp: 10
+    pp: 12
     priority: 0
   hone-claws:
     type: dark
     damageClass: status
     power: null
     accuracy: null
-    pp: 15
+    pp: 16
     priority: 0
   hurricane:
     type: flying
     damageClass: special
     power: 110
     accuracy: 70
-    pp: 10
+    pp: 12
     priority: 0
   hyper-voice:
     type: normal
     damageClass: special
     power: 90
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   hypnosis:
     type: psychic
@@ -552,42 +552,42 @@ moves:
     damageClass: physical
     power: 75
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   ice-spinner:
     type: ice
     damageClass: physical
     power: 80
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   icy-wind:
     type: ice
     damageClass: special
     power: 55
     accuracy: 95
-    pp: 15
+    pp: 16
     priority: 0
   imprison:
     type: psychic
     damageClass: status
     power: null
     accuracy: null
-    pp: 10
+    pp: 12
     priority: 0
   iron-defense:
     type: steel
     damageClass: status
     power: null
     accuracy: null
-    pp: 15
+    pp: 16
     priority: 0
   iron-head:
     type: steel
     damageClass: physical
     power: 80
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   knock-off:
     type: dark
@@ -601,28 +601,28 @@ moves:
     damageClass: physical
     power: 90
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   leaf-storm:
     type: grass
     damageClass: special
     power: 130
     accuracy: 90
-    pp: 5
+    pp: 8
     priority: 0
   life-dew:
     type: water
     damageClass: status
     power: null
     accuracy: null
-    pp: 10
+    pp: 12
     priority: 0
   liquidation:
     type: water
     damageClass: physical
     power: 85
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   low-kick:
     type: fighting
@@ -636,14 +636,14 @@ moves:
     damageClass: physical
     power: 80
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   megahorn:
     type: bug
     damageClass: physical
     power: 120
     accuracy: 85
-    pp: 10
+    pp: 12
     priority: 0
   mirror-coat:
     type: psychic
@@ -657,28 +657,28 @@ moves:
     damageClass: special
     power: 90
     accuracy: 85
-    pp: 10
+    pp: 12
     priority: 0
   mystical-fire:
     type: fire
     damageClass: special
     power: 75
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   night-slash:
     type: dark
     damageClass: physical
     power: 70
     accuracy: 100
-    pp: 15
+    pp: 20
     priority: 0
   overheat:
     type: fire
     damageClass: special
     power: 130
     accuracy: 90
-    pp: 5
+    pp: 8
     priority: 0
   pain-split:
     type: normal
@@ -692,7 +692,7 @@ moves:
     damageClass: physical
     power: 90
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   pin-missile:
     type: bug
@@ -706,7 +706,7 @@ moves:
     damageClass: physical
     power: 90
     accuracy: 90
-    pp: 10
+    pp: 12
     priority: 0
   poison-jab:
     type: poison
@@ -720,56 +720,56 @@ moves:
     damageClass: physical
     power: 110
     accuracy: 90
-    pp: 5
+    pp: 8
     priority: 0
   power-trip:
     type: dark
     damageClass: physical
     power: 20
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   protect:
     type: normal
     damageClass: status
     power: null
     accuracy: null
-    pp: 10
+    pp: 8
     priority: 4
   psychic:
     type: psychic
     damageClass: special
     power: 90
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   psychic-fangs:
     type: psychic
     damageClass: physical
     power: 85
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   psyshock:
     type: psychic
     damageClass: special
     power: 80
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   rapid-spin:
     type: normal
     damageClass: physical
     power: 50
     accuracy: 100
-    pp: 40
+    pp: 20
     priority: 0
   recover:
     type: normal
     damageClass: status
     power: null
     accuracy: null
-    pp: 5
+    pp: 8
     priority: 0
   roar:
     type: normal
@@ -783,28 +783,28 @@ moves:
     damageClass: physical
     power: 25
     accuracy: 90
-    pp: 10
+    pp: 12
     priority: 0
   rock-slide:
     type: rock
     damageClass: physical
     power: 75
     accuracy: 90
-    pp: 10
+    pp: 12
     priority: 0
   salt-cure:
     type: rock
     damageClass: physical
     power: 40
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   scald:
     type: water
     damageClass: special
     power: 80
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   scale-shot:
     type: dragon
@@ -818,49 +818,49 @@ moves:
     damageClass: special
     power: 70
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   shadow-claw:
     type: ghost
     damageClass: physical
     power: 70
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   shadow-sneak:
     type: ghost
     damageClass: physical
     power: 40
     accuracy: 100
-    pp: 30
+    pp: 20
     priority: 1
   shell-smash:
     type: normal
     damageClass: status
     power: null
     accuracy: null
-    pp: 15
+    pp: 16
     priority: 0
   sludge-bomb:
     type: poison
     damageClass: special
     power: 90
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   smart-strike:
     type: steel
     damageClass: physical
     power: 70
     accuracy: null
-    pp: 10
+    pp: 12
     priority: 0
   snarl:
     type: dark
     damageClass: special
     power: 55
     accuracy: 95
-    pp: 15
+    pp: 16
     priority: 0
   spikes:
     type: ground
@@ -872,9 +872,9 @@ moves:
   spirit-shackle:
     type: ghost
     damageClass: physical
-    power: 80
+    power: 90
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   stealth-rock:
     type: rock
@@ -888,42 +888,42 @@ moves:
     damageClass: physical
     power: 75
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   substitute:
     type: normal
     damageClass: status
     power: null
     accuracy: null
-    pp: 10
+    pp: 12
     priority: 0
   sucker-punch:
     type: dark
     damageClass: physical
     power: 70
     accuracy: 100
-    pp: 5
+    pp: 8
     priority: 1
   superpower:
     type: fighting
     damageClass: physical
     power: 120
     accuracy: 100
-    pp: 5
+    pp: 8
     priority: 0
   surf:
     type: water
     damageClass: special
     power: 90
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   tailwind:
     type: flying
     damageClass: status
     power: null
     accuracy: null
-    pp: 15
+    pp: 16
     priority: 0
   taunt:
     type: dark
@@ -937,14 +937,14 @@ moves:
     damageClass: physical
     power: 80
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   thunder-punch:
     type: electric
     damageClass: physical
     power: 75
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   thunder-wave:
     type: electric
@@ -958,7 +958,7 @@ moves:
     damageClass: special
     power: 80
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   toxic-spikes:
     type: poison
@@ -979,21 +979,21 @@ moves:
     damageClass: status
     power: null
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   trick-room:
     type: psychic
     damageClass: status
     power: null
     accuracy: null
-    pp: 5
+    pp: 8
     priority: -7
   triple-axel:
     type: ice
     damageClass: physical
     power: 20
     accuracy: 90
-    pp: 10
+    pp: 12
     priority: 0
   u-turn:
     type: bug
@@ -1007,7 +1007,7 @@ moves:
     damageClass: special
     power: 40
     accuracy: 100
-    pp: 30
+    pp: 20
     priority: 1
   water-shuriken:
     type: water
@@ -1021,28 +1021,28 @@ moves:
     damageClass: physical
     power: 120
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   wide-guard:
     type: rock
     damageClass: status
     power: null
     accuracy: null
-    pp: 10
+    pp: 12
     priority: 3
   wild-charge:
     type: electric
     damageClass: physical
     power: 90
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   x-scissor:
     type: bug
     damageClass: physical
     power: 80
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   acid-spray:
     type: poison
@@ -1056,63 +1056,63 @@ moves:
     damageClass: special
     power: 60
     accuracy: 95
-    pp: 25
+    pp: 20
     priority: 0
   ancient-power:
     type: rock
     damageClass: special
     power: 60
     accuracy: 100
-    pp: 5
+    pp: 8
     priority: 0
   beat-up:
     type: dark
     damageClass: physical
     power: null
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   belly-drum:
     type: normal
     damageClass: status
     power: null
     accuracy: null
-    pp: 10
+    pp: 12
     priority: 0
   bite:
     type: dark
     damageClass: physical
     power: 60
     accuracy: 100
-    pp: 25
+    pp: 20
     priority: 0
   blast-burn:
     type: fire
     damageClass: special
     power: 150
     accuracy: 90
-    pp: 5
+    pp: 8
     priority: 0
   body-slam:
     type: normal
     damageClass: physical
     power: 85
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   breaking-swipe:
     type: dragon
     damageClass: physical
     power: 60
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   brick-break:
     type: fighting
     damageClass: physical
     power: 75
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   brutal-swing:
     type: dark
@@ -1133,14 +1133,14 @@ moves:
     damageClass: status
     power: null
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   corrosive-gas:
     type: poison
     damageClass: status
     power: null
     accuracy: 100
-    pp: 40
+    pp: 20
     priority: 0
   counter:
     type: fighting
@@ -1154,7 +1154,7 @@ moves:
     damageClass: physical
     power: 80
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   disable:
     type: normal
@@ -1168,28 +1168,28 @@ moves:
     damageClass: physical
     power: 120
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   dragon-cheer:
     type: dragon
     damageClass: status
     power: null
     accuracy: null
-    pp: 15
+    pp: 16
     priority: 0
   dragon-rush:
     type: dragon
     damageClass: physical
     power: 100
     accuracy: 75
-    pp: 10
+    pp: 12
     priority: 0
   endure:
     type: normal
     damageClass: status
     power: null
     accuracy: null
-    pp: 10
+    pp: 12
     priority: 4
   facade:
     type: normal
@@ -1203,21 +1203,21 @@ moves:
     damageClass: special
     power: 35
     accuracy: 85
-    pp: 15
+    pp: 16
     priority: 0
   fling:
     type: dark
     damageClass: physical
     power: null
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   fly:
     type: flying
     damageClass: physical
     power: 90
     accuracy: 95
-    pp: 15
+    pp: 16
     priority: 0
   focus-punch:
     type: fighting
@@ -1231,28 +1231,28 @@ moves:
     damageClass: physical
     power: 95
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   giga-drain:
     type: grass
     damageClass: special
     power: 75
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   giga-impact:
     type: normal
     damageClass: physical
     power: 150
     accuracy: 90
-    pp: 5
+    pp: 8
     priority: 0
   heat-crash:
     type: fire
     damageClass: physical
     power: null
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   helping-hand:
     type: normal
@@ -1266,63 +1266,63 @@ moves:
     damageClass: special
     power: 150
     accuracy: 90
-    pp: 5
+    pp: 8
     priority: 0
   inferno:
     type: fire
     damageClass: special
     power: 100
     accuracy: 50
-    pp: 5
+    pp: 8
     priority: 0
   iron-tail:
     type: steel
     damageClass: physical
     power: 100
     accuracy: 75
-    pp: 15
+    pp: 16
     priority: 0
   mean-look:
     type: normal
     damageClass: status
     power: null
     accuracy: null
-    pp: 5
+    pp: 8
     priority: 0
   mega-kick:
     type: normal
     damageClass: physical
     power: 120
     accuracy: 75
-    pp: 5
+    pp: 8
     priority: 0
   mud-shot:
     type: ground
     damageClass: special
     power: 55
     accuracy: 95
-    pp: 15
+    pp: 16
     priority: 0
   night-shade:
     type: ghost
     damageClass: special
     power: null
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   payback:
     type: dark
     damageClass: physical
     power: 50
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   perish-song:
     type: normal
     damageClass: status
     power: null
     accuracy: null
-    pp: 5
+    pp: 8
     priority: 0
   power-gem:
     type: rock
@@ -1336,77 +1336,77 @@ moves:
     damageClass: status
     power: null
     accuracy: null
-    pp: 10
+    pp: 12
     priority: 0
   psychic-noise:
     type: psychic
     damageClass: special
     power: 75
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   rain-dance:
     type: water
     damageClass: status
     power: null
     accuracy: null
-    pp: 5
+    pp: 8
     priority: 0
   reflect-type:
     type: normal
     damageClass: status
     power: null
     accuracy: null
-    pp: 15
+    pp: 16
     priority: 0
   rest:
     type: psychic
     damageClass: status
     power: null
     accuracy: null
-    pp: 5
+    pp: 8
     priority: 0
   rock-tomb:
     type: rock
     damageClass: physical
     power: 60
     accuracy: 95
-    pp: 15
+    pp: 16
     priority: 0
   round:
     type: normal
     damageClass: special
     power: 60
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   sand-tomb:
     type: ground
     damageClass: physical
     power: 35
     accuracy: 85
-    pp: 15
+    pp: 16
     priority: 0
   sandstorm:
     type: rock
     damageClass: status
     power: null
     accuracy: null
-    pp: 10
+    pp: 8
     priority: 0
   scary-face:
     type: normal
     damageClass: status
     power: null
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   self-destruct:
     type: normal
     damageClass: physical
     power: 200
     accuracy: 100
-    pp: 5
+    pp: 8
     priority: 0
   shadow-punch:
     type: ghost
@@ -1420,117 +1420,117 @@ moves:
     damageClass: status
     power: null
     accuracy: null
-    pp: 10
+    pp: 12
     priority: 0
   skitter-smack:
     type: bug
     damageClass: physical
     power: 70
     accuracy: 90
-    pp: 10
+    pp: 12
     priority: 0
   sleep-talk:
     type: normal
     damageClass: status
     power: null
     accuracy: null
-    pp: 10
+    pp: 12
     priority: 0
   sludge-wave:
     type: poison
     damageClass: special
     power: 95
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   snore:
     type: normal
     damageClass: special
     power: 50
     accuracy: 100
-    pp: 15
+    pp: 16
     priority: 0
   solar-beam:
     type: grass
     damageClass: special
     power: 120
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   spite:
     type: ghost
     damageClass: status
     power: null
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   steel-wing:
     type: steel
     damageClass: physical
     power: 70
     accuracy: 90
-    pp: 25
+    pp: 20
     priority: 0
   sunny-day:
     type: fire
     damageClass: status
     power: null
     accuracy: null
-    pp: 5
+    pp: 8
     priority: 0
   temper-flare:
     type: fire
     damageClass: physical
     power: 75
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   thief:
     type: dark
     damageClass: physical
     power: 60
     accuracy: 100
-    pp: 25
+    pp: 20
     priority: 0
   thunder:
     type: electric
     damageClass: special
     power: 110
     accuracy: 70
-    pp: 10
+    pp: 12
     priority: 0
   thunder-fang:
     type: electric
     damageClass: physical
     power: 65
     accuracy: 95
-    pp: 15
+    pp: 16
     priority: 0
   toxic:
     type: poison
     damageClass: status
     power: null
     accuracy: 90
-    pp: 10
+    pp: 12
     priority: 0
   venoshock:
     type: poison
     damageClass: special
     power: 65
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   weather-ball:
     type: normal
     damageClass: special
     power: 50
     accuracy: 100
-    pp: 10
+    pp: 12
     priority: 0
   wonder-room:
     type: psychic
     damageClass: status
     power: null
     accuracy: null
-    pp: 10
+    pp: 12
     priority: 0

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { ParsedItems, ParsedSpecies } from "./parse.ts";
-import { validateItems, validateSpecies } from "./schema.ts";
+import type { ParsedItems, ParsedMoveMaster, ParsedSpecies } from "./parse.ts";
+import { validateItems, validateMoveMaster, validateSpecies } from "./schema.ts";
 
 /** 健全な中間表現（各テストはこれを部分的に壊す）。 */
 function validSpecies(): ParsedSpecies {
@@ -178,5 +178,100 @@ describe("validateItems", () => {
     const result = validateItems(p);
     expect(result.stage).toBe(4);
     expect(result.issues).toEqual(["mega target shape: Charizard"]);
+  });
+});
+
+/** 健全な技マスター中間表現（各テストはこれを部分的に壊す）。 */
+function validMoveMaster(): ParsedMoveMaster {
+  return {
+    name: "Earthquake",
+    id: "earthquake",
+    type: "ground",
+    damageClass: "physical",
+    power: 100,
+    accuracy: 100,
+    pp: 12,
+    priority: 0,
+  };
+}
+
+describe("validateMoveMaster", () => {
+  it("returns stage 0 for a healthy move master", () => {
+    expect(validateMoveMaster(validMoveMaster())).toEqual({
+      stage: 0,
+      missingFields: [],
+      issues: [],
+    });
+  });
+
+  it("accepts a status move (null power/accuracy) and negative priority", () => {
+    const m: ParsedMoveMaster = {
+      ...validMoveMaster(),
+      id: "roar",
+      damageClass: "status",
+      power: null,
+      accuracy: null,
+      pp: 20,
+      priority: -6,
+    };
+    expect(validateMoveMaster(m).stage).toBe(0);
+  });
+
+  it("returns stage 3 with every missing required field", () => {
+    const m: ParsedMoveMaster = {
+      name: "",
+      id: "",
+      type: "",
+      damageClass: "",
+      power: null,
+      accuracy: null,
+      pp: null,
+      priority: null,
+    };
+    expect(validateMoveMaster(m)).toEqual({
+      stage: 3,
+      missingFields: ["id", "type", "damageClass", "pp", "priority"],
+      issues: [],
+    });
+  });
+
+  it("prioritises schema absence (stage 3) over health (stage 4)", () => {
+    // pp 欠落 = stage 3。priority レンジ外でも欠落が優先される。
+    const m: ParsedMoveMaster = { ...validMoveMaster(), pp: null, priority: 99 };
+    expect(validateMoveMaster(m).stage).toBe(3);
+  });
+
+  it("returns stage 4 when pp is outside the Champions scale", () => {
+    const m: ParsedMoveMaster = { ...validMoveMaster(), pp: 10 }; // 前作値 = スケール外
+    const r = validateMoveMaster(m);
+    expect(r.stage).toBe(4);
+    expect(r.issues).toEqual(["pp out of scale: 10"]);
+  });
+
+  it("returns stage 4 for a malformed id, bad damageClass, negative power/accuracy, out-of-range priority", () => {
+    const m: ParsedMoveMaster = {
+      name: "Bad",
+      id: "Bad Id",
+      type: "fire",
+      damageClass: "weird",
+      power: -5,
+      accuracy: -1,
+      pp: 12,
+      priority: 9,
+    };
+    const r = validateMoveMaster(m);
+    expect(r.stage).toBe(4);
+    expect(r.issues).toEqual([
+      "move id shape: Bad Id",
+      "damageClass: weird",
+      "power negative: -5",
+      "accuracy negative: -1",
+      "priority out of range: 9",
+    ]);
+  });
+
+  it("flags priority below the minimum range too", () => {
+    const m: ParsedMoveMaster = { ...validMoveMaster(), priority: -8 };
+    expect(validateMoveMaster(m).issues).toEqual(["priority out of range: -8"]);
   });
 });

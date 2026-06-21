@@ -14,7 +14,7 @@
  * 組むことに専念し、既存値との突き合わせ・conflict 判定は持たない（純変換）。
  */
 import { isCatalogIdShape } from "./normalize.ts";
-import type { ParsedItem, ParsedMove, ParsedSpecies } from "./parse.ts";
+import type { ParsedItem, ParsedMove, ParsedMoveMaster, ParsedSpecies } from "./parse.ts";
 
 /**
  * catalog/moves.yaml の Serebii 由来名前欄。`en` は Serebii 表示名（`ja` は持たない＝materialize が PokeAPI move
@@ -30,9 +30,10 @@ export function moveNameFields(m: ParsedMove): MoveNameFields {
 }
 
 /**
- * regulations/champions/moves.yaml の Serebii 由来技メタ欄（per-game 共有・Phase 11 / ADR 0034）。`priority` は
- * Serebii の Standard Moves 表に列が無いため `0` 既定（実値は skill-authored で上書き＝materialize の
- * append/既存尊重で保護）。技の数値は Champions 固有調整があり得るためゲーム単位で持つ。
+ * move-specs.yaml の Serebii 由来技メタ欄（per-game 共有・ADR 0034/0035）。技の数値は Champions 固有調整が
+ * あり得るためゲーム単位で持つ。`priority` の正値は**技マスター専用取得**（`moveMasterStatsFields`・技専用
+ * ページ由来・ADR 0037）が SoT。種族ページ副産物の `moveStatsFields` は Standard Moves 表に priority 列が
+ * 無いため `0` 既定で、Phase 3 で副産物抽出が除去されるまでの暫定値（技マスター転記が後勝ち上書きで是正する）。
  */
 export interface MoveStatsFields {
   type: string;
@@ -53,6 +54,27 @@ export function moveStatsFields(m: ParsedMove): MoveStatsFields {
     pp: m.pp,
     priority: 0,
   };
+}
+
+/**
+ * `ParsedMoveMaster` → move-specs.yaml 技メタ欄（技専用ページ由来・priority を含む全項目・ADR 0037）。種族
+ * ページ由来の `moveStatsFields`（priority 既定 0）と違い、技専用ページは priority を一次ソースから持つ。技
+ * マスター転記は**この値で move-specs を上書き是正**する（前作 PP 残存の根絶・後勝ち）。
+ */
+export function moveMasterStatsFields(m: ParsedMoveMaster): MoveStatsFields {
+  return {
+    type: m.type,
+    damageClass: m.damageClass,
+    power: m.power,
+    accuracy: m.accuracy,
+    pp: m.pp,
+    priority: m.priority === null ? 0 : m.priority,
+  };
+}
+
+/** `ParsedMoveMaster` → languages/moves.yaml 名前欄（Serebii 表示名 en・ja は materialize が補完）。 */
+export function moveMasterNameFields(m: ParsedMoveMaster): MoveNameFields {
+  return { en: m.name };
 }
 
 /** species.yaml の Serebii 由来欄（en のみ。ja / dex / types / stats / abilities は materialize が埋める）。 */

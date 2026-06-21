@@ -7,7 +7,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 100,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "dragon-claw": {
@@ -15,7 +15,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 80,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "stone-edge": {
@@ -23,7 +23,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 100,
     accuracy: 80,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "swords-dance": {
@@ -39,7 +39,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 120,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "fire-punch": {
@@ -47,7 +47,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 75,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "extreme-speed": {
@@ -55,7 +55,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 80,
     accuracy: 100,
-    pp: 5,
+    pp: 8,
     priority: 2,
   },
   "draco-meteor": {
@@ -63,7 +63,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 130,
     accuracy: 90,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "fire-blast": {
@@ -71,7 +71,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 110,
     accuracy: 85,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   roost: {
@@ -79,7 +79,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "meteor-mash": {
@@ -87,7 +87,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 90,
     accuracy: 90,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "zen-headbutt": {
@@ -95,7 +95,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 80,
     accuracy: 90,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "bullet-punch": {
@@ -103,7 +103,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 40,
     accuracy: 100,
-    pp: 30,
+    pp: 20,
     priority: 1,
   },
   "hydro-pump": {
@@ -111,7 +111,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 110,
     accuracy: 80,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   thunderbolt: {
@@ -119,7 +119,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 90,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "volt-switch": {
@@ -135,7 +135,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: 85,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "flare-blitz": {
@@ -143,7 +143,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 120,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   psystrike: {
@@ -151,7 +151,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 100,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "ice-beam": {
@@ -159,7 +159,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 90,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "shadow-ball": {
@@ -167,7 +167,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 80,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "dark-pulse": {
@@ -175,7 +175,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 80,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "nasty-plot": {
@@ -191,7 +191,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 55,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "aerial-ace": {
@@ -207,7 +207,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 75,
     accuracy: 95,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "aqua-jet": {
@@ -223,7 +223,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 80,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "aqua-tail": {
@@ -231,7 +231,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 90,
     accuracy: 90,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "aura-sphere": {
@@ -247,7 +247,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 80,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "brave-bird": {
@@ -255,7 +255,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 120,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "bug-bite": {
@@ -279,7 +279,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 25,
     accuracy: 100,
-    pp: 30,
+    pp: 20,
     priority: 0,
   },
   "calm-mind": {
@@ -295,7 +295,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 120,
     accuracy: 100,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   crunch: {
@@ -303,7 +303,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 80,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   curse: {
@@ -311,7 +311,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "darkest-lariat": {
@@ -319,7 +319,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 85,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "dazzling-gleam": {
@@ -327,7 +327,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 80,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   defog: {
@@ -335,7 +335,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "destiny-bond": {
@@ -343,7 +343,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "disarming-voice": {
@@ -351,7 +351,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 40,
     accuracy: null,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "dragon-dance": {
@@ -367,7 +367,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 50,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "dragon-pulse": {
@@ -375,7 +375,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 85,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "dragon-tail": {
@@ -383,7 +383,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 60,
     accuracy: 90,
-    pp: 10,
+    pp: 12,
     priority: -6,
   },
   "drain-punch": {
@@ -391,7 +391,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 75,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "drill-peck": {
@@ -407,7 +407,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 80,
     accuracy: 95,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "dual-wingbeat": {
@@ -415,7 +415,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 40,
     accuracy: 90,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "earth-power": {
@@ -423,7 +423,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 90,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   electroweb: {
@@ -431,7 +431,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 55,
     accuracy: 95,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   encore: {
@@ -439,7 +439,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: 100,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "energy-ball": {
@@ -447,7 +447,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 90,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "expanding-force": {
@@ -455,7 +455,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 80,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   extrasensory: {
@@ -471,7 +471,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 40,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 3,
   },
   "fire-fang": {
@@ -479,7 +479,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 65,
     accuracy: 95,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "flame-charge": {
@@ -495,7 +495,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 90,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "flash-cannon": {
@@ -503,7 +503,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 80,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "flip-turn": {
@@ -519,7 +519,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 70,
     accuracy: null,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "focus-blast": {
@@ -527,7 +527,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 120,
     accuracy: 70,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "grass-knot": {
@@ -551,7 +551,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 120,
     accuracy: 80,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   haze: {
@@ -559,7 +559,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 30,
+    pp: 20,
     priority: 0,
   },
   "heat-wave": {
@@ -567,7 +567,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 95,
     accuracy: 90,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "heavy-slam": {
@@ -575,7 +575,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: null,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   hex: {
@@ -583,7 +583,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 65,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "high-horsepower": {
@@ -591,7 +591,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 95,
     accuracy: 95,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "hone-claws": {
@@ -599,7 +599,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   hurricane: {
@@ -607,7 +607,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 110,
     accuracy: 70,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "hyper-voice": {
@@ -615,7 +615,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 90,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   hypnosis: {
@@ -631,7 +631,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 75,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "ice-spinner": {
@@ -639,7 +639,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 80,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "icy-wind": {
@@ -647,7 +647,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 55,
     accuracy: 95,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   imprison: {
@@ -655,7 +655,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "iron-defense": {
@@ -663,7 +663,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "iron-head": {
@@ -671,7 +671,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 80,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "knock-off": {
@@ -687,7 +687,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 90,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "leaf-storm": {
@@ -695,7 +695,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 130,
     accuracy: 90,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "life-dew": {
@@ -703,7 +703,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   liquidation: {
@@ -711,7 +711,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 85,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "low-kick": {
@@ -727,7 +727,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 80,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   megahorn: {
@@ -735,7 +735,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 120,
     accuracy: 85,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "mirror-coat": {
@@ -751,7 +751,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 90,
     accuracy: 85,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "mystical-fire": {
@@ -759,7 +759,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 75,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "night-slash": {
@@ -767,7 +767,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 70,
     accuracy: 100,
-    pp: 15,
+    pp: 20,
     priority: 0,
   },
   overheat: {
@@ -775,7 +775,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 130,
     accuracy: 90,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "pain-split": {
@@ -791,7 +791,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 90,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "pin-missile": {
@@ -807,7 +807,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 90,
     accuracy: 90,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "poison-jab": {
@@ -823,7 +823,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 110,
     accuracy: 90,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "power-trip": {
@@ -831,7 +831,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 20,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   protect: {
@@ -839,7 +839,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 10,
+    pp: 8,
     priority: 4,
   },
   psychic: {
@@ -847,7 +847,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 90,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "psychic-fangs": {
@@ -855,7 +855,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 85,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   psyshock: {
@@ -863,7 +863,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 80,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "rapid-spin": {
@@ -871,7 +871,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 50,
     accuracy: 100,
-    pp: 40,
+    pp: 20,
     priority: 0,
   },
   recover: {
@@ -879,7 +879,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   roar: {
@@ -895,7 +895,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 25,
     accuracy: 90,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "rock-slide": {
@@ -903,7 +903,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 75,
     accuracy: 90,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "salt-cure": {
@@ -911,7 +911,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 40,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   scald: {
@@ -919,7 +919,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 80,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "scale-shot": {
@@ -935,7 +935,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 70,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "shadow-claw": {
@@ -943,7 +943,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 70,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "shadow-sneak": {
@@ -951,7 +951,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 40,
     accuracy: 100,
-    pp: 30,
+    pp: 20,
     priority: 1,
   },
   "shell-smash": {
@@ -959,7 +959,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "sludge-bomb": {
@@ -967,7 +967,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 90,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "smart-strike": {
@@ -975,7 +975,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 70,
     accuracy: null,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   snarl: {
@@ -983,7 +983,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 55,
     accuracy: 95,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   spikes: {
@@ -997,9 +997,9 @@ export const moveSpecsDex = {
   "spirit-shackle": {
     type: "ghost",
     damageClass: "physical",
-    power: 80,
+    power: 90,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "stealth-rock": {
@@ -1015,7 +1015,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 75,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   substitute: {
@@ -1023,7 +1023,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "sucker-punch": {
@@ -1031,7 +1031,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 70,
     accuracy: 100,
-    pp: 5,
+    pp: 8,
     priority: 1,
   },
   superpower: {
@@ -1039,7 +1039,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 120,
     accuracy: 100,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   surf: {
@@ -1047,7 +1047,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 90,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   tailwind: {
@@ -1055,7 +1055,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   taunt: {
@@ -1071,7 +1071,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 80,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "thunder-punch": {
@@ -1079,7 +1079,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 75,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "thunder-wave": {
@@ -1095,7 +1095,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 80,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "toxic-spikes": {
@@ -1119,7 +1119,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "trick-room": {
@@ -1127,7 +1127,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 5,
+    pp: 8,
     priority: -7,
   },
   "triple-axel": {
@@ -1135,7 +1135,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 20,
     accuracy: 90,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "u-turn": {
@@ -1151,7 +1151,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 40,
     accuracy: 100,
-    pp: 30,
+    pp: 20,
     priority: 1,
   },
   "water-shuriken": {
@@ -1167,7 +1167,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 120,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "wide-guard": {
@@ -1175,7 +1175,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 10,
+    pp: 12,
     priority: 3,
   },
   "wild-charge": {
@@ -1183,7 +1183,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 90,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "x-scissor": {
@@ -1191,7 +1191,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 80,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "acid-spray": {
@@ -1207,7 +1207,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 60,
     accuracy: 95,
-    pp: 25,
+    pp: 20,
     priority: 0,
   },
   "ancient-power": {
@@ -1215,7 +1215,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 60,
     accuracy: 100,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "beat-up": {
@@ -1223,7 +1223,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: null,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "belly-drum": {
@@ -1231,7 +1231,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   bite: {
@@ -1239,7 +1239,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 60,
     accuracy: 100,
-    pp: 25,
+    pp: 20,
     priority: 0,
   },
   "blast-burn": {
@@ -1247,7 +1247,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 150,
     accuracy: 90,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "body-slam": {
@@ -1255,7 +1255,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 85,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "breaking-swipe": {
@@ -1263,7 +1263,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 60,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "brick-break": {
@@ -1271,7 +1271,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 75,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "brutal-swing": {
@@ -1295,7 +1295,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "corrosive-gas": {
@@ -1303,7 +1303,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: 100,
-    pp: 40,
+    pp: 20,
     priority: 0,
   },
   counter: {
@@ -1319,7 +1319,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 80,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   disable: {
@@ -1335,7 +1335,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 120,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "dragon-cheer": {
@@ -1343,7 +1343,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "dragon-rush": {
@@ -1351,7 +1351,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 100,
     accuracy: 75,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   endure: {
@@ -1359,7 +1359,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 10,
+    pp: 12,
     priority: 4,
   },
   facade: {
@@ -1375,7 +1375,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 35,
     accuracy: 85,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   fling: {
@@ -1383,7 +1383,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: null,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   fly: {
@@ -1391,7 +1391,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 90,
     accuracy: 95,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "focus-punch": {
@@ -1407,7 +1407,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 95,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "giga-drain": {
@@ -1415,7 +1415,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 75,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "giga-impact": {
@@ -1423,7 +1423,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 150,
     accuracy: 90,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "heat-crash": {
@@ -1431,7 +1431,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: null,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "helping-hand": {
@@ -1447,7 +1447,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 150,
     accuracy: 90,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   inferno: {
@@ -1455,7 +1455,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 100,
     accuracy: 50,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "iron-tail": {
@@ -1463,7 +1463,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 100,
     accuracy: 75,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "mean-look": {
@@ -1471,7 +1471,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "mega-kick": {
@@ -1479,7 +1479,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 120,
     accuracy: 75,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "mud-shot": {
@@ -1487,7 +1487,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 55,
     accuracy: 95,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "night-shade": {
@@ -1495,7 +1495,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: null,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   payback: {
@@ -1503,7 +1503,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 50,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "perish-song": {
@@ -1511,7 +1511,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "power-gem": {
@@ -1527,7 +1527,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "psychic-noise": {
@@ -1535,7 +1535,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 75,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "rain-dance": {
@@ -1543,7 +1543,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "reflect-type": {
@@ -1551,7 +1551,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   rest: {
@@ -1559,7 +1559,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "rock-tomb": {
@@ -1567,7 +1567,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 60,
     accuracy: 95,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   round: {
@@ -1575,7 +1575,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 60,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "sand-tomb": {
@@ -1583,7 +1583,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 35,
     accuracy: 85,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   sandstorm: {
@@ -1591,7 +1591,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 10,
+    pp: 8,
     priority: 0,
   },
   "scary-face": {
@@ -1599,7 +1599,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "self-destruct": {
@@ -1607,7 +1607,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 200,
     accuracy: 100,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "shadow-punch": {
@@ -1623,7 +1623,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "skitter-smack": {
@@ -1631,7 +1631,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 70,
     accuracy: 90,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "sleep-talk": {
@@ -1639,7 +1639,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "sludge-wave": {
@@ -1647,7 +1647,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 95,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   snore: {
@@ -1655,7 +1655,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 50,
     accuracy: 100,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   "solar-beam": {
@@ -1663,7 +1663,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 120,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   spite: {
@@ -1671,7 +1671,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "steel-wing": {
@@ -1679,7 +1679,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 70,
     accuracy: 90,
-    pp: 25,
+    pp: 20,
     priority: 0,
   },
   "sunny-day": {
@@ -1687,7 +1687,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 5,
+    pp: 8,
     priority: 0,
   },
   "temper-flare": {
@@ -1695,7 +1695,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 75,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   thief: {
@@ -1703,7 +1703,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 60,
     accuracy: 100,
-    pp: 25,
+    pp: 20,
     priority: 0,
   },
   thunder: {
@@ -1711,7 +1711,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 110,
     accuracy: 70,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "thunder-fang": {
@@ -1719,7 +1719,7 @@ export const moveSpecsDex = {
     damageClass: "physical",
     power: 65,
     accuracy: 95,
-    pp: 15,
+    pp: 16,
     priority: 0,
   },
   toxic: {
@@ -1727,7 +1727,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: 90,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   venoshock: {
@@ -1735,7 +1735,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 65,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "weather-ball": {
@@ -1743,7 +1743,7 @@ export const moveSpecsDex = {
     damageClass: "special",
     power: 50,
     accuracy: 100,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
   "wonder-room": {
@@ -1751,7 +1751,7 @@ export const moveSpecsDex = {
     damageClass: "status",
     power: null,
     accuracy: null,
-    pp: 10,
+    pp: 12,
     priority: 0,
   },
 } as const satisfies Record<string, MoveStats>;
