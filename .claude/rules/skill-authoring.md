@@ -63,7 +63,9 @@ survey-regulation 層2-3（[ADR 0031](../../docs/adr/archive/0031-deterministic-
 
 - **参照の実在確認**: ADR / rule / ファイルへのリンクは `ls` / grep で**実在を確認してから**書く。`[[wikilink]]` は
   対応 rule / memory の slug が実在するもののみ（dangling 防止・learning #42/#58）。推測でファイル名を書かない
-  （ADR は採番が紛らわしく `0022-xxx.md` の slug を取り違えやすい）。
+  （ADR は採番が紛らわしく `0022-xxx.md` の slug を取り違えやすい）。**コードシンボル（関数 / dex / 型名・例
+  `ItemNotHoldableBy`）を doc / skill 本文に書くときも `git grep` で実装 SoT に実在することを確認する**（tsc は
+  doc 内の架空シンボルを捕れず、`reverseEn` のような実在しない名前が紛れ込む・learning #133 / #135 / #139 反復）。
 - **ファイル参照は markdown リンク**: skill 内のファイル参照は `[表示名](./path)` で書く。`[[...]]` は rule / memory
   名の wikilink 専用で、ファイルパスに使わない（記法の混同を避ける）。
 - **`description` は文字数で ≤1024**: YAML folded scalar の `description` を `wc -c`（バイト数）で測ると日本語は
