@@ -23,6 +23,14 @@ ADR 本文は **可変な plan ファイル（`docs/plan/**` の phase doc / `OV
 - **引かない（可変）**: `phase-NN-*.md` へのリンク、本文中の「Phase N」表記、`OVERVIEW.md` へのリンク。詳細が phase doc にしか無い場合は、対応する rule / `architecture.md` へ寄せるか、決定内容を ADR 本文で自己完結させる。
 - **例外（概念参照）**: plan 運用そのものが主題の ADR（`0020` plans-new / `0018` implementation-workflow 等）は、`docs/plan/` 構造や「OVERVIEW」「6 基準」等を**概念として**言及してよい。陳腐化する**具体 phase 番号のみ**避ける。`implementation-workflow` の「Phase 0〜9」のような **skill 内部フェーズ番号**は plan phase ではないので可。
 
+## ADR が持つもの / ライブ SoT が持つもの（具体値を不変ログに抱えない）
+
+ADR 本文は**決定の根拠（Why）と捨てた代替案**を持つ不変ログ。**具体数値・スキーマ値・DOM 契約値などの変わりうる「値」の SoT は、ライブ手順 SoT（`.claude/skills/*/references/*` / 各 `.claude/rules/*` / `docs/plan/01-mvp/architecture.md`）側に置き、ADR からは参照する**。理由は、不変ログである ADR に具体値を抱えると、値が更新されたとき ADR が陳腐化し「決定の追跡可能性」と「現行値の正しさ」の両方が損なわれるため（ライブ SoT は更新できるが Accepted な ADR 本文は書き換えない）。
+
+- **ADR 本文に書く**: 「なぜその取得経路 / 表現 / 機構を選んだか」「何を捨てたか」（決定根拠）。
+- **ライブ SoT に書く**: 具体的な閾値・スキーマ・契約値（例: PP スケール・exit code の意味・DOM セレクタ・型名）。ADR からはそこへ参照を張り、値の二重持ち（ドリフト死角）を避ける。
+- 既出の「可変な plan ファイルを引かない」と同根の原則（不変ログに陳腐化する詳細を抱えない）。コードシンボル・スキーマ値は実装 SoT を引き、ADR で再記述しない。
+
 ## 採番と作成
 
 - `NNNN` は 4 桁ゼロ詰めの連番。既存の**最大連番 + 1**。原則飛ばさず・再利用しない。
