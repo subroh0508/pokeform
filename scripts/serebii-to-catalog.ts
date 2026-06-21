@@ -248,16 +248,32 @@ function transcribeSpecies(slug: string, regId: string, jsonPath: string | undef
  * 技専用ページの技マスター中間 JSON を `move-specs.yaml`（技メタ・上書き是正）と `languages/moves.yaml`
  * （技名 en・append/既存尊重）へ転記する。move-specs は前作値が残るため、技メタ 6 項目を技マスター値で
  * **上書き**する（後勝ち・ADR 0037）。空 map（flow `{}`）を生まないよう block の map ノードを作って set する。
+ *
+ * 冪等・可視化のため: 既存値と一致するなら書き戻さない（round-trip 再整形ノイズ回避・他転記の `writeIf` と
+ * 同方針）。既存 key が無い id は move-specs を**新規作成**するが、専用取得は基本「既存値の是正」なので新規作成は
+ * 想定外（typo slug / どの reg にも属さない技）。orphan key は下流 `check:regulation` / `generate` の id 集合
+ * 整合で顕在化するため、ここで warn して可視化する。
  */
 function transcribeMoveMaster(jsonPath: string | undefined): void {
   const m = readJson<ParsedMoveMaster>(jsonPath);
 
-  // --- 技メタ（move-specs・上書き是正） ---
+  // --- 技メタ（move-specs・上書き是正・冪等書き戻し） ---
   const moveSpecsFile = join(CH, "move-specs.yaml");
   const moveSpecsDoc = loadDoc(moveSpecsFile);
   const moveSpecsMap = moveSpecsDoc.get("moves") as YAMLMap;
-  moveSpecsMap.set(m.id, moveSpecsDoc.createNode(moveMasterStatsFields(m)));
-  writeFileSync(moveSpecsFile, moveSpecsDoc.toString());
+  const fresh = moveMasterStatsFields(m);
+  const existingNode = moveSpecsMap.get(m.id) as YAMLMap | undefined;
+  const existing = existingNode?.toJS(moveSpecsDoc) as Record<string, unknown> | undefined;
+  if (existing === undefined) {
+    warn(
+      `move-master ${m.id}: NEW move-specs entry (no existing key — verify it belongs to a reg)`,
+    );
+  }
+  const specsChanged = existing === undefined || JSON.stringify(existing) !== JSON.stringify(fresh);
+  if (specsChanged) {
+    moveSpecsMap.set(m.id, moveSpecsDoc.createNode(fresh));
+    writeFileSync(moveSpecsFile, moveSpecsDoc.toString());
+  }
 
   // --- 技名 en（languages/moves・append/既存尊重・名前 SoT は上書きしない） ---
   const langMovesFile = join(LANG, "moves.yaml");
@@ -267,7 +283,7 @@ function transcribeMoveMaster(jsonPath: string | undefined): void {
   writeIf(langMovesFile, langMovesDoc, langChanged);
 
   warn(
-    `move-master ${m.id}: move-specs upserted (overwrite), languages en ${langChanged ? "added" : "kept"}`,
+    `move-master ${m.id}: move-specs ${specsChanged ? "overwritten" : "unchanged"}, languages en ${langChanged ? "added" : "kept"}`,
   );
 }
 

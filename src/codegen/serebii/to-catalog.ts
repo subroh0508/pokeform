@@ -30,9 +30,10 @@ export function moveNameFields(m: ParsedMove): MoveNameFields {
 }
 
 /**
- * regulations/champions/moves.yaml の Serebii 由来技メタ欄（per-game 共有・Phase 11 / ADR 0034）。`priority` は
- * Serebii の Standard Moves 表に列が無いため `0` 既定（実値は skill-authored で上書き＝materialize の
- * append/既存尊重で保護）。技の数値は Champions 固有調整があり得るためゲーム単位で持つ。
+ * move-specs.yaml の Serebii 由来技メタ欄（per-game 共有・ADR 0034/0035）。技の数値は Champions 固有調整が
+ * あり得るためゲーム単位で持つ。`priority` の正値は**技マスター専用取得**（`moveMasterStatsFields`・技専用
+ * ページ由来・ADR 0037）が SoT。種族ページ副産物の `moveStatsFields` は Standard Moves 表に priority 列が
+ * 無いため `0` 既定で、Phase 3 で副産物抽出が除去されるまでの暫定値（技マスター転記が後勝ち上書きで是正する）。
  */
 export interface MoveStatsFields {
   type: string;
