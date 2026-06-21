@@ -2,7 +2,7 @@
 
 ## 目的 / スコープ
 
-軽量級 rules を P1-P5 パターンで圧縮する（調査レポート §5.2）。**`code-review.md` は Phase 2（共通フレーム抽出）で扱うため本 Phase では除外**。`implementation-workflow.md` / `data-pipeline.md` は Phase 0。
+軽量級 rules を P1-P5 パターンで圧縮する。**`code-review.md` は Phase 2（共通フレーム抽出）で扱うため本 Phase では除外**。`implementation-workflow.md` / `data-pipeline.md` は Phase 0。
 
 対象と削減目安:
 - adr.md（64・15-20）: 前置き圧縮 / 参照ルール箇条統一 / learning 番号削除。
@@ -22,11 +22,11 @@
 
 ## 前提（依存）
 
-- 先行計画 07 完了。特に `planning.md` は 07 Phase 4 で `paths` が `docs/roadmap/**` へ追従済み・renumber/`completed` 運用が追記済みの状態を前提に圧縮する（競合回避）。
+- なし。本計画は後続 [`08-docs-restructure`](../08-docs-restructure/README.md) より先に実施する。`planning.md` の `paths` は本計画時点では `docs/plan/**`（`docs/roadmap/**` への追従は 08 が行う）。本 Phase は本文圧縮のみで `paths` は変えないため競合しない。
 
 ## タスク
 
-- [ ] 各 rule を P1-P5 で圧縮。**learning 番号は「再発防止の根拠」になっているものを残し**、冗長な羅列のみ「過去 learning で反復」へ集約（§5.5）。
+- [ ] 各 rule を P1-P5 で圧縮。**learning 番号は「再発防止の根拠」になっているものを残し**、冗長な羅列のみ「過去 learning で反復」へ集約。
 - [ ] 「なぜ」の長文は 1 行要約 + ADR / リンク委譲（自己完結性維持）。
 - [ ] `paths` / description は意味・自動ロード範囲を変えない。
 - [ ] 各 rule の `[[wikilink]]` / リンクが実在へ解決することを確認。

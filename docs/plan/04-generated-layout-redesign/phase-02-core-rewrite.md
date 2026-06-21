@@ -10,7 +10,7 @@ Phase 1 で確定した設計に沿って、ソース YAML・codegen・型・con
   - **パイプライン追従**: `materialize`（構造→specs / ja→languages）・`fetch-pokeapi`（列挙元）・`serebii-to-catalog`（書き出し先）・`check:regulation`/`check:yaml-style`（走査パス）。
   - **型レイヤ**（`src/types/**`）: specs/languages 型（`NameEntry`・新 `MegaSpec`・`SpeciesBaseInfo` から name 除去）。**individual.ts/party.ts の reg-aware 制約・ブランドエラーを保全**（`RegulationDex[R]["speciesDex"]` 形を維持）。
   - **14 consumer + 公開 API**: 名前参照を languages へ（`cli/format.ts`・`io/load-individual.ts`）・逆引きを languages forward から導出（`io/load-party.ts`・`codegen/normalize.ts`）・import パス・`src/index.ts` の export・テスト fixture（`__fixtures__/chart.ts`・`type-effectiveness.test.ts`）。
-- スコープ外: ADR 起票（Phase 1）。rule/skill/architecture/docs 追従（Phase 3）。技仕様の値是正（後続計画群 05）・全種族投入（後続計画群 09）。
+- スコープ外: ADR 起票（Phase 1）。rule/skill/architecture/docs 追従（Phase 3）。技仕様の値是正（後続計画群 05）・全種族投入（後続計画群 XX）。
 
 ## 前提（依存）
 

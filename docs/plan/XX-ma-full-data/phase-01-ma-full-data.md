@@ -1,7 +1,7 @@
 # Phase 1 — M-A 全データ投入（全186種 + 全 movepool）
 
 > 本 phase は 02-data-model-redesign の旧 phase-20（M-A 全データ投入）を起源とし、複数回の cross-plan move を経て
-> 本計画群（09）の唯一の phase として確定したもの。投入手段は **03-survey-regulation-rework で構築した新パイプライン
+> 本計画群（XX）の唯一の phase として確定したもの。投入手段は **03-survey-regulation-rework で構築した新パイプライン
 > （決定論スクレイパー + Haiku 取得 fan-out + 自己修復ループ）+ 05-move-master-scraper-refactor で整理した役割分割済み
 > パイプライン**経由。
 >

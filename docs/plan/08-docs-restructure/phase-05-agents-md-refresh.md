@@ -4,12 +4,12 @@
 
 陳腐化した AGENTS.md（指示 SoT）を実態へ追従し、**列挙（実体重複）から参照（SoT へポインタ）へ転換**する。Anthropic 公式の「memory は <200 行目標・import はコンテキスト非削減（削減は path-scoped rule で）」を根拠に、肥大分は path-scoped rule へ寄せる。
 
-是正対象（調査レポート §3 高 / §4.2）:
+是正対象:
 - **コマンド表**: `verify` の中身が古い（`check:yaml-style` 漏れ・順序違い）。`check:party` / `check:individual` / `check:regulation` / `check:yaml-style` / `generate:data` / `fetch:serebii` / `materialize` / `scrape:serebii` / `serebii:catalog` 等が未掲載 → `package.json` scripts に追従、または「正本は package.json」とし要点のみ。
 - **skill リスト**: 「レビュー skill・implementation-workflow 等は後続フェーズで追加される」注記が事実と乖離（すべて実装済み）。未列挙 skill が多数 → 列挙から `.claude/skills/` が SoT の参照へ転換し、注記を除去。
 - **ディレクトリ説明**: `*-specs.yaml` 総称で 6 種別（species / mega / item / ability / move / type）が隠れる。`languages/` の役割が曖昧 → 粒度調整、または design / rule へポインタ。
 
-スコープ外: rule / skill 本体の文体圧縮（後続計画 08）。本 Phase は AGENTS.md 1 ファイルの刷新。
+スコープ外: rule / skill 本体の文体圧縮（先行計画 07）。本 Phase は AGENTS.md 1 ファイルの刷新。
 
 ## 前提（依存）
 

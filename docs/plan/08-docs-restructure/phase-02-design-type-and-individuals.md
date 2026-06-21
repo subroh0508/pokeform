@@ -18,6 +18,7 @@
 - [ ] `docs/design/type-validation.md` を執筆（書かない: 型シグネチャ・interface・Dex の具体 → [[type-conventions]] / [[tsc-verification]] + `src/types/`）。
 - [ ] `docs/design/individuals-and-parties.md` を執筆（書かない: `IndividualSpec` フィールド・YAML 具体例・CLI フラグ・数式 → [[game-spec]] / [[cli-and-io]] + `src/` + `author-individual` / `review-party` skill）。
 - [ ] 両ファイル末尾に「実装 SoT ポインタ」節（rule `[[...]]` + `src` パス）を必須化。
+- [ ] 両ファイル冒頭に **front matter**（`last_modified`: ISO8601 / `adr`: 関連 ADR 配列）を付与する（Phase 0 ADR の規約）。
 - [ ] 不変条件の列挙は自然言語で（数式・閾値 66/32 の実体は [[game-spec]] が SoT・design は「二重 floor に注意」等の設計上の注意のみ）。
 
 ## この Phase で育てるハーネス（rule・skill）
@@ -26,7 +27,7 @@
 
 ## 受け入れ基準
 
-1. `docs/design/type-validation.md` と `docs/design/individuals-and-parties.md` が存在し、**TS コード・YAML キー網羅・数式の実体を含まない**。
+1. `docs/design/type-validation.md` と `docs/design/individuals-and-parties.md` が存在し、front matter（`last_modified` + `adr`）を持ち、**TS コード・YAML キー網羅・数式の実体を含まない**。
 2. 個体・パーティの**保証する不変条件**が自然言語で列挙され、具体値は rule / src を参照。
 3. 各ファイル末尾「実装 SoT ポインタ」のリンクが実在へ解決。
 4. `pnpm verify` 緑。

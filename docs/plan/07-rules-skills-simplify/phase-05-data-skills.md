@@ -2,7 +2,7 @@
 
 ## 目的 / スコープ
 
-データ系 skill を P1 / P2 中心に圧縮する（調査レポート §5.3）:
+データ系 skill を P1 / P2 中心に圧縮する:
 
 - dep-update（167・25-30）: description 短縮 / 入力節 → frontmatter / 具体例（L121-148）を references 化。主因 P1 / P4。
 - update-catalog（117・15-20）: frontmatter ↔ 本文の構造データ列挙重複 / 対象 id 確定ステップ自明。主因 P1 / P2。
@@ -14,14 +14,14 @@
 
 ## 前提（依存）
 
-- 先行計画 07 完了（配置・参照確定）。データ系 skill は 07 の影響が小さいが、着手前提として 07 完了後に行う（計画間の競合回避・OVERVIEW）。
+- なし。本計画は後続 [`08-docs-restructure`](../08-docs-restructure/README.md) より先に実施する。データ系 skill は 08 の構造再編の影響が小さく、独立に着手できる。
 
 ## タスク
 
 - [ ] 各 skill の frontmatter description をスリム化（P1・key concept 詰め込み解消・eval 確認）。
 - [ ] frontmatter ↔ 本文冒頭の重複説明を削除（P2）。
 - [ ] dep-update の具体例を `references/` 化し SKILL からリンク（P4・dangling を作らない）。
-- [ ] **手順の安全性記述（check:* 委譲・合計66/各32 制約・マージ不可逆性・idempotent）は残す**（§5.5）。
+- [ ] **手順の安全性記述（check:* 委譲・合計66/各32 制約・マージ不可逆性・idempotent）は残す**。
 - [ ] 委譲説明（domain / 他 skill への委譲）は冗長を削り要点 + リンクへ。
 
 ## この Phase で育てるハーネス（rule・skill）
@@ -44,5 +44,5 @@
 ## リスク・備考
 
 - データ系は機械ゲート（check:*）への委譲が安全性の核。委譲記述を削らない。
-- review-party は既に短く余地小。過度な圧縮で自己説明性を失わない（§5.5）。
-- 本 Phase 完了で計画 08（純シンプル化）が完了。
+- review-party は既に短く余地小。過度な圧縮で自己説明性を失わない。
+- 本 Phase 完了で計画 07（純シンプル化）が完了。

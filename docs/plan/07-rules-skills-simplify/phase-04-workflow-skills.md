@@ -2,7 +2,7 @@
 
 ## 目的 / スコープ
 
-ワークフロー系 skill を P1-P5 で圧縮する（調査レポート §5.3）:
+ワークフロー系 skill を P1-P5 で圧縮する:
 
 - finish-phase（136・38-50）: 「なぜ」節 / README 更新詳細 / ADR 基準が adr.md と重複。
 - plans-new（116・30-40）: 6 基準が概要・rule・split-criteria.md の三重記述 / issue 作成詳細。
@@ -17,7 +17,7 @@
 
 ## 前提（依存）
 
-- 先行計画 07 完了（`finish-phase` は 07 Phase 4 で `completed/` 移動運用が追記済み・`start-phase` は 07 Phase 6 で使い分け明確化済みの状態を前提に圧縮）。
+- なし。本計画は後続 [`08-docs-restructure`](../08-docs-restructure/README.md) より先に実施する。`finish-phase` の `completed/` 移動運用追記・`start-phase` の使い分け明確化は 08 が行う（本 Phase の圧縮とは別編集）。
 
 ## タスク
 

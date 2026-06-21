@@ -7,7 +7,7 @@
 - スコープ内:
   - **ADR (a)「generated/YAML ディレクトリ再編＋specs/languages 分離」**: 構造（specs・言語非依存）/ 名前（languages・ゲーム非依存）/ レギュ解禁（per-reg 4 オブジェクト）の 3 軸直交、YAML 参照機構＝ディレクトリ同型＋generate 合成（`$ref` 不採用）、名前 SoT の所在を catalog/dex から `data/languages/*` へ移す決定。ADR 0025（名前 SoT を catalog へ）/ 0032（ja 取得元）/ 0034（技メタ per-game SoT・所在）を **supersede/追補**（決定の本質は不変・所在のみ改訂）。
   - **ADR (b)「メガを独立 spec エンティティ化」**: メガを `species-specs` 内エントリ＋`megaLinks` から `mega-specs`（base 種族から構造データを分離・`baseSpecies` 逆参照）へ。per-reg `mega.ts`・`languages/mega.ts` を派生。
-- スコープ外: 実装（Phase 2）。ハーネス rule/skill 追従（Phase 3）。技仕様の値是正（後続計画群 05）・全種族投入（後続計画群 09）。
+- スコープ外: 実装（Phase 2）。ハーネス rule/skill 追従（Phase 3）。技仕様の値是正（後続計画群 05）・全種族投入（後続計画群 XX）。
 
 ## 前提（依存）
 

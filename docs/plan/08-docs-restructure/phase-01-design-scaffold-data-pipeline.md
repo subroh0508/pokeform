@@ -15,6 +15,7 @@
 - [ ] `docs/design/README.md` を執筆: 目的・スコープ / 設計方針 5 点の意図 / 全体データフロー図（mermaid・ノードは "specs"/"languages"/"per-reg" 等の陳腐化しにくい抽象語）/ 3 本へのナビ / 主要トレードオフ / 参考ソース / `roadmap` との一行棲み分け。
 - [ ] `docs/design/data-pipeline.md` を執筆: 情報源 3 系統（Serebii / 補助 / PokeAPI）の関係、skill 著述 ↔ 機械転記の 2 辺、specs / languages / per-reg が「何の SoT か」、generate の決定論性、データの流れ（mermaid）。
 - [ ] 各ファイル末尾に **「実装 SoT ポインタ」節**を必須化（`[[data-pipeline]]` rule + `scripts/` + `src/` パスへ誘導）。
+- [ ] 各ファイル冒頭に **front matter**（`last_modified`: ISO8601 / `adr`: 関連 ADR 配列）を付与する（Phase 0 ADR で確定した規約）。
 - [ ] **TypeScript の具体コード・YAML キー網羅・転記コードを書かない**（→ [[data-pipeline]] rule + `scripts/`）。
 
 ## この Phase で育てるハーネス（rule・skill）
@@ -24,7 +25,7 @@
 ## 受け入れ基準
 
 1. `docs/design/README.md` と `docs/design/data-pipeline.md` が存在し、**TS コード（型シグネチャ・interface・Dex・関数定義）を含まない**（`grep -nE 'interface |: [A-Z][a-zA-Z]+Dex|export const' docs/design/` がデータフロー以外で空）。
-2. 各ファイル末尾に「実装 SoT ポインタ」節があり、`[[...]]` / 相対リンク / `src` パスがすべて実在へ解決。
+2. 各ファイルが front matter（`last_modified` + `adr`）を持ち、末尾に「実装 SoT ポインタ」節があり、`[[...]]` / 相対リンク / `src` パスがすべて実在へ解決。
 3. mermaid のノードラベルが具体ファイル名・キーを埋め込まず抽象語に留まる。
 4. `pnpm verify` 緑。
 

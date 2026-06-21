@@ -8,11 +8,11 @@
 ```
 docs/roadmap/
 ├─ README.md              # ロードマップ全体（進捗ロールアップ表 ✅/🚧/⬜）
-├─ 07-docs-restructure/   # active（本計画自身・進行中）
-├─ 08-rules-skills-simplify/
-├─ 09-ma-full-data/
+├─ 08-docs-restructure/   # active（本計画自身・進行中）
+├─ XX-ma-full-data/       # active（未着手・採番やり直し回避の XX- 採番）
 └─ completed/
    ├─ 00-harness-setup/ … 05-move-master-scraper-refactor/
+   └─ 07-rules-skills-simplify/   # 先行計画（全 phase 完了していれば集約）
 ```
 
 スコープ外: AGENTS.md 刷新（Phase 5）。ただし AGENTS.md / rule / skill 内の `docs/plan` パス参照は本 Phase で `docs/roadmap` へ追従する（改名で dangling を作らないため）。
@@ -26,7 +26,7 @@ docs/roadmap/
 - [ ] `git mv docs/plan docs/roadmap`。完了計画群を `git mv docs/roadmap/0[0-5]-* docs/roadmap/completed/`。
 - [ ] `docs/roadmap/README.md` を更新（旧 docs/plan/README.md）: 進捗ロールアップ表・採番規約・completed 運用の明文化。冒頭に `design` との一行棲み分けを記載。
 - [ ] `git grep -n 'docs/plan'` でリポジトリ全体（rule 11・ADR 10・learnings 8・skill・AGENTS.md・CLAUDE.md 等）の参照を `docs/roadmap`（完了計画は `completed/`）へ追従。**インライン相対リンク・reference 式リンク定義・素のパス参照**を全走査。
-- [ ] **ADR からの plan 参照を安定 SoT（rule / design）へ寄せる好機**（調査レポート §9.5）。`docs/adr/` の plan 参照は adr.md の「可変 plan ファイルを引かない」原則に照らし、rule / architecture（design）へ向け直すか ADR 本文で自己完結させる。archive ADR 本文は不変なので触らない。
+- [ ] **ADR からの plan 参照を安定 SoT（rule / design）へ寄せる好機**。`docs/adr/` の plan 参照は adr.md の「可変 plan ファイルを引かない」原則に照らし、rule / architecture（design）へ向け直すか ADR 本文で自己完結させる。archive ADR 本文は不変なので触らない。
 - [ ] `planning.md` / `finish-phase` に「計画群の全 phase 完了 → `completed/` へ移動 + 参照追従」の運用を明文化（renumber 追従チェックリストと同種）。
 - [ ] `docs/harness/rules-index.md` は生成物。`paths` に `docs/plan` を含む rule（`planning.md` の `paths: docs/plan/**`）があれば `docs/roadmap/**` へ更新し、`prepare` / `gen-rules-index.ts` で再生成（手編集しない）。
 
@@ -36,8 +36,8 @@ docs/roadmap/
 
 ## 受け入れ基準
 
-1. `docs/roadmap/` が存在し `docs/plan/` が存在しない。完了計画 00〜05 が `completed/` 配下、active（07/08/09）が直下。
-2. `git grep -n 'docs/plan'` が active なファイルで dangling ゼロ（archive ADR・調査レポートの歴史言及を除く）。
+1. `docs/roadmap/` が存在し `docs/plan/` が存在しない。完了計画（00〜05・先行完了した 07）が `completed/` 配下、active（08・`XX-ma-full-data`）が直下。
+2. `git grep -n 'docs/plan'` が active なファイルで dangling ゼロ（archive ADR の歴史言及を除く）。
 3. `docs/roadmap/README.md` に進捗ロールアップ表と `completed/` 運用・`design` 棲み分けがある。
 4. `planning.md` の `paths` が `docs/roadmap/**` を指し、`rules-index.md` が再生成されてドリフトなし。
 5. `pnpm verify` 緑。`harness-review` で dangling ゼロ確認。

@@ -2,7 +2,7 @@
 
 ## 目的 / スコープ
 
-最大の単独削減対象 `survey-regulation` skill（287 行・削減目安 80-120）を圧縮する（調査レポート §5.3）。主因 P1 / P2 / P4:
+最大の単独削減対象 `survey-regulation` skill（287 行・削減目安 80-120）を圧縮する。主因 P1 / P2 / P4:
 
 - frontmatter（240 字超）を trigger 1-2 文へ。
 - blockquote・「なぜ」節が `references/` を逐語再掲 → 参照へ置換。
@@ -13,11 +13,11 @@
 
 ## 前提（依存）
 
-- 先行計画 07 完了（`survey-regulation/references/serebii-sourcing.md` の陳腐化表記は 07 Phase 6 で是正済みの状態を前提に圧縮）。
+- なし。本計画は後続 [`08-docs-restructure`](../08-docs-restructure/README.md) より先に実施する。`survey-regulation/references/serebii-sourcing.md` の陳腐化表記是正は 08 が行う（本 Phase の圧縮とは別編集）。
 
 ## タスク
 
-- [ ] frontmatter description を trigger 1-2 文へ圧縮（key concept の詰め込みを解消・§5.5 で eval 確認）。
+- [ ] frontmatter description を trigger 1-2 文へ圧縮（key concept の詰め込みを解消・eval 確認）。
 - [ ] 本文冒頭の frontmatter 重複説明を削除（P2）。
 - [ ] `references/` を逐語再掲している箇所を参照リンクへ置換（P4・dangling を作らない）。
 - [ ] Gotchas の冗長整理（**安全性記述 = HTML を LLM に載せない / exit code 判定 / 取りこぼし自己修復 / redaction は残す**）。
@@ -45,4 +45,4 @@
 ## リスク・備考
 
 - survey-regulation は層2-3 Workflow（Claude 固有）と層1 縮退を持つ。圧縮で「正しさは層1 に宿る」記述を落とさない。
-- description が長大なぶん under-trigger リスクが高い。短縮は eval で確認してから（§5.5）。
+- description が長大なぶん under-trigger リスクが高い。短縮は eval で確認してから。
