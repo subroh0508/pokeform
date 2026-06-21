@@ -9,7 +9,7 @@
 
 - スコープ内:
   - **情報種別ごとの分割**: roster 確定 / 種族が覚える技の一覧 / **技マスター（新・Phase 2 由来）** / 持ち物 を独立単位
-    に切り出す。mega（ADR 0033 で決定論自動著述）・move-meta（ADR 0034 で per-game 移設）は機械化済みのため非分割。
+    に切り出す。mega（ADR 0033 で決定論自動著述）・move-meta（ADR 0035・旧 ADR 0034 で per-game 移設）は機械化済みのため非分割。
   - **`survey-regulation` SKILL.md を骨子へ縮減**し、詳細を `references/` へ progressive disclosure。本体はオーケストレー
     ション手順（実行順・チェックポイント・各取得の呼び分け）に絞る。
   - サブスキル化 or Workflow 呼び分けのどちらかを Phase 1 確定方針で実装。`update-catalog` との責務分離（PokeAPI 構造
@@ -67,7 +67,7 @@
 
 ## リスク・備考
 
-- **過分割を避ける**: mega（ADR 0033）・move-meta（ADR 0034）は既に機械化済みで、サブスキル化しても効果が薄い。独立
+- **過分割を避ける**: mega（ADR 0033）・move-meta（ADR 0035・旧 ADR 0034）は既に機械化済みで、サブスキル化しても効果が薄い。独立
   効果がある roster / 覚える技の一覧 / 技マスター / 持ち物 に絞り、skill 数の増えすぎでオーケストレーションが複雑化
   しないようにする（SKILL.md の references 分離で十分なら無理にサブスキルを増やさない）。
 - **cross-agent パリティが要点**: Workflow は Claude 固有。Codex / 素の CLI では層1（テスト済み純関数 + npm script）の
