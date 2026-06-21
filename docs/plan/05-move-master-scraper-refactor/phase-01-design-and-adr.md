@@ -14,8 +14,8 @@
   - **skill 再編方針の確定**: `survey-regulation` をオーケストレーター化する粒度（roster / 覚える技の一覧 / 技マスター /
     持ち物 を独立単位・mega/move-meta は機械化済みで非分割）を確定。
   - **ADR 起票**: 技マスター取得経路の追加（Serebii 第一優先の技メタ SoT を「種族ページ副産物」から「技専用ページ専用
-    取得」へ具体化）と、03 Phase 13 廃止の経緯を ADR に残す。ADR 0034（技メタ per-game 移設）を supersede するか補完
-    するかを判断（所在は `move-specs`・出自は Serebii で不変のため**補完**が基本）。
+    取得」へ具体化）と、03 Phase 13 廃止の経緯を ADR に残す。技メタ per-game 移設の現行 carrier ADR 0035（旧 ADR 0034
+    を継承）を supersede するか補完するかを判断（所在は `move-specs`・出自は Serebii で不変のため**補完**が基本）。
 - スコープ外: 実装（Phase 2-4）。レイアウト再編（04 で完了済み）。
 
 ## 前提（依存）
@@ -36,7 +36,7 @@
       を設計メモに確定する。
 - [ ] skill オーケストレーター化の粒度（独立単位 = roster / 覚える技の一覧 / 技マスター / 持ち物・非分割 = mega/move-meta）
       と、サブスキル化 or Workflow 呼び分けのどちらを採るかを確定する。
-- [ ] `adr-new` で ADR を起票（技マスター専用取得経路の追加・03 Phase 13 廃止の経緯・ADR 0034 補完/supersede の判断）。
+- [ ] `adr-new` で ADR を起票（技マスター専用取得経路の追加・03 Phase 13 廃止の経緯・ADR 0035（旧 ADR 0034 継承）補完/supersede の判断）。
 - [ ] OVERVIEW / 後続 phase doc に確定事項を反映（必要なら追補）。
 
 ## この Phase で育てるハーネス（rule・skill）
