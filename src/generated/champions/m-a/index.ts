@@ -19,7 +19,7 @@ export const speciesDex = {
     baseStats: speciesSpecsDex.garchomp.baseStats,
     abilities: speciesSpecsDex.garchomp.abilities,
     moves: speciesMoves.garchomp,
-    items: ["garchompite"],
+    items: "any",
     megaEvolvesTo: mega.garchomp,
   },
   dragonite: {
@@ -47,7 +47,7 @@ export const speciesDex = {
     baseStats: speciesSpecsDex.charizard.baseStats,
     abilities: speciesSpecsDex.charizard.abilities,
     moves: speciesMoves.charizard,
-    items: ["charizardite-x", "charizardite-y"],
+    items: "any",
     megaEvolvesTo: mega.charizard,
   },
   dragapult: {
@@ -156,7 +156,7 @@ export const speciesDex = {
     baseStats: speciesSpecsDex.gengar.baseStats,
     abilities: speciesSpecsDex.gengar.abilities,
     moves: speciesMoves.gengar,
-    items: ["gengarite"],
+    items: "any",
     megaEvolvesTo: mega.gengar,
   },
   greninja: {

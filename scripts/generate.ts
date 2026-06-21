@@ -374,34 +374,6 @@ for (const [file, name, map] of langFiles) {
   );
 }
 
-// メガ可能種 → 対応メガストーン id タプルの決定論導出（item-specs の megaSpecies リンク・Phase 6）。
-// メガ形態 id（charizard-mega-x 等）→ ストーン id（charizardite-x 等）の逆引きを 1 度だけ構築する。
-const stonesByMegaSpecies = new Map<string, string[]>();
-for (const [iid, meta] of Object.entries(itemSpecs)) {
-  if (meta.megaSpecies) {
-    const arr = stonesByMegaSpecies.get(meta.megaSpecies) ?? [];
-    arr.push(iid);
-    stonesByMegaSpecies.set(meta.megaSpecies, arr);
-  }
-}
-// per-reg 解禁メガ形態（r.mega[sid]）に対応するストーン群を引く。欠落は fail-fast（空タプル＝
-// 「どの持ち物も不可」の不正状態を防ぐ）。reg の解禁プールに無いストーンも fail-fast（データ不整合）。
-const megaStonesFor = (r: RegData, sid: string, megaIds: readonly string[]): string[] => {
-  const stones = [...new Set(megaIds.flatMap((mid) => stonesByMegaSpecies.get(mid) ?? []))].sort();
-  if (stones.length === 0) {
-    throw new Error(
-      `regulation '${r.id}' mega species '${sid}' has no mega stone (item-specs megaSpecies link missing)`,
-    );
-  }
-  const regItems = new Set(r.items);
-  for (const s of stones) {
-    if (!regItems.has(s)) {
-      throw new Error(`regulation '${r.id}' mega stone '${s}' for '${sid}' not in reg items pool`);
-    }
-  }
-  return stones;
-};
-
 // champions/<reg>/{species,items,mega,species-moves,index}.ts
 for (const r of regs) {
   const dir = join("champions", r.reg);
@@ -420,14 +392,11 @@ for (const r of regs) {
   const baseLines = r.species.map((sid) => {
     const k = JSON.stringify(sid);
     const sp = acc("speciesSpecsDex", sid);
-    const megaIds = r.mega[sid];
-    const isMegaCapable = megaIds && megaIds.length > 0;
-    const megaPart = isMegaCapable ? `, megaEvolvesTo: ${acc("mega", sid)}` : "";
-    // メガ可能種（per-reg mega を持つ base 種族）の items は対応メガストーンのタプルに型制約する
-    // （個体が他持ち物を持つと ItemNotHoldableBy ブランドエラー・Phase 6）。非メガ種は従来どおり
-    // "any"（reg 解禁プール全件・HoldableItems が接続する）。
-    const itemsLit = isMegaCapable ? lit(megaStonesFor(r, sid, megaIds)) : '"any"';
-    return `  ${k}: { id: ${sp}.id, dex: ${sp}.dex, types: ${sp}.types, baseStats: ${sp}.baseStats, abilities: ${sp}.abilities, moves: ${acc("speciesMoves", sid)}, items: ${itemsLit}${megaPart} },`;
+    const megaPart =
+      r.mega[sid] && r.mega[sid].length > 0 ? `, megaEvolvesTo: ${acc("mega", sid)}` : "";
+    // base 種族（メガシンカ前）の items は "any"（reg 解禁プール全件・メガストーン含む）。メガストーン
+    // 専有はメガ形態種族側に課す（HoldableItems の MegaStoneOf<S> 分岐・対応ストーンのみ）。
+    return `  ${k}: { id: ${sp}.id, dex: ${sp}.dex, types: ${sp}.types, baseStats: ${sp}.baseStats, abilities: ${sp}.abilities, moves: ${acc("speciesMoves", sid)}, items: "any"${megaPart} },`;
   });
   const megaLines: string[] = [];
   for (const [sid, ms] of Object.entries(r.mega)) {

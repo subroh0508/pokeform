@@ -46,7 +46,7 @@ export const speciesDex = {
     baseStats: speciesSpecsDex.charizard.baseStats,
     abilities: speciesSpecsDex.charizard.abilities,
     moves: speciesMoves.charizard,
-    items: ["charizardite-x"],
+    items: "any",
     megaEvolvesTo: mega.charizard,
   },
   dragapult: {
