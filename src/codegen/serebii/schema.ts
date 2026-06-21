@@ -11,7 +11,7 @@
  * schema 欠落（stage 3）を健全性（stage 4）より優先する（必須欄が無ければ件数検証は無意味なため）。
  */
 import { isCatalogIdShape } from "./normalize.ts";
-import type { ParsedItems, ParsedSpecies } from "./parse.ts";
+import type { ParsedItems, ParsedMoveMaster, ParsedSpecies } from "./parse.ts";
 
 /** 自己検証 stage（= exit code）。2（取得失敗）は取得層 `scrape-serebii.ts` が判定し本関数は扱わない。 */
 export type Stage = 0 | 3 | 4;
@@ -90,6 +90,51 @@ function itemIssuesOf(p: ParsedItems): string[] {
 export function validateItems(p: ParsedItems): ValidationResult {
   if (p.items.length === 0) return { stage: 3, missingFields: ["items"], issues: [] };
   const issues = itemIssuesOf(p);
+  if (issues.length > 0) return { stage: 4, missingFields: [], issues };
+  return { stage: 0, missingFields: [], issues: [] };
+}
+
+/** Champions PP スケール（attackdex-champions は前作値ではなくこのスケールで PP を提示する・ADR 0037）。 */
+const MOVE_PP_SCALE: ReadonlySet<number> = new Set([8, 12, 16, 20]);
+/** damageClass の許容値（cat 画像 physical/special/other → physical/special/status）。 */
+const VALID_DAMAGE_CLASSES: ReadonlySet<string> = new Set(["physical", "special", "status"]);
+/** priority の想定レンジ（trick-room -7 〜 helping-hand +5）。 */
+const PRIORITY_MIN = -7;
+const PRIORITY_MAX = 5;
+
+/** 技マスターの必須欄欠落を集める（stage 3 の源・type/damageClass/pp/priority が必須）。 */
+function moveMasterMissingOf(m: ParsedMoveMaster): string[] {
+  const missing: string[] = [];
+  if (!m.id) missing.push("id");
+  if (!m.type) missing.push("type");
+  if (!m.damageClass) missing.push("damageClass");
+  if (m.pp === null) missing.push("pp");
+  if (m.priority === null) missing.push("priority");
+  return missing;
+}
+
+/** 技マスターの件数・健全性違反を集める（stage 4 の源・必須欄が揃っている前提）。 */
+function moveMasterIssuesOf(m: ParsedMoveMaster): string[] {
+  const issues: string[] = [];
+  if (!isCatalogIdShape(m.id)) issues.push(`move id shape: ${m.id}`);
+  if (m.pp !== null && !MOVE_PP_SCALE.has(m.pp)) issues.push(`pp out of scale: ${m.pp}`);
+  if (!VALID_DAMAGE_CLASSES.has(m.damageClass)) issues.push(`damageClass: ${m.damageClass}`);
+  if (m.power !== null && m.power < 0) issues.push(`power negative: ${m.power}`);
+  if (m.accuracy !== null && m.accuracy < 0) issues.push(`accuracy negative: ${m.accuracy}`);
+  if (m.priority !== null && (m.priority < PRIORITY_MIN || m.priority > PRIORITY_MAX)) {
+    issues.push(`priority out of range: ${m.priority}`);
+  }
+  return issues;
+}
+
+/**
+ * 技マスターのパース結果を検証し stage（exit code）を判定する。欠落（3）を健全性（4）より優先する
+ * （必須欄が無ければ件数検証は無意味なため・`validateSpecies` と同順序・ADR 0037 設計メモ 2）。
+ */
+export function validateMoveMaster(m: ParsedMoveMaster): ValidationResult {
+  const missingFields = moveMasterMissingOf(m);
+  if (missingFields.length > 0) return { stage: 3, missingFields, issues: [] };
+  const issues = moveMasterIssuesOf(m);
   if (issues.length > 0) return { stage: 4, missingFields: [], issues };
   return { stage: 0, missingFields: [], issues: [] };
 }

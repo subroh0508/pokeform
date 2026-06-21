@@ -19,19 +19,26 @@
  * `check:regulation` → `generate:data`）:
  * - `node scripts/serebii-to-catalog.ts species <slug> <regId> [jsonPath]`
  * - `node scripts/serebii-to-catalog.ts items <regId> [jsonPath]`
+ * - `node scripts/serebii-to-catalog.ts move-master [jsonPath]`（技専用ページの技マスター JSON → move-specs）
  *   `jsonPath` 省略 / `-` で stdin から中間 JSON を読む。
+ *
+ * **技マスター転記は move-specs の技メタを上書き是正する**（append/既存尊重ではなく後勝ち・ADR 0037）。技専用
+ * ページが Champions 準拠の威力 / PP / priority を一次ソースで持つため、前作値の残存を根絶するには上書きが必要。
+ * 技名 en（`languages/moves.yaml`）は名前 SoT なので append/既存尊重のままにする。
  */
 import { existsSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Document, parseDocument, type YAMLMap, type YAMLSeq } from "yaml";
 import { planFields } from "../src/codegen/materialize.ts";
-import type { ParsedItems, ParsedSpecies } from "../src/codegen/serebii/parse.ts";
+import type { ParsedItems, ParsedMoveMaster, ParsedSpecies } from "../src/codegen/serebii/parse.ts";
 import {
   abilityEnFromId,
   abilityIds,
   itemCatalogFields,
   megaAuthoring,
+  moveMasterNameFields,
+  moveMasterStatsFields,
   moveNameFields,
   moveStatsFields,
   regMoveIds,
@@ -237,6 +244,33 @@ function transcribeSpecies(slug: string, regId: string, jsonPath: string | undef
   }
 }
 
+/**
+ * 技専用ページの技マスター中間 JSON を `move-specs.yaml`（技メタ・上書き是正）と `languages/moves.yaml`
+ * （技名 en・append/既存尊重）へ転記する。move-specs は前作値が残るため、技メタ 6 項目を技マスター値で
+ * **上書き**する（後勝ち・ADR 0037）。空 map（flow `{}`）を生まないよう block の map ノードを作って set する。
+ */
+function transcribeMoveMaster(jsonPath: string | undefined): void {
+  const m = readJson<ParsedMoveMaster>(jsonPath);
+
+  // --- 技メタ（move-specs・上書き是正） ---
+  const moveSpecsFile = join(CH, "move-specs.yaml");
+  const moveSpecsDoc = loadDoc(moveSpecsFile);
+  const moveSpecsMap = moveSpecsDoc.get("moves") as YAMLMap;
+  moveSpecsMap.set(m.id, moveSpecsDoc.createNode(moveMasterStatsFields(m)));
+  writeFileSync(moveSpecsFile, moveSpecsDoc.toString());
+
+  // --- 技名 en（languages/moves・append/既存尊重・名前 SoT は上書きしない） ---
+  const langMovesFile = join(LANG, "moves.yaml");
+  const langMovesDoc = loadDoc(langMovesFile);
+  const langMovesMap = langMovesDoc.get("moves") as YAMLMap;
+  const langChanged = upsert(langMovesDoc, langMovesMap, m.id, { ...moveMasterNameFields(m) });
+  writeIf(langMovesFile, langMovesDoc, langChanged);
+
+  warn(
+    `move-master ${m.id}: move-specs upserted (overwrite), languages en ${langChanged ? "added" : "kept"}`,
+  );
+}
+
 function transcribeItems(regId: string, jsonPath: string | undefined): void {
   const parsed = readJson<ParsedItems>(jsonPath);
   const dir = regDir(regId);
@@ -278,9 +312,11 @@ if (cmd === "species" && rest[0] && rest[1]) {
   transcribeSpecies(rest[0], rest[1], rest[2]);
 } else if (cmd === "items" && rest[0]) {
   transcribeItems(rest[0], rest[1]);
+} else if (cmd === "move-master") {
+  transcribeMoveMaster(rest[0]);
 } else {
   process.stderr.write(
-    "usage: serebii-to-catalog (species <slug> <regId> [jsonPath] | items <regId> [jsonPath])\n",
+    "usage: serebii-to-catalog (species <slug> <regId> [jsonPath] | items <regId> [jsonPath] | move-master [jsonPath])\n",
   );
   process.exit(1);
 }

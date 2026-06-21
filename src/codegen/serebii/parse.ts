@@ -36,6 +36,22 @@ export interface ParsedMove {
   pp: number | null;
 }
 
+/**
+ * 技マスター 1 件（技専用ページ `attackdex-champions/<slug>.shtml` 由来）。種族ページ副産物（`ParsedMove`）と
+ * 違い `priority` を持ち、技メタ全項目（move-specs 必須）を一次ソースから取る。`priority === null` は Speed
+ * Priority 行が取れない（schema 欠落）。変化技は power / accuracy が null、可変威力技も power は null。
+ */
+export interface ParsedMoveMaster {
+  name: string;
+  id: string;
+  type: string;
+  damageClass: string;
+  power: number | null;
+  accuracy: number | null;
+  pp: number | null;
+  priority: number | null;
+}
+
 /** メガフォルム 1 件（種族値 / タイプ / 特性。技は base と共有のため持たない）。 */
 export interface ParsedMega {
   name: string;
@@ -278,6 +294,78 @@ export function parseItemsPage(html: string): ParsedItems {
     }
   });
   return { items };
+}
+
+/** cat 画像 `/pokedex-bw/type/<physical|special|other>.png` から damageClass を引く（未知は ""）。 */
+function damageClassFromImg(src: string): string {
+  const cat = /\/pokedex-bw\/type\/([a-z]+)\.png/.exec(src)?.[1] ?? "";
+  return DAMAGE_CLASS[cat] ?? "";
+}
+
+/**
+ * `<b>label</b>` を含むヘッダ行の**直後の行**の各 td テキストを返す（技マスター表は「ヘッダ行 → 値行」の
+ * 2 行 1 組）。見つからなければ空配列。値の位置は呼び出し側がインデックスで取る。
+ */
+function dataRowAfterHeader(
+  $: CheerioAPI,
+  $table: ReturnType<CheerioAPI>,
+  label: string,
+): string[] {
+  let cells: string[] = [];
+  $table.find("tr").each((_, tr) => {
+    const hasLabel = $(tr)
+      .children("td")
+      .toArray()
+      .some((td) => $(td).find("b").text().trim() === label);
+    if (!hasLabel) return;
+    cells = $(tr)
+      .next("tr")
+      .children("td")
+      .toArray()
+      .map((td) => $(td).text().trim());
+    return false; // 最初の該当ヘッダ行だけ採る
+  });
+  return cells;
+}
+
+/**
+ * 技マスターの power セル値を move-specs 規約へ写す。変化技は Serebii で `0`、可変 / 固定威力技（Low Kick /
+ * Grass Knot / Counter / Night Shade 等）は `1` と表記されるため、いずれも `null`（威力なし）に倒す。実威力を
+ * 持つ技は最小でも 10 以上で `0` / `1` を取らないため、`<= 1` を null 判定にしても実値を潰さない。
+ */
+function movePower(raw: number | null): number | null {
+  return raw !== null && raw <= 1 ? null : raw;
+}
+
+/**
+ * 技専用ページ（attackdex-champions）HTML → 技マスター中間表現。先頭の `table.dextable`（属性付きでも
+ * cheerio の class セレクタで一意）が技情報表で、「Power Points / Base Power / Accuracy」「Base Critical Hit
+ * Rate / Speed Priority / Pokémon Hit in Battle」の 2 段ヘッダ + 値行で構成される。表示名は `<title>`
+ * （`<name> - AttackDex - Serebii.net`）から取り catalog id へ kebab 化する（圧縮 slug は復元不能なため）。
+ */
+export function parseMoveMaster(html: string): ParsedMoveMaster {
+  const $ = load(html);
+  const name = /^\s*(.+?)\s*-\s*AttackDex/.exec($("title").text())?.[1] ?? "";
+  const $table = $("table.dextable").first();
+  let type = "";
+  let damageClass = "";
+  $table.find("img").each((_, img) => {
+    const src = $(img).attr("src") ?? "";
+    type = type || (typeFromGif(src) ?? "");
+    damageClass = damageClass || damageClassFromImg(src);
+  });
+  const stats = dataRowAfterHeader($, $table, "Power Points"); // [PP, Base Power, Accuracy]
+  const prio = dataRowAfterHeader($, $table, "Speed Priority"); // [Crit, Speed Priority, Target]
+  return {
+    name,
+    id: toCatalogId(name),
+    type,
+    damageClass,
+    power: movePower(cellNumber(stats[1] ?? "")),
+    accuracy: accuracyNumber(stats[2] ?? ""),
+    pp: cellNumber(stats[0] ?? ""),
+    priority: cellNumber(prio[1] ?? ""),
+  };
 }
 
 /** 種族ページ HTML → 中間表現。値の妥当性検証は `schema.ts` に委ねる（本関数は抽出に専念）。 */

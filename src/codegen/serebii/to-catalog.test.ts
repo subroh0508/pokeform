@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ParsedItem, ParsedMove, ParsedSpecies } from "./parse.ts";
+import type { ParsedItem, ParsedMove, ParsedMoveMaster, ParsedSpecies } from "./parse.ts";
 import {
   abilityEnFromId,
   abilityIds,
@@ -7,6 +7,8 @@ import {
   megaAuthoring,
   megaSpeciesId,
   megaStoneSpeciesId,
+  moveMasterNameFields,
+  moveMasterStatsFields,
   moveNameFields,
   moveStatsFields,
   regMoveIds,
@@ -261,5 +263,43 @@ describe("megaAuthoring", () => {
       speciesEntries: [{ id: "kyogre-mega", en: "Mega Kyogre" }],
       escalations: ["Primal Kyogre"],
     });
+  });
+});
+
+describe("moveMasterStatsFields / moveMasterNameFields", () => {
+  const base: ParsedMoveMaster = {
+    name: "Quick Attack",
+    id: "quick-attack",
+    type: "normal",
+    damageClass: "physical",
+    power: 40,
+    accuracy: 100,
+    pp: 20,
+    priority: 1,
+  };
+
+  it("carries every move-master meta field including parsed priority", () => {
+    expect(moveMasterStatsFields(base)).toEqual({
+      type: "normal",
+      damageClass: "physical",
+      power: 40,
+      accuracy: 100,
+      pp: 20,
+      priority: 1,
+    });
+  });
+
+  it("coalesces a null priority to 0 (validated moves always carry priority)", () => {
+    const m: ParsedMoveMaster = { ...base, priority: null };
+    expect(moveMasterStatsFields(m).priority).toBe(0);
+  });
+
+  it("passes null power/accuracy through for status / variable-power moves", () => {
+    const m: ParsedMoveMaster = { ...base, power: null, accuracy: null };
+    expect(moveMasterStatsFields(m)).toMatchObject({ power: null, accuracy: null });
+  });
+
+  it("uses the Serebii display name for the en name field", () => {
+    expect(moveMasterNameFields(base)).toEqual({ en: "Quick Attack" });
   });
 });

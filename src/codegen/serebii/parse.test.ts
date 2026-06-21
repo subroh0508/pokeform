@@ -2,7 +2,13 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { decodeSerebiiHtml, parseItemsPage, parseSpeciesPage, slugFromHref } from "./parse.ts";
+import {
+  decodeSerebiiHtml,
+  parseItemsPage,
+  parseMoveMaster,
+  parseSpeciesPage,
+  slugFromHref,
+} from "./parse.ts";
 
 const FIXTURES = join(dirname(fileURLToPath(import.meta.url)), "__fixtures__");
 /** fixture は latin-1（ISO-8859-1）で保存されている（実 Serebii ページと同じ）。 */
@@ -213,6 +219,118 @@ describe("parseItemsPage — edge structures (missing slug / unmatched mega desc
 describe("parseItemsPage — no item sections", () => {
   it("returns an empty list when no item section headings are present", () => {
     expect(parseItemsPage("<html><body><p>nothing</p></body></html>")).toEqual({ items: [] });
+  });
+});
+
+describe("parseMoveMaster — move-master pages (attackdex-champions fixtures)", () => {
+  it("extracts a physical damaging move with Champions-scale PP (earthquake 12, not 10)", () => {
+    expect(parseMoveMaster(fixture("serebii-move-earthquake"))).toEqual({
+      name: "Earthquake",
+      id: "earthquake",
+      type: "ground",
+      damageClass: "physical",
+      power: 100,
+      accuracy: 100,
+      pp: 12, // 前作 10 ではなく Champions 値 12
+      priority: 0,
+    });
+  });
+
+  it("extracts a special move (draco meteor, PP 8)", () => {
+    expect(parseMoveMaster(fixture("serebii-move-draco-meteor"))).toEqual({
+      name: "Draco Meteor",
+      id: "draco-meteor",
+      type: "dragon",
+      damageClass: "special",
+      power: 130,
+      accuracy: 90,
+      pp: 8,
+      priority: 0,
+    });
+  });
+
+  it("maps a status move power 0 / accuracy 101 to null (swords dance)", () => {
+    expect(parseMoveMaster(fixture("serebii-move-swords-dance"))).toEqual({
+      name: "Swords Dance",
+      id: "swords-dance",
+      type: "normal",
+      damageClass: "status", // Serebii cat other.png → status
+      power: null, // 0 → null
+      accuracy: null, // 101 → null
+      pp: 20,
+      priority: 0,
+    });
+  });
+
+  it("maps variable-power moves (serebii power 1) to null (low kick)", () => {
+    expect(parseMoveMaster(fixture("serebii-move-low-kick"))).toMatchObject({
+      id: "low-kick",
+      damageClass: "physical",
+      power: null, // 可変威力 = serebii 表記 1 → null
+      accuracy: 100,
+      pp: 20,
+      priority: 0,
+    });
+  });
+
+  it("extracts a positive priority move (quick attack +1)", () => {
+    expect(parseMoveMaster(fixture("serebii-move-quick-attack"))).toMatchObject({
+      id: "quick-attack",
+      power: 40,
+      pp: 20,
+      priority: 1,
+    });
+  });
+
+  it("extracts a negative priority move (roar -6)", () => {
+    expect(parseMoveMaster(fixture("serebii-move-roar"))).toMatchObject({
+      id: "roar",
+      damageClass: "status",
+      power: null,
+      accuracy: null,
+      priority: -6,
+    });
+  });
+
+  it("returns empty/null fields for a page without a title or info table", () => {
+    expect(parseMoveMaster("<html><body><p>nothing</p></body></html>")).toEqual({
+      name: "",
+      id: "",
+      type: "",
+      damageClass: "",
+      power: null,
+      accuracy: null,
+      pp: null,
+      priority: null,
+    });
+  });
+
+  it("leaves type/damageClass empty for imgs with no src or unknown type/cat", () => {
+    // src 無し img（attr undefined → ""）と未知 cat png（other 以外）を集約し、type/damageClass の
+    // フォールバック（typeFromGif null → "" / damageClassFromImg 未知 → ""）境界を網羅する。
+    const EDGE = `<title>Edge Move - AttackDex - Serebii.net</title>
+<table class="dextable">
+  <tr><td class="fooevo"><b>Attack Name</b></td><td class="fooevo"><b>Battle Type</b></td>
+    <td class="fooevo"><b>Category</b></td></tr>
+  <tr><td class="cen">Edge Move</td><td class="cen"><img></td>
+    <td class="cen"><img src="/pokedex-bw/type/weird.png"></td></tr>
+  <tr><td class="fooevo"><b>Power Points</b></td><td class="fooevo"><b>Base Power</b></td>
+    <td class="fooevo"><b>Accuracy</b></td></tr>
+  <tr><td class="cen">12</td><td class="cen">50</td><td class="cen">100</td></tr>
+  <tr><td class="fooevo"><b>Base Critical Hit Rate</b></td><td class="fooevo"><b>Speed Priority</b></td>
+    <td class="fooevo"><b>Hit</b></td></tr>
+  <tr><td class="cen">4.17%</td><td class="cen">0</td><td class="cen">Self</td></tr>
+</table>`;
+    expect(parseMoveMaster(EDGE)).toEqual({
+      name: "Edge Move",
+      id: "edge-move",
+      type: "", // src 無し img → typeFromGif null → ""
+      damageClass: "", // weird.png = 未知 cat → ""
+      power: 50,
+      accuracy: 100,
+      pp: 12,
+      priority: 0,
+    });
   });
 });
 

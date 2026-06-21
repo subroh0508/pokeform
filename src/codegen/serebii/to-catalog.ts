@@ -14,7 +14,7 @@
  * 組むことに専念し、既存値との突き合わせ・conflict 判定は持たない（純変換）。
  */
 import { isCatalogIdShape } from "./normalize.ts";
-import type { ParsedItem, ParsedMove, ParsedSpecies } from "./parse.ts";
+import type { ParsedItem, ParsedMove, ParsedMoveMaster, ParsedSpecies } from "./parse.ts";
 
 /**
  * catalog/moves.yaml の Serebii 由来名前欄。`en` は Serebii 表示名（`ja` は持たない＝materialize が PokeAPI move
@@ -53,6 +53,27 @@ export function moveStatsFields(m: ParsedMove): MoveStatsFields {
     pp: m.pp,
     priority: 0,
   };
+}
+
+/**
+ * `ParsedMoveMaster` → move-specs.yaml 技メタ欄（技専用ページ由来・priority を含む全項目・ADR 0037）。種族
+ * ページ由来の `moveStatsFields`（priority 既定 0）と違い、技専用ページは priority を一次ソースから持つ。技
+ * マスター転記は**この値で move-specs を上書き是正**する（前作 PP 残存の根絶・後勝ち）。
+ */
+export function moveMasterStatsFields(m: ParsedMoveMaster): MoveStatsFields {
+  return {
+    type: m.type,
+    damageClass: m.damageClass,
+    power: m.power,
+    accuracy: m.accuracy,
+    pp: m.pp,
+    priority: m.priority === null ? 0 : m.priority,
+  };
+}
+
+/** `ParsedMoveMaster` → languages/moves.yaml 名前欄（Serebii 表示名 en・ja は materialize が補完）。 */
+export function moveMasterNameFields(m: ParsedMoveMaster): MoveNameFields {
+  return { en: m.name };
 }
 
 /** species.yaml の Serebii 由来欄（en のみ。ja / dex / types / stats / abilities は materialize が埋める）。 */
