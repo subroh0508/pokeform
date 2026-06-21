@@ -5,7 +5,7 @@
  *
  * - stage 3 = schema 欠落: dex / en / types≥1 / abilities≥1 / stats（Base Stats 行）/ moves≥1 のいずれか欠落。
  * - stage 4 = 件数・健全性: 種族値合計が Total 行と不一致 / id が catalog id 形（`^[a-z0-9]+(-[a-z0-9]+)*$`）
- *   不適合 / 技に type・damageClass 欠落。
+ *   不適合（技は名前一覧のみなので id 形のみ検査・技メタは `validateMoveMaster` が担う・ADR 0037）。
  * - stage 0 = 健全。
  *
  * schema 欠落（stage 3）を健全性（stage 4）より優先する（必須欄が無ければ件数検証は無意味なため）。
@@ -50,9 +50,8 @@ function healthIssuesOf(p: ParsedSpecies): string[] {
     if (!isCatalogIdShape(id)) issues.push(`ability id shape: ${id}`);
   }
   for (const m of p.moves) {
+    // 種族ページ由来 `ParsedMove` は名前一覧のみ（技メタは技専用ページ `validateMoveMaster` が検証・ADR 0037）。
     if (!isCatalogIdShape(m.id)) issues.push(`move id shape: ${m.id}`);
-    if (!m.type) issues.push(`move missing type: ${m.id}`);
-    if (!m.damageClass) issues.push(`move missing damageClass: ${m.id}`);
   }
   return issues;
 }

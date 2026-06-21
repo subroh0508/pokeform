@@ -1,16 +1,20 @@
 /**
- * parse.ts（serebii codegen 純関数）— Serebii Champions 種族ページ HTML を中間表現へ抽出する純変換。
- * cheerio で DOM を読み、種族値 / タイプ / 特性 / dex / 英名 / 使用可能技（Standard Moves 全行）/ メガ
- * セクションを取り出す。fetch / fs I/O は持たない（`scripts/scrape-serebii.ts` が薄く配線する）。
+ * parse.ts（serebii codegen 純関数）— Serebii Champions ページ HTML を中間表現へ抽出する純変換。
+ * 種族ページは責務別に `parseSpeciesBase`（種族値 / タイプ / 特性 / dex / 英名）/ `parseMoves`（覚える技の
+ * 名前一覧のみ）/ `parseMegas`（メガ形態）へ分解し、`parseSpeciesPage` が合成する。技そのものの技メタ
+ * （威力 / 命中 / PP / priority）は技専用ページ由来の `parseMoveMaster` が SoT で、種族ページからは抽出
+ * しない（ADR 0037）。fetch / fs I/O は持たない（`scripts/scrape-serebii.ts` が薄く配線する）。
  *
  * 実ページ確認で判明した前提（OVERVIEW「実装指針」）:
  * - ページは latin-1 + CRLF + 超長行 → `decodeSerebiiHtml` で latin-1 デコード（HTML エンティティ展開は
  *   cheerio が担う）。
  * - 種族タイプは `img.typeimg`（base 種族のみ・alt=`Dragon-type`）で一意に取れる（技テーブルの type 画像は
  *   typeimg クラスを持たない）。
- * - 技テーブルは `<a name="attacks">` 直後の `table.dextable`（"Standard Moves" 1 表 = 使用可能技 全件）。
+ * - 技テーブルは `<a name="attacks">` 直後の `table.dextable`（"Standard Moves" 1 表 = 覚える技 全件）。
  *   各技は 2 行（技データ行 + 効果説明行）で、データ行は技名リンク `a[href*="/attackdex-champions/"]` を持つ。
- * - 必中技 accuracy は `101`、変化技は power/accuracy `--` → `null`。変化技 cat 画像は `other.png` → `status`。
+ *   `parseMoves` はこのリンクの表示名から名前一覧（name / id）だけを取り、技メタは取らない。
+ * - 技専用ページ（`parseMoveMaster`）では必中技 accuracy は `101`、変化技は power/accuracy `--` → `null`、
+ *   変化技 cat 画像は `other.png` → `status`。
  */
 import { type CheerioAPI, load } from "cheerio";
 import { normalizeItemName, toCatalogId } from "./normalize.ts";
@@ -25,15 +29,14 @@ export interface ParsedStats {
   S: number;
 }
 
-/** 使用可能技 1 件（name=表示名 / id=catalog id・power/accuracy/pp は変化技や必中で null）。 */
+/**
+ * 覚える技 1 件（種族ページの Standard Moves 表 = **その種族が覚える技の名前一覧のみ**）。技メタ
+ * （type/damageClass/power/accuracy/pp/priority）は技専用ページ由来の `ParsedMoveMaster` が SoT で、種族
+ * ページからは副産物抽出しない（ADR 0037・技メタ取得を技専用ページへ一本化）。
+ */
 export interface ParsedMove {
   name: string;
   id: string;
-  type: string;
-  damageClass: string;
-  power: number | null;
-  accuracy: number | null;
-  pp: number | null;
 }
 
 /**
@@ -61,14 +64,21 @@ export interface ParsedMega {
   statTotal: number | null;
 }
 
-/** 種族ページ全体の中間表現。`statTotal === null` は Base Stats 行が無い（schema 欠落）。 */
-export interface ParsedSpecies {
+/**
+ * 種族 base 情報（種族値・タイプ・特性・en・dex）。メガ / 技を含まない base 種族の構造。
+ * `statTotal === null` は Base Stats 行が無い（schema 欠落）。
+ */
+export interface ParsedSpeciesBase {
   en: string;
   dex: number | null;
   types: string[];
   abilities: string[];
   stats: ParsedStats;
   statTotal: number | null;
+}
+
+/** 種族ページ全体の中間表現（base 情報 + 覚える技の名前一覧 + メガ形態）。 */
+export interface ParsedSpecies extends ParsedSpeciesBase {
   moves: ParsedMove[];
   megas: ParsedMega[];
 }
@@ -201,32 +211,36 @@ function statsIn($: CheerioAPI): { stats: ParsedStats; statTotal: number | null 
   return { stats, statTotal };
 }
 
-/** Standard Moves テーブル（`a[name="attacks"]` 直後）の全技行を抽出する。 */
-function movesIn($: CheerioAPI): ParsedMove[] {
+/**
+ * base 種族スコープ（最初のメガアンカー手前まで）を cheerio へ読み込む。メガの特性 / 種族値を base が
+ * 拾わないよう、`<a name="mega"` の手前で切り出す（メガは全文から `parseMegas` が抽出する）。
+ */
+function baseScope(html: string): CheerioAPI {
+  const cut = html.indexOf('<a name="mega"');
+  return load(cut === -1 ? html : html.slice(0, cut));
+}
+
+/**
+ * Standard Moves テーブル（`a[name="attacks"]` 直後）から「その種族が覚える技の名前一覧」だけを抽出する。
+ * 技メタ（type/damageClass/power/accuracy/pp）の副産物抽出は除去し、技メタは技専用ページ由来の
+ * `parseMoveMaster` を SoT とする（ADR 0037）。
+ */
+export function parseMoves(html: string): ParsedMove[] {
+  const $ = baseScope(html);
   const moves: ParsedMove[] = [];
   const $table = $("a[name='attacks']").nextAll("table.dextable").first();
   $table.find("tr").each((_, tr) => {
-    const $cells = $(tr).children("td");
-    const $link = $cells.first().find("a[href*='/attackdex-champions/']");
+    const $link = $(tr).children("td").first().find("a[href*='/attackdex-champions/']");
     if ($link.length === 0) return; // 効果説明行・ヘッダ行はスキップ
     const name = $link.first().text().trim();
-    const catSrc = $($cells[2]).find("img").attr("src") ?? "";
-    const catName = /\/pokedex-bw\/type\/([a-z]+)\.(?:png|gif)/.exec(catSrc)?.[1] ?? "";
-    moves.push({
-      name,
-      id: toCatalogId(name),
-      type: typeFromGif($($cells[1]).find("img").attr("src") ?? "") ?? "",
-      damageClass: DAMAGE_CLASS[catName] ?? "",
-      power: cellNumber($($cells[3]).text()),
-      accuracy: accuracyNumber($($cells[4]).text()),
-      pp: cellNumber($($cells[5]).text()),
-    });
+    moves.push({ name, id: toCatalogId(name) });
   });
   return moves;
 }
 
 /** メガセクション（`a[name="mega"]` 直後）を各フォルムへ抽出する。技は base と共有のため持たない。 */
-function megasIn($: CheerioAPI): ParsedMega[] {
+export function parseMegas(html: string): ParsedMega[] {
+  const $ = load(html);
   const megas: ParsedMega[] = [];
   $("a[name='mega']").each((_, anchor) => {
     const section = $(anchor).nextUntil("a[name='mega'], a[name='attacks']");
@@ -236,6 +250,24 @@ function megasIn($: CheerioAPI): ParsedMega[] {
     megas.push({ name, types: typesFromGifs(sub), abilities: abilitiesIn(sub), stats, statTotal });
   });
   return megas;
+}
+
+/**
+ * base 種族情報（種族値 / タイプ / 特性 / en / dex）を抽出する。メガの特性 / 種族値を拾わないよう
+ * `baseScope` でメガ手前まで切り出してから読む（メガは `parseMegas` が全文から抽出する）。
+ */
+export function parseSpeciesBase(html: string): ParsedSpeciesBase {
+  const $base = baseScope(html);
+  const titleMatch = /^\s*(.+?)\s*-\s*#(\d+)\s*-/.exec($base("title").text());
+  const en = titleMatch?.[1] ?? "";
+  const dex = titleMatch ? Number(titleMatch[2]) : null;
+  const types: string[] = [];
+  $base("img.typeimg").each((_, img) => {
+    const t = ($base(img).attr("alt") ?? "").replace(/-type$/i, "").toLowerCase();
+    if (VALID_TYPES.has(t) && !types.includes(t)) types.push(t);
+  });
+  const { stats, statTotal } = statsIn($base);
+  return { en, dex, types, abilities: abilitiesIn($base), stats, statTotal };
 }
 
 /**
@@ -368,29 +400,10 @@ export function parseMoveMaster(html: string): ParsedMoveMaster {
   };
 }
 
-/** 種族ページ HTML → 中間表現。値の妥当性検証は `schema.ts` に委ねる（本関数は抽出に専念）。 */
+/**
+ * 種族ページ HTML → 中間表現。責務別に分解した `parseSpeciesBase`（base 情報）/ `parseMoves`（覚える技の
+ * 名前一覧）/ `parseMegas`（メガ形態）を合成する薄い入口。値の妥当性検証は `schema.ts` に委ねる。
+ */
 export function parseSpeciesPage(html: string): ParsedSpecies {
-  // base 種族の欄（タイプ / 特性 / 種族値 / 技）はメガセクションより前にある。メガの特性 / 種族値を
-  // base が拾わないよう、最初のメガアンカー手前までを base スコープとして切り出す（メガは全文から抽出）。
-  const cut = html.indexOf('<a name="mega"');
-  const $base = load(cut === -1 ? html : html.slice(0, cut));
-  const titleMatch = /^\s*(.+?)\s*-\s*#(\d+)\s*-/.exec($base("title").text());
-  const en = titleMatch?.[1] ?? "";
-  const dex = titleMatch ? Number(titleMatch[2]) : null;
-  const types: string[] = [];
-  $base("img.typeimg").each((_, img) => {
-    const t = ($base(img).attr("alt") ?? "").replace(/-type$/i, "").toLowerCase();
-    if (VALID_TYPES.has(t) && !types.includes(t)) types.push(t);
-  });
-  const { stats, statTotal } = statsIn($base);
-  return {
-    en,
-    dex,
-    types,
-    abilities: abilitiesIn($base),
-    stats,
-    statTotal,
-    moves: movesIn($base),
-    megas: megasIn(load(html)),
-  };
+  return { ...parseSpeciesBase(html), moves: parseMoves(html), megas: parseMegas(html) };
 }

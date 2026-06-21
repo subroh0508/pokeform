@@ -6,6 +6,7 @@ import {
   decodeSerebiiHtml,
   parseItemsPage,
   parseMoveMaster,
+  parseMoves,
   parseSpeciesPage,
   slugFromHref,
 } from "./parse.ts";
@@ -33,35 +34,11 @@ describe("parseSpeciesPage — simple species (garchomp)", () => {
     expect(p.megas).toEqual([]);
   });
 
-  it("extracts all Standard Moves with 101-accuracy and status (--) handling", () => {
+  it("extracts the learned-move name list only (no move-meta byproduct・ADR 0037)", () => {
     expect(p.moves).toEqual([
-      {
-        name: "Aerial Ace",
-        id: "aerial-ace",
-        type: "flying",
-        damageClass: "physical",
-        power: 60,
-        accuracy: null, // 101 = 必中 → null
-        pp: 20,
-      },
-      {
-        name: "Swords Dance",
-        id: "swords-dance",
-        type: "normal",
-        damageClass: "status", // Serebii "Other" → status
-        power: null, // -- → null
-        accuracy: null, // 101 → null
-        pp: 20,
-      },
-      {
-        name: "Earthquake",
-        id: "earthquake",
-        type: "ground",
-        damageClass: "physical",
-        power: 100,
-        accuracy: 100,
-        pp: 10,
-      },
+      { name: "Aerial Ace", id: "aerial-ace" },
+      { name: "Swords Dance", id: "swords-dance" },
+      { name: "Earthquake", id: "earthquake" },
     ]);
   });
 });
@@ -76,8 +53,7 @@ describe("parseSpeciesPage — mega / multi-form species (charizard)", () => {
     expect(p.abilities).toEqual(["blaze", "solar-power"]);
     expect(p.stats).toEqual({ H: 78, A: 84, B: 78, C: 109, D: 85, S: 100 });
     expect(p.statTotal).toBe(534);
-    expect(p.moves).toHaveLength(1);
-    expect(p.moves[0]).toMatchObject({ id: "flamethrower", type: "fire", damageClass: "special" });
+    expect(p.moves).toEqual([{ name: "Flamethrower", id: "flamethrower" }]);
   });
 
   it("extracts each mega form's name, types, abilities and stats", () => {
@@ -97,6 +73,24 @@ describe("parseSpeciesPage — mega / multi-form species (charizard)", () => {
         statTotal: 634,
       },
     ]);
+  });
+});
+
+describe("parseMoves — learned-move name list only (技メタ副産物なし・ADR 0037)", () => {
+  const moves = parseMoves(fixture("serebii-garchomp"));
+
+  it("returns only name + id fields (no type/damageClass/power/accuracy/pp meta)", () => {
+    expect(moves).toEqual([
+      { name: "Aerial Ace", id: "aerial-ace" },
+      { name: "Swords Dance", id: "swords-dance" },
+      { name: "Earthquake", id: "earthquake" },
+    ]);
+    // 各エントリのキーが name / id だけであることを明示（技メタが紛れ込まない）。
+    for (const m of moves) expect(Object.keys(m).sort()).toEqual(["id", "name"]);
+  });
+
+  it("returns an empty list when there is no Standard Moves table", () => {
+    expect(parseMoves("<html><body><p>nothing</p></body></html>")).toEqual([]);
   });
 });
 
@@ -332,6 +326,29 @@ describe("parseMoveMaster — move-master pages (attackdex-champions fixtures)",
       priority: 0,
     });
   });
+
+  it("maps a non-numeric Base Power cell to null (cellNumber NaN → null)", () => {
+    // 数値でない power セル（`--` でも空でもない不正値）は parseInt が NaN → null へ倒れる。
+    const EDGE = `<title>NaN Move - AttackDex - Serebii.net</title>
+<table class="dextable">
+  <tr><td class="fooevo"><b>Attack Name</b></td><td class="fooevo"><b>Battle Type</b></td>
+    <td class="fooevo"><b>Category</b></td></tr>
+  <tr><td class="cen">NaN Move</td><td class="cen"><img src="/pokedex-bw/type/fire.gif"></td>
+    <td class="cen"><img src="/pokedex-bw/type/special.png"></td></tr>
+  <tr><td class="fooevo"><b>Power Points</b></td><td class="fooevo"><b>Base Power</b></td>
+    <td class="fooevo"><b>Accuracy</b></td></tr>
+  <tr><td class="cen">12</td><td class="cen">abc</td><td class="cen">100</td></tr>
+  <tr><td class="fooevo"><b>Base Critical Hit Rate</b></td><td class="fooevo"><b>Speed Priority</b></td>
+    <td class="fooevo"><b>Hit</b></td></tr>
+  <tr><td class="cen">4.17%</td><td class="cen">0</td><td class="cen">Self</td></tr>
+</table>`;
+    expect(parseMoveMaster(EDGE)).toMatchObject({
+      id: "nan-move",
+      power: null, // "abc" = 非数値 → NaN → null
+      accuracy: 100,
+      pp: 12,
+    });
+  });
 });
 
 describe("parseSpeciesPage — degenerate input", () => {
@@ -400,32 +417,14 @@ describe("parseSpeciesPage — edge structures (dedup / invalid / malformed cell
     expect(p.abilities).toEqual(["sand-veil"]);
   });
 
-  it("maps empty/non-numeric power to null and unknown type/cat to empty string", () => {
-    expect(p.moves[0]).toEqual({
-      name: "Edge Move",
-      id: "edge-move",
-      type: "", // mystery = 無効タイプ → ""
-      damageClass: "", // weird.png = 未知 cat → ""
-      power: null, // 空セル → null
-      accuracy: 100,
-      pp: 5,
-    });
-    expect(p.moves[1]).toMatchObject({
-      type: "", // src が type gif パターン外 → null → ""
-      damageClass: "physical",
-      power: null, // "abc" = 非数値 → null
-      accuracy: null, // -- → null
-    });
-    // type / cat セルに img が無い → attr undefined → "" 経由で type / damageClass とも ""。
-    expect(p.moves[2]).toEqual({
-      name: "No Img",
-      id: "no-img",
-      type: "",
-      damageClass: "",
-      power: 50,
-      accuracy: 100,
-      pp: 5,
-    });
+  it("extracts the move name list only (no meta) across rows with varied cell structures", () => {
+    // 技メタ副産物抽出を除去したので、セル構造（無効 type/cat 画像・非数値 power・img 無し）に依らず
+    // 名前一覧（name / id）だけを取る（ADR 0037）。
+    expect(p.moves).toEqual([
+      { name: "Edge Move", id: "edge-move" },
+      { name: "No Match", id: "no-match" },
+      { name: "No Img", id: "no-img" },
+    ]);
   });
 
   it("dedups and filters mega type gifs", () => {
