@@ -17,7 +17,7 @@ flowchart TD
     P2 --> P3[phase-03 — 参照張り替え + architecture.md 撤去 + 二重管理解消]
     P3 --> P4[phase-04 — docs/plan → docs/roadmap 改名 + completed/ 集約]
     P4 --> P5[phase-05 — AGENTS.md 刷新]
-    P4 --> P6[phase-06 — 規約 / skill 是正 + rules への adr front matter]
+    P4 --> P6[phase-06 — 規約 / skill 是正 + rules への front matter]
 ```
 
 ## フェーズ一覧（この順で実施）
@@ -28,7 +28,7 @@ flowchart TD
 - [ ] [Phase 3 — inbound 参照張り替え + 旧 architecture.md 撤去 + 二重管理解消](./phase-03-rewire-and-retire-architecture.md)
 - [ ] [Phase 4 — docs/plan → docs/roadmap 改名 + completed/ 集約 + 参照追従](./phase-04-roadmap-rename.md)
 - [ ] [Phase 5 — AGENTS.md 刷新](./phase-05-agents-md-refresh.md)
-- [ ] [Phase 6 — 規約 / skill の plan 参照違反・陳腐化是正 + rules への adr front matter](./phase-06-rule-skill-staleness-fix.md)
+- [ ] [Phase 6 — 規約 / skill の plan 参照違反・陳腐化是正 + rules への front matter](./phase-06-rule-skill-staleness-fix.md)
 
 ## 補足
 
