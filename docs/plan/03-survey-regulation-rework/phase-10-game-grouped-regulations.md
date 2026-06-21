@@ -1,6 +1,6 @@
 # Phase 10 — regulations をゲームでグルーピング（`regulations/champions/m-(a|b).yaml`）
 
-> 全種族投入（後続計画群 06）の前に、データレイアウトを将来のマルチゲーム対応へ整える 3 phase の 1 本目。
+> 全種族投入（後続計画群 09）の前に、データレイアウトを将来のマルチゲーム対応へ整える 3 phase の 1 本目。
 > 現状フラットな `data/champions/regulations/<id>.yaml` を **ゲーム（champions）でグルーピング**し、
 > per-game 共有データ（Phase 11 の技メタ `moves.yaml`）の置き場を用意する。
 

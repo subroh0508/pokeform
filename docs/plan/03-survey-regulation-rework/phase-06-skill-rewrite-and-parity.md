@@ -4,7 +4,7 @@
 
 `survey-regulation` skill を「LLM WebFetch 目視抽出」から「**決定論スクレイパー + Workflow 自己修復**」へ全面
 改訂する。`allowed-tools` を見直し、cross-agent フォールバック（Codex は層1 を逐次 + 人手修正で完結）を明記する。
-数十種での実証までを本 phase で行い、全186種フル投入は後続計画群 06 に分離する。
+数十種での実証までを本 phase で行い、全186種フル投入は後続計画群 09 に分離する。
 
 - スコープ内:
   - `SKILL.md` / `references/serebii-sourcing.md` を新パイプラインへ全面改訂（手順 1-3 の WebFetch 目視を
@@ -13,7 +13,7 @@
   - cross-agent フォールバックの明記（正しさは層1・SubAgent/Workflow は Claude 固有の最適化・Codex は
     `node scripts/...` 逐次 + 人手修正で完結）。
   - 数十種での end-to-end 実証（fetch→scrape→自己修復→転記→materialize→generate→verify）。
-- スコープ外: 全186種フル投入（後続計画群 06）。
+- スコープ外: 全186種フル投入（後続計画群 09）。
 
 ## 前提（依存）
 

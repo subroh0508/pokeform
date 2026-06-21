@@ -16,7 +16,7 @@
     データ vs Serebii 解禁データ）は維持。
   - **cross-agent パリティ**: canonical（`.claude/skills/*`）+ `.agents/skills/*` symlink の一致・Workflow 不可環境では
     層1 逐次へ縮退して同一成果。`skill-creator` で作成・改修。
-- スコープ外: 取得経路・スクレイパーの実装（Phase 2-3 で完了）。全種族投入（06）。新しいデータ種別の追加。
+- スコープ外: 取得経路・スクレイパーの実装（Phase 2-3 で完了）。全種族投入（09）。新しいデータ種別の追加。
 
 ## 前提（依存）
 

@@ -24,7 +24,7 @@
   - `fetch:data` / `materialize` / `generate.ts` の改修（メガ先 catalog id = PokeAPI slug のため無改修見込み・
     実機 404 チェックで担保）。
   - メガストーンの `megaStoneFor`（base 逆参照）は維持・触らない。
-  - M-A 全種族の実投入（後続計画群 06）。
+  - M-A 全種族の実投入（後続計画群 09）。
 
 ## 前提（依存）
 
@@ -82,5 +82,5 @@
   `Mega ` 接頭の無い特殊形・未知 id は自動著述せず escalation に残し、決定論で確実なものだけ自動化する。
 - メガ先 catalog id = PokeAPI pokemon slug のため `fetch:data`/`materialize`/`generate` は無改修見込みだが、
   実機で 404 が無いことを必ず確認する（slug 一致の最終担保）。
-- 本 phase 完了で後続計画群 06（M-A 全データ投入）の全量スクレイプ時にメガが自動取り込みされ、手動 linking の
+- 本 phase 完了で後続計画群 09（M-A 全データ投入）の全量スクレイプ時にメガが自動取り込みされ、手動 linking の
   取りこぼし（メガ消失）を防げる。
