@@ -1,8 +1,11 @@
 /**
  * serebii-to-catalog.ts — `scrape-serebii` の中間 JSON（種族 = `ParsedSpecies` / 持ち物 = `ParsedItems`）を
  * 新ツリー（`data/champions/*-specs.yaml` 構造 + `data/languages/*.yaml` 名前 + `data/champions/<reg>/*` 解禁）へ
- * **転記**する薄い配線。抽出・変換ロジックは `src/codegen/serebii/to-catalog.ts`（純関数・テスト100%）に委譲し、
- * 本スクリプトは fs / YAML I/O のみ（coverage 除外・[[testing]]）。
+ * **転記**する薄い配線。抽出・変換ロジックは `src/codegen/serebii/{catalog,per-game,regulation}-fields.ts`
+ * （責務別の純関数・テスト100%・ADR 0037 の役割分割）に委譲し、本スクリプトは fs / YAML I/O のみ
+ * （coverage 除外・[[testing]]）。種族転記は catalog 書き込み（`writeSpeciesCatalog`）と per-reg 書き込み
+ * （`writeSpeciesPerReg`）へ責務分解し、技メタ（move-specs）は技専用ページの `transcribeMoveMaster` に一本化
+ * する（種族ページ副産物抽出の除去・ADR 0037）。
  *
  * 設計（層分離・ADR 0035/0036）:
  * - **append/既存尊重**: 既存 skill-authored 値は上書きせず未設定欄のみ転記（`planFields` 再利用・conflict 提示・
@@ -31,20 +34,22 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Document, parseDocument, type YAMLMap, type YAMLSeq } from "yaml";
 import { planFields } from "../src/codegen/materialize.ts";
-import type { ParsedItems, ParsedMoveMaster, ParsedSpecies } from "../src/codegen/serebii/parse.ts";
 import {
   abilityEnFromId,
   abilityIds,
   itemCatalogFields,
-  megaAuthoring,
   moveMasterNameFields,
-  moveMasterStatsFields,
   moveNameFields,
-  moveStatsFields,
+  speciesCatalogFields,
+} from "../src/codegen/serebii/catalog-fields.ts";
+import type { ParsedItems, ParsedMoveMaster, ParsedSpecies } from "../src/codegen/serebii/parse.ts";
+import { moveMasterStatsFields } from "../src/codegen/serebii/per-game-fields.ts";
+import {
+  type MegaAuthoring,
+  megaAuthoring,
   regMoveIds,
   sortedUnion,
-  speciesCatalogFields,
-} from "../src/codegen/serebii/to-catalog.ts";
+} from "../src/codegen/serebii/regulation-fields.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const CH = join(ROOT, "data", "champions");
@@ -118,13 +123,13 @@ function writeIf(file: string, doc: Document, changed: boolean): void {
   if (changed) writeFileSync(file, doc.toString());
 }
 
-function transcribeSpecies(slug: string, regId: string, jsonPath: string | undefined): void {
-  const p = readJson<ParsedSpecies>(jsonPath);
-  const dir = regDir(regId);
-
-  // メガ自動著述プラン（決定論変換・null は escalations へ分離・ADR 0024 のメガ運用）。
-  const auth = megaAuthoring(slug, p);
-
+/**
+ * reg 非依存の catalog / specs / languages へ転記する（構造 placeholder = species-specs / mega-specs・名前 en =
+ * languages species / mega / moves・特性 = ability-specs / languages abilities）。技メタ（move-specs）は種族
+ * ページから書かない（技専用ページの `transcribe-move-master` が SoT・ADR 0037）。`parseMoves` は名前一覧のみ
+ * なので languages/moves の en だけ補完し、move-specs の技メタには触れない。
+ */
+function writeSpeciesCatalog(slug: string, p: ParsedSpecies, auth: MegaAuthoring): void {
   // --- 構造 placeholder（species-specs / mega-specs）: key を作り materialize に構造を委ねる ---
   const speciesSpecsFile = join(CH, "species-specs.yaml");
   const speciesSpecsDoc = loadDoc(speciesSpecsFile);
@@ -173,7 +178,7 @@ function transcribeSpecies(slug: string, regId: string, jsonPath: string | undef
     writeIf(langMegaFile, langMegaDoc, langMegaChanged);
   }
 
-  // --- 技名 en（languages/moves）+ 技メタ（move-specs・top-level・Champions 固有値・ADR 0034） ---
+  // --- 技名 en（languages/moves）。技メタ（move-specs）は技専用ページの転記が SoT・ADR 0037。 ---
   const langMovesFile = join(LANG, "moves.yaml");
   const langMovesDoc = loadDoc(langMovesFile);
   const langMovesMap = langMovesDoc.get("moves") as YAMLMap;
@@ -183,16 +188,6 @@ function transcribeSpecies(slug: string, regId: string, jsonPath: string | undef
       upsert(langMovesDoc, langMovesMap, m.id, { ...moveNameFields(m) }) || langMovesChanged;
   }
   writeIf(langMovesFile, langMovesDoc, langMovesChanged);
-
-  const moveSpecsFile = join(CH, "move-specs.yaml");
-  const moveSpecsDoc = loadDoc(moveSpecsFile);
-  const moveSpecsMap = moveSpecsDoc.get("moves") as YAMLMap;
-  let moveSpecsChanged = false;
-  for (const m of p.moves) {
-    moveSpecsChanged =
-      upsert(moveSpecsDoc, moveSpecsMap, m.id, { ...moveStatsFields(m) }) || moveSpecsChanged;
-  }
-  writeIf(moveSpecsFile, moveSpecsDoc, moveSpecsChanged);
 
   // --- 特性: id を ability-specs（list）へ append + en を languages/abilities へ ---
   const abilitySpecsFile = join(CH, "ability-specs.yaml");
@@ -211,8 +206,19 @@ function transcribeSpecies(slug: string, regId: string, jsonPath: string | undef
   }
   writeIf(abilitySpecsFile, abilitySpecsDoc, abilitySpecsChanged);
   writeIf(langAbilitiesFile, langAbilitiesDoc, langAbilitiesChanged);
+}
 
-  // --- per-reg: roster（species.yaml）+ per-species moves（species-moves.yaml）+ mega（mega.yaml） ---
+/**
+ * per-reg 解禁（roster = species.yaml・per-species moves = species-moves.yaml・mega = mega.yaml）へ転記する。
+ * 既存解禁種族は moves/mega を上書きしない（既存尊重・部分集合で縮小しない）。
+ */
+function writeSpeciesPerReg(
+  slug: string,
+  regId: string,
+  dir: string,
+  p: ParsedSpecies,
+  auth: MegaAuthoring,
+): void {
   const rosterFile = join(dir, "species.yaml");
   const rosterDoc = loadDoc(rosterFile);
   const rosterSeq = rosterDoc.get("species") as YAMLSeq;
@@ -223,18 +229,33 @@ function transcribeSpecies(slug: string, regId: string, jsonPath: string | undef
     warn(
       `reg ${regId}: species '${slug}' already allowed — leaving its moves/mega untouched (既存尊重)`,
     );
-  } else {
-    if (appendToList(rosterDoc, rosterSeq, slug)) writeFileSync(rosterFile, rosterDoc.toString());
-    movesMap.set(slug, movesDoc.createNode(regMoveIds(p)));
-    writeFileSync(movesFile, movesDoc.toString());
-    if (auth.ids.length > 0) {
-      const megaFile = join(dir, "mega.yaml");
-      const megaDoc = loadDoc(megaFile);
-      const megaMap = megaDoc.get("mega") as YAMLMap;
-      megaMap.set(slug, megaDoc.createNode(auth.ids));
-      writeFileSync(megaFile, megaDoc.toString());
-    }
+    return;
   }
+  if (appendToList(rosterDoc, rosterSeq, slug)) writeFileSync(rosterFile, rosterDoc.toString());
+  movesMap.set(slug, movesDoc.createNode(regMoveIds(p)));
+  writeFileSync(movesFile, movesDoc.toString());
+  if (auth.ids.length > 0) {
+    const megaFile = join(dir, "mega.yaml");
+    const megaDoc = loadDoc(megaFile);
+    const megaMap = megaDoc.get("mega") as YAMLMap;
+    megaMap.set(slug, megaDoc.createNode(auth.ids));
+    writeFileSync(megaFile, megaDoc.toString());
+  }
+}
+
+/**
+ * 種族ページ中間 JSON を catalog（reg 非依存・`writeSpeciesCatalog`）と per-reg 解禁（`writeSpeciesPerReg`）へ
+ * 責務別に転記する薄い配線。技メタ（move-specs）は技専用ページの `transcribe-move-master` が SoT で本経路は
+ * 触れない（種族ページ副産物抽出の除去・ADR 0037）。
+ */
+function transcribeSpecies(slug: string, regId: string, jsonPath: string | undefined): void {
+  const p = readJson<ParsedSpecies>(jsonPath);
+  const dir = regDir(regId);
+  // メガ自動著述プラン（決定論変換・null は escalations へ分離・ADR 0033 のメガ運用）。
+  const auth = megaAuthoring(slug, p);
+
+  writeSpeciesCatalog(slug, p, auth);
+  writeSpeciesPerReg(slug, regId, dir, p, auth);
 
   // --- 決定論変換できなかったメガ（Primal 等・非 `Mega ` 形）だけ escalation（自動著述しない） ---
   if (auth.escalations.length > 0) {

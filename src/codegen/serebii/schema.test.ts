@@ -11,17 +11,7 @@ function validSpecies(): ParsedSpecies {
     abilities: ["sand-veil", "rough-skin"],
     stats: { H: 108, A: 130, B: 95, C: 80, D: 85, S: 102 },
     statTotal: 600,
-    moves: [
-      {
-        name: "Earthquake",
-        id: "earthquake",
-        type: "ground",
-        damageClass: "physical",
-        power: 100,
-        accuracy: 100,
-        pp: 10,
-      },
-    ],
+    moves: [{ name: "Earthquake", id: "earthquake" }],
     megas: [],
   };
 }
@@ -68,28 +58,14 @@ describe("validateSpecies", () => {
     expect(result.issues).toEqual(["ability id shape: Sand Veil"]);
   });
 
-  it("returns stage 4 for a move missing id shape, type and damageClass", () => {
+  it("returns stage 4 for a move with a malformed id shape (names-only; meta は validateMoveMaster が検証)", () => {
     const p: ParsedSpecies = {
       ...validSpecies(),
-      moves: [
-        {
-          name: "Bad Move",
-          id: "Bad Move",
-          type: "",
-          damageClass: "",
-          power: null,
-          accuracy: null,
-          pp: null,
-        },
-      ],
+      moves: [{ name: "Bad Move", id: "Bad Move" }],
     };
     const result = validateSpecies(p);
     expect(result.stage).toBe(4);
-    expect(result.issues).toEqual([
-      "move id shape: Bad Move",
-      "move missing type: Bad Move",
-      "move missing damageClass: Bad Move",
-    ]);
+    expect(result.issues).toEqual(["move id shape: Bad Move"]);
   });
 });
 

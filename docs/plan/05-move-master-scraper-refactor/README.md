@@ -27,7 +27,7 @@ flowchart TD
 
 - [x] [Phase 1 — ADR + 設計確定（技マスター専用取得の SoT・新取得経路の DOM 仕様・役割分割方針・skill 再編方針・03 Phase 13 廃止の記録）](./phase-01-design-and-adr.md)
 - [x] [Phase 2 — 技マスター専用取得経路の実装（Serebii 技専用ページの新パーサ + fetch/scrape/transcribe + exit code + fixture + move-specs を Champions 準拠値で populate・旧 03 Phase 13 を吸収）](./phase-02-move-master-fetch.md)
-- [ ] [Phase 3 — スクレイパー役割分割リファクタ（parse.ts / to-catalog.ts / serebii-to-catalog.ts を責務別に分解・種族ページからの技メタ副産物抽出を除去）](./phase-03-scraper-decomposition.md)
+- [x] [Phase 3 — スクレイパー役割分割リファクタ（parse.ts / to-catalog.ts / serebii-to-catalog.ts を責務別に分解・種族ページからの技メタ副産物抽出を除去）](./phase-03-scraper-decomposition.md)
 - [ ] [Phase 4 — survey-regulation オーケストレーター化（roster / species-moves / move-master / items のサブスキル / Workflow 分割 + SKILL.md 縮減 + cross-agent パリティ）](./phase-04-skill-orchestration.md)
 
 > 計画群全体の受け入れ基準は [`OVERVIEW.md` の「受け入れ基準」節](./OVERVIEW.md#受け入れ基準) を参照。
