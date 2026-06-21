@@ -33,7 +33,7 @@ pokeform の実装計画は **計画ディレクトリ単位**で分割し、各
 | [02-data-model-redesign](./02-data-model-redesign/README.md) | ✅ 完了 |
 | [03-survey-regulation-rework](./03-survey-regulation-rework/README.md) | ✅ 完了 |
 | [04-generated-layout-redesign](./04-generated-layout-redesign/README.md) | ✅ 完了 |
-| [05-move-master-scraper-refactor](./05-move-master-scraper-refactor/README.md) | 🚧 進行中 |
+| [05-move-master-scraper-refactor](./05-move-master-scraper-refactor/README.md) | ✅ 完了 |
 | [06-ma-full-data](./06-ma-full-data/README.md) | ⬜ 未着手 |
 
 ## MVP の範囲
