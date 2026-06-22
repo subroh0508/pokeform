@@ -27,7 +27,7 @@ flowchart TD
 - [x] [Phase 2 — レビュー skill 共通フレーム抽出](./phase-02-review-skill-common-frame.md)
 - [x] [Phase 3 — survey-regulation 単独圧縮](./phase-03-survey-regulation.md)
 - [x] [Phase 4 — ワークフロー系 skills 圧縮](./phase-04-workflow-skills.md)
-- [ ] [Phase 5 — データ系 skills 圧縮](./phase-05-data-skills.md)
+- [x] [Phase 5 — データ系 skills 圧縮](./phase-05-data-skills.md)
 
 ## 補足
 
