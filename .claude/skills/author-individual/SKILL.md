@@ -14,20 +14,16 @@ allowed-tools: Bash(pnpm *), Bash(node src/cli/*), Read, Write, Edit
 # author-individual — 個体 YAML を雛形から起こして tsc 検証する
 
 pokeform の利用者（コーディングエージェント / 人間）が、**1 体の育成済み個体 YAML** を書き起こす際の
-入口。種族の許容値（特性・技・持ち物）と能力ポイント規約（合計66・各 ≤32・[[game-spec]]）に沿った
-雛形を提示し、`pokeform check:individual` で**覚えない技・使えない特性・性格 up=down・ポイント違反**を
-tsc に弾かせる。検証ロジックは CLI / codegen / 型に委譲し、本 skill は**雛形提示と検証実行・要約**に
-徹する（機械ゲートを再実装しない・[[skill-authoring]]）。
+入口。種族の許容値（特性・技・持ち物）と能力ポイント規約（合計66・各 ≤32・[[game-spec]]）に沿った雛形を
+提示し、`pokeform check:individual` の tsc 検証で違反を弾かせる。検証ロジックは CLI / codegen / 型に委譲し、
+本 skill は**雛形提示と検証実行・要約**に徹する（機械ゲートを再実装しない・[[skill-authoring]]）。
 
 ## 役割
 
-- **雛形を出す**: 対象レギュ `R` の per-reg 種族 dex `src/generated/champions/<R>/index.ts` の
-  `speciesDex[S]`（`abilities` / `moves` / `items`）から許容値を確認し、`regulations: [<id>...]` を宣言した
-  個体 YAML 雛形を提示する。習得技はレギュごとに異なりうる（per-reg・ADR 0021）。
-- **検証する**: `pokeform check:individual <path>` を実行し、終了コードと診断（ブランド型名 + YAML 行）を
-  要約する。非0なら最初の違反を指摘し修正案を出す。
-- **言語を尊重する**: ファイル先頭の `lang: ja|en` 宣言に従う（既定 ja）。日本語ファイルは名称・能力名を
-  日本語で、英語ファイルは安定 ID（kebab 英名 / StatKey）で書く（[[cli-and-io]] / ADR 0014）。
+- **雛形を出す** — per-reg 種族 dex の許容値から `regulations` 宣言付き YAML 雛形を提示（手順 1-2）。
+- **検証する** — `check:individual` を実行し終了コードと診断を要約、非0なら最初の違反と修正案を出す（手順 3）。
+- **言語を尊重する** — ファイル先頭の `lang: ja|en` に従う（既定 ja・日本語は名称を日本語、英語は安定 ID・
+  [[cli-and-io]] / ADR 0014）。
 
 ## 入力 / 出力
 

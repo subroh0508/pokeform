@@ -1,26 +1,22 @@
 ---
 name: update-catalog
 description: >-
-  PokeAPI 由来の reg 非依存データ（構造データ = 種族値 / タイプ / 特性 id / 図鑑番号 / 持ち物 category、
-  日本語名 ja、技 / 特性の名前補完）を構造は `data/champions/*-specs.yaml`・名前は `data/languages/*.yaml`
-  へ取り込む手順 skill。実体は新規 / 更新 id について `pnpm fetch:data`（PokeAPI raw 取得・`data/raw` キャッシュ）
-  → `pnpm materialize`（raw → specs / languages 転記・append / 既存尊重）+ 種族の特性 id を `ability-specs.yaml`
-  へ集約 → `pnpm generate:data` 緑確認。構造データ SoT は specs YAML・名前 SoT は languages YAML（ADR 0027 /
-  0032 / 0035）。「specs を更新したい」「PokeAPI の構造データ（種族値 / タイプ / 特性 / 図鑑番号 / category）を
-  取り込んで」「日本語名 ja を languages へ入れて」「新しい種族 / 持ち物を specs に追加して」「update-catalog
-  <id...>」「materialize で構造データを埋めて」「特性 id を ability-specs に集約して」と言われたとき、または
-  regulations 取得（`survey-regulation`）の specs 更新チェックポイントで未登録 id を補うときに使う。Champions
-  解禁データ（roster / 技 / メガ）の取得は `survey-regulation`（こちらは PokeAPI 構造データ + 名前の取り込みが
-  責務）。生成 / 検証は `generate:data` / `verify` に委譲し機械ゲートは再実装しない。
+  PokeAPI 由来の reg 非依存データ（構造データ = 種族値 / タイプ / 特性 id / 図鑑番号 / 持ち物 category と
+  日本語名 ja）を、構造は `data/champions/*-specs.yaml`・名前は `data/languages/*.yaml` へ取り込む手順 skill。
+  「specs を更新したい」「PokeAPI の構造データ（種族値 / タイプ / 特性 / 図鑑番号 / category）を取り込んで」
+  「日本語名 ja を languages へ入れて」「新しい種族 / 持ち物を specs に追加して」「update-catalog <id...>」
+  「materialize で構造データを埋めて」「特性 id を ability-specs に集約して」と言われたとき、または
+  `survey-regulation` の specs 更新チェックポイントで未登録 id を補うときに使う。Champions 解禁データ
+  （roster / 技 / メガ）の取得は `survey-regulation` の責務（こちらは PokeAPI 構造データ + 名前の取り込み）。
+  生成 / 検証は `generate:data` / `verify` に委譲し機械ゲートは再実装しない。
 allowed-tools: Bash(pnpm *), Bash(node scripts/*), Bash(node src/cli/*), Read, Write, Edit
 ---
 
 # update-catalog — PokeAPI 構造データ・日本語名を specs / languages へ取り込む
 
-`data/champions/*-specs.yaml`（構造）と `data/languages/*.yaml`（名前）の **reg / ゲーム非依存データ**（構造データ
-= 種族値 / タイプ / 特性 id / 図鑑番号 / 持ち物 category、日本語名 ja、技 / 特性の名前補完）を **PokeAPI vendor
-由来で取り込む**手順を定型化する。これは Champions レギュレーションに依存しない「種族や持ち物そのものの事実」であり、
-取得元・更新頻度・情報源が Champions 解禁データ（Serebii 由来）とは異なるため、**取得スキルを取得元で分離する**
+`data/champions/*-specs.yaml`（構造）と `data/languages/*.yaml`（名前）の **reg / ゲーム非依存データ**——
+Champions レギュに依存しない「種族や持ち物そのものの事実」——を **PokeAPI vendor 由来で取り込む**手順を定型化する。
+取得元・更新頻度が Champions 解禁データ（Serebii 由来）と異なるため、**取得スキルを取得元で分離する**
 （regulations 取得は [`survey-regulation`](../survey-regulation/SKILL.md)）。
 
 > データ構造・SoT の正本は [[data-pipeline]]（specs / languages / 取得 → 転記 → 合成の三段）。構造データ SoT を
@@ -56,11 +52,8 @@ move-specs（survey-regulation）**（技メタを per-game へ移した [ADR 00
 
 ### 1. 対象 id を確定する
 
-specs / languages に**新規追加 / 更新が要る** species slug・item id を確定する。典型的には:
-
-- **新規種族 / 持ち物の投入**（全種族投入など）で specs に未登録の id。
-- **`survey-regulation` の specs 更新チェックポイント**（`check:regulation` の参照整合エラーが「未登録の種族 /
-  持ち物」を列挙）で渡される不足 id。
+specs / languages に**新規追加 / 更新が要る** species slug・item id を確定する（全種族投入で未登録の id、または
+`survey-regulation` の specs 更新チェックポイントが `check:regulation` の参照整合エラーで列挙する不足 id）。
 
 ### 2. PokeAPI raw を取得する（fetch:data）
 
