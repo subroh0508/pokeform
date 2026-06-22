@@ -16,11 +16,10 @@ allowed-tools: Read Write Bash(ls *) Bash(gh issue create *) Glob
 
 ## なぜこのスキルがあるか
 
-実装指示をプロンプトで直に受けると、着手の仕方・分割の粒度がエージェントごと・回ごとにぶれる。OVERVIEW を
-飛ばしていきなり phase を切ったり、巨大すぎる 1 PR を作ったりする。本スキルは「**指示 → OVERVIEW →
-6 基準で分割 → 着手へ受け渡し**」を定型化し、`start-phase` / `implementation-workflow` の**手前の標準
-エントリポイント**にする。実装の駆動（worktree〜マージ）は `implementation-workflow` の責務で、本スキルは
-**計画化に専念**する（役割を分ける）。
+指示をプロンプトで直に受けると着手・分割の粒度がぶれ、OVERVIEW を飛ばして巨大 1 PR を作る事故が起きる。
+「**指示 → OVERVIEW → 6 基準で分割 → 着手へ受け渡し**」を定型化し、`start-phase` /
+`implementation-workflow` の**手前の標準エントリポイント**にする。実装の駆動は後段の責務で、本スキルは
+**計画化に専念**する。
 
 ## 入力 / 出力
 
@@ -49,26 +48,18 @@ allowed-tools: Read Write Bash(ls *) Bash(gh issue create *) Glob
 
 ### 2. OVERVIEW を 6 基準で評価し phase に分割する
 
-OVERVIEW を実現する作業を洗い出し、**6 基準**で 1 phase = 1 PR に分割する。基準の詳細・1 PR 妥当ライン・
-判断例は [references/split-criteria.md](references/split-criteria.md) を参照（SoT は [[planning]]）。
-
-6 基準 = **意思決定の数 / 不可逆性 / スコープの広さ / 技術的難易度 / 想定 diff / 並行実装のしやすさ**。
-想定 diff は ~500 行を目安に、**>1000 行は積極的に分割**する。ただしデータセット追加など意味ある粒度での
-分割が困難なケースは例外として 1 PR を許容する（理由を OVERVIEW / issue に明記）。
+OVERVIEW を実現する作業を洗い出し、**6 基準**で 1 phase = 1 PR に分割する。**6 基準の実体・1 PR 妥当
+ライン・diff 目安（~500 行 / >1000 行は積極分割）・判断例は [[planning]]（SoT）と
+[references/split-criteria.md](references/split-criteria.md)**。各 phase は「単独でマージしても壊れない・
+レビュー可能・意味的に完結」を満たす。
 
 ### 3. 書き出し（2 分岐）
 
 #### 3a. 1 PR 妥当（分割不要）
 
-`docs/plan/NN-{slug}/` は**作らない**。OVERVIEW 相当の整理を本文にした GitHub issue を起票する:
-
-```
-gh issue create --title "<簡潔なタイトル>" --body-file /tmp/plans-new-issue.md
-```
-
-issue 本文は body-file 経由（heredoc 直送を避ける）。投稿は GitHub への書き出しなので**投稿前に
-[[redaction]] を適用**（Secrets / 最小 PII を `[REDACTED-*]` へ）。起票後、そのまま
-`implementation-workflow` をキックして着手へ繋ぐ。
+`docs/plan/NN-{slug}/` は**作らない**。OVERVIEW 相当を本文にした GitHub issue を body-file 経由で起票し
+（`gh issue create --body-file`・heredoc 直送を避ける）、そのまま `implementation-workflow` をキックする。
+投稿は GitHub への書き出しなので**投稿前に [[redaction]] を適用**（Secrets / 最小 PII を `[REDACTED-*]`）。
 
 #### 3b. 複数 phase
 
@@ -96,12 +87,8 @@ issue 本文は body-file 経由（heredoc 直送を避ける）。投稿は Git
 
 - **OVERVIEW を飛ばさない**。必ず OVERVIEW → 分割の順。曖昧なまま phase を切ると粒度がぶれる。
 - **採番は `ls docs/plan/` から機械的に**。記憶や推測で `NN` を振らない（衝突・抜けの原因）。
-- **機械ゲート / レビュー観点を再実装しない**。検証は `verify`、評価は `code-review` / `harness-review` の
-  責務。本スキルは計画化のみ（[[skill-authoring]]）。
-- **`docs/harness/rules-index.md` を手編集しない**。`planning.md` 追加は `prepare` / 生成スクリプトで反映
-  される生成物（[[cross-agent]]）。
-- **本スキルは実テーマの実装をしない**。計画化して着手へ渡すところまで。実装は
-  `implementation-workflow`。
+- **計画化のみ・実装も再実装もしない**。実テーマの実装は `implementation-workflow`、検証 / 評価は
+  `verify` / `code-review` / `harness-review` の責務（[[skill-authoring]]）。
 - **issue 本文・PR への書き出しは redaction 適用後**（[[redaction]]）。
 
 ## 関連

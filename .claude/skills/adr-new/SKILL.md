@@ -65,12 +65,14 @@ hit したら、安定 SoT（`.claude/rules/*` / `architecture.md` / 他 ADR の
 
 ## supersede（既存 ADR を覆す）
 
-決定を覆すときは**旧 ADR の本文を書き換えない**（不変ログのため）。手順:
+**手順・追従ルールの SoT は [adr.md](../../rules/adr.md) の「Status と supersede」**（旧本文は不変・archive 退避・
+全 inbound 参照の追従）。このスキルが駆動する骨子:
 
 1. 上記 1〜6 で新 ADR（`MMMM`）を作成。Context に「ADR-NNNN を見直す」経緯を書く。
-2. 旧 ADR（`NNNN`）を Read し、**frontmatter `status` フィールドのみ**を `Superseded by ADR-MMMM` に更新する（本文は不変。補足が要れば末尾に追記のみ）。
-3. 旧 ADR を **`docs/adr/archive/` へ `git mv`** して退避する（`deprecated` も同様）。アクティブ `docs/adr/*.md` は現行の決定だけにする。移動で本文内の相対リンクがずれるので、**旧 ADR 本文の他 ADR への相対リンク（`./NNNN` → `../NNNN`）を機械的に追従修正**する（決定内容は変えない）。
-4. `README.md` の旧 ADR をアクティブ一覧表から外し、「アーカイブ」節へ（`archive/` への相対リンク・Status を `Superseded by ADR-MMMM`）移す。退避に伴い旧 ADR への参照リンクの相対パスがずれる場合は追従修正する。
+2. 旧 ADR（`NNNN`）の **frontmatter `status` のみ**を `Superseded by ADR-MMMM` に更新（本文は不変・末尾追記のみ可）。
+3. 旧 ADR を **`docs/adr/archive/` へ `git mv`**（`deprecated` も同様）。移動後、**当該番号への全 inbound 参照
+   （他 ADR / rule / skill・`.md` / `.ts`・reference 式リンク定義・素の番号）を archive パスか後継 ADR へ追従**する。
+4. `README.md` のアクティブ一覧から外し「アーカイブ」節へ移す（`archive/` リンク・Status を `Superseded by ADR-MMMM`）。
 
 ## Gotchas
 
