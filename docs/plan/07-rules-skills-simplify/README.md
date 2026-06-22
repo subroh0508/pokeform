@@ -22,7 +22,7 @@ flowchart TD
 
 ## フェーズ一覧（順不同・並行可）
 
-- [ ] [Phase 0 — rules 重量級シンプル化（implementation-workflow / data-pipeline）](./phase-00-rules-heavy.md)
+- [x] [Phase 0 — rules 重量級シンプル化（implementation-workflow / data-pipeline）](./phase-00-rules-heavy.md)
 - [ ] [Phase 1 — rules 軽量級シンプル化（残り rules）](./phase-01-rules-light.md)
 - [ ] [Phase 2 — レビュー skill 共通フレーム抽出](./phase-02-review-skill-common-frame.md)
 - [ ] [Phase 3 — survey-regulation 単独圧縮](./phase-03-survey-regulation.md)
