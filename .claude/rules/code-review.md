@@ -43,7 +43,26 @@ description: PR マージ前の意味的レビュー（code-review / harness-rev
 - **PR 番号があるとき**: 上記フォーマットの総括 + 指摘を **1 つの要約コメント**として投稿する（`gh pr comment`）。ブロッキングなしでも「✅ ブロッキングなし」のコメントを残す（レビュー実施の記録）。
 - **ローカルブランチのみ（PR 未作成）でレビューするとき**: 投稿先が無いためチャット出力に留める。
 - コメントは GitHub への書き出しなので、投稿**前**に [[redaction]] を適用する（Secrets / 最小 PII を `[REDACTED-*]` へ）。
-- **コメントを残す = レビュー結果の記録**であり、**コードの修正コミットや auto-merge の実行とは別**。レビュー skill はコメント投稿までで、修正・マージはしない（auto-merge の発火条件は各 checklist の「auto-merge ゲート」節）。
+- **コメントを残す = レビュー結果の記録**であり、**コードの修正コミットや auto-merge の実行とは別**。レビュー skill はコメント投稿までで、修正・マージはしない（auto-merge の発火条件は下記「auto-merge ゲート」節）。
+
+## 共通レビュー手順（両 skill 共通の 5 ステップ）
+
+`code-review` / `harness-review` は手順骨格を共有する。**対象 paths と参照する checklist だけが違う**（その差分は各 skill 本文が持つ）。両 skill はこのフレームを参照し、逐語の手順記述を持たない。
+
+1. **対象 diff を収集する** — PR 番号があれば `gh pr diff <N>`、なければ `git diff origin/main...HEAD`。変更ファイルから自分の対象範囲（src/scripts/data ↔ ハーネス資産）だけを抽出し、対象外が混ざれば相方の skill を別途使う旨を添える。
+2. **paths から重点観点を選ぶ** — 各 skill の `references/*-checklist.md` の「paths × 重点観点」表で、該当パスの観点に絞る（全観点を機械的に当てない）。
+3. **checklist で評価する** — checklist の観点を変更の実体に当てる。**機械ゲート項目（型 / カバレッジ数値 / Biome 整形）は再実行・再チェックしない**（上記「機械ゲート非再実行の原則」）。
+4. **重大度を付けて要約する** — 各指摘に `blocking` / `non-blocking` / `nit` を付け、総括 → 重大度順でまとめる（上記「指摘フォーマット」）。
+5. **PR コメントとして残す** — `/tmp/<prefix>-review.md` に Write し `gh pr comment <N> --body-file` で投稿。ブロッキングなしでも「✅ ブロッキングなし」を 1 コメント残す。投稿**前**に [[redaction]] を適用する。PR 番号が無いローカルレビューはチャット出力に留める（上記「出力先」）。
+
+## auto-merge ゲート（発火条件）
+
+レビューは**提案的**。auto-merge は次の **2 条件がともに揃ったとき**のみ `gh pr merge --auto --merge` を予約する（[ADR 0017](../../docs/adr/0017-semantic-code-review-skills.md)）:
+
+1. **server-side CI（`.github/workflows/ci.yml` の `pnpm verify`）が緑** — 機械ゲート（required status check）。ローカル Git hooks は GitHub の merge を gate しないため CI が必須。
+2. **ブロッキング指摘なし** — レビューで `blocking` が 0 件。
+
+どちらかが欠ければ auto-merge は**止まる**。最終 approve は人間（または branch protection の承認ルール）に置く。レビュー skill 自身は merge を実行しない（指摘までが責務）。auto-merge コマンドの予約は実装ワークフロー（[[implementation-workflow]]）が担う。
 
 ## effort 段階
 

@@ -11,7 +11,8 @@ effort・redaction）の SoT は [`.claude/rules/code-review.md`](../../../rules
 3. rules 観点（context engineering）
 4. 共通観点（cross-agent / redaction / ゲート二重化）
 5. paths × 重点観点
-6. auto-merge ゲート（発火条件）
+
+auto-merge ゲート（発火条件）は [`code-review.md` の「auto-merge ゲート」](../../../rules/code-review.md)に一本化済み（両 skill 共通）。
 
 ---
 
@@ -79,13 +80,7 @@ effort・redaction）の SoT は [`.claude/rules/code-review.md`](../../../rules
 | `.githooks/**`, `.claude/settings.json`, `.claude/hooks/**` | **ゲート二重化していないか** / 実行権限前提 / 設定値の妥当性・秘匿情報非混入 |
 | `docs/plan/**`, `docs/adr/**`, `docs/harness/**` | phase テンプレ準拠 / 相互参照（前提節）の整合・dangling なし / ADR 採番・supersede 規約 / learning の redaction / 生成物（rules-index）の手編集 / **renumber を含む plan PR は番号整合を機械確認**（`git grep "Phase N"` は**計画ディレクトリ内に限定せず cross-plan = リポジトリ全体**を走査し、他計画 doc / rule / skill からの参照まで dangling を点検 / 表・mermaid・散文の素の番号・完了済み phase の forward 参照まで全 hit 追従 / README リンクが実在ファイルに解決 / ADR・rule リンクは slug を実体照合）。手順 SoT は [[planning]] の「phase の insert/renumber 追従チェックリスト」 |
 
-## 6. auto-merge ゲート（発火条件）
+## auto-merge ゲート（発火条件）
 
-レビューは**提案的**。auto-merge は次の **2 条件がともに揃ったとき**のみ `gh pr merge --auto --merge` を予約する
-（[ADR 0017](../../../../docs/adr/0017-semantic-code-review-skills.md) / phase-03 doc）:
-
-1. **server-side CI（`.github/workflows/ci.yml` の `pnpm verify`）が緑** — 機械ゲート（required status check）。
-2. **ブロッキング指摘なし** — 本レビューで `blocking` が 0 件。
-
-どちらかが欠ければ auto-merge は**止まる**。最終 approve は人間（または branch protection の承認ルール）に置く。
-この skill 自身は merge を実行しない。auto-merge コマンドの予約は実装ワークフロー（Phase 11）が担う。
+→ [`code-review.md` の「auto-merge ゲート」](../../../rules/code-review.md)に一本化（CI 緑 + ブロッキング 0 の
+2 条件・両 skill 共通）。本 checklist では再記述しない（SoT 一本化・[ADR 0017](../../../../docs/adr/0017-semantic-code-review-skills.md)）。
