@@ -8,27 +8,17 @@ description: PR ごと KPT learning ファイルの構造 SoT。`pr-retrospectiv
 
 # retrospective-format — learning ファイル構造の SoT
 
-PR ごとの KPT（Keep / Problem / Try）レトロスペクティブを記録する learning ファイルの
-**唯一の正本（Single Source of Truth）**。`pr-retrospective` skill が本構造で生成し、
-`harness-meta` skill が `🤖 ハーネス改善提案` セクションを機械 parse する。手書き生成も本構造に従う。
+PR ごとの KPT（Keep / Problem / Try）レトロを記録する learning ファイルの**唯一の正本**。`pr-retrospective` skill が本構造で生成し、`harness-meta` skill が `🤖 ハーネス改善提案` セクションを機械 parse する。手書き生成も本構造に従う。
 
-> ループ全体像は [`docs/harness/README.md`](../../docs/harness/README.md)、判定基準は
-> [`harness-meta-criteria.md`](./harness-meta-criteria.md)、秘匿情報の置換は
-> [`redaction.md`](./redaction.md) を参照。
+> ループ全体像は [`docs/harness/README.md`](../../docs/harness/README.md)、判定基準は [`harness-meta-criteria.md`](./harness-meta-criteria.md)、秘匿情報の置換は [`redaction.md`](./redaction.md) を参照。
 
 ## ルール（なぜ）
 
-- **1 PR = 1 ファイル**: 粒度を PR に固定すると、後から `harness-meta` が「複数 PR で反復した提案」を
-  数えやすく、採用判定（criteria ①）が機械的に行える。
-- **ファイル名 `docs/harness/learnings/YYYY-MM-DD-pr-<n>.md`**: 日付プレフィックスで時系列に並び、
-  PR 番号で idempotent（同 PR を二重生成しない）に判定できる。
-- **見出しは固定**: `harness-meta` が見出し文字列で section を特定するため、絵文字・文言を変えない。
-  空でも見出しは維持する（`📝 harness-meta フィードバック` は meta が後追記するため）。
-- **改善提案は 5 プレフィックス + `[ ]`**: `[rule]` / `[skill]` / `[template]` / `[adr]` / `[remove]` の
-  チェックボックスで起票する。`harness-meta` は**未処理（`[ ]`）のみ**を集約し、採用後に `[x]` へ更新する。
-  プレフィックスを固定することで「どのハーネス資産を触る提案か」を parse 時に分類できる。
-- **指標は pokeform のゲートに限定**: 型チェック / カバレッジ% / Biome 違反 / CI / 差分 files・行数のみ。
-  重量級メトリクス（複雑度・三層メトリクス等）は本規模では不採用。
+- **1 PR = 1 ファイル**: 粒度を PR に固定すると `harness-meta` が「複数 PR で反復した提案」を数えやすく、採用判定（criteria ①）が機械的に行える。
+- **ファイル名 `docs/harness/learnings/YYYY-MM-DD-pr-<n>.md`**: 日付プレフィックスで時系列に並び、PR 番号で idempotent（同 PR を二重生成しない）に判定できる。
+- **見出しは固定**: `harness-meta` が見出し文字列で section を特定するため、絵文字・文言を変えない。空でも見出しは維持する（`📝 harness-meta フィードバック` は meta が後追記する）。
+- **改善提案は 5 プレフィックス + `[ ]`**: `[rule]` / `[skill]` / `[template]` / `[adr]` / `[remove]` のチェックボックスで起票する。`harness-meta` は**未処理（`[ ]`）のみ**を集約し採用後に `[x]` へ更新する。プレフィックス固定で「どのハーネス資産を触る提案か」を parse 時に分類できる。
+- **指標は pokeform のゲートに限定**: 型チェック / カバレッジ% / Biome 違反 / CI / 差分 files・行数のみ（重量級メトリクスは本規模では不採用）。
 
 ## frontmatter
 
@@ -89,8 +79,7 @@ generator: pr-retrospective skill | 手動
 
 ## 制約
 
-- KPT 各セクションは**最低 3 項目**（推奨 5-10）。観点が薄い PR でも形式を保ち、空欄にしない。
-- `🚀 Try` は抽象論で終えず、**どの資産（rule / skill / template / ADR）をどう変えるか**まで具体化し、
-  対応する `🤖 ハーネス改善提案` のチェックボックスへ落とす。
+- KPT 各セクションは**最低 3 項目**（推奨 5-10）。観点が薄い PR でも形式を保ち空欄にしない。
+- `🚀 Try` は抽象論で終えず、**どの資産（rule / skill / template / ADR）をどう変えるか**まで具体化し、対応する `🤖 ハーネス改善提案` のチェックボックスへ落とす。
 - 生成前に [`redaction.md`](./redaction.md) の正規表現で token / key / メール等を `[REDACTED-*]` 置換する。
 - PR レビューコメントの収集はするが、**learning ファイルが SoT**。PR 本体へコメントは投稿しない。
