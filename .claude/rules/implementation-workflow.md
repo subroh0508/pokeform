@@ -8,18 +8,15 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 
 [`implementation-workflow`](../skills/implementation-workflow/SKILL.md) skill が駆動する Phase 0〜9 の
 **詳細手順の唯一の正本**。skill 本体（SKILL.md）は ≤500 行に収めるため概要に留め、各フェーズの
-入出力・成功条件・失敗時 fallback・worktree 基盤の規律は本 rule に逃がす（progressive disclosure）。
-
-> 決定の「なぜ」は [ADR 0018](../../docs/adr/0018-implementation-workflow-orchestrator.md)、
-> 役割分担・受け入れ基準は [`docs/plan/00-harness-setup/phase-11-implementation-workflow.md`](../../docs/plan/00-harness-setup/phase-11-implementation-workflow.md) と
-> [README](../../docs/plan/00-harness-setup/README.md)。本 rule はそれらと**二重記述しない**（手順の SoT に専念）。
+入出力・成功条件・失敗時 fallback・worktree 規律は本 rule に逃がす（progressive disclosure）。決定の
+「なぜ」は [ADR 0018](../../docs/adr/0018-implementation-workflow-orchestrator.md)、役割分担・受け入れ基準は
+[phase-11 doc](../../docs/plan/00-harness-setup/phase-11-implementation-workflow.md) / [README](../../docs/plan/00-harness-setup/README.md)（本 rule はそれらと二重記述しない）。
 
 ## 大原則: 実装は原則このワークフロー経由
 
-**確定した Plan / Phase の実装は、原則すべて本 skill 経由で駆動する**。本 skill は単に「用意された部品」ではなく、
-**実装の標準エントリポイント**。エージェントが着手〜マージの繋ぎ方を都度判断することを避け、定型化された
-ワークフローに統一する（[ADR 0018](../../docs/adr/0018-implementation-workflow-orchestrator.md)）。
-例外は trivial な単発編集や会話的応答のみで、フェーズ単位の実装ではこれを既定とする。
+**確定した Plan / Phase の実装は、原則すべて本 skill 経由で駆動する**（実装の標準エントリポイント）。
+着手〜マージの繋ぎ方を都度判断してぶれるのを避け、定型化されたワークフローに統一する。例外は trivial な
+単発編集や会話的応答のみ。
 
 > **入口は [`plans-new`](../skills/plans-new/SKILL.md)**（[[planning]]）。生の実装指示はまず `plans-new` が
 > OVERVIEW 化 → 6 基準で分割し、その**産出物（GitHub issue または `docs/plan/NN-{slug}/` の phase doc）を
@@ -28,13 +25,11 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 
 ## 設計の核（なぜこの形か）
 
-この skill は**既存 skill を束ねるオーケストレーター**であり、新規ロジックは最小に保つ。理由は、
-着手・実装・検証・PR・レビュー・マージ・レトロ・後片付けの繋ぎ方をエージェントが都度判断すると
-手順がぶれるため。検証（`pnpm verify`）・レビュー観点・ADR 採番・レトロ生成・README 進捗更新は
-**それぞれ専任 skill に委譲**し、本 skill では**再実装しない**（[[skill-authoring]] の機械ゲート非再実装）。
-
-「**設置 ≠ 稼働**」。capstone ゆえ依存は広いが、実稼働は MVP 実装 PR 以降。未整備の依存があっても
-前方参照で許容し、フェーズはあるものから順に駆動する。
+この skill は**既存 skill を束ねるオーケストレーター**であり、新規ロジックは最小に保つ。着手・実装・検証・
+PR・レビュー・マージ・レトロ・後片付けの繋ぎ方をエージェントが都度判断すると手順がぶれるため。検証
+（`pnpm verify`）・レビュー観点・ADR 採番・レトロ生成・README 進捗更新は**それぞれ専任 skill に委譲**し、
+本 skill では**再実装しない**（[[skill-authoring]] の機械ゲート非再実装）。「**設置 ≠ 稼働**」: capstone ゆえ
+依存は広いが、未整備の依存は前方参照で許容し、あるものから順に駆動する。
 
 ## 入力 / 出力
 
@@ -45,30 +40,27 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 ## フェーズ別 詳細手順（Phase 0〜9）
 
 各フェーズは **成功条件を満たしてから次へ進む**。満たせない場合は当該フェーズの fallback に従う。
+横断する不変条件は末尾「不変条件（まとめ）」に集約し、各フェーズはそれを参照する（二重記述しない）。
 
 ### Phase 0 — Worktree 作成 + main fetch
 
 - **手順**: `git fetch origin main` → unstaged があれば `git stash push -u` →
   `git worktree add <abs-path> -b <branch> origin/main`。branch 名は命名規約（`<type>/<scope>-<purpose>`、
-  [AGENTS.md](../../AGENTS.md) / [[cross-agent]]）に従う。worktree パスは**絶対パス**で扱う。
-  worktree 作成後は **`pnpm install` を実行**してから検証する（git worktree は node_modules を共有しないため、
-  各 worktree で依存を導入しないと `pnpm verify` が失敗する）。同様に **`data/raw`（gitignore・PokeAPI キャッシュ）も
-  worktree 間で共有されない**。`generate:data` で raw（種族値 / タイプ / 特性 / 持ち物 category）が要るデータ系
-  作業では、着手前に **`pnpm fetch:data` を回して `data/raw` を完全化してから** `generate` する。
-  **メイン側からの cp は worktree 作業では部分的になりうる**（取得済みの種だけ cp され取りこぼす）ため、
-  全量の完全性が要るデータ系作業では cp でなく `fetch:data` を優先する（learning #94 / #96 反復）。
-  `check:regulation` は参照整合 / schema のみで `data/raw` 非依存（learnset 照合は撤去・ADR 0034 = ADR 0026 改訂・[[data-pipeline]]）。
-- **成功条件**: worktree が作成され、対象 branch が origin/main 起点で checkout 済み。
-- **fallback**: 既に同名 worktree / branch があれば再利用（再作成しない）。stash した変更は最終フェーズ後に
-  `git stash pop` する余地を残す。
-- **不変**: Phase 0 と Phase 9 は**ペア**。Phase 0 で作った worktree は Phase 9 でしか削除しない。
+  [AGENTS.md](../../AGENTS.md) / [[cross-agent]]）に従い、worktree パスは**絶対パス**で扱う。worktree 作成後は
+  **`pnpm install`**（git worktree は node_modules を共有しないため必須）。**`data/raw`（gitignore・PokeAPI
+  キャッシュ）も worktree 間で共有されない**ため、`generate:data` で raw が要るデータ系作業では着手前に
+  **`pnpm fetch:data` で `data/raw` を完全化してから** `generate` する（メイン側からの cp は取得済み種だけで
+  部分的になりうる・全量の完全性が要るなら cp でなく `fetch:data`・learning #94 / #96）。`check:regulation` は
+  参照整合 / schema のみで `data/raw` 非依存（ADR 0034 = ADR 0026 改訂・[[data-pipeline]]）。
+- **成功条件**: 対象 branch が origin/main 起点で checkout 済み。
+- **fallback**: 同名 worktree / branch があれば再利用（再作成しない）。stash は Phase 9 後に `git stash pop`。
 
 ### Phase 1 — 計画 / 設計 Read（start-phase に委譲）
 
-- **手順**: [`start-phase <id>`](../skills/start-phase/SKILL.md) を使い、対象 `docs/plan/.../phase-*.md`・
-  依存・受け入れ基準・検証手順・関連 ADR / rule を読込・提示させる。
+- **手順**: [`start-phase <id>`](../skills/start-phase/SKILL.md) で対象 `docs/plan/.../phase-*.md`・依存・
+  受け入れ基準・検証手順・関連 ADR / rule を読込・提示させる。
 - **成功条件**: 受け入れ基準と検証手順を把握済み（以降の自己照合の基準）。
-- **fallback**: 依存フェーズが未充足なら `start-phase` がブロック要因として提示する。前方参照で進める場合は
+- **fallback**: 依存が未充足なら `start-phase` がブロック要因を提示する。前方参照で進める場合は
   「設置 ≠ 稼働」を理由に明示して続行可。
 
 ### Phase 2 — 整合性チェック
@@ -76,106 +68,98 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 - **手順**: 受け入れ基準を `architecture.md` / 関連 rules / リポジトリ現状と突き合わせる。pokeform は
   SPEC/REQ 分離が無く **phase doc が基準**。相互参照（リンク・パス）の dangling がゼロになるよう設計する。
 - **成功条件**: 整合レポート（基準と現状の差分・dangling 有無）が揃う。
-- **fallback**: 既に完了済みのタスクがあれば**現状に適応**し、失敗するコマンドを盲目的に再実行しない。
+- **fallback**: 完了済みタスクがあれば**現状に適応**し、失敗するコマンドを盲目的に再実行しない。
 
 ### Phase 3 — 実装 + 検証（fix loop・上限 3）
 
-- **手順**: phase doc のタスクを実装 → [`verify`](../skills/verify/SKILL.md)（`pnpm verify` =
-  `tsc --noEmit` / `vitest run --coverage` 閾値100% / `biome check .`）→ 赤なら最初の失敗箇所を修正して
-  再実行。
+- **手順**: phase doc のタスクを実装 → [`verify`](../skills/verify/SKILL.md)（`pnpm verify` = `tsc --noEmit` /
+  `vitest run --coverage` 閾値100% / `biome check .`）→ 赤なら最初の失敗箇所を修正して再実行。
 - **成功条件**: `pnpm verify` が緑。
-- **fallback（不変条件）**: 実装 + verify の fix loop は**上限 3 回**。3 回で緑にならなければ対象
-  plan / phase doc に `blocked` を記録し、人間へ通知して停止する（無理に先へ進めない）。
-- **注**: `pnpm verify` が未整備の段階（Phase 5 マージ前等）は成果物を手動検証（ファイル実在・参照解決・
-  dangling ゼロ・記述整合）で代替する。
+- **fallback**: fix loop は**上限 3 回**（不変条件）。超過で `blocked` 記録 + 人間通知して停止する。
+- **注**: `pnpm verify` 未整備の段階（Phase 5 マージ前等）は手動検証（ファイル実在・参照解決・dangling
+  ゼロ・記述整合）で代替する。
 
 ### Phase 4 — セルフ検証
 
 - **手順**: redaction / secrets 混入なし（[[redaction]]）、cross-agent パリティ（canonical +
-  symlink/copy 一致、[[cross-agent]]）、生成物（`src/generated/**` 等）への手編集なし、命名規約準拠、
-  受け入れ基準の充足を点検する。あわせて、**rule が `architecture.md` を正本と宣言しつつ数式・仕様を
-  追記する場合、同一 PR で `architecture.md` を同期しているか**を点検する（rule が正本に先行する doc-data
-  乖離の再発防止）。あわせて、phase doc に紐づく実装 PR では **README 進捗・doc 同期コミットを当該
-  フィーチャー PR に同梱したか**（Phase 8「README 進捗・doc 同期の取り込み方」と対。オーケストレーター
-  主導マージで進捗が main 未反映・別 PR へ分離するのを防ぐ・learning #82 / #102）を点検する。
+  symlink/copy 一致・[[cross-agent]]）、生成物（`src/generated/**` 等）への手編集なし、命名規約準拠、
+  受け入れ基準の充足を点検する。あわせて次の doc 同期を点検（過去の doc-data 乖離の再発防止）:
+  - **rule が `architecture.md` を正本と宣言しつつ数式・仕様を追記する場合、同一 PR で `architecture.md` を
+    同期しているか**。
+  - phase doc に紐づく実装 PR で **README 進捗・doc 同期コミットを当該フィーチャー PR に同梱したか**
+    （Phase 8「README 進捗・doc 同期の取り込み方」と対・オーケストレーター主導マージで進捗が main 未反映 /
+    別 PR へ分離するのを防ぐ・learning #82 / #102）。
 - **成功条件**: 規約違反ゼロ。
-- **fallback**: scope 縮小指示が出た場合は `git reset --soft` でコミットを巻き直し、scope を絞り直す。
+- **fallback**: scope 縮小指示が出たら `git reset --soft` でコミットを巻き直し scope を絞り直す。
 
-### Phase 5 — Draft PR 作成（gh CLI 経由・body-file 経由）
+### Phase 5 — Draft PR 作成（gh CLI・body-file 経由）
 
 - **手順**: commit message を `/tmp/<prefix>-commit.txt`、PR body を `/tmp/<prefix>-pr.md` に `Write` →
-  `git add -A && git commit -F /tmp/<prefix>-commit.txt`（Conventional Commits、フッタに
-  `Co-Authored-By:`）→ `git push -u origin <branch>` →
-  `gh pr create --draft --base main --body-file /tmp/<prefix>-pr.md`。PR テンプレは
+  `git add -A && git commit -F /tmp/<prefix>-commit.txt`（Conventional Commits・フッタに `Co-Authored-By:`）→
+  `git push -u origin <branch>` → `gh pr create --draft --base main --body-file /tmp/<prefix>-pr.md`。PR テンプレは
   `.github/PULL_REQUEST_TEMPLATE/<type>.md`（ハーネス改修は `harness.md`）を**複写してカスタマイズ**する。
 - **成功条件**: PR URL を取得。
-- **不変条件**: PR 操作は **gh CLI 経由**、PR body / commit message は **`/tmp` body-file 経由**。
-  heredoc 直送や `--template` と `--body-file` の同時指定は避ける（壊れやすく不定）。
+- **不変条件**: PR 操作は gh CLI、PR body / commit message は `/tmp` body-file 経由（heredoc 直送・
+  `--template` と `--body-file` 同時指定は壊れやすく不定なので避ける）。
 
 ### Phase 6 — 独立レビュー（Evaluator・Generator から分離）
 
-- **手順**: `Agent` ツールでレビュー skill を**独立サブエージェントとして起動**する。
-  `src/**` / `scripts/**` の変更は [`code-review`](../skills/code-review/SKILL.md)、ハーネス資産
-  （`.claude/**` / `AGENTS.md` / `CLAUDE.md` / `.githooks` / `docs/**`）は
-  [`harness-review`](../skills/harness-review/SKILL.md)。両方含む PR は分担する。各レビュー skill は
-  結果を **PR コメントとして残す**（`gh pr comment`）ので、指摘は PR 上で辿れる。
+- **手順**: `Agent` ツールでレビュー skill を**独立サブエージェントとして起動**する。`src/**` / `scripts/**` の
+  変更は [`code-review`](../skills/code-review/SKILL.md)、ハーネス資産（`.claude/**` / `AGENTS.md` /
+  `CLAUDE.md` / `.githooks` / `docs/**`）は [`harness-review`](../skills/harness-review/SKILL.md)。両方含む PR は
+  分担する。各レビュー skill は結果を **PR コメントとして残す**（`gh pr comment`）。
 - **レビューコメント投稿の確認（不変条件）**: レビュー Agent 完了後、**`gh pr view <N> --comments` で
   レビュー結果の PR コメントが投稿済みであることを確認してから** Phase 7 へ進む。ブロッキングなしでも
-  `✅ ブロッキングなし` のコメントを残す（レビュー実施の記録・[code-review](../skills/code-review/SKILL.md)
-  の出力先規約）。未投稿なら投稿させてから次へ進む（レビュー Agent が `gh pr comment` を忘れて
-  レビュー記録なしでマージされる死角の再発防止）。
-- **成功条件**: ブロッキング（`blocking`）指摘が 0 件、**かつレビュー結果の PR コメントが投稿済み**
-  （ブロッキングなしでも記録が PR 上に残っている）。
-- **fallback（不変条件）**: ブロッキング指摘があれば Phase 3 へ戻って修正（**レビュー fix loop も上限 3 回**）。
-  累計超過で `blocked` 記録 + 人間通知。`non-blocking` / `nit` のみならマージを妨げない（健全性の純改善基準、
-  [[code-review]]）。
-- **不変条件（Generator/Evaluator 独立）**: 本 skill（実装 = Generator）はレビュー観点を**再実装せず**、
-  評価は必ず別 skill（Evaluator）を `Agent` で起動して得る。自己採点で代替しない。
-- **不変条件（worker/orchestrator マージ同期点）**: ワーカーとオーケストレーターを分業する運用では、
-  ワーカーは**レビュー fix を Draft 解除前に取り込んでから** `READY_FOR_MERGE` を報告し、その報告に
-  **fix 込みの最終 HEAD SHA** を含める。オーケストレーターは**マージ対象がその SHA であることを照合**して
-  からマージする（レビュー fix のマージ取りこぼし防止）。
+  `✅ ブロッキングなし` のコメントを残す（レビュー実施の記録・[[code-review]] の出力先規約）。未投稿なら
+  投稿させてから次へ進む（レビュー記録なしでマージされる死角の再発防止）。
+- **成功条件**: `blocking` 指摘が 0 件、**かつレビュー結果の PR コメントが投稿済み**。
+- **fallback**: blocking 指摘があれば Phase 3 へ戻って修正（**レビュー fix loop も上限 3 回**・不変条件）。
+  累計超過で `blocked` 記録 + 人間通知。`non-blocking` / `nit` のみならマージを妨げない（健全性の純改善
+  基準・[[code-review]]）。
+- **不変条件（worker/orchestrator マージ同期点）**: ワーカーとオーケストレーターを分業する運用では、ワーカーは
+  **レビュー fix を Draft 解除前に取り込んでから** `READY_FOR_MERGE` を**最終 HEAD SHA 付き**で報告し、
+  オーケストレーターは**マージ対象がその SHA であることを照合**してからマージする（fix のマージ取りこぼし防止）。
+  分業運用の詳細ノートは [worker-orchestration-notes](../skills/implementation-workflow/references/worker-orchestration-notes.md)。
 
 ### Phase 7 — マージ（auto-merge・Phase 3 のゲートに委譲）
 
-- **手順**: レビュー待ち中の main 再進化を `gh pr view --json mergeable,mergeStateStatus` で検出し、
-  必要なら `git rebase origin/main`（競合解決）→ `gh pr ready`（Draft 解除）→
-  **CI 緑 ＋ ブロッキング指摘なしで `gh pr merge --auto --merge`**（通常マージ = merge commit）。
+- **手順**: レビュー待ち中の main 再進化を `gh pr view --json mergeable,mergeStateStatus` で検出し、必要なら
+  `git rebase origin/main`（競合解決）→ `gh pr ready`（Draft 解除）→ **CI 緑 ＋ ブロッキング指摘なしで
+  `gh pr merge --auto --merge`**（通常マージ = merge commit）。
 - **成功条件**: PR が auto-merge 予約済み / MERGED。
 - **不変条件（auto-merge 委譲）**: マージ可否ゲートは [ADR 0017](../../docs/adr/0017-semantic-code-review-skills.md)
-  / [[code-review]] の auto-merge に**委譲**する。本 skill は独自のマージ規約（独自の「auto-merge 禁止」や
-  人間 approve 必須型）を**導入しない**。将来 Phase 3 のゲートを見直す場合は本 rule と Phase 3 を**同時更新**する。
+  / [[code-review]] の auto-merge に**委譲**する。独自のマージ規約（独自「auto-merge 禁止」や人間 approve
+  必須型）を**導入しない**。Phase 3 のゲートを見直す場合は本 rule と Phase 3 を**同時更新**する。
 
 ### Phase 8 — マージ後処理（finish-phase + pr-retrospective に委譲）
 
 - **手順**: [`finish-phase <id>`](../skills/finish-phase/SKILL.md)（`verify` 再実行・受け入れ基準照合・
   `docs/plan` README 進捗更新・アーキ決定があれば [`adr-new`](../skills/adr-new/SKILL.md) を促す）→
-  [`pr-retrospective <PR#>`](../skills/pr-retrospective/SKILL.md)（KPT learning 生成、
-  [[retrospective-format]]）。
+  [`pr-retrospective <PR#>`](../skills/pr-retrospective/SKILL.md)（KPT learning 生成・[[retrospective-format]]）。
 - **成功条件**: README 進捗が更新され、learning が生成済み。
 - **不変条件**: ADR 採番・レトロ生成・README 更新は各専任 skill の責務。本 skill は**起動・委譲のみ**で
   再実装しない（idempotent: 既に `- [x]` / learning 有りなら二重実行しない）。
 - **進捗更新の二層（finish-phase に委譲）**: README 進捗は **(a) サブ README の対象 phase チェック**
   （`- [ ]`→`- [x]`）に加え、計画の状況が変わったとき **(b) トップ `docs/plan/README.md` の status
-  ロールアップ表**（🚧 進行中 / ✅ 完了・分数は付けない）も更新する。いずれも `finish-phase` 手順 4 の責務。
-- **README 進捗・doc 同期の取り込み方**: 進捗・doc 同期コミットは**フィーチャー PR に同梱してからマージ**するか、
+  ロールアップ表**（🚧 進行中 / ✅ 完了・分数は付けない）も更新する（いずれも `finish-phase` 手順 4 の責務）。
+- **README 進捗・doc 同期の取り込み方**: 進捗・doc 同期コミットは**フィーチャー PR に同梱してからマージ**するか
   別 follow-up PR に切り出す（オーケストレーター主導マージで同期が main 未反映になるのを防ぐ）。ただし
-  **`docs/plan` の phase doc に紐づかない単発ハーネス PR は finish-phase の README 進捗更新をスキップ可**
-  （想定外パスの正規化）。
+  **`docs/plan` の phase doc に紐づかない単発ハーネス PR は finish-phase の README 進捗更新をスキップ可**。
 
 ### Phase 9 — Worktree 削除（Phase 0 とペア）
 
-- **手順**: `gh pr view --json state,mergedAt` で **MERGED を確認**してから
-  `git worktree remove <abs-path>` + `git branch -d <branch>`（失敗時のみ `-D`）。Phase 0 で stash した
-  変更があれば `git stash pop` で復帰させる。
+- **手順**: `gh pr view --json state,mergedAt` で **MERGED を確認**してから `git worktree remove <abs-path>` +
+  `git branch -d <branch>`（失敗時のみ `-D`）。Phase 0 で stash した変更があれば `git stash pop` で復帰させる。
 - **成功条件**: worktree / branch が削除済み。
-- **fallback（不変条件）**: **未マージなら強制削除しない**。停止して人間へ通知する。MERGED 確認前の
+- **fallback（不変条件）**: **未マージなら強制削除しない**（停止して人間へ通知）。MERGED 確認前の
   `git worktree remove --force` / `git branch -D` は禁止（作業消失リスク）。
 
 ## 不変条件（まとめ）
 
-- **fix loop 上限 3**: 実装+`pnpm verify`（Phase 3）/ レビュー Critical 修正（Phase 6）は各々上限 3 回。
-  累計超過で対象 plan / phase doc に `blocked` を記録し人間へ通知して停止する。
+各フェーズが参照する横断不変条件の集約。**ここが唯一の正本**で、各フェーズは再説明しない:
+
+- **fix loop 上限 3**: 実装+`pnpm verify`（Phase 3）/ レビュー blocking 修正（Phase 6）は各々上限 3 回。
+  累計超過で対象 plan / phase doc に `blocked` を記録し人間へ通知して停止する（無理に進めない）。
 - **Generator / Evaluator 独立**: 実装（本 skill = Generator）と評価（`code-review` / `harness-review` =
   Evaluator）を分離。Phase 6 は `Agent` でレビュー skill を独立起動し、自己採点で代替しない。
 - **gh CLI / body-file 経由**: PR 操作は gh CLI、PR body・commit message は `/tmp` body-file 経由。
@@ -184,34 +168,12 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
   **Phase 0 と Phase 9 はペア**・未マージ時は強制削除しない。
 - **auto-merge 委譲**: マージゲートは Phase 3（ADR 0017）に委譲。独自マージ規約を導入しない。
 
-## ワーカー分業時の運用ノート（worker/orchestrator split・任意）
+## ワーカー分業（worker/orchestrator split・任意）
 
-Phase 6 の「worker/orchestrator マージ同期点」不変条件のとおり、実装を**別ワーカー**（別セッション / 別プロセスの
-エージェント）に委ね、本ワークフローを駆動する側がオーケストレーターになる分業を取ることがある。これは並行
-オーケストレーションの*機構*（下記「取り込まないもの」）ではなく**ワーカーへのタスク委譲の作法**であり、特定の
-端末多重化ツール（tmux 等）やそのコマンドに依存しない一般則として、反復して観測された摩擦（learning
-#72 / #73 / #77）への運用ノートを次に残す:
-
-- **編集は小さく分割して適用するようワーカーへ着手時に指示する**。単一の巨大編集は長考でストールしやすい
-  （観測例: 1 ファイルの一括編集で約47分ハング）。大きな rule / skill / データ整形は段階的に適用させる。
-- **ワーカーの権限モードは安全な操作を自動許可する `auto` 相当にする**。編集だけ自動許可する `acceptEdits` 相当だと
-  ファイル編集は自動でも **Bash は都度承認**になり、`git status/log/diff`・`gh ... view`・`ls`・`grep` 等の安全な
-  確認コマンドで承認が頻発して停滞する。ワーカーを **`auto` 権限モードで起動**すれば read-only コマンドの都度承認
-  摩擦を避けられる（個別の broad な権限を `.claude/settings.json` へ書く必要はない）。
-- **進捗検知はワーカーの出力スクレイプより `gh pr list --head <branch>` / PR の `headRefOid` 変化で行う**。
-  出力スクレイプは**オーケストレーター自身がワーカーへ送った指示文**にマッチして誤検知しやすい。
-- **ソース / YAML / データファイルの確認も `Read` ツールで行うようワーカーへ指示する**。`cat` / `grep` による
-  内容読みは、その後 `Edit` / `Write` する直前に `Read` し直しになり二度手間になる（編集ツールは事前 `Read` を
-  要求するため）。検索や存在確認に `grep` を使うのは可だが、編集予定のファイルは最初から `Read` で開く
-  （learning #114 / #116 反復）。
-- **マージ同期点**（既出・不変条件）: ワーカーはレビュー fix を Draft 解除前に取り込んで `READY_FOR_MERGE` を
-  **最終 HEAD SHA 付き**で報告し、オーケストレーターはその SHA を照合してからマージする。
-
-## 取り込まないもの
-
-参考にした多段ワークフローの「Plan/Epic frontmatter 同期・roadmap ミラー・PR ポーリング・複数エージェント
-並行オーケストレーション*機構*」は pokeform に該当機構が無いため**取り込まない**（上のノートは機構でなく委譲の
-作法）。進捗反映は `finish-phase` の README 進捗更新で代替し、学びは `pr-retrospective` が担う。
+実装を別ワーカーに委ねて本ワークフローを駆動する側がオーケストレーターになる分業の運用ノート（編集分割・
+権限モード・進捗検知・Read 優先・マージ同期点）と、取り込まない多段ワークフロー機構は
+[worker-orchestration-notes](../skills/implementation-workflow/references/worker-orchestration-notes.md) に逃がす
+（progressive disclosure）。本分業は機構でなく**委譲の作法**であり、特定の端末多重化ツールに依存しない。
 
 ## 関連
 
