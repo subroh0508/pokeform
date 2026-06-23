@@ -69,6 +69,11 @@ auto-merge ゲート（発火条件）は [`code-review.md` の「auto-merge ゲ
   `pnpm verify` / `.githooks/` の再利用になっているか。→ ADR 0013。
 - **設定値の妥当性・秘匿情報非混入**: `.claude/settings.json` / `.githooks/` の権限・実行前提・設定値が妥当で、
   秘匿情報がプレーンテキストで混ざっていないか。
+- **圧縮系 PR の保護対象 / リンク非劣化**（rule / skill の文体シンプル化 PR で点検・learning #161-166）:
+  圧縮前後で **trigger 句（description）が全維持**されているか / **検証委譲・安全性・不可逆制約の記述**が削れていないか /
+  **references / 参照先 rule への内容が行レベルで実在**し痩せていないか / **markdown リンク本数が非劣化**（ADR / skill /
+  rule リンクが bare-text 化していないか）/ **dangling ゼロ**・**cross-agent パリティ**維持。圧縮判断線の SoT は
+  [[skill-authoring]] の「圧縮（文体シンプル化）PR の規約」。
 
 ## 5. paths × 重点観点
 
