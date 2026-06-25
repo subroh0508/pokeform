@@ -40,7 +40,7 @@ pokeform の実装計画は **計画ディレクトリ単位**で分割し、各
 | [03-survey-regulation-rework](./03-survey-regulation-rework/README.md) | ✅ 完了 |
 | [04-generated-layout-redesign](./04-generated-layout-redesign/README.md) | ✅ 完了 |
 | [05-move-master-scraper-refactor](./05-move-master-scraper-refactor/README.md) | ✅ 完了 |
-| [07-rules-skills-simplify](./07-rules-skills-simplify/README.md) | ⬜ 未着手 |
+| [07-rules-skills-simplify](./07-rules-skills-simplify/README.md) | ✅ 完了 |
 | [08-docs-restructure](./08-docs-restructure/README.md) | ⬜ 未着手 |
 | [XX-ma-full-data](./XX-ma-full-data/README.md) | ⬜ 未着手 |
 
