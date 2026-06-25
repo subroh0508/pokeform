@@ -28,7 +28,7 @@ flowchart TD
 - [x] [Phase 3 — inbound 参照張り替え + 旧 architecture.md 撤去 + 二重管理解消](./phase-03-rewire-and-retire-architecture.md)
 - [x] [Phase 4 — docs/plan → docs/roadmap 改名 + completed/ 集約 + 参照追従](./phase-04-roadmap-rename.md)
 - [x] [Phase 5 — AGENTS.md 刷新](./phase-05-agents-md-refresh.md)
-- [ ] [Phase 6 — 規約 / skill の plan 参照違反・陳腐化是正 + rules への front matter](./phase-06-rule-skill-staleness-fix.md)
+- [x] [Phase 6 — 規約 / skill の plan 参照違反・陳腐化是正 + rules への front matter](./phase-06-rule-skill-staleness-fix.md)
 
 ## 補足
 

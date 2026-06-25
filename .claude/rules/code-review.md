@@ -7,6 +7,11 @@ paths:
   - "AGENTS.md"
   - "CLAUDE.md"
 description: PR マージ前の意味的レビュー（code-review / harness-review skill）の共通 SoT。レビュー基準「健全性の純改善」・機械ゲート非再実行・指摘フォーマット（重大度 / ファイル:行 / 根拠）・effort 段階・redaction を定める。ソース / ハーネス資産を変更する PR をレビューするとき適用する。
+last_modified: "2026-06-26T00:00:00+09:00"
+adr:
+  - "ADR 0013"
+  - "ADR 0015"
+  - "ADR 0017"
 ---
 
 # code-review — 意味的レビューの共通規約（SoT）
@@ -24,7 +29,7 @@ description: PR マージ前の意味的レビュー（code-review / harness-rev
 
 ## 機械ゲート非再実行の原則（なぜ）
 
-型 / カバレッジ100% / Biome は [Phase 9](../../docs/roadmap/completed/00-harness-setup/phase-09-verification-gates.md) の Git hooks と CI（`.github/workflows/ci.yml`）の責務。**レビューでこれらを再チェックしない。** 理由は二重化が無駄でドリフトの温床になるため。レビューは機械ゲートで捕れない層 — **仕様忠実性・設計・安全性・整合性** — に専念する。「lint が通るか」ではなく「この設計でよいか / エッジケースを取りこぼしていないか」を見る。
+型 / カバレッジ100% / Biome は [ADR 0013](../../docs/adr/0013-git-hooks-over-claude-hooks.md) の Git hooks と CI（`.github/workflows/ci.yml`）の責務。**レビューでこれらを再チェックしない。** 理由は二重化が無駄でドリフトの温床になるため。レビューは機械ゲートで捕れない層 — **仕様忠実性・設計・安全性・整合性** — に専念する。「lint が通るか」ではなく「この設計でよいか / エッジケースを取りこぼしていないか」を見る。
 
 ## 指摘フォーマット
 

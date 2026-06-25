@@ -1,9 +1,11 @@
 ---
 name: start-phase
 description: >-
-  指定したフェーズの phase doc を読み、依存・必要な rule / skill・受け入れ基準を整理して着手準備を整える。
+  指定したフェーズの phase doc を読み、依存・必要な rule / skill・受け入れ基準を整理して着手準備を整える（準備のみで実装はしない）。
   「フェーズ N に着手する」「Phase N を始めたい」「次のフェーズの準備をして」「start-phase N」
   「このフェーズの前提と受け入れ基準を教えて」と言われたとき、新しい実装単位に取りかかる最初に使う。
+  worktree 作成〜実装〜検証〜PR〜マージ〜レトロまで端から端まで駆動したいときは implementation-workflow を使う
+  （本 skill はそのワークフローの着手準備ステップに相当する単発用途で、駆動は implementation-workflow の責務）。
   実装の入口を定型化し、依存漏れ・受け入れ基準の見落としを防ぐ。
 allowed-tools: Read Glob Grep
 ---
@@ -13,6 +15,8 @@ allowed-tools: Read Glob Grep
 引数で受け取ったフェーズ識別子から該当 `phase-*.md` を特定し、**依存 / 必要な rule・skill / 受け入れ基準 /
 検証手順**を抽出して提示する手順 skill。実装に飛び込む前に「何を満たせば完了か」「何に依存するか」を
 明確にし、繰り返し正しく着手できるようにする。完了側は [`finish-phase`](../finish-phase/SKILL.md) が担う。
+
+**[`implementation-workflow`](../implementation-workflow/SKILL.md) との使い分け**: 本 skill は**単発の着手準備のみ**（phase doc を読み前提と受け入れ基準を提示するところで止まる）。worktree 作成 → 実装 + 検証 → PR → 独立レビュー → マージ → レトロまで**端から端まで駆動**したいときは `implementation-workflow` を使う（本 skill はその Phase 1「計画 / 設計 Read」に委譲先として組み込まれる）。「準備だけ整えたい」なら本 skill、「実装ライフサイクル全体を回したい」なら `implementation-workflow`。
 
 ## なぜこの skill があるか
 
@@ -73,6 +77,7 @@ phase doc が明示的に参照する `.claude/rules/*` / `.claude/skills/*` / `
 
 ## 関連
 
+- 端から端まで駆動: [`implementation-workflow`](../implementation-workflow/SKILL.md) — 本 skill を Phase 1 着手準備として束ね、実装〜マージ〜レトロまで回す。
 - 完了側: [`finish-phase`](../finish-phase/SKILL.md) — verify → 受け入れ基準照合 → 進捗更新。
 - 検証ゲート: [`verify`](../verify/SKILL.md)。
 - フェーズ一覧 / 役割分担 / 受け入れ基準: `docs/roadmap/completed/00-harness-setup/README.md`（ハーネス計画）。

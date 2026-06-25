@@ -2,6 +2,9 @@
 paths:
   - ".claude/skills/harness-meta/**"
 description: harness-meta skill が learning の改善提案を「採用 / 見送り / 撤去」へ振り分ける判定基準。
+last_modified: "2026-06-26T00:00:00+09:00"
+adr:
+  - "ADR 0015"
 ---
 
 # harness-meta-criteria — 採用 / 見送り / 撤去の判定基準

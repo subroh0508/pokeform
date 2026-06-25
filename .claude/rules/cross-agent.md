@@ -1,5 +1,10 @@
 ---
 description: クロスエージェント共有方針の SoT（AGENTS.md=指示 SoT / CLAUDE.md=@AGENTS.md / skill symlink 共有と copy フォールバック / rules-index 生成 / Git hooks=ゲート SoT）。常時適用する。
+last_modified: "2026-06-26T00:00:00+09:00"
+adr:
+  - "ADR 0013"
+  - "ADR 0016"
+  - "ADR 0017"
 ---
 
 # クロスエージェント共有の規約

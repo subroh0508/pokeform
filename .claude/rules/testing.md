@@ -2,6 +2,10 @@
 paths:
   - "**/*.test.ts"
 description: テストの規約（Vitest・カバレッジ100%・境界重点・プロダクションコードと同階層にコロケーション・fixture は近傍 __fixtures__/）。`*.test.ts` を扱うとき適用する。
+last_modified: "2026-06-26T00:00:00+09:00"
+adr:
+  - "ADR 0006"
+  - "ADR 0010"
 ---
 
 # テストの規約

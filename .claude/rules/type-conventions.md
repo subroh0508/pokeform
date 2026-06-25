@@ -3,6 +3,11 @@ paths:
   - "src/types/**"
   - "src/generated/**"
 description: 型表現の統一パターン（`XxxBase` + `XxxDex` + `XxxId = keyof XxxDex`）・種族粒度（種族値が一意 = 1 種族）・日英 name と逆引きマップ。src/types/ や src/generated/ を扱うとき適用する。
+last_modified: "2026-06-26T00:00:00+09:00"
+adr:
+  - "ADR 0011"
+  - "ADR 0035"
+  - "ADR 0036"
 ---
 
 # 型表現の規約

@@ -3,6 +3,9 @@ paths:
   - ".claude/skills/**"
   - ".agents/skills/**"
 description: skill の新規作成・改修は `skill-creator` skill の利用を必須化する方針（手書きで SKILL.md を起こさない・description=trigger・≤500 行・標準構成・canonical + symlink 配置）。.claude/skills/ や .agents/skills/ を扱うとき適用する。
+last_modified: "2026-06-26T00:00:00+09:00"
+adr:
+  - "ADR 0016"
 ---
 
 # skill 作成の規約
