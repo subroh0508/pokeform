@@ -70,8 +70,8 @@ flowchart LR
 ## テーマ別ナビ
 
 - [data-pipeline.md](./data-pipeline.md) — データ取得・管理の仕組み（情報源 3 系統・SoT の分担・生成の決定論性）。
-- `type-validation.md` — 型バリデーションの仕組み（tsc を唯一ゲートにする考え方）。**後続フェーズで追加**。
-- `individuals-and-parties.md` — 個体・パーティ管理が保証する不変条件。**後続フェーズで追加**。
+- [type-validation.md](./type-validation.md) — 型バリデーションの仕組み（tsc を唯一ゲートにする考え方・ブランドエラー型・巨大 union 回避）。
+- [individuals-and-parties.md](./individuals-and-parties.md) — 個体・パーティ管理が保証する不変条件（技 / 特性 / ポイント / 重複 / 解禁 / 体数）と分析が答える問い。
 
 ## 主要トレードオフ
 
