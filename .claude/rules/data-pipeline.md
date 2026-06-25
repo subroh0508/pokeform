@@ -3,6 +3,15 @@ paths:
   - "scripts/**"
   - "data/**"
 description: データ生成パイプライン（raw=取得キャッシュ / champions catalog=SoT / generated=raw 非依存合成の vendor 方式・取得元 PokeAPI / SoT catalog / materialize 転記）。scripts/ や data/ を扱うとき適用する。
+last_modified: "2026-06-26T00:00:00+09:00"
+adr:
+  - "ADR 0012"
+  - "ADR 0027"
+  - "ADR 0030"
+  - "ADR 0033"
+  - "ADR 0035"
+  - "ADR 0036"
+  - "ADR 0037"
 ---
 
 # データ生成パイプラインの規約

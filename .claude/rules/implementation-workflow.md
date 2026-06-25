@@ -2,6 +2,11 @@
 paths:
   - ".claude/skills/implementation-workflow/**"
 description: implementation-workflow skill の詳細手順 SoT。1 本の PR の実装ライフサイクル（Phase 0〜9: worktree 作成 → 着手 → 実装+verify fix loop → セルフ検証 → Draft PR → 独立レビュー → auto-merge → レトロ → worktree 削除）の各フェーズの入出力・成功条件・失敗 fallback と不変条件（fix loop 上限3・Generator/Evaluator 独立・worktree Phase 0/9 ペア・auto-merge 委譲）を定める。implementation-workflow skill を読む / 動かすときに適用する。
+last_modified: "2026-06-26T00:00:00+09:00"
+adr:
+  - "ADR 0017"
+  - "ADR 0018"
+  - "ADR 0020"
 ---
 
 # implementation-workflow — 実装ライフサイクル統合の詳細手順 SoT

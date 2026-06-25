@@ -2,6 +2,9 @@
 paths:
   - "docs/roadmap/**"
 description: 実装指示を計画へ落とす手順の SoT。生の指示は必ず `plans-new` スキルを入口に通し、まず OVERVIEW（ゴール / 背景 / 設計方針 / 実装指針 / スコープ外）を作ってから 6 基準（意思決定の数 / 不可逆性 / スコープの広さ / 技術的難易度 / 想定 diff ~500行目安・>1000行は積極分割 / 並行実装のしやすさ）で 1 phase = 1 PR に分割する。1 PR 妥当なら GitHub issue + implementation-workflow、複数なら docs/roadmap/NN-{slug} 計画群を起こす。docs/roadmap/** を作る / 編集する・新しい計画群やテーマを起こすときに適用する。
+last_modified: "2026-06-26T00:00:00+09:00"
+adr:
+  - "ADR 0020"
 ---
 
 # planning — 実装指示を計画へ落とす手順の SoT

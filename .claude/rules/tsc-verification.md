@@ -3,6 +3,10 @@ paths:
   - "src/codegen/**"
   - "src/types/**"
 description: 「検証は tsc のみ」方針（Zod 不採用）・YAML→codegen→`tsc --noEmit`・ブランドエラー型の命名・合計66 は codegen 算出。src/codegen/ や src/types/ を扱うとき適用する。
+last_modified: "2026-06-26T00:00:00+09:00"
+adr:
+  - "ADR 0010"
+  - "ADR 0019"
 ---
 
 # tsc のみ検証の規約

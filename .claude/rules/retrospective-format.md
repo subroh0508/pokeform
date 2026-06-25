@@ -4,6 +4,9 @@ paths:
   - ".claude/skills/pr-retrospective/**"
   - ".claude/skills/harness-meta/**"
 description: PR ごと KPT learning ファイルの構造 SoT。`pr-retrospective` が生成し `harness-meta` が parse する正規フォーマットを定義する。
+last_modified: "2026-06-26T00:00:00+09:00"
+adr:
+  - "ADR 0015"
 ---
 
 # retrospective-format — learning ファイル構造の SoT

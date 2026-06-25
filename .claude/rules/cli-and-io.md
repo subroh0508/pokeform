@@ -3,6 +3,10 @@ paths:
   - "src/cli/**"
   - "src/io/**"
 description: CLI と I/O の規約（lang のファイル単位宣言・--lang 表示言語・終了コード 0/非0・ディレクトリ再帰 glob・診断の YAML 行マッピング）。src/cli/ や src/io/ を扱うとき適用する。
+last_modified: "2026-06-26T00:00:00+09:00"
+adr:
+  - "ADR 0014"
+  - "ADR 0035"
 ---
 
 # CLI / I/O の規約

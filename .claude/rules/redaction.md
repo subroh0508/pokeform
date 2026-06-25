@@ -2,6 +2,9 @@
 paths:
   - "docs/harness/**"
 description: docs/harness/ 配下（特に learnings）へ書き出す前に Secrets / 最小 PII を `[REDACTED-*]` へ置換する規約と正規表現。
+last_modified: "2026-06-26T00:00:00+09:00"
+adr:
+  - "ADR 0015"
 ---
 
 # redaction — Secrets / PII の `[REDACTED-*]` 置換規約
