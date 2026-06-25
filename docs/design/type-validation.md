@@ -36,7 +36,7 @@ pokeform は入力（個体・パーティ）の正しさを、**実行時のバ
 - **エージェント親和性**: 合否が型チェックの成否に一元化され、CI / エージェントが機械判定しやすい。
 
 トレードオフは「型レベルでは重い制約（合計値のような算術）がある」こと。重い部分は変換段で先に計算して
-型注釈へ逃がし、ゲート自体は型チェック 1 つに保つ（[[individuals-and-parties]] の合計値の扱いを参照）。
+型注釈へ逃がし、ゲート自体は型チェック 1 つに保つ（[individuals-and-parties](./individuals-and-parties.md) の合計値の扱いを参照）。
 
 ## 診断を読みやすくする — ブランドエラー型
 
@@ -91,5 +91,3 @@ pokeform は入力（個体・パーティ）の正しさを、**実行時のバ
 - 決定の「なぜ」: [ADR 0010](../adr/0010-tsc-only-verification.md) / [ADR 0019](../adr/0019-branded-error-types-and-source-mapping.md) /
   [ADR 0021](../adr/0021-per-regulation-species-and-legality.md) / [ADR 0035](../adr/0035-specs-languages-layout-redesign.md) /
   [ADR 0036](../adr/0036-mega-independent-spec-entity.md)（一覧は [README](../adr/README.md)）。
-</content>
-</invoke>
