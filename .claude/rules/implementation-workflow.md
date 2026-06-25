@@ -65,7 +65,7 @@ PR・レビュー・マージ・レトロ・後片付けの繋ぎ方をエージ
 
 ### Phase 2 — 整合性チェック
 
-- **手順**: 受け入れ基準を `architecture.md` / 関連 rules / リポジトリ現状と突き合わせる。pokeform は
+- **手順**: 受け入れ基準を `docs/design/` / 関連 rules / リポジトリ現状と突き合わせる。pokeform は
   SPEC/REQ 分離が無く **phase doc が基準**。相互参照（リンク・パス）の dangling がゼロになるよう設計する。
 - **成功条件**: 整合レポート（基準と現状の差分・dangling 有無）が揃う。
 - **fallback**: 完了済みタスクがあれば**現状に適応**し、失敗するコマンドを盲目的に再実行しない。
@@ -84,7 +84,7 @@ PR・レビュー・マージ・レトロ・後片付けの繋ぎ方をエージ
 - **手順**: redaction / secrets 混入なし（[[redaction]]）、cross-agent パリティ（canonical +
   symlink/copy 一致・[[cross-agent]]）、生成物（`src/generated/**` 等）への手編集なし、命名規約準拠、
   受け入れ基準の充足を点検する。あわせて次の doc 同期を点検（過去の doc-data 乖離の再発防止）:
-  - **rule が `architecture.md` を正本と宣言しつつ数式・仕様を追記する場合、同一 PR で `architecture.md` を
+  - **rule が正本（`src/` / 他 rule）を宣言しつつ数式・仕様を追記する場合、同一 PR で当該正本を
     同期しているか**。
   - phase doc に紐づく実装 PR で **README 進捗・doc 同期コミットを当該フィーチャー PR に同梱したか**
     （Phase 8「README 進捗・doc 同期の取り込み方」と対・オーケストレーター主導マージで進捗が main 未反映 /

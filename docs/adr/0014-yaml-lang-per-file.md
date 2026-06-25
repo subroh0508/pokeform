@@ -12,7 +12,7 @@ date: 2026-06-07
 
 ## Decision
 
-記述言語を**ファイル先頭の `lang: ja|en` 宣言で 1 ファイル単位に固定**する（未指定時の既定は `ja`）。loader/codegen は宣言言語に従って全名称フィールドを解決し、双方向名称マップ（`IdByJaName` / `IdByEnName`）で正規の ID に正規化してから型生成・検証する。宣言言語に一致しない名称（例 `lang: ja` なのに `species: pikachu`）はエラーとし、フィールド混在を許さない。パーティ Markdown も frontmatter に `lang:` を持てる（本文フリーテキストは言語自由）。CLI 出力の表示言語は別途 `--lang` で指定し、入力ファイルの `lang` とは独立。詳細は `docs/plan/01-mvp/architecture.md`（入力フォーマット例節）。
+記述言語を**ファイル先頭の `lang: ja|en` 宣言で 1 ファイル単位に固定**する（未指定時の既定は `ja`）。loader/codegen は宣言言語に従って全名称フィールドを解決し、双方向名称マップ（`IdByJaName` / `IdByEnName`）で正規の ID に正規化してから型生成・検証する。宣言言語に一致しない名称（例 `lang: ja` なのに `species: pikachu`）はエラーとし、フィールド混在を許さない。パーティ Markdown も frontmatter に `lang:` を持てる（本文フリーテキストは言語自由）。CLI 出力の表示言語は別途 `--lang` で指定し、入力ファイルの `lang` とは独立。詳細は [[cli-and-io]]。
 
 ## Consequences
 

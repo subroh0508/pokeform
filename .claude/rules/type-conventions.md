@@ -7,7 +7,7 @@ description: 型表現の統一パターン（`XxxBase` + `XxxDex` + `XxxId = ke
 
 # 型表現の規約
 
-種族 / 技 / タイプ / 特性 / 持ち物を**同一パターン**で型表現するための規約。正本は `docs/plan/01-mvp/architecture.md`（「種族の型表現」節）。ここは取り違え防止の要約。
+種族 / 技 / タイプ / 特性 / 持ち物を**同一パターン**で型表現するための規約。本 rule が型表現の規約 SoT で、設計俯瞰は [type-validation](../../docs/design/type-validation.md)、型の実体は `src/types/` / `src/generated/`。
 
 ## 統一パターン（4 種すべて同形）
 

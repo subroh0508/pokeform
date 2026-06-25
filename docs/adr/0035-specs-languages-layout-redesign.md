@@ -64,8 +64,8 @@ supersede で記録する（[[adr]] の supersede 手順）。
   まま不変（dir は `champions/m-a/` でも id は `<game>-<reg>` を維持）。
 
 これにより [ADR 0025] / [ADR 0032] / [ADR 0034] の名前・技メタ SoT の**所在決定を本 ADR が改訂**する
-（本質は不変）。仕様の詳細（ディレクトリ規約・型の形・取得元表）は [[data-pipeline]] / [[type-conventions]] と
-`docs/plan/01-mvp/architecture.md` を正本とし、本 ADR は「なぜ」を記録する。
+（本質は不変）。仕様の詳細（ディレクトリ規約・型の形・取得元表）は [[data-pipeline]] / [[type-conventions]] を
+正本とし、本 ADR は「なぜ」を記録する。
 
 ## Consequences
 

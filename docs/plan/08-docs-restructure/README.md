@@ -25,7 +25,7 @@ flowchart TD
 - [x] [Phase 0 — 配置・front matter 規約の ADR 起票](./phase-00-placement-adr.md)
 - [x] [Phase 1 — docs/design/ 骨組み + README + data-pipeline.md](./phase-01-design-scaffold-data-pipeline.md)
 - [x] [Phase 2 — type-validation.md + individuals-and-parties.md](./phase-02-design-type-and-individuals.md)
-- [ ] [Phase 3 — inbound 参照張り替え + 旧 architecture.md 撤去 + 二重管理解消](./phase-03-rewire-and-retire-architecture.md)
+- [x] [Phase 3 — inbound 参照張り替え + 旧 architecture.md 撤去 + 二重管理解消](./phase-03-rewire-and-retire-architecture.md)
 - [ ] [Phase 4 — docs/plan → docs/roadmap 改名 + completed/ 集約 + 参照追従](./phase-04-roadmap-rename.md)
 - [ ] [Phase 5 — AGENTS.md 刷新](./phase-05-agents-md-refresh.md)
 - [ ] [Phase 6 — 規約 / skill の plan 参照違反・陳腐化是正 + rules への front matter](./phase-06-rule-skill-staleness-fix.md)

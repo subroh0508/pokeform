@@ -53,7 +53,7 @@ auto-merge ゲート（発火条件）は [`code-review.md` の「auto-merge ゲ
   場面でロードされない。変更対象ファイル群と paths が噛み合うか。
 - **既存 rule と非矛盾**。新 rule が既存 rule と衝突・重複していないか。重複は SoT を二つにする。
 - **right altitude（Goldilocks ゾーン）**。ハードコード過ぎ（脆い）でも曖昧過ぎ（無力）でもない高さか。
-- **要点再記述 + 正本ポインタ**。仕様詳細は `architecture.md` 等の正本に置き、rule からは参照する。最小の
+- **要点再記述 + 正本ポインタ**。値・数式の実体は `src/` 等の実装正本に置き、rule は規約の要点に絞る。最小の
   高シグナルトークン集合になっているか。
 - **rules-index は生成物**。`docs/harness/rules-index.md` は `paths` から `scripts/gen-rules-index.ts` で生成。
   手編集の混入を疑う（[[cross-agent]]）。
@@ -79,7 +79,7 @@ auto-merge ゲート（発火条件）は [`code-review.md` の「auto-merge ゲ
 
 | paths | 重点観点 |
 |---|---|
-| `.claude/rules/**` | paths スコープ過不足 / 既存 rule 非矛盾 / 要点再記述 + `architecture.md` ポインタ / right altitude |
+| `.claude/rules/**` | paths スコープ過不足 / 既存 rule 非矛盾 / 要点再記述 + 正本（`src/` / `docs/design/`）ポインタ / right altitude |
 | `.claude/skills/**`, `.agents/skills/**` | description=「何を + いつ」三人称・under-trigger 回避（≤1024字・XML不可）/ ≤500行・progressive disclosure / 「ルール + なぜ」（`ALWAYS/NEVER` 羅列回避）/ **canonical+symlink パリティ** / allowed-tools 最小権限 |
 | `AGENTS.md`, `CLAUDE.md` | 短さ（≤300行目安）・普遍的でない指示の混入なし・スタイルは linter 委譲 / SoT 一貫性（AGENTS=指示 SoT / CLAUDE=`@AGENTS.md` 薄アダプタ）/ 詳細はポインタ化・32KiB 意識 |
 | `.githooks/**`, `.claude/settings.json`, `.claude/hooks/**` | **ゲート二重化していないか** / 実行権限前提 / 設定値の妥当性・秘匿情報非混入 |

@@ -38,7 +38,7 @@ allowed-tools: Read Write Bash(ls *) Bash(git mv *)
 Context / Decision / Consequences（必要なら Alternatives Considered）を埋める。**ADR は「なぜ」を記録する場**なので、次の点を意識する（理由は `.claude/rules/adr.md`）:
 
 - **Context**: どんな制約・前提でこの決定が必要になったか。背景なしに後から覆されないよう「なぜ今これを決めるか」を書く。
-- **Decision**: 「何を」決めたかを能動形・断定形で言い切る。仕様の細部は正本（`docs/plan/01-mvp/architecture.md` / 各 rule）に置き、ここからは参照する（二重記述を避ける）。
+- **Decision**: 「何を」決めたかを能動形・断定形で言い切る。仕様の細部は正本（各 rule / `src/`）に置き、ここからは参照する（二重記述を避ける）。
 - **Consequences**: 良い点・悪い点/コスト・トレードオフを率直に。決定の代償を隠さない。
 - **Alternatives Considered**（推奨）: 比較検討して捨てた代替案と却下理由を簡潔に（表 / 節どちらでも可）。真の代替案が無ければ省略してよい。
 
@@ -61,7 +61,7 @@ ADR は**不変ログ**なので、可変な plan ファイル（`docs/plan/**` 
 grep -nE 'phase-[0-9]+|Phase [0-9]+|OVERVIEW\.md' docs/adr/NNNN-<slug>.md
 ```
 
-hit したら、安定 SoT（`.claude/rules/*` / `architecture.md` / 他 ADR の `ADR-NNNN`）へ寄せるか、決定内容を ADR 本文で自己完結させる。**例外**は plan 運用そのものが主題の ADR（概念として「OVERVIEW」「6 基準」等を言及してよい）と skill 内部 Phase 番号で、これらは陳腐化する**具体 plan phase 番号のみ**避ける（`adr.md` の例外条項どおり）。
+hit したら、安定 SoT（`.claude/rules/*` / `src/` / 他 ADR の `ADR-NNNN`）へ寄せるか、決定内容を ADR 本文で自己完結させる。**例外**は plan 運用そのものが主題の ADR（概念として「OVERVIEW」「6 基準」等を言及してよい）と skill 内部 Phase 番号で、これらは陳腐化する**具体 plan phase 番号のみ**避ける（`adr.md` の例外条項どおり）。
 
 ## supersede（既存 ADR を覆す）
 
@@ -78,7 +78,7 @@ hit したら、安定 SoT（`.claude/rules/*` / `architecture.md` / 他 ADR の
 
 - **採番は ls 結果から機械的に**。記憶や推測で番号を振らない（衝突・抜けの原因）。
 - **Accepted を書き換えない**。覆すのは supersede フローで。これを破ると「なぜ変わったか」の履歴が消える。
-- **二重記述しない**。仕様の詳細は architecture.md / rules が正本。ADR からはリンクで参照する。
+- **二重記述しない**。仕様の詳細は各 rule / `src/` が正本。ADR からはリンクで参照する。
 - **README 一覧の更新を忘れない**。一覧が ADR の索引になっている。
 
 ## 関連

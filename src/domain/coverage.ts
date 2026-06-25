@@ -3,7 +3,7 @@ import { type EffectivenessChart, effectiveness } from "./type-effectiveness.ts"
 
 /**
  * パーティの技範囲（攻撃カバレッジの穴）と防御弱点（弱点集中）を集計する純関数群。
- * MVP の価値の核（docs/plan/01-mvp/architecture.md「分析アルゴリズム」節）。
+ * MVP の価値の核（設計俯瞰は docs/design/individuals-and-parties.md「分析が答える問い」）。
  * I/O 非依存: メンバーの「防御タイプ」「攻撃技タイプ」を受け取り集計する（メガ展開・名称解決は
  * 呼び出し側 = CLI が担う）。脆弱判定は防御弱点の集中（weakCount ≥ 閾値）で行う（[[cli-and-io]]）。
  */

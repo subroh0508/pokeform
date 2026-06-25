@@ -12,7 +12,7 @@ date: 2026-06-07
 
 ## Decision
 
-エンティティ（種族 / 技 / タイプ / 特性 / 持ち物）を**親型 `XxxBase` + エントリごとの子型 + `XxxDex` インターフェースに ID キーで集約 + `XxxId = keyof XxxDex`** の統一パターンで定義する。制約は巨大 union ではなく `XxxDex[Id]` のプロパティアクセス主体で行い、union 分配コストを回避する。粒度は「**種族値が一意に定まる単位 = 1 種族**」を `SpeciesId`（kebab-case の安定キー）とし、種族値が変わるフォルム/メガは別 `SpeciesId`。英名 ID を型キー、日本語名を `name` プロパティ + 双方向マップ（`JaName<Id>` / `IdByJaName<...>`）で持つ。詳細は `docs/plan/01-mvp/architecture.md`（種族の型表現節）。
+エンティティ（種族 / 技 / タイプ / 特性 / 持ち物）を**親型 `XxxBase` + エントリごとの子型 + `XxxDex` インターフェースに ID キーで集約 + `XxxId = keyof XxxDex`** の統一パターンで定義する。制約は巨大 union ではなく `XxxDex[Id]` のプロパティアクセス主体で行い、union 分配コストを回避する。粒度は「**種族値が一意に定まる単位 = 1 種族**」を `SpeciesId`（kebab-case の安定キー）とし、種族値が変わるフォルム/メガは別 `SpeciesId`。英名 ID を型キー、日本語名を `name` プロパティ + 双方向マップ（`JaName<Id>` / `IdByJaName<...>`）で持つ。詳細は [[type-conventions]]。
 
 ## Consequences
 

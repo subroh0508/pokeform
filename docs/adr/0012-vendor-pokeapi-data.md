@@ -12,7 +12,7 @@ date: 2026-06-07
 
 ## Decision
 
-PokeAPI データは **vendor 方式**（ビルド時取得→整形→`data/generated/` をコミット）を採る。`scripts/fetch-pokeapi.ts` が `data/raw/`（gitignore）にキャッシュし、`scripts/generate.ts` が raw と手動管理の `data/champions/*.yaml`（rules / regulation / overrides）を合成して `data/generated/`（コミット）を出力する。**MVP 時点で全国図鑑の全種族分を生成**しておく。詳細は `docs/plan/01-mvp/architecture.md`（データ生成パイプライン節）。
+PokeAPI データは **vendor 方式**（ビルド時取得→整形→`data/generated/` をコミット）を採る。`scripts/fetch-pokeapi.ts` が `data/raw/`（gitignore）にキャッシュし、`scripts/generate.ts` が raw と手動管理の `data/champions/*.yaml`（rules / regulation / overrides）を合成して `data/generated/`（コミット）を出力する。**MVP 時点で全国図鑑の全種族分を生成**しておく。詳細は [[data-pipeline]]。
 
 ## Consequences
 

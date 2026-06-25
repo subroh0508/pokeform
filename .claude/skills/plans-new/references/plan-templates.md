@@ -49,7 +49,7 @@ per-phase の進捗チェックは**サブ README のみ**が SoT（トップ `d
 ```markdown
 # NN-{slug} — <計画群タイトル>（実装計画インデックス）
 
-<1〜2 段落の概要。設計の正本は OVERVIEW.md / architecture.md など正本へポインタする>
+<1〜2 段落の概要。設計の正本は OVERVIEW.md / docs/design/ など正本へポインタする>
 
 > 設計の正本は [`OVERVIEW.md`](./OVERVIEW.md)（ゴール / 背景 / 設計方針 / 実装指針 / スコープ外 /
 > 計画群全体の受け入れ基準）。

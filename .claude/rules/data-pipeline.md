@@ -7,7 +7,7 @@ description: データ生成パイプライン（raw=取得キャッシュ / cha
 
 # データ生成パイプラインの規約
 
-PokeAPI を **取得元**に vendor 方式で取り込み、構造データの **SoT は specs YAML**（`data/champions/*-specs.yaml`）・名前の **SoT は languages YAML**（`data/languages/*.yaml`）に置いて `src/generated/` を出力する流れの要点。正本は `docs/plan/01-mvp/architecture.md`（「データ生成パイプライン」節）と ADR `0012-vendor-pokeapi-data`（取得方式）/ ADR `0027-structural-data-catalog-sot`（構造データ SoT をソース YAML へ・generate raw 非依存）/ ADR `0035-specs-languages-layout-redesign`（specs / languages / per-reg の 3 軸直交・名前 SoT を languages へ）/ ADR `0036-mega-independent-spec-entity`（メガ独立 spec エンティティ）。
+PokeAPI を **取得元**に vendor 方式で取り込み、構造データの **SoT は specs YAML**（`data/champions/*-specs.yaml`）・名前の **SoT は languages YAML**（`data/languages/*.yaml`）に置いて `src/generated/` を出力する流れの規約。本 rule が規約 SoT で、設計俯瞰は [data-pipeline](../../docs/design/data-pipeline.md)、決定の「なぜ」は ADR `0012-vendor-pokeapi-data`（取得方式）/ ADR `0027-structural-data-catalog-sot`（構造データ SoT をソース YAML へ・generate raw 非依存）/ ADR `0035-specs-languages-layout-redesign`（specs / languages / per-reg の 3 軸直交・名前 SoT を languages へ）/ ADR `0036-mega-independent-spec-entity`（メガ独立 spec エンティティ）。
 
 ## レイアウトの 3 軸直交（specs / languages / per-reg・ADR 0035/0036）
 

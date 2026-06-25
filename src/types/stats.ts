@@ -1,7 +1,7 @@
 /**
  * 能力値まわりの基本型。種族値（BaseStats）・実数値（RealStats）・能力ポイント配分
  * （PointAllocation）を 6 能力（StatKey）で統一表現する。計算式は `src/domain/calc-stats.ts`。
- * 詳細は docs/plan/01-mvp/architecture.md / .claude/rules/game-spec.md を参照。
+ * 詳細は .claude/rules/game-spec.md（設計俯瞰は docs/design/individuals-and-parties.md）を参照。
  */
 
 /** 6 能力のキー。HP のみ性格補正が掛からない（[[game-spec]]）。 */
