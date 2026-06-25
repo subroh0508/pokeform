@@ -10,7 +10,7 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 **詳細手順の唯一の正本**。skill 本体（SKILL.md）は ≤500 行に収めるため概要に留め、各フェーズの
 入出力・成功条件・失敗時 fallback・worktree 規律は本 rule に逃がす（progressive disclosure）。決定の
 「なぜ」は [ADR 0018](../../docs/adr/0018-implementation-workflow-orchestrator.md)、役割分担・受け入れ基準は
-[phase-11 doc](../../docs/plan/00-harness-setup/phase-11-implementation-workflow.md) / [README](../../docs/plan/00-harness-setup/README.md)（本 rule はそれらと二重記述しない）。
+[phase-11 doc](../../docs/roadmap/completed/00-harness-setup/phase-11-implementation-workflow.md) / [README](../../docs/roadmap/completed/00-harness-setup/README.md)（本 rule はそれらと二重記述しない）。
 
 ## 大原則: 実装は原則このワークフロー経由
 
@@ -19,7 +19,7 @@ description: implementation-workflow skill の詳細手順 SoT。1 本の PR の
 単発編集や会話的応答のみ。
 
 > **入口は [`plans-new`](../skills/plans-new/SKILL.md)**（[[planning]]）。生の実装指示はまず `plans-new` が
-> OVERVIEW 化 → 6 基準で分割し、その**産出物（GitHub issue または `docs/plan/NN-{slug}/` の phase doc）を
+> OVERVIEW 化 → 6 基準で分割し、その**産出物（GitHub issue または `docs/roadmap/NN-{slug}/` の phase doc）を
 > 本ワークフローが消費**して Phase 0〜9 を駆動する。計画化（1→多）は `plans-new`、1 本の PR の実装ライフ
 > サイクルは本 skill、と役割を分ける（[ADR 0020](../../docs/adr/0020-plans-new-entry-point.md)）。
 
@@ -57,7 +57,7 @@ PR・レビュー・マージ・レトロ・後片付けの繋ぎ方をエージ
 
 ### Phase 1 — 計画 / 設計 Read（start-phase に委譲）
 
-- **手順**: [`start-phase <id>`](../skills/start-phase/SKILL.md) で対象 `docs/plan/.../phase-*.md`・依存・
+- **手順**: [`start-phase <id>`](../skills/start-phase/SKILL.md) で対象 `docs/roadmap/.../phase-*.md`・依存・
   受け入れ基準・検証手順・関連 ADR / rule を読込・提示させる。
 - **成功条件**: 受け入れ基準と検証手順を把握済み（以降の自己照合の基準）。
 - **fallback**: 依存が未充足なら `start-phase` がブロック要因を提示する。前方参照で進める場合は
@@ -134,17 +134,17 @@ PR・レビュー・マージ・レトロ・後片付けの繋ぎ方をエージ
 ### Phase 8 — マージ後処理（finish-phase + pr-retrospective に委譲）
 
 - **手順**: [`finish-phase <id>`](../skills/finish-phase/SKILL.md)（`verify` 再実行・受け入れ基準照合・
-  `docs/plan` README 進捗更新・アーキ決定があれば [`adr-new`](../skills/adr-new/SKILL.md) を促す）→
+  `docs/roadmap` README 進捗更新・アーキ決定があれば [`adr-new`](../skills/adr-new/SKILL.md) を促す）→
   [`pr-retrospective <PR#>`](../skills/pr-retrospective/SKILL.md)（KPT learning 生成・[[retrospective-format]]）。
 - **成功条件**: README 進捗が更新され、learning が生成済み。
 - **不変条件**: ADR 採番・レトロ生成・README 更新は各専任 skill の責務。本 skill は**起動・委譲のみ**で
   再実装しない（idempotent: 既に `- [x]` / learning 有りなら二重実行しない）。
 - **進捗更新の二層（finish-phase に委譲）**: README 進捗は **(a) サブ README の対象 phase チェック**
-  （`- [ ]`→`- [x]`）に加え、計画の状況が変わったとき **(b) トップ `docs/plan/README.md` の status
+  （`- [ ]`→`- [x]`）に加え、計画の状況が変わったとき **(b) トップ `docs/roadmap/README.md` の status
   ロールアップ表**（🚧 進行中 / ✅ 完了・分数は付けない）も更新する（いずれも `finish-phase` 手順 4 の責務）。
 - **README 進捗・doc 同期の取り込み方**: 進捗・doc 同期コミットは**フィーチャー PR に同梱してからマージ**するか
   別 follow-up PR に切り出す（オーケストレーター主導マージで同期が main 未反映になるのを防ぐ）。ただし
-  **`docs/plan` の phase doc に紐づかない単発ハーネス PR は finish-phase の README 進捗更新をスキップ可**。
+  **`docs/roadmap` の phase doc に紐づかない単発ハーネス PR は finish-phase の README 進捗更新をスキップ可**。
 
 ### Phase 9 — Worktree 削除（Phase 0 とペア）
 

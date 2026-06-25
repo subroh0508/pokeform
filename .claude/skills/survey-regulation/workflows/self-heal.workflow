@@ -231,7 +231,7 @@ if (finalEscalated.length > 0) {
       .join(", ")}`,
   );
 }
-// ok / escalated / counts は roster-source doc（docs/plan/<plan>/<id>-roster-source.md）の進捗・成功/失敗 +
+// ok / escalated / counts は roster-source doc（docs/roadmap/<plan>/<id>-roster-source.md）の進捗・成功/失敗 +
 // 未確定種の記録へ転記する（呼び出し側 = SKILL 手順）。
 
 return result;

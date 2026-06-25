@@ -138,6 +138,6 @@ log(
 if (failed.length > 0) {
   log(`失敗種（修正 SubAgent / 人手エスカレーション・Phase 5）: ${report.failed.map((f) => f.slug).join(", ")}`);
 }
-// counts は roster-source doc（docs/plan/<plan>/<id>-roster-source.md）の進捗・成功/失敗記録へ転記する（呼び出し側 = SKILL 手順）。
+// counts は roster-source doc（docs/roadmap/<plan>/<id>-roster-source.md）の進捗・成功/失敗記録へ転記する（呼び出し側 = SKILL 手順）。
 
 return report;

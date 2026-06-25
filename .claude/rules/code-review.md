@@ -16,7 +16,7 @@ description: PR マージ前の意味的レビュー（code-review / harness-rev
 レビューは対象によって観点が本質的に異なるため 2 skill に分割する。本 rule はその**共通基準**で、観点チェックリストの実体は各 skill の `references/` にある:
 
 - [`code-review`](../skills/code-review/SKILL.md) — `src/**` / `scripts/**` 等のソース・データパイプライン。
-- [`harness-review`](../skills/harness-review/SKILL.md) — `.claude/rules` / `.claude/skills` / `AGENTS.md` / `CLAUDE.md` / `.githooks` / `docs/plan` / `docs/adr` 等のハーネス資産。
+- [`harness-review`](../skills/harness-review/SKILL.md) — `.claude/rules` / `.claude/skills` / `AGENTS.md` / `CLAUDE.md` / `.githooks` / `docs/roadmap` / `docs/adr` 等のハーネス資産。
 
 ## レビュー基準（なぜ）
 
@@ -24,7 +24,7 @@ description: PR マージ前の意味的レビュー（code-review / harness-rev
 
 ## 機械ゲート非再実行の原則（なぜ）
 
-型 / カバレッジ100% / Biome は [Phase 9](../../docs/plan/00-harness-setup/phase-09-verification-gates.md) の Git hooks と CI（`.github/workflows/ci.yml`）の責務。**レビューでこれらを再チェックしない。** 理由は二重化が無駄でドリフトの温床になるため。レビューは機械ゲートで捕れない層 — **仕様忠実性・設計・安全性・整合性** — に専念する。「lint が通るか」ではなく「この設計でよいか / エッジケースを取りこぼしていないか」を見る。
+型 / カバレッジ100% / Biome は [Phase 9](../../docs/roadmap/completed/00-harness-setup/phase-09-verification-gates.md) の Git hooks と CI（`.github/workflows/ci.yml`）の責務。**レビューでこれらを再チェックしない。** 理由は二重化が無駄でドリフトの温床になるため。レビューは機械ゲートで捕れない層 — **仕様忠実性・設計・安全性・整合性** — に専念する。「lint が通るか」ではなく「この設計でよいか / エッジケースを取りこぼしていないか」を見る。
 
 ## 指摘フォーマット
 

@@ -3,8 +3,8 @@
 pokeform を Claude Code / Codex が**繰り返し・信頼性高く**実装するための土台（ハーネス）のうち、
 **PR ごとの学びをハーネスへ書き戻す自己改良ループ**を司る場所。learning の蓄積と、その採用判定の記録を置く。
 
-> ハーネス全体の役割分担表は [`../plan/00-harness-setup/README.md`](../plan/00-harness-setup/README.md) を参照。
-> 本ループの設計意図は phase doc [`phase-02-retrospective-loop.md`](../plan/00-harness-setup/phase-02-retrospective-loop.md)。
+> ハーネス全体の役割分担表は [`../roadmap/completed/00-harness-setup/README.md`](../roadmap/completed/00-harness-setup/README.md) を参照。
+> 本ループの設計意図は phase doc [`phase-02-retrospective-loop.md`](../roadmap/completed/00-harness-setup/phase-02-retrospective-loop.md)。
 
 ## ループ全体像
 
