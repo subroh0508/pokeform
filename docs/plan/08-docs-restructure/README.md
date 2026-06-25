@@ -22,7 +22,7 @@ flowchart TD
 
 ## フェーズ一覧（この順で実施）
 
-- [ ] [Phase 0 — 配置・front matter 規約の ADR 起票](./phase-00-placement-adr.md)
+- [x] [Phase 0 — 配置・front matter 規約の ADR 起票](./phase-00-placement-adr.md)
 - [ ] [Phase 1 — docs/design/ 骨組み + README + data-pipeline.md](./phase-01-design-scaffold-data-pipeline.md)
 - [ ] [Phase 2 — type-validation.md + individuals-and-parties.md](./phase-02-design-type-and-individuals.md)
 - [ ] [Phase 3 — inbound 参照張り替え + 旧 architecture.md 撤去 + 二重管理解消](./phase-03-rewire-and-retire-architecture.md)
