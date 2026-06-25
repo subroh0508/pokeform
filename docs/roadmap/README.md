@@ -49,7 +49,7 @@ active（未着手・進行中）は直下、完了した計画群は [`complete
 | [completed/04-generated-layout-redesign](./completed/04-generated-layout-redesign/README.md) | ✅ 完了 |
 | [completed/05-move-master-scraper-refactor](./completed/05-move-master-scraper-refactor/README.md) | ✅ 完了 |
 | [completed/07-rules-skills-simplify](./completed/07-rules-skills-simplify/README.md) | ✅ 完了 |
-| [08-docs-restructure](./08-docs-restructure/README.md) | 🚧 進行中 |
+| [08-docs-restructure](./08-docs-restructure/README.md) | ✅ 完了 |
 | [XX-ma-full-data](./XX-ma-full-data/README.md) | ⬜ 未着手 |
 
 ## MVP の範囲
