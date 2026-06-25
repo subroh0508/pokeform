@@ -13,7 +13,7 @@ pokeform の実装計画は **計画ディレクトリ単位**で分割し、各
 - rules / skills の純シンプル化（文体圧縮・SoT 実体重複削減）計画 → [`07-rules-skills-simplify/README.md`](./07-rules-skills-simplify/)
 - ドキュメント構成再編（`docs/design/` 新設・`docs/plan` → `docs/roadmap` 改名・front matter 規約・AGENTS.md 刷新・SoT 二重管理解消）計画 → [`08-docs-restructure/README.md`](./08-docs-restructure/)
 - M-A 全種族投入（新レイアウト + 整理済みパイプライン上での全量投入）計画 → [`XX-ma-full-data/README.md`](./XX-ma-full-data/)
-- アーキ正本（旧 `plan.md`）→ [`01-mvp/architecture.md`](./01-mvp/architecture.md)
+- 設計俯瞰（旧 `01-mvp/architecture.md` をテーマ別に分割昇格・コードなし）→ [`docs/design/`](../design/README.md)
 
 > **`XX-ma-full-data` の `XX-` は「常に最後」の番号プレースホルダ**（全種族投入は本番前にまだ計画が前に挿入されうるため、固定の数値採番を避けて採番やり直しの頻度を下げる）。数値採番の新計画（09・10…）は常に `XX-` の手前に並ぶ。`06` は旧 `06-ma-full-data` の番号で、`XX-` 移行に伴い欠番（再利用しない）。
 > **実施順**: `07-rules-skills-simplify`（文体圧縮）を先、`08-docs-restructure`（構造再編）を後にする（先に冗長を削ってから構造を動かす）。

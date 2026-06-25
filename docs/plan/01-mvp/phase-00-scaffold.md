@@ -2,7 +2,7 @@
 
 ## 目的 / スコープ
 
-ライブラリの**型の土台**と**実数値計算（純関数）**を用意する。MVP コア（Phase 1）が依存する `StatKey`/相性型/計算ロジックを先に固める。アーキ詳細は [`architecture.md`](./architecture.md)。
+ライブラリの**型の土台**と**実数値計算（純関数）**を用意する。MVP コア（Phase 1）が依存する `StatKey`/相性型/計算ロジックを先に固める。アーキ詳細は [`docs/design/`](../../design/README.md)（旧 `architecture.md` を分割昇格）。
 
 ## 前提（依存）
 

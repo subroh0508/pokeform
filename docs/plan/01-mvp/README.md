@@ -1,13 +1,15 @@
 # 01-mvp — pokeform 本体 実装計画（インデックス）
 
-ポケモンチャンピオンズ向け "Pokemon as Code" ライブラリ本体の実装計画。アーキ正本は [`architecture.md`](./architecture.md)（旧 `plan.md`）。**ハーネス（`docs/plan/00-harness-setup/`）整備済みを前提**に、その緑のゲート（型 OK / カバレッジ100% / Biome）の上で実装する。
+ポケモンチャンピオンズ向け "Pokemon as Code" ライブラリ本体の実装計画。**ハーネス（`docs/plan/00-harness-setup/`）整備済みを前提**に、その緑のゲート（型 OK / カバレッジ100% / Biome）の上で実装する。
+
+> **旧 `architecture.md`（旧 `plan.md`）は撤去済み**（`08-docs-restructure` Phase 3）。設計俯瞰はコードなしの [`docs/design/`](../../design/README.md) へテーマ別に分割・昇格し、規約・具体値の正本は `.claude/rules/*`、型・数式の正本は `src/` に移した。
 
 ## MVP の範囲とゴール
 
 - **MVP コア** = パーティ構築の**一貫性チェック**（防御弱点の集中検出）と**技範囲チェック**（Phase 1）。
 - MVP 完了で「個体・パーティの検証 + 一貫性/技範囲チェック + ステータス調整の壁打ち」が揃う（Phase 0〜3 すべて）。
 
-## 確定アーキ（詳細は architecture.md）
+## 確定アーキ（詳細は [`docs/design/`](../../design/README.md) / 各 rule）
 
 - **Champions 仕様**: Lv50・個体値31 固定、能力ポイント 66/32、HP/非HP の二重 floor 計算式、性格 ±10%、メガ可・テラス/ダイマ不可。
 - **tsc のみ検証**: YAML/MD → codegen `.generated.ts` → `tsc --noEmit` で不正個体/パーティを弾く。

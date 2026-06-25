@@ -4,7 +4,7 @@ import type { BaseStats, PointAllocation, RealStats, StatKey } from "../types/st
 /**
  * 実数値計算（純関数・I/O 非依存）。Lv50・個体値31 固定を代入済みの確定式を実装する。
  * HP 以外は **二重 floor**（内側 floor 後に性格補正を掛けてさらに floor）。順序を変えると 1 ずれる。
- * 正本は .claude/rules/game-spec.md / docs/plan/01-mvp/architecture.md。
+ * 正本は .claude/rules/game-spec.md（設計俯瞰は docs/design/individuals-and-parties.md）。
  */
 
 /** 性格補正係数（下げ ×0.9 / 無補正 ×1.0 / 上げ ×1.1）。 */

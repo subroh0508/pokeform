@@ -64,9 +64,9 @@ cross-plan dangling・番号誤指しは learning #42 / #58 / #76 / #104 / #118 
 
 ## 完了済み plan の決定を後続 PR が覆すとき（supersede 追補）
 
-完了済み phase の決定（確定仕様・採用機構）を後続の fix / 別 PR が**覆した / 作り直した**ときは、当該 plan の `OVERVIEW.md` / `README.md` / 該当 phase doc の現状事実記述に **supersede 追補（「Phase N の決定は PR #M で見直し・現行 SoT は <rule/architecture> を参照」）を残す**（item legality が #145→#147→#149 と 3 度変遷した実例で反復）。plan doc は mutable WIP だが完了 phase の記述が**現状事実として読まれる**ため、正本 rule を直しても plan doc が旧モデルのまま残ると将来の参照源として誤誘導になる。
+完了済み phase の決定（確定仕様・採用機構）を後続の fix / 別 PR が**覆した / 作り直した**ときは、当該 plan の `OVERVIEW.md` / `README.md` / 該当 phase doc の現状事実記述に **supersede 追補（「Phase N の決定は PR #M で見直し・現行 SoT は <rule / src> を参照」）を残す**（item legality が #145→#147→#149 と 3 度変遷した実例で反復）。plan doc は mutable WIP だが完了 phase の記述が**現状事実として読まれる**ため、正本 rule を直しても plan doc が旧モデルのまま残ると将来の参照源として誤誘導になる。
 
-- **正本（rule / `architecture.md`）の更新が最優先**。plan doc 追補はその次（mutable doc の鮮度維持）。
+- **正本（rule / `src/`）の更新が最優先**。plan doc 追補はその次（mutable doc の鮮度維持）。
 - 完了 phase doc の**本文は歴史記録として凍結可**だが、決定が覆ったことの**前方ポインタ（追補注記）**は残す。
 - ADR で決定したことの supersede は [[adr]] の手順（新 ADR + `status` + archive 退避）に従う（plan doc 追補とは別系統）。
 

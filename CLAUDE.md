@@ -2,7 +2,7 @@
 
 <!--
 CLAUDE.md は AGENTS.md を import する薄いアダプタ（公式 Pattern 0）。
-規約・アーキ詳細は AGENTS.md と @docs/plan/01-mvp/architecture.md に委譲し、本文へ再掲しない。
+規約・アーキ詳細は AGENTS.md と各 rule（`.claude/rules/*`）・`docs/design/` に委譲し、本文へ再掲しない。
 Claude 固有の上書き・注記のみを import 行の下に置く。方針 SoT は .claude/rules/cross-agent.md。
 -->
 

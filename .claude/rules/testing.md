@@ -6,7 +6,7 @@ description: テストの規約（Vitest・カバレッジ100%・境界重点・
 
 # テストの規約
 
-テストの配置とカバレッジ方針の要点。正本は `docs/plan/01-mvp/architecture.md`（「検証方法」節 / ディレクトリ構成のテスト配置注記）。
+テストの配置とカバレッジ方針の規約。本 rule がテスト方針の規約 SoT で、設計上の位置づけは [docs/design/](../../docs/design/README.md)（設計方針 4）。
 
 ## ツールと閾値
 

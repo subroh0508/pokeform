@@ -2,7 +2,7 @@
 
 ## 目的 / スコープ
 
-PokeAPI を vendor して全種族データを生成し、**`check:party`（パーティ一貫性）** と **`analyze:coverage`（技範囲・防御弱点）** を提供する。**ここまでで要求 MVP を達成**。アーキ詳細は [`architecture.md`](./architecture.md)。
+PokeAPI を vendor して全種族データを生成し、**`check:party`（パーティ一貫性）** と **`analyze:coverage`（技範囲・防御弱点）** を提供する。**ここまでで要求 MVP を達成**。アーキ詳細は [`docs/design/`](../../design/README.md)（旧 `architecture.md` を分割昇格）。
 
 ## 前提（依存）
 
