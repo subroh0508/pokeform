@@ -28,8 +28,8 @@ Codex）はプロンプトを直に受けて着手の仕方・分割の粒度を
 2. OVERVIEW を **6 基準**（意思決定の数 / 不可逆性 / スコープの広さ / 技術的難易度 / 想定 diff〔~500 行
    目安・>1000 行は積極分割・データセット等の分割困難は例外〕/ 並行実装のしやすさ）で 1 phase = 1 PR に
    分割する。
-3. **1 PR 妥当**なら `docs/plan/` を作らず GitHub issue を起票して `implementation-workflow` をキック、
-   **複数 phase** なら `docs/plan/NN-{slug}/` 計画群（OVERVIEW + README〔Mermaid 依存グラフ〕+ phase doc）を
+3. **1 PR 妥当**なら `docs/roadmap/` を作らず GitHub issue を起票して `implementation-workflow` をキック、
+   **複数 phase** なら `docs/roadmap/NN-{slug}/` 計画群（OVERVIEW + README〔Mermaid 依存グラフ〕+ phase doc）を
    起こして `start-phase` / `implementation-workflow` へ繋ぐ。
 
 `plans-new` は**計画化に専念**し、実装駆動（worktree〜マージ〜レトロ）は `implementation-workflow` に委ねる

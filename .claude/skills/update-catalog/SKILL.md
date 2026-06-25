@@ -99,7 +99,7 @@ category）と `languages/*.yaml` の**日本語名 ja** を転記する（**app
 
 ## 関連
 
-- データ構造・SoT 正本: [[data-pipeline]] / [`02-data-model-redesign/OVERVIEW.md`](../../../docs/plan/02-data-model-redesign/OVERVIEW.md)。
+- データ構造・SoT 正本: [[data-pipeline]] / [`02-data-model-redesign/OVERVIEW.md`](../../../docs/roadmap/completed/02-data-model-redesign/OVERVIEW.md)。
 - 決定の「なぜ」: [ADR 0027](../../../docs/adr/0027-structural-data-catalog-sot.md)（構造データ SoT を catalog へ・`materialize` 新設）/
   [ADR 0032](../../../docs/adr/archive/0032-japanese-name-source-pokeapi-names.md)（日本語名 ja は PokeAPI names）/
   [ADR 0034](../../../docs/adr/archive/0034-move-meta-per-game-sot.md)（技メタ = per-game の境界）/

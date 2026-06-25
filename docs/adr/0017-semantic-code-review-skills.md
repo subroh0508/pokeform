@@ -12,7 +12,7 @@ date: 2026-06-07
 
 ## Decision
 
-PR マージ前の意味的レビューを 2 skill に分割する: **`code-review`**（`src/**` / `scripts/**` 等のソース・データパイプライン）と **`harness-review`**（`.claude/rules` / `.claude/skills` / `AGENTS.md` / `CLAUDE.md` / `.githooks` / `docs/plan` / `docs/adr` 等のハーネス資産）。レビューは**提案的**で、機械ゲートが緑にした項目（型/カバレッジ/Biome）は**再実行しない**。auto-merge は server-side CI（`.github/workflows/ci.yml` でコンテナ内 `pnpm verify`）+ branch protection を前提に、**CI 緑 ＋ ブロッキング指摘なし**で `gh pr merge --auto` する。SKILL.md 本体は ≤500 行、観点チェックリストは `references/` に分離。詳細は [[code-review]]。
+PR マージ前の意味的レビューを 2 skill に分割する: **`code-review`**（`src/**` / `scripts/**` 等のソース・データパイプライン）と **`harness-review`**（`.claude/rules` / `.claude/skills` / `AGENTS.md` / `CLAUDE.md` / `.githooks` / `docs/roadmap` / `docs/adr` 等のハーネス資産）。レビューは**提案的**で、機械ゲートが緑にした項目（型/カバレッジ/Biome）は**再実行しない**。auto-merge は server-side CI（`.github/workflows/ci.yml` でコンテナ内 `pnpm verify`）+ branch protection を前提に、**CI 緑 ＋ ブロッキング指摘なし**で `gh pr merge --auto` する。SKILL.md 本体は ≤500 行、観点チェックリストは `references/` に分離。詳細は [[code-review]]。
 
 ## Consequences
 

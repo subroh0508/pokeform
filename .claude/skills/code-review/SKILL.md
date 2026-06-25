@@ -31,7 +31,7 @@ AI が書いたソースは「もっともらしいが仕様と違う（plausibl
 
 - **使う**: `src/**` / `scripts/**` / `data/**`（`raw`/`champions` catalog）/ `*.test.ts` / `__fixtures__/`。
 - **使わない（→ `harness-review`）**: `.claude/rules` / `.claude/skills` / `.agents/skills` / `AGENTS.md` /
-  `CLAUDE.md` / `.githooks` / `.claude/settings.json` / `docs/plan` / `docs/adr` / `docs/harness`。
+  `CLAUDE.md` / `.githooks` / `.claude/settings.json` / `docs/roadmap` / `docs/adr` / `docs/harness`。
 - PR が両方を含むなら、ソース分を本 skill・ハーネス分を `harness-review` で分担する。
 
 ## 入力
