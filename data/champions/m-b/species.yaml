@@ -1,0 +1,34 @@
+# data/champions/m-b/species.yaml — 解禁 base 種族 roster（id 列挙）。
+species:
+  - vileplume
+  - qwilfish
+  - sceptile
+  - blaziken
+  - swampert
+  - mawile
+  - metagross
+  - staraptor
+  - musharna
+  - scolipede
+  - scrafty
+  - eelektross
+  - pyroar
+  - malamar
+  - barbaracle
+  - dragalge
+  - grimmsnarl
+  - falinks
+  - overqwil
+  - houndstone
+  - annihilape
+  - gholdengo
+  - charizard
+  - starmie
+  - gengar
+  - garchomp
+  - dragapult
+  - dragonite
+  - hydreigon
+  - tyranitar
+  - lucario
+  - rotom-wash

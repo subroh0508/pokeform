@@ -212,6 +212,153 @@ export const speciesNames = {
       ja: "スターミー",
     },
   },
+  vileplume: {
+    id: "vileplume",
+    name: {
+      en: "Vileplume",
+      ja: "ラフレシア",
+    },
+  },
+  qwilfish: {
+    id: "qwilfish",
+    name: {
+      en: "Qwilfish",
+      ja: "ハリーセン",
+    },
+  },
+  sceptile: {
+    id: "sceptile",
+    name: {
+      en: "Sceptile",
+      ja: "ジュカイン",
+    },
+  },
+  blaziken: {
+    id: "blaziken",
+    name: {
+      en: "Blaziken",
+      ja: "バシャーモ",
+    },
+  },
+  swampert: {
+    id: "swampert",
+    name: {
+      en: "Swampert",
+      ja: "ラグラージ",
+    },
+  },
+  mawile: {
+    id: "mawile",
+    name: {
+      en: "Mawile",
+      ja: "クチート",
+    },
+  },
+  staraptor: {
+    id: "staraptor",
+    name: {
+      en: "Staraptor",
+      ja: "ムクホーク",
+    },
+  },
+  musharna: {
+    id: "musharna",
+    name: {
+      en: "Musharna",
+      ja: "ムシャーナ",
+    },
+  },
+  scolipede: {
+    id: "scolipede",
+    name: {
+      en: "Scolipede",
+      ja: "ペンドラー",
+    },
+  },
+  scrafty: {
+    id: "scrafty",
+    name: {
+      en: "Scrafty",
+      ja: "ズルズキン",
+    },
+  },
+  eelektross: {
+    id: "eelektross",
+    name: {
+      en: "Eelektross",
+      ja: "シビルドン",
+    },
+  },
+  pyroar: {
+    id: "pyroar",
+    name: {
+      en: "Pyroar",
+      ja: "カエンジシ",
+    },
+  },
+  malamar: {
+    id: "malamar",
+    name: {
+      en: "Malamar",
+      ja: "カラマネロ",
+    },
+  },
+  barbaracle: {
+    id: "barbaracle",
+    name: {
+      en: "Barbaracle",
+      ja: "ガメノデス",
+    },
+  },
+  dragalge: {
+    id: "dragalge",
+    name: {
+      en: "Dragalge",
+      ja: "ドラミドロ",
+    },
+  },
+  grimmsnarl: {
+    id: "grimmsnarl",
+    name: {
+      en: "Grimmsnarl",
+      ja: "オーロンゲ",
+    },
+  },
+  falinks: {
+    id: "falinks",
+    name: {
+      en: "Falinks",
+      ja: "タイレーツ",
+    },
+  },
+  overqwil: {
+    id: "overqwil",
+    name: {
+      en: "Overqwil",
+      ja: "ハリーマン",
+    },
+  },
+  houndstone: {
+    id: "houndstone",
+    name: {
+      en: "Houndstone",
+      ja: "ハカドッグ",
+    },
+  },
+  annihilape: {
+    id: "annihilape",
+    name: {
+      en: "Annihilape",
+      ja: "コノヨザル",
+    },
+  },
+  gholdengo: {
+    id: "gholdengo",
+    name: {
+      en: "Gholdengo",
+      ja: "サーフゴー",
+    },
+  },
 } as const satisfies Record<string, NameEntry>;
 
 export type SpeciesNames = typeof speciesNames;

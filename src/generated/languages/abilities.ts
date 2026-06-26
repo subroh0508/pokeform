@@ -352,6 +352,202 @@ export const abilityNames = {
       ja: "てきおうりょく",
     },
   },
+  chlorophyll: {
+    id: "chlorophyll",
+    name: {
+      en: "Chlorophyll",
+      ja: "ようりょくそ",
+    },
+  },
+  "effect-spore": {
+    id: "effect-spore",
+    name: {
+      en: "Effect Spore",
+      ja: "ほうし",
+    },
+  },
+  "poison-point": {
+    id: "poison-point",
+    name: {
+      en: "Poison Point",
+      ja: "どくのトゲ",
+    },
+  },
+  "swift-swim": {
+    id: "swift-swim",
+    name: {
+      en: "Swift Swim",
+      ja: "すいすい",
+    },
+  },
+  unburden: {
+    id: "unburden",
+    name: {
+      en: "Unburden",
+      ja: "かるわざ",
+    },
+  },
+  "speed-boost": {
+    id: "speed-boost",
+    name: {
+      en: "Speed Boost",
+      ja: "かそく",
+    },
+  },
+  damp: {
+    id: "damp",
+    name: {
+      en: "Damp",
+      ja: "しめりけ",
+    },
+  },
+  "hyper-cutter": {
+    id: "hyper-cutter",
+    name: {
+      en: "Hyper Cutter",
+      ja: "かいりきバサミ",
+    },
+  },
+  "sheer-force": {
+    id: "sheer-force",
+    name: {
+      en: "Sheer Force",
+      ja: "ちからずく",
+    },
+  },
+  reckless: {
+    id: "reckless",
+    name: {
+      en: "Reckless",
+      ja: "すてみ",
+    },
+  },
+  forewarn: {
+    id: "forewarn",
+    name: {
+      en: "Forewarn",
+      ja: "よちむ",
+    },
+  },
+  telepathy: {
+    id: "telepathy",
+    name: {
+      en: "Telepathy",
+      ja: "テレパシー",
+    },
+  },
+  "shed-skin": {
+    id: "shed-skin",
+    name: {
+      en: "Shed Skin",
+      ja: "だっぴ",
+    },
+  },
+  rivalry: {
+    id: "rivalry",
+    name: {
+      en: "Rivalry",
+      ja: "とうそうしん",
+    },
+  },
+  contrary: {
+    id: "contrary",
+    name: {
+      en: "Contrary",
+      ja: "あまのじゃく",
+    },
+  },
+  "suction-cups": {
+    id: "suction-cups",
+    name: {
+      en: "Suction Cups",
+      ja: "きゅうばん",
+    },
+  },
+  sniper: {
+    id: "sniper",
+    name: {
+      en: "Sniper",
+      ja: "スナイパー",
+    },
+  },
+  pickpocket: {
+    id: "pickpocket",
+    name: {
+      en: "Pickpocket",
+      ja: "わるいてぐせ",
+    },
+  },
+  "poison-touch": {
+    id: "poison-touch",
+    name: {
+      en: "Poison Touch",
+      ja: "どくしゅ",
+    },
+  },
+  prankster: {
+    id: "prankster",
+    name: {
+      en: "Prankster",
+      ja: "いたずらごころ",
+    },
+  },
+  frisk: {
+    id: "frisk",
+    name: {
+      en: "Frisk",
+      ja: "おみとおし",
+    },
+  },
+  "battle-armor": {
+    id: "battle-armor",
+    name: {
+      en: "Battle Armor",
+      ja: "カブトアーマー",
+    },
+  },
+  defiant: {
+    id: "defiant",
+    name: {
+      en: "Defiant",
+      ja: "まけんき",
+    },
+  },
+  fluffy: {
+    id: "fluffy",
+    name: {
+      en: "Fluffy",
+      ja: "もふもふ",
+    },
+  },
+  "vital-spirit": {
+    id: "vital-spirit",
+    name: {
+      en: "Vital Spirit",
+      ja: "やるき",
+    },
+  },
+  "good-as-gold": {
+    id: "good-as-gold",
+    name: {
+      en: "Good As Gold",
+      ja: "おうごんのからだ",
+    },
+  },
+  "lightning-rod": {
+    id: "lightning-rod",
+    name: {
+      en: "Lightning Rod",
+      ja: "ひらいしん",
+    },
+  },
+  "huge-power": {
+    id: "huge-power",
+    name: {
+      en: "Huge Power",
+      ja: "ちからもち",
+    },
+  },
 } as const satisfies Record<string, NameEntry>;
 
 export type AbilityNames = typeof abilityNames;

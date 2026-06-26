@@ -85,3 +85,73 @@ mega:
       S: 112
     ability: adaptability
     baseSpecies: lucario
+  sceptile-mega:
+    dex: 254
+    types:
+      - grass
+      - dragon
+    stats:
+      H: 70
+      A: 110
+      B: 75
+      C: 145
+      D: 85
+      S: 145
+    ability: lightning-rod
+    baseSpecies: sceptile
+  blaziken-mega:
+    dex: 257
+    types:
+      - fire
+      - fighting
+    stats:
+      H: 80
+      A: 160
+      B: 80
+      C: 130
+      D: 80
+      S: 100
+    ability: speed-boost
+    baseSpecies: blaziken
+  swampert-mega:
+    dex: 260
+    types:
+      - water
+      - ground
+    stats:
+      H: 100
+      A: 150
+      B: 110
+      C: 95
+      D: 110
+      S: 70
+    ability: swift-swim
+    baseSpecies: swampert
+  mawile-mega:
+    dex: 303
+    types:
+      - steel
+      - fairy
+    stats:
+      H: 50
+      A: 105
+      B: 125
+      C: 55
+      D: 95
+      S: 50
+    ability: huge-power
+    baseSpecies: mawile
+  metagross-mega:
+    dex: 376
+    types:
+      - steel
+      - psychic
+    stats:
+      H: 80
+      A: 145
+      B: 150
+      C: 105
+      D: 110
+      S: 110
+    ability: tough-claws
+    baseSpecies: metagross

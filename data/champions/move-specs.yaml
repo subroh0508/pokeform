@@ -2031,3 +2031,605 @@ moves:
     accuracy: 90
     pp: 20
     priority: 0
+  acid-armor:
+    type: poison
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  acupressure:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  after-you:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 16
+    priority: 0
+  amnesia:
+    type: psychic
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  aqua-cutter:
+    type: water
+    damageClass: physical
+    power: 70
+    accuracy: 100
+    pp: 20
+    priority: 0
+  aqua-ring:
+    type: water
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  attract:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 16
+    priority: 0
+  barb-barrage:
+    type: poison
+    damageClass: physical
+    power: 60
+    accuracy: 100
+    pp: 12
+    priority: 0
+  bounce:
+    type: flying
+    damageClass: physical
+    power: 85
+    accuracy: 85
+    pp: 8
+    priority: 0
+  burning-jealousy:
+    type: fire
+    damageClass: special
+    power: 70
+    accuracy: 100
+    pp: 8
+    priority: 0
+  charm:
+    type: fairy
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 20
+    priority: 0
+  coil:
+    type: poison
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  cross-poison:
+    type: poison
+    damageClass: physical
+    power: 70
+    accuracy: 100
+    pp: 20
+    priority: 0
+  crush-claw:
+    type: normal
+    damageClass: physical
+    power: 75
+    accuracy: 95
+    pp: 12
+    priority: 0
+  draining-kiss:
+    type: fairy
+    damageClass: special
+    power: 50
+    accuracy: 100
+    pp: 12
+    priority: 0
+  dynamic-punch:
+    type: fighting
+    damageClass: physical
+    power: 100
+    accuracy: 50
+    pp: 8
+    priority: 0
+  endeavor:
+    type: normal
+    damageClass: physical
+    power: null
+    accuracy: 100
+    pp: 8
+    priority: 0
+  entrainment:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 16
+    priority: 0
+  explosion:
+    type: normal
+    damageClass: physical
+    power: 250
+    accuracy: 100
+    pp: 8
+    priority: 0
+  fake-tears:
+    type: dark
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 20
+    priority: 0
+  feather-dance:
+    type: flying
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 16
+    priority: 0
+  fell-stinger:
+    type: bug
+    damageClass: physical
+    power: 50
+    accuracy: 100
+    pp: 20
+    priority: 0
+  first-impression:
+    type: bug
+    damageClass: physical
+    power: 100
+    accuracy: 100
+    pp: 12
+    priority: 2
+  flail:
+    type: normal
+    damageClass: physical
+    power: null
+    accuracy: 100
+    pp: 16
+    priority: 0
+  flatter:
+    type: dark
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 16
+    priority: 0
+  frenzy-plant:
+    type: grass
+    damageClass: special
+    power: 150
+    accuracy: 90
+    pp: 8
+    priority: 0
+  future-sight:
+    type: psychic
+    damageClass: special
+    power: 120
+    accuracy: 100
+    pp: 12
+    priority: 0
+  gastro-acid:
+    type: poison
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 12
+    priority: 0
+  grassy-terrain:
+    type: grass
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 12
+    priority: 0
+  growth:
+    type: grass
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  guard-swap:
+    type: psychic
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 12
+    priority: 0
+  hammer-arm:
+    type: fighting
+    damageClass: physical
+    power: 100
+    accuracy: 90
+    pp: 12
+    priority: 0
+  healing-wish:
+    type: psychic
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 12
+    priority: 0
+  hydro-cannon:
+    type: water
+    damageClass: special
+    power: 150
+    accuracy: 90
+    pp: 8
+    priority: 0
+  ingrain:
+    type: grass
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  last-respects:
+    type: ghost
+    damageClass: physical
+    power: 50
+    accuracy: 100
+    pp: 12
+    priority: 0
+  leech-life:
+    type: bug
+    damageClass: physical
+    power: 80
+    accuracy: 100
+    pp: 12
+    priority: 0
+  leech-seed:
+    type: grass
+    damageClass: status
+    power: null
+    accuracy: 90
+    pp: 12
+    priority: 0
+  magnet-rise:
+    type: electric
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 12
+    priority: 0
+  make-it-rain:
+    type: steel
+    damageClass: special
+    power: 120
+    accuracy: 95
+    pp: 8
+    priority: 0
+  memento:
+    type: dark
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 12
+    priority: 0
+  misty-explosion:
+    type: fairy
+    damageClass: special
+    power: 100
+    accuracy: 100
+    pp: 8
+    priority: 0
+  misty-terrain:
+    type: fairy
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 12
+    priority: 0
+  moonblast:
+    type: fairy
+    damageClass: special
+    power: 95
+    accuracy: 100
+    pp: 16
+    priority: 0
+  moonlight:
+    type: fairy
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 8
+    priority: 0
+  no-retreat:
+    type: fighting
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 8
+    priority: 0
+  noble-roar:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 20
+    priority: 0
+  parting-shot:
+    type: dark
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 20
+    priority: 0
+  petal-blizzard:
+    type: grass
+    damageClass: physical
+    power: 90
+    accuracy: 100
+    pp: 16
+    priority: 0
+  petal-dance:
+    type: grass
+    damageClass: special
+    power: 120
+    accuracy: 100
+    pp: 12
+    priority: 0
+  pluck:
+    type: flying
+    damageClass: physical
+    power: 60
+    accuracy: 100
+    pp: 20
+    priority: 0
+  poison-fang:
+    type: poison
+    damageClass: physical
+    power: 50
+    accuracy: 100
+    pp: 16
+    priority: 0
+  poison-powder:
+    type: poison
+    damageClass: status
+    power: null
+    accuracy: 75
+    pp: 20
+    priority: 0
+  pollen-puff:
+    type: bug
+    damageClass: special
+    power: 90
+    accuracy: 100
+    pp: 16
+    priority: 0
+  power-swap:
+    type: psychic
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 12
+    priority: 0
+  power-whip:
+    type: grass
+    damageClass: physical
+    power: 120
+    accuracy: 85
+    pp: 12
+    priority: 0
+  psychic-terrain:
+    type: psychic
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 12
+    priority: 0
+  rage-fist:
+    type: ghost
+    damageClass: physical
+    power: 50
+    accuracy: 100
+    pp: 12
+    priority: 0
+  razor-shell:
+    type: water
+    damageClass: physical
+    power: 75
+    accuracy: 95
+    pp: 12
+    priority: 0
+  rock-polish:
+    type: rock
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  seed-bomb:
+    type: grass
+    damageClass: physical
+    power: 80
+    accuracy: 100
+    pp: 16
+    priority: 0
+  seismic-toss:
+    type: fighting
+    damageClass: physical
+    power: null
+    accuracy: 100
+    pp: 20
+    priority: 0
+  shed-tail:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 12
+    priority: 0
+  sky-attack:
+    type: flying
+    damageClass: physical
+    power: 140
+    accuracy: 90
+    pp: 8
+    priority: 0
+  sleep-powder:
+    type: grass
+    damageClass: status
+    power: null
+    accuracy: 75
+    pp: 16
+    priority: 0
+  solar-blade:
+    type: grass
+    damageClass: physical
+    power: 125
+    accuracy: 100
+    pp: 12
+    priority: 0
+  spirit-break:
+    type: fairy
+    damageClass: physical
+    power: 75
+    accuracy: 100
+    pp: 16
+    priority: 0
+  spit-up:
+    type: normal
+    damageClass: special
+    power: null
+    accuracy: 100
+    pp: 12
+    priority: 0
+  steel-roller:
+    type: steel
+    damageClass: physical
+    power: 130
+    accuracy: 100
+    pp: 8
+    priority: 0
+  stockpile:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  storm-throw:
+    type: fighting
+    damageClass: physical
+    power: 60
+    accuracy: 100
+    pp: 12
+    priority: 0
+  strength-sap:
+    type: grass
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 12
+    priority: 0
+  stun-spore:
+    type: grass
+    damageClass: status
+    power: null
+    accuracy: 75
+    pp: 20
+    priority: 0
+  super-fang:
+    type: normal
+    damageClass: physical
+    power: null
+    accuracy: 90
+    pp: 12
+    priority: 0
+  supercell-slam:
+    type: electric
+    damageClass: physical
+    power: 100
+    accuracy: 95
+    pp: 16
+    priority: 0
+  swallow:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 12
+    priority: 0
+  sweet-scent:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 20
+    priority: 0
+  switcheroo:
+    type: dark
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 12
+    priority: 0
+  synthesis:
+    type: grass
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 8
+    priority: 0
+  teeter-dance:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 20
+    priority: 0
+  tickle:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 20
+    priority: 0
+  topsy-turvy:
+    type: dark
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  torment:
+    type: dark
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 16
+    priority: 0
+  worry-seed:
+    type: grass
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 12
+    priority: 0
+  yawn:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 12
+    priority: 0
+  zap-cannon:
+    type: electric
+    damageClass: special
+    power: 120
+    accuracy: 50
+    pp: 8
+    priority: 0

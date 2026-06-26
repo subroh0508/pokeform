@@ -44,6 +44,41 @@ export const megaNames = {
       ja: "メガルカリオ",
     },
   },
+  "sceptile-mega": {
+    id: "sceptile-mega",
+    name: {
+      en: "Mega Sceptile",
+      ja: "メガジュカイン",
+    },
+  },
+  "blaziken-mega": {
+    id: "blaziken-mega",
+    name: {
+      en: "Mega Blaziken",
+      ja: "メガバシャーモ",
+    },
+  },
+  "swampert-mega": {
+    id: "swampert-mega",
+    name: {
+      en: "Mega Swampert",
+      ja: "メガラグラージ",
+    },
+  },
+  "mawile-mega": {
+    id: "mawile-mega",
+    name: {
+      en: "Mega Mawile",
+      ja: "メガクチート",
+    },
+  },
+  "metagross-mega": {
+    id: "metagross-mega",
+    name: {
+      en: "Mega Metagross",
+      ja: "メガメタグロス",
+    },
+  },
 } as const satisfies Record<string, NameEntry>;
 
 export type MegaNames = typeof megaNames;

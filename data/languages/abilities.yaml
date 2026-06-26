@@ -150,3 +150,87 @@ abilities:
   adaptability:
     ja: てきおうりょく
     en: Adaptability
+  chlorophyll:
+    en: Chlorophyll
+    ja: ようりょくそ
+  effect-spore:
+    en: Effect Spore
+    ja: ほうし
+  poison-point:
+    en: Poison Point
+    ja: どくのトゲ
+  swift-swim:
+    en: Swift Swim
+    ja: すいすい
+  unburden:
+    en: Unburden
+    ja: かるわざ
+  speed-boost:
+    en: Speed Boost
+    ja: かそく
+  damp:
+    en: Damp
+    ja: しめりけ
+  hyper-cutter:
+    en: Hyper Cutter
+    ja: かいりきバサミ
+  sheer-force:
+    en: Sheer Force
+    ja: ちからずく
+  reckless:
+    en: Reckless
+    ja: すてみ
+  forewarn:
+    en: Forewarn
+    ja: よちむ
+  telepathy:
+    en: Telepathy
+    ja: テレパシー
+  shed-skin:
+    en: Shed Skin
+    ja: だっぴ
+  rivalry:
+    en: Rivalry
+    ja: とうそうしん
+  contrary:
+    en: Contrary
+    ja: あまのじゃく
+  suction-cups:
+    en: Suction Cups
+    ja: きゅうばん
+  sniper:
+    en: Sniper
+    ja: スナイパー
+  pickpocket:
+    en: Pickpocket
+    ja: わるいてぐせ
+  poison-touch:
+    en: Poison Touch
+    ja: どくしゅ
+  prankster:
+    en: Prankster
+    ja: いたずらごころ
+  frisk:
+    en: Frisk
+    ja: おみとおし
+  battle-armor:
+    en: Battle Armor
+    ja: カブトアーマー
+  defiant:
+    en: Defiant
+    ja: まけんき
+  fluffy:
+    en: Fluffy
+    ja: もふもふ
+  vital-spirit:
+    en: Vital Spirit
+    ja: やるき
+  good-as-gold:
+    en: Good As Gold
+    ja: おうごんのからだ
+  lightning-rod:
+    ja: ひらいしん
+    en: Lightning Rod
+  huge-power:
+    ja: ちからもち
+    en: Huge Power
