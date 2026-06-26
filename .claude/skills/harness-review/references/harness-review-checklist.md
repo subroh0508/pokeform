@@ -74,6 +74,15 @@ auto-merge ゲート（発火条件）は [`code-review.md` の「auto-merge ゲ
   **references / 参照先 rule への内容が行レベルで実在**し痩せていないか / **markdown リンク本数が非劣化**（ADR / skill /
   rule リンクが bare-text 化していないか）/ **dangling ゼロ**・**cross-agent パリティ**維持。圧縮判断線の SoT は
   [[skill-authoring]] の「圧縮（文体シンプル化）PR の規約」。
+- **design doc の altitude**（`docs/design/**` 変更 PR・learning #171/#172）: design は **ADR の決定根拠を再記述せず
+  要約・索引に留める**（再記述は二重化で nit）。**TypeScript の具体コード・型例・YAML 例・数式を含まない**（[[adr]] 0038・
+  C4 Code レベル不記述）。doc 間の相互参照は **markdown 相対リンク**（`[[wikilink]]` は rule/memory slug 専用）。
+- **撤去・改名 PR の参照追従**（ファイル撤去 / ディレクトリ改名 PR・learning #173/#174）: inbound 参照の **dangling を
+  literal + 相対形の両方で走査**する（例 `docs/plan`/`architecture` の literal に加え `../plan/`・`../../plan/` の相対形も）。
+  **クリッカブルリンク・reference 式リンク定義・import・素の番号/パス・wikilink** を横断し、対象は `.md` に限らず
+  **`.workflow` / `.ts`** まで（`git grep` ワンライナで一括）。**凍結対象の判断**: クリッカブルリンクが 404 化するものは
+  張り替え、**歴史記録（archive ADR 本文・完了 phase doc の forward 参照・learnings）は凍結可**（番号が指すテーマが
+  不変な場合）。archive ADR 本文の可変 plan 参照が改名で 404 化する場合は [[adr]] の例外#1（脱リンク）が既定。
 
 ## 5. paths × 重点観点
 
