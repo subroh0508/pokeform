@@ -205,6 +205,13 @@ export const speciesNames = {
       ja: "バンギラス",
     },
   },
+  starmie: {
+    id: "starmie",
+    name: {
+      en: "Starmie",
+      ja: "スターミー",
+    },
+  },
 } as const satisfies Record<string, NameEntry>;
 
 export type SpeciesNames = typeof speciesNames;

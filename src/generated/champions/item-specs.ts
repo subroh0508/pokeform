@@ -271,6 +271,18 @@ export const itemSpecsDex = {
     megaStoneFor: "gengar",
     megaSpecies: "gengar-mega",
   },
+  lucarionite: {
+    id: "lucarionite",
+    category: "mega-stones",
+    megaStoneFor: "lucario",
+    megaSpecies: "lucario-mega",
+  },
+  tyranitarite: {
+    id: "tyranitarite",
+    category: "mega-stones",
+    megaStoneFor: "tyranitar",
+    megaSpecies: "tyranitar-mega",
+  },
 } as const;
 
 export type ItemSpecsDex = typeof itemSpecsDex;

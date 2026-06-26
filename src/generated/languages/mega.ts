@@ -30,6 +30,20 @@ export const megaNames = {
       ja: "メガゲンガー",
     },
   },
+  "tyranitar-mega": {
+    id: "tyranitar-mega",
+    name: {
+      en: "Mega Tyranitar",
+      ja: "メガバンギラス",
+    },
+  },
+  "lucario-mega": {
+    id: "lucario-mega",
+    name: {
+      en: "Mega Lucario",
+      ja: "メガルカリオ",
+    },
+  },
 } as const satisfies Record<string, NameEntry>;
 
 export type MegaNames = typeof megaNames;

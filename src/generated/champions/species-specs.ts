@@ -326,6 +326,7 @@ export const speciesSpecsDex = {
       speed: 90,
     },
     abilities: ["steadfast", "inner-focus", "justified"],
+    megaEvolvesTo: ["lucario-mega"],
   },
   meowscarada: {
     dex: 908,
@@ -410,6 +411,21 @@ export const speciesSpecsDex = {
       speed: 61,
     },
     abilities: ["sand-stream", "unnerve"],
+    megaEvolvesTo: ["tyranitar-mega"],
+  },
+  starmie: {
+    dex: 121,
+    id: "starmie",
+    types: ["water", "psychic"],
+    baseStats: {
+      hp: 60,
+      attack: 75,
+      defense: 85,
+      spAttack: 100,
+      spDefense: 85,
+      speed: 115,
+    },
+    abilities: ["illuminate", "natural-cure", "analytic"],
   },
 } as const satisfies Record<string, SpeciesSpec>;
 

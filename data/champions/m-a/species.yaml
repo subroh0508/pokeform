@@ -1,28 +1,12 @@
 # data/champions/m-a/species.yaml — 解禁 base 種族 roster（id 列挙）。
 species:
-  - garchomp
-  - dragonite
-  - rotom-wash
   - charizard
-  - dragapult
-  - hydreigon
-  - aggron
-  - alakazam
-  - arcanine
-  - blastoise
-  - chandelure
-  - corviknight
-  - decidueye
-  - excadrill
-  - garganacl
+  - starmie
   - gengar
-  - greninja
-  - heracross
-  - krookodile
-  - lucario
-  - meowscarada
-  - milotic
-  - quaquaval
-  - skeledirge
-  - talonflame
+  - garchomp
+  - dragapult
+  - dragonite
+  - hydreigon
   - tyranitar
+  - lucario
+  - rotom-wash

@@ -2,6 +2,12 @@
 import type { AbilityBase } from "../../types/ability.ts";
 
 export const abilitySpecsDex = {
+  adaptability: {
+    id: "adaptability",
+  },
+  analytic: {
+    id: "analytic",
+  },
   "anger-point": {
     id: "anger-point",
   },
@@ -37,6 +43,9 @@ export const abilitySpecsDex = {
   },
   "heavy-metal": {
     id: "heavy-metal",
+  },
+  illuminate: {
+    id: "illuminate",
   },
   infiltrator: {
     id: "infiltrator",
@@ -76,6 +85,9 @@ export const abilitySpecsDex = {
   },
   multiscale: {
     id: "multiscale",
+  },
+  "natural-cure": {
+    id: "natural-cure",
   },
   overgrow: {
     id: "overgrow",

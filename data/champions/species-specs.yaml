@@ -356,6 +356,8 @@ species:
       - steadfast
       - inner-focus
       - justified
+    megaEvolvesTo:
+      - lucario-mega
   meowscarada:
     dex: 908
     types:
@@ -446,3 +448,21 @@ species:
     abilities:
       - sand-stream
       - unnerve
+    megaEvolvesTo:
+      - tyranitar-mega
+  starmie:
+    dex: 121
+    types:
+      - water
+      - psychic
+    stats:
+      H: 60
+      A: 75
+      B: 85
+      C: 100
+      D: 85
+      S: 115
+    abilities:
+      - illuminate
+      - natural-cure
+      - analytic

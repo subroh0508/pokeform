@@ -324,6 +324,34 @@ export const abilityNames = {
       ja: "きんちょうかん",
     },
   },
+  illuminate: {
+    id: "illuminate",
+    name: {
+      en: "Illuminate",
+      ja: "はっこう",
+    },
+  },
+  "natural-cure": {
+    id: "natural-cure",
+    name: {
+      en: "Natural Cure",
+      ja: "しぜんかいふく",
+    },
+  },
+  analytic: {
+    id: "analytic",
+    name: {
+      en: "Analytic",
+      ja: "アナライズ",
+    },
+  },
+  adaptability: {
+    id: "adaptability",
+    name: {
+      en: "Adaptability",
+      ja: "てきおうりょく",
+    },
+  },
 } as const satisfies Record<string, NameEntry>;
 
 export type AbilityNames = typeof abilityNames;
