@@ -121,5 +121,3 @@ structural catalog（`species-specs` 等）は **append-only マスター**（AD
 （M-A-10 外の旧 roster 種・デモ種 metagross / mewtwo / salamence）は削除せず保持する。**リセットは per-reg 層**
 （M-A roster を 10 体へ・truncated だった movepool を Serebii 全量へ・m-b 削除）で行い、catalog は append-only を
 尊重した。生成 per-reg（`src/generated/champions/m-a/*`）が M-A = 10 体の解禁集合を表す。
-</content>
-</invoke>
