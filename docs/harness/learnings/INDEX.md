@@ -84,6 +84,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #174 | plan08 Phase 4: docs/plan→docs/roadmap 改名 + completed/ 集約 + 114 files 参照追従（89 rename + 25 内容）。凍結方針 2 段（archive 全凍結 / active ADR は用語 rename 追従）・251 md 機械チェック・planning.md/finish-phase へ集約手順育成。literal grep が相対形 ../plan/ を取りこぼし・archive/0034 が clickable 404（凍結 vs 脱リンク例外の都度判断） | 2026-06-25 | 08-docs-restructure/phase-04 | draft | [2026-06-25-pr-174.md](./2026-06-25-pr-174.md) |
 | #175 | plan08 Phase 5: AGENTS.md 刷新（列挙→SoT 参照へ転換・+20/-20）。コマンド表を package.json 照合し check:yaml-style 回収・skill 16 全件照合・陳腐化注記除去。同一節内の同一文重複 nit（後続 commit で解消）・列挙→参照の網羅性が手照合依存・小 diff でも意味的レビュー必須 | 2026-06-25 | 08-docs-restructure/phase-05 | draft | [2026-06-25-pr-175.md](./2026-06-25-pr-175.md) |
 | #176 | plan08 Phase 6（最終）: code-review.md の Phase 9 参照を ADR 0013 へ張替（plan 参照違反解消）+ 全 15 rule へ front matter（last_modified+adr）付与・active のみ・gen-rules-index 再生成 diff ゼロで paths 非干渉実証。front matter adr が背景 archive ADR を網羅しない基準未定（nb）・design↔rule 体裁差（nit）・last_modified 一括手入力 | 2026-06-25 | 08-docs-restructure/phase-06 | draft | [2026-06-25-pr-176.md](./2026-06-25-pr-176.md) |
+| #182 | plan09 Phase 1: M-A リセット + 代表10体 skill 投入。限定セット de-risk で 3 pipeline ギャップ検出（Champions 固有メガ materialize 不可・新規種族 null placeholder crash・空 regulation gate 非互換）。team サンプルとロスターの暗黙結合・削除レグ stale 生成物残存 | 2026-06-26 | 09-champions-data-rollout/phase-01 | draft | [2026-06-26-pr-182.md](./2026-06-26-pr-182.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
