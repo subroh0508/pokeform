@@ -42,7 +42,7 @@
 ## スコープ外
 
 - **ドキュメント構成再編**（design 新設・roadmap 改名・AGENTS.md 刷新・二重管理解消・front matter 規約導入）= 後続計画 [`08-docs-restructure`](../08-docs-restructure/README.md)。本計画は文体圧縮に専念し、配置・参照・front matter は変えない。
-- **M-A 全種族投入**（[`XX-ma-full-data`](../../XX-ma-full-data/README.md)）。
+- **M-A 全種族投入**（[`09-champions-data-rollout`](../../09-champions-data-rollout/README.md)）。
 - 機械ゲート・レビュー観点・規約の**意味**の変更。圧縮は文面のみ。
 - skill の trigger（description の意味）を変える改修（精度を保つ圧縮のみ。意味変更は別 PR）。
 

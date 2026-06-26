@@ -33,8 +33,8 @@ flowchart TD
     P18 -. churn最小化 .-> P19
 ```
 
-> 旧 Phase 20（M-A 全データ投入）は後続計画群 [`XX-ma-full-data`](../../XX-ma-full-data/README.md) の
-> [phase-01](../../XX-ma-full-data/phase-01-ma-full-data.md) へ移動した（04 のレイアウト再編 → 05 の技マスター取得 + 役割分割を経た新レイアウト + 整理済みパイプライン上で投入）。
+> 旧 Phase 20（M-A 全データ投入）は後続計画群 [`09-champions-data-rollout`](../../09-champions-data-rollout/README.md) の
+> [本計画群](../../09-champions-data-rollout/README.md) へ移動した（04 のレイアウト再編 → 05 の技マスター取得 + 役割分割を経た新レイアウト + 整理済みパイプライン上で投入）。
 
 ## フェーズ一覧（この順で実施）
 
@@ -58,8 +58,8 @@ flowchart TD
 - [x] [Phase 18 — 用語 rename + 人間直編集文言の全資産展開（hand-authored → skill-authored・ADR 本文含む・手動編集前提文言を改訂）](./phase-18-skill-authored-rename.md)
 - [x] [Phase 19 — 情報源の役割・関係性の SoT 整理 + フロー図の Mermaid 化・改訂（Serebii 第一優先 / 補助裏取り / PokeAPI 構造データの 3 系統・2 系統合流図）](./phase-19-source-roles-and-flow.md)
 
-> **旧 Phase 20（M-A 全データ投入）は後続計画群 [`XX-ma-full-data`](../../XX-ma-full-data/README.md) の
-> [phase-01](../../XX-ma-full-data/phase-01-ma-full-data.md) へ移動**した。新パイプライン
+> **旧 Phase 20（M-A 全データ投入）は後続計画群 [`09-champions-data-rollout`](../../09-champions-data-rollout/README.md) の
+> [本計画群](../../09-champions-data-rollout/README.md) へ移動**した。新パイプライン
 > （決定論スクレイパー + 自己修復）経由で、かつ generated/YAML 再編後の新レイアウト上で投入するため。02 は Phase 1-19 で
 > 完了とする（完了済み phase doc 内の「Phase 20」への forward 参照は当時の計画スナップショットとして凍結）。
 

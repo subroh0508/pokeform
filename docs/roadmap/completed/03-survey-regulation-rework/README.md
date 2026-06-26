@@ -9,8 +9,8 @@
 > **後続計画群への一方通行**: 本計画群（03・取得パイプライン刷新）完了後、技仕様の Champions 対応（技マスターの値是正）
 > とスクレイパー役割分割・skill オーケストレーター化は後続
 > [`05-move-master-scraper-refactor`](../05-move-master-scraper-refactor/README.md) が、M-A 全186種の全量投入は
-> [`XX-ma-full-data`](../../XX-ma-full-data/README.md) が担う。順序は **03（取得刷新・Phase 1-12）→ 04（generated/YAML
-> レイアウト再編）→ 05（技マスター取得 + 役割分割 + skill 再編）→ XX（全種族投入）** の一方通行。
+> [`09-champions-data-rollout`](../../09-champions-data-rollout/README.md) が担う。順序は **03（取得刷新・Phase 1-12）→ 04（generated/YAML
+> レイアウト再編）→ 05（技マスター取得 + 役割分割 + skill 再編）→ 09（全種族投入）** の一方通行。
 > **旧 03 Phase 13（技メタ値の手動是正）は 05 の技マスター専用取得経路へ吸収して廃止した**（手動是正の代わりに専用
 > 取得で根本解決）。
 
@@ -34,7 +34,7 @@ flowchart TD
     P9 --> P10
     P10 --> P11[phase-11 — 技メタを per-game へ移転]
     P11 --> P12[phase-12 — 取得スキル 2 分割 + catalog チェックポイント]
-    P12 --> PLAN04[次計画群 04-generated-layout-redesign（レイアウト再編）→ 05（技マスター取得 + 役割分割）→ XX（全種族投入）]
+    P12 --> PLAN04[次計画群 04-generated-layout-redesign（レイアウト再編）→ 05（技マスター取得 + 役割分割）→ 09（全種族投入）]
 ```
 
 ## フェーズ一覧（この順で実施）
@@ -52,7 +52,7 @@ flowchart TD
 - [x] [Phase 11 — 技メタを per-game へ移転（catalog = 名前 / `regulations/champions/moves.yaml` = 技メタ・ADR 0026 改訂）](./phase-11-per-game-move-meta.md)
 - [x] [Phase 12 — 取得スキルを 2 分割（catalog 取得 / regulations 取得）+ catalog 更新チェックポイント](./phase-12-update-skill-split.md)
 
-> **全種族投入（M-A 全186種）は本計画群ではなく後続計画群 [`XX-ma-full-data`](../../XX-ma-full-data/README.md)** で実施する（04 のレイアウト再編 → 05 の技マスター取得 + 役割分割を経た新ツリー + 整理済みパイプライン上で投入）。技仕様の Champions 対応は [`05-move-master-scraper-refactor`](../05-move-master-scraper-refactor/README.md) が担う。
+> **全種族投入（M-A 全186種）は本計画群ではなく後続計画群 [`09-champions-data-rollout`](../../09-champions-data-rollout/README.md)** で実施する（04 のレイアウト再編 → 05 の技マスター取得 + 役割分割を経た新ツリー + 整理済みパイプライン上で投入）。技仕様の Champions 対応は [`05-move-master-scraper-refactor`](../05-move-master-scraper-refactor/README.md) が担う。
 
 > 計画群全体の受け入れ基準は [`OVERVIEW.md` の「受け入れ基準」節](./OVERVIEW.md#受け入れ基準) を参照。
 
@@ -63,9 +63,9 @@ flowchart TD
 - スキル作成・改修は `skill-creator`、ADR は `adr-new`（[[skill-authoring]] / [[adr]]）。層2-3 の SubAgent
   オーケストレーションは Workflow スクリプトで実装する（OVERVIEW 設計方針）。
 - Phase 7-9 は survey-regulation の動作確認で判明した是正（per-reg 持ち物 legality・per-reg species name 削除・
-  メガ決定論取り込み）。全種族投入（後続 [XX-ma-full-data](../../XX-ma-full-data/README.md)）の前段として、legality 強制とメガ自動取り込みを揃える。
+  メガ決定論取り込み）。全種族投入（後続 [09-champions-data-rollout](../../09-champions-data-rollout/README.md)）の前段として、legality 強制とメガ自動取り込みを揃える。
 - Phase 10-12 はデータレイアウト整備（ゲームグルーピング・per-game 技メタ・取得スキル 2 分割）。全種族投入
-  （後続 [XX-ma-full-data](../../XX-ma-full-data/README.md)）の手前で、`regulations/champions/` レイアウト・`catalog`(名前)/`regulations`(技メタ) の責務分離・
+  （後続 [09-champions-data-rollout](../../09-champions-data-rollout/README.md)）の手前で、`regulations/champions/` レイアウト・`catalog`(名前)/`regulations`(技メタ) の責務分離・
   catalog 取得 / regulations 取得スキルの分割を確定させる de-risk（learning #59/#76 の「全量投入の手前で仕組みを
   確定」と同型）。
 - **技仕様の Champions 対応は 05 へ**: 前作から変更された技仕様（PP の 8/12/16/20 化・power・type）の是正は、当初
@@ -73,5 +73,5 @@ flowchart TD
   [`05-move-master-scraper-refactor`](../05-move-master-scraper-refactor/README.md) の**技マスター専用取得経路**へ吸収して
   廃止した。手動是正の代わりに Serebii 技専用ページから Champions 準拠値を取得して `move-specs` を正す（根本解決）。
 - **全種族投入は 06 へ**: 02 の旧 phase-20（M-A 全データ投入）は後続計画群
-  [`XX-ma-full-data`](../../XX-ma-full-data/README.md) で、新パイプライン経由・**04 再編後の新レイアウト**・05 是正済みの
-  技メタの上で全186種を投入する。依存を一方通行（03 → 04 → 05 → XX）に保つため、全量投入を 03 へ戻さない。
+  [`09-champions-data-rollout`](../../09-champions-data-rollout/README.md) で、新パイプライン経由・**04 再編後の新レイアウト**・05 是正済みの
+  技メタの上で全186種を投入する。依存を一方通行（03 → 04 → 05 → 09）に保つため、全量投入を 03 へ戻さない。
