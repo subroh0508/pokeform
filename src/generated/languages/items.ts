@@ -457,6 +457,20 @@ export const itemNames = {
       ja: "ゲンガナイト",
     },
   },
+  lucarionite: {
+    id: "lucarionite",
+    name: {
+      en: "Lucarionite",
+      ja: "ルカリオナイト",
+    },
+  },
+  tyranitarite: {
+    id: "tyranitarite",
+    name: {
+      en: "Tyranitarite",
+      ja: "バンギラスナイト",
+    },
+  },
 } as const satisfies Record<string, NameEntry>;
 
 export type ItemNames = typeof itemNames;

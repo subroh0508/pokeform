@@ -657,3 +657,216 @@ moves:
   wonder-room:
     ja: ワンダールーム
     en: Wonder Room
+  agility:
+    en: Agility
+    ja: こうそくいどう
+  ally-switch:
+    en: Ally Switch
+    ja: サイドチェンジ
+  avalanche:
+    en: Avalanche
+    ja: ゆきなだれ
+  blizzard:
+    en: Blizzard
+    ja: ふぶき
+  charge-beam:
+    en: Charge Beam
+    ja: チャージビーム
+  chilling-water:
+    en: Chilling Water
+    ja: ひやみず
+  cosmic-power:
+    en: Cosmic Power
+    ja: コスモパワー
+  dive:
+    en: Dive
+    ja: ダイビング
+  gravity:
+    en: Gravity
+    ja: じゅうりょく
+  gyro-ball:
+    en: Gyro Ball
+    ja: ジャイロボール
+  light-screen:
+    en: Light Screen
+    ja: ひかりのかべ
+  meteor-beam:
+    en: Meteor Beam
+    ja: メテオビーム
+  minimize:
+    en: Minimize
+    ja: ちいさくなる
+  psycho-cut:
+    en: Psycho Cut
+    ja: サイコカッター
+  reflect:
+    en: Reflect
+    ja: リフレクター
+  safeguard:
+    en: Safeguard
+    ja: しんぴのまもり
+  tri-attack:
+    en: Tri Attack
+    ja: トライアタック
+  water-pulse:
+    en: Water Pulse
+    ja: みずのはどう
+  waterfall:
+    en: Waterfall
+    ja: たきのぼり
+  whirlpool:
+    en: Whirlpool
+    ja: うずしお
+  clear-smog:
+    en: Clear Smog
+    ja: クリアスモッグ
+  thrash:
+    en: Thrash
+    ja: あばれる
+  assurance:
+    en: Assurance
+    ja: ダメおし
+  baton-pass:
+    en: Baton Pass
+    ja: バトンタッチ
+  double-hit:
+    en: Double Hit
+    ja: ダブルアタック
+  double-team:
+    en: Double Team
+    ja: かげぶんしん
+  infestation:
+    en: Infestation
+    ja: まとわりつく
+  last-resort:
+    en: Last Resort
+    ja: とっておき
+  lock-on:
+    en: Lock-On
+    ja: ロックオン
+  pounce:
+    en: Pounce
+    ja: とびつく
+  quick-attack:
+    en: Quick Attack
+    ja: でんこうせっか
+  snowscape:
+    en: Snowscape
+    ja: ゆきげしき
+  whirlwind:
+    en: Whirlwind
+    ja: ふきとばし
+  wrap:
+    en: Wrap
+    ja: まきつく
+  belch:
+    en: Belch
+    ja: ゲップ
+  focus-energy:
+    en: Focus Energy
+    ja: きあいだめ
+  head-smash:
+    en: Head Smash
+    ja: もろはのずつき
+  ice-fang:
+    en: Ice Fang
+    ja: こおりのキバ
+  lash-out:
+    en: Lash Out
+    ja: うっぷんばらし
+  screech:
+    en: Screech
+    ja: いやなおと
+  uproar:
+    en: Uproar
+    ja: さわぐ
+  hard-press:
+    en: Hard Press
+    ja: ハードプレス
+  mud-slap:
+    en: Mud-Slap
+    ja: どろかけ
+  smack-down:
+    en: Smack Down
+    ja: うちおとす
+  swagger:
+    en: Swagger
+    ja: いばる
+  blaze-kick:
+    en: Blaze Kick
+    ja: ブレイズキック
+  bone-rush:
+    en: Bone Rush
+    ja: ボーンラッシュ
+  circle-throw:
+    en: Circle Throw
+    ja: ともえなげ
+  coaching:
+    en: Coaching
+    ja: コーチング
+  copycat:
+    en: Copycat
+    ja: まねっこ
+  cross-chop:
+    en: Cross Chop
+    ja: クロスチョップ
+  detect:
+    en: Detect
+    ja: みきり
+  feint:
+    en: Feint
+    ja: フェイント
+  final-gambit:
+    en: Final Gambit
+    ja: いのちがけ
+  heal-pulse:
+    en: Heal Pulse
+    ja: いやしのはどう
+  high-jump-kick:
+    en: High Jump Kick
+    ja: とびひざげり
+  howl:
+    en: Howl
+    ja: とおぼえ
+  low-sweep:
+    en: Low Sweep
+    ja: ローキック
+  metal-sound:
+    en: Metal Sound
+    ja: きんぞくおん
+  quick-guard:
+    en: Quick Guard
+    ja: ファストガード
+  reversal:
+    en: Reversal
+    ja: きしかいせい
+  steel-beam:
+    en: Steel Beam
+    ja: てっていこうせん
+  terrain-pulse:
+    en: Terrain Pulse
+    ja: だいちのはどう
+  upper-hand:
+    en: Upper Hand
+    ja: はやてがえし
+  charge:
+    en: Charge
+    ja: じゅうでん
+  discharge:
+    en: Discharge
+    ja: ほうでん
+  eerie-impulse:
+    en: Eerie Impulse
+    ja: かいでんぱ
+  electric-terrain:
+    en: Electric Terrain
+    ja: エレキフィールド
+  electro-ball:
+    en: Electro Ball
+    ja: エレキボール
+  rising-voltage:
+    en: Rising Voltage
+    ja: ライジングボルト
+  stored-power:
+    en: Stored Power
+    ja: アシストパワー

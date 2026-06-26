@@ -138,3 +138,15 @@ abilities:
   unnerve:
     ja: きんちょうかん
     en: Unnerve
+  illuminate:
+    en: Illuminate
+    ja: はっこう
+  natural-cure:
+    en: Natural Cure
+    ja: しぜんかいふく
+  analytic:
+    en: Analytic
+    ja: アナライズ
+  adaptability:
+    ja: てきおうりょく
+    en: Adaptability

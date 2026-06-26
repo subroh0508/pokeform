@@ -57,3 +57,31 @@ mega:
       S: 130
     ability: shadow-tag
     baseSpecies: gengar
+  tyranitar-mega:
+    dex: 248
+    types:
+      - rock
+      - dark
+    stats:
+      H: 100
+      A: 164
+      B: 150
+      C: 95
+      D: 120
+      S: 71
+    ability: sand-stream
+    baseSpecies: tyranitar
+  lucario-mega:
+    dex: 448
+    types:
+      - fighting
+      - steel
+    stats:
+      H: 70
+      A: 145
+      B: 88
+      C: 140
+      D: 70
+      S: 112
+    ability: adaptability
+    baseSpecies: lucario

@@ -1535,6 +1535,503 @@ export const moveNames = {
       ja: "ワンダールーム",
     },
   },
+  agility: {
+    id: "agility",
+    name: {
+      en: "Agility",
+      ja: "こうそくいどう",
+    },
+  },
+  "ally-switch": {
+    id: "ally-switch",
+    name: {
+      en: "Ally Switch",
+      ja: "サイドチェンジ",
+    },
+  },
+  avalanche: {
+    id: "avalanche",
+    name: {
+      en: "Avalanche",
+      ja: "ゆきなだれ",
+    },
+  },
+  blizzard: {
+    id: "blizzard",
+    name: {
+      en: "Blizzard",
+      ja: "ふぶき",
+    },
+  },
+  "charge-beam": {
+    id: "charge-beam",
+    name: {
+      en: "Charge Beam",
+      ja: "チャージビーム",
+    },
+  },
+  "chilling-water": {
+    id: "chilling-water",
+    name: {
+      en: "Chilling Water",
+      ja: "ひやみず",
+    },
+  },
+  "cosmic-power": {
+    id: "cosmic-power",
+    name: {
+      en: "Cosmic Power",
+      ja: "コスモパワー",
+    },
+  },
+  dive: {
+    id: "dive",
+    name: {
+      en: "Dive",
+      ja: "ダイビング",
+    },
+  },
+  gravity: {
+    id: "gravity",
+    name: {
+      en: "Gravity",
+      ja: "じゅうりょく",
+    },
+  },
+  "gyro-ball": {
+    id: "gyro-ball",
+    name: {
+      en: "Gyro Ball",
+      ja: "ジャイロボール",
+    },
+  },
+  "light-screen": {
+    id: "light-screen",
+    name: {
+      en: "Light Screen",
+      ja: "ひかりのかべ",
+    },
+  },
+  "meteor-beam": {
+    id: "meteor-beam",
+    name: {
+      en: "Meteor Beam",
+      ja: "メテオビーム",
+    },
+  },
+  minimize: {
+    id: "minimize",
+    name: {
+      en: "Minimize",
+      ja: "ちいさくなる",
+    },
+  },
+  "psycho-cut": {
+    id: "psycho-cut",
+    name: {
+      en: "Psycho Cut",
+      ja: "サイコカッター",
+    },
+  },
+  reflect: {
+    id: "reflect",
+    name: {
+      en: "Reflect",
+      ja: "リフレクター",
+    },
+  },
+  safeguard: {
+    id: "safeguard",
+    name: {
+      en: "Safeguard",
+      ja: "しんぴのまもり",
+    },
+  },
+  "tri-attack": {
+    id: "tri-attack",
+    name: {
+      en: "Tri Attack",
+      ja: "トライアタック",
+    },
+  },
+  "water-pulse": {
+    id: "water-pulse",
+    name: {
+      en: "Water Pulse",
+      ja: "みずのはどう",
+    },
+  },
+  waterfall: {
+    id: "waterfall",
+    name: {
+      en: "Waterfall",
+      ja: "たきのぼり",
+    },
+  },
+  whirlpool: {
+    id: "whirlpool",
+    name: {
+      en: "Whirlpool",
+      ja: "うずしお",
+    },
+  },
+  "clear-smog": {
+    id: "clear-smog",
+    name: {
+      en: "Clear Smog",
+      ja: "クリアスモッグ",
+    },
+  },
+  thrash: {
+    id: "thrash",
+    name: {
+      en: "Thrash",
+      ja: "あばれる",
+    },
+  },
+  assurance: {
+    id: "assurance",
+    name: {
+      en: "Assurance",
+      ja: "ダメおし",
+    },
+  },
+  "baton-pass": {
+    id: "baton-pass",
+    name: {
+      en: "Baton Pass",
+      ja: "バトンタッチ",
+    },
+  },
+  "double-hit": {
+    id: "double-hit",
+    name: {
+      en: "Double Hit",
+      ja: "ダブルアタック",
+    },
+  },
+  "double-team": {
+    id: "double-team",
+    name: {
+      en: "Double Team",
+      ja: "かげぶんしん",
+    },
+  },
+  infestation: {
+    id: "infestation",
+    name: {
+      en: "Infestation",
+      ja: "まとわりつく",
+    },
+  },
+  "last-resort": {
+    id: "last-resort",
+    name: {
+      en: "Last Resort",
+      ja: "とっておき",
+    },
+  },
+  "lock-on": {
+    id: "lock-on",
+    name: {
+      en: "Lock-On",
+      ja: "ロックオン",
+    },
+  },
+  pounce: {
+    id: "pounce",
+    name: {
+      en: "Pounce",
+      ja: "とびつく",
+    },
+  },
+  "quick-attack": {
+    id: "quick-attack",
+    name: {
+      en: "Quick Attack",
+      ja: "でんこうせっか",
+    },
+  },
+  snowscape: {
+    id: "snowscape",
+    name: {
+      en: "Snowscape",
+      ja: "ゆきげしき",
+    },
+  },
+  whirlwind: {
+    id: "whirlwind",
+    name: {
+      en: "Whirlwind",
+      ja: "ふきとばし",
+    },
+  },
+  wrap: {
+    id: "wrap",
+    name: {
+      en: "Wrap",
+      ja: "まきつく",
+    },
+  },
+  belch: {
+    id: "belch",
+    name: {
+      en: "Belch",
+      ja: "ゲップ",
+    },
+  },
+  "focus-energy": {
+    id: "focus-energy",
+    name: {
+      en: "Focus Energy",
+      ja: "きあいだめ",
+    },
+  },
+  "head-smash": {
+    id: "head-smash",
+    name: {
+      en: "Head Smash",
+      ja: "もろはのずつき",
+    },
+  },
+  "ice-fang": {
+    id: "ice-fang",
+    name: {
+      en: "Ice Fang",
+      ja: "こおりのキバ",
+    },
+  },
+  "lash-out": {
+    id: "lash-out",
+    name: {
+      en: "Lash Out",
+      ja: "うっぷんばらし",
+    },
+  },
+  screech: {
+    id: "screech",
+    name: {
+      en: "Screech",
+      ja: "いやなおと",
+    },
+  },
+  uproar: {
+    id: "uproar",
+    name: {
+      en: "Uproar",
+      ja: "さわぐ",
+    },
+  },
+  "hard-press": {
+    id: "hard-press",
+    name: {
+      en: "Hard Press",
+      ja: "ハードプレス",
+    },
+  },
+  "mud-slap": {
+    id: "mud-slap",
+    name: {
+      en: "Mud-Slap",
+      ja: "どろかけ",
+    },
+  },
+  "smack-down": {
+    id: "smack-down",
+    name: {
+      en: "Smack Down",
+      ja: "うちおとす",
+    },
+  },
+  swagger: {
+    id: "swagger",
+    name: {
+      en: "Swagger",
+      ja: "いばる",
+    },
+  },
+  "blaze-kick": {
+    id: "blaze-kick",
+    name: {
+      en: "Blaze Kick",
+      ja: "ブレイズキック",
+    },
+  },
+  "bone-rush": {
+    id: "bone-rush",
+    name: {
+      en: "Bone Rush",
+      ja: "ボーンラッシュ",
+    },
+  },
+  "circle-throw": {
+    id: "circle-throw",
+    name: {
+      en: "Circle Throw",
+      ja: "ともえなげ",
+    },
+  },
+  coaching: {
+    id: "coaching",
+    name: {
+      en: "Coaching",
+      ja: "コーチング",
+    },
+  },
+  copycat: {
+    id: "copycat",
+    name: {
+      en: "Copycat",
+      ja: "まねっこ",
+    },
+  },
+  "cross-chop": {
+    id: "cross-chop",
+    name: {
+      en: "Cross Chop",
+      ja: "クロスチョップ",
+    },
+  },
+  detect: {
+    id: "detect",
+    name: {
+      en: "Detect",
+      ja: "みきり",
+    },
+  },
+  feint: {
+    id: "feint",
+    name: {
+      en: "Feint",
+      ja: "フェイント",
+    },
+  },
+  "final-gambit": {
+    id: "final-gambit",
+    name: {
+      en: "Final Gambit",
+      ja: "いのちがけ",
+    },
+  },
+  "heal-pulse": {
+    id: "heal-pulse",
+    name: {
+      en: "Heal Pulse",
+      ja: "いやしのはどう",
+    },
+  },
+  "high-jump-kick": {
+    id: "high-jump-kick",
+    name: {
+      en: "High Jump Kick",
+      ja: "とびひざげり",
+    },
+  },
+  howl: {
+    id: "howl",
+    name: {
+      en: "Howl",
+      ja: "とおぼえ",
+    },
+  },
+  "low-sweep": {
+    id: "low-sweep",
+    name: {
+      en: "Low Sweep",
+      ja: "ローキック",
+    },
+  },
+  "metal-sound": {
+    id: "metal-sound",
+    name: {
+      en: "Metal Sound",
+      ja: "きんぞくおん",
+    },
+  },
+  "quick-guard": {
+    id: "quick-guard",
+    name: {
+      en: "Quick Guard",
+      ja: "ファストガード",
+    },
+  },
+  reversal: {
+    id: "reversal",
+    name: {
+      en: "Reversal",
+      ja: "きしかいせい",
+    },
+  },
+  "steel-beam": {
+    id: "steel-beam",
+    name: {
+      en: "Steel Beam",
+      ja: "てっていこうせん",
+    },
+  },
+  "terrain-pulse": {
+    id: "terrain-pulse",
+    name: {
+      en: "Terrain Pulse",
+      ja: "だいちのはどう",
+    },
+  },
+  "upper-hand": {
+    id: "upper-hand",
+    name: {
+      en: "Upper Hand",
+      ja: "はやてがえし",
+    },
+  },
+  charge: {
+    id: "charge",
+    name: {
+      en: "Charge",
+      ja: "じゅうでん",
+    },
+  },
+  discharge: {
+    id: "discharge",
+    name: {
+      en: "Discharge",
+      ja: "ほうでん",
+    },
+  },
+  "eerie-impulse": {
+    id: "eerie-impulse",
+    name: {
+      en: "Eerie Impulse",
+      ja: "かいでんぱ",
+    },
+  },
+  "electric-terrain": {
+    id: "electric-terrain",
+    name: {
+      en: "Electric Terrain",
+      ja: "エレキフィールド",
+    },
+  },
+  "electro-ball": {
+    id: "electro-ball",
+    name: {
+      en: "Electro Ball",
+      ja: "エレキボール",
+    },
+  },
+  "rising-voltage": {
+    id: "rising-voltage",
+    name: {
+      en: "Rising Voltage",
+      ja: "ライジングボルト",
+    },
+  },
+  "stored-power": {
+    id: "stored-power",
+    name: {
+      en: "Stored Power",
+      ja: "アシストパワー",
+    },
+  },
 } as const satisfies Record<string, NameEntry>;
 
 export type MoveNames = typeof moveNames;

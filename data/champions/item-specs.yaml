@@ -139,3 +139,11 @@ items:
     megaStoneFor: gengar
     megaSpecies: gengar-mega
     category: mega-stones
+  lucarionite:
+    megaStoneFor: lucario
+    megaSpecies: lucario-mega
+    category: mega-stones
+  tyranitarite:
+    megaStoneFor: tyranitar
+    megaSpecies: tyranitar-mega
+    category: mega-stones

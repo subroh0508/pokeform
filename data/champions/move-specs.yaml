@@ -1534,3 +1534,500 @@ moves:
     accuracy: null
     pp: 12
     priority: 0
+  agility:
+    type: psychic
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  ally-switch:
+    type: psychic
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 16
+    priority: 2
+  assurance:
+    type: dark
+    damageClass: physical
+    power: 60
+    accuracy: 100
+    pp: 12
+    priority: 0
+  avalanche:
+    type: ice
+    damageClass: physical
+    power: 60
+    accuracy: 100
+    pp: 12
+    priority: -4
+  baton-pass:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  belch:
+    type: poison
+    damageClass: special
+    power: 120
+    accuracy: 90
+    pp: 12
+    priority: 0
+  blaze-kick:
+    type: fire
+    damageClass: physical
+    power: 85
+    accuracy: 90
+    pp: 12
+    priority: 0
+  blizzard:
+    type: ice
+    damageClass: special
+    power: 110
+    accuracy: 70
+    pp: 8
+    priority: 0
+  bone-rush:
+    type: ground
+    damageClass: physical
+    power: 30
+    accuracy: 90
+    pp: 12
+    priority: 0
+  charge:
+    type: electric
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  charge-beam:
+    type: electric
+    damageClass: special
+    power: 50
+    accuracy: 90
+    pp: 12
+    priority: 0
+  chilling-water:
+    type: water
+    damageClass: special
+    power: 50
+    accuracy: 100
+    pp: 20
+    priority: 0
+  circle-throw:
+    type: fighting
+    damageClass: physical
+    power: 60
+    accuracy: 90
+    pp: 12
+    priority: -6
+  clear-smog:
+    type: poison
+    damageClass: special
+    power: 50
+    accuracy: null
+    pp: 16
+    priority: 0
+  coaching:
+    type: fighting
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 12
+    priority: 0
+  copycat:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  cosmic-power:
+    type: psychic
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  cross-chop:
+    type: fighting
+    damageClass: physical
+    power: 100
+    accuracy: 80
+    pp: 8
+    priority: 0
+  detect:
+    type: fighting
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 8
+    priority: 4
+  discharge:
+    type: electric
+    damageClass: special
+    power: 80
+    accuracy: 100
+    pp: 16
+    priority: 0
+  dive:
+    type: water
+    damageClass: physical
+    power: 80
+    accuracy: 100
+    pp: 12
+    priority: 0
+  double-hit:
+    type: normal
+    damageClass: physical
+    power: 35
+    accuracy: 90
+    pp: 12
+    priority: 0
+  double-team:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 16
+    priority: 0
+  eerie-impulse:
+    type: electric
+    damageClass: status
+    power: null
+    accuracy: 100
+    pp: 16
+    priority: 0
+  electric-terrain:
+    type: electric
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 12
+    priority: 0
+  electro-ball:
+    type: electric
+    damageClass: special
+    power: null
+    accuracy: 100
+    pp: 12
+    priority: 0
+  feint:
+    type: normal
+    damageClass: physical
+    power: 30
+    accuracy: 100
+    pp: 12
+    priority: 2
+  final-gambit:
+    type: fighting
+    damageClass: special
+    power: null
+    accuracy: 100
+    pp: 8
+    priority: 0
+  focus-energy:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  gravity:
+    type: psychic
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 8
+    priority: 0
+  gyro-ball:
+    type: steel
+    damageClass: physical
+    power: null
+    accuracy: 100
+    pp: 8
+    priority: 0
+  hard-press:
+    type: steel
+    damageClass: physical
+    power: null
+    accuracy: 100
+    pp: 12
+    priority: 0
+  head-smash:
+    type: rock
+    damageClass: physical
+    power: 150
+    accuracy: 80
+    pp: 8
+    priority: 0
+  heal-pulse:
+    type: psychic
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 12
+    priority: 0
+  high-jump-kick:
+    type: fighting
+    damageClass: physical
+    power: 130
+    accuracy: 90
+    pp: 12
+    priority: 0
+  howl:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  ice-fang:
+    type: ice
+    damageClass: physical
+    power: 65
+    accuracy: 95
+    pp: 16
+    priority: 0
+  infestation:
+    type: bug
+    damageClass: special
+    power: 20
+    accuracy: 100
+    pp: 20
+    priority: 0
+  lash-out:
+    type: dark
+    damageClass: physical
+    power: 75
+    accuracy: 100
+    pp: 8
+    priority: 0
+  last-resort:
+    type: normal
+    damageClass: physical
+    power: 140
+    accuracy: 100
+    pp: 8
+    priority: 0
+  light-screen:
+    type: psychic
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  lock-on:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 8
+    priority: 0
+  low-sweep:
+    type: fighting
+    damageClass: physical
+    power: 65
+    accuracy: 100
+    pp: 20
+    priority: 0
+  metal-sound:
+    type: steel
+    damageClass: status
+    power: null
+    accuracy: 85
+    pp: 20
+    priority: 0
+  meteor-beam:
+    type: rock
+    damageClass: special
+    power: 120
+    accuracy: 90
+    pp: 12
+    priority: 0
+  minimize:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 12
+    priority: 0
+  mud-slap:
+    type: ground
+    damageClass: special
+    power: 20
+    accuracy: 100
+    pp: 12
+    priority: 0
+  pounce:
+    type: bug
+    damageClass: physical
+    power: 50
+    accuracy: 100
+    pp: 20
+    priority: 0
+  psycho-cut:
+    type: psychic
+    damageClass: physical
+    power: 70
+    accuracy: 100
+    pp: 20
+    priority: 0
+  quick-attack:
+    type: normal
+    damageClass: physical
+    power: 40
+    accuracy: 100
+    pp: 20
+    priority: 1
+  quick-guard:
+    type: fighting
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 16
+    priority: 3
+  reflect:
+    type: psychic
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  reversal:
+    type: fighting
+    damageClass: physical
+    power: null
+    accuracy: 100
+    pp: 16
+    priority: 0
+  rising-voltage:
+    type: electric
+    damageClass: special
+    power: 70
+    accuracy: 100
+    pp: 20
+    priority: 0
+  safeguard:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: 0
+  screech:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: 85
+    pp: 20
+    priority: 0
+  smack-down:
+    type: rock
+    damageClass: physical
+    power: 50
+    accuracy: 100
+    pp: 16
+    priority: 0
+  snowscape:
+    type: ice
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 8
+    priority: 0
+  steel-beam:
+    type: steel
+    damageClass: special
+    power: 140
+    accuracy: 95
+    pp: 8
+    priority: 0
+  stored-power:
+    type: psychic
+    damageClass: special
+    power: 20
+    accuracy: 100
+    pp: 12
+    priority: 0
+  swagger:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: 85
+    pp: 16
+    priority: 0
+  terrain-pulse:
+    type: normal
+    damageClass: special
+    power: 50
+    accuracy: 100
+    pp: 12
+    priority: 0
+  thrash:
+    type: normal
+    damageClass: physical
+    power: 120
+    accuracy: 100
+    pp: 12
+    priority: 0
+  tri-attack:
+    type: normal
+    damageClass: special
+    power: 80
+    accuracy: 100
+    pp: 12
+    priority: 0
+  upper-hand:
+    type: fighting
+    damageClass: physical
+    power: 65
+    accuracy: 100
+    pp: 16
+    priority: 3
+  uproar:
+    type: normal
+    damageClass: special
+    power: 90
+    accuracy: 100
+    pp: 12
+    priority: 0
+  water-pulse:
+    type: water
+    damageClass: special
+    power: 60
+    accuracy: 100
+    pp: 20
+    priority: 0
+  waterfall:
+    type: water
+    damageClass: physical
+    power: 80
+    accuracy: 100
+    pp: 16
+    priority: 0
+  whirlpool:
+    type: water
+    damageClass: special
+    power: 35
+    accuracy: 85
+    pp: 16
+    priority: 0
+  whirlwind:
+    type: normal
+    damageClass: status
+    power: null
+    accuracy: null
+    pp: 20
+    priority: -6
+  wrap:
+    type: normal
+    damageClass: physical
+    power: 15
+    accuracy: 90
+    pp: 20
+    priority: 0
