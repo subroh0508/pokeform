@@ -17,7 +17,7 @@
 
 ## 前提（依存）
 
-- なし。本計画は後続 [`08-docs-restructure`](../../08-docs-restructure/README.md) より先に実施する。`finish-phase` の `completed/` 移動運用追記・`start-phase` の使い分け明確化は 08 が行う（本 Phase の圧縮とは別編集）。
+- なし。本計画は後続 [`08-docs-restructure`](../08-docs-restructure/README.md) より先に実施する。`finish-phase` の `completed/` 移動運用追記・`start-phase` の使い分け明確化は 08 が行う（本 Phase の圧縮とは別編集）。
 
 ## タスク
 

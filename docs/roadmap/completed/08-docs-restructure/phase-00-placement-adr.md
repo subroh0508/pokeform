@@ -14,7 +14,7 @@
 
 ## 前提（依存）
 
-なし（本計画群の ADR は起点）。実施順としては先行計画 [`07-rules-skills-simplify`](../completed/07-rules-skills-simplify/README.md) を済ませた状態が望ましい（重なるファイルの rework 削減）。Context に外部文献（Diátaxis / arc42・C4 / DRY・ARID / Anthropic 公式）と現状のドリフト債務分析を引く。
+なし（本計画群の ADR は起点）。実施順としては先行計画 [`07-rules-skills-simplify`](../07-rules-skills-simplify/README.md) を済ませた状態が望ましい（重なるファイルの rework 削減）。Context に外部文献（Diátaxis / arc42・C4 / DRY・ARID / Anthropic 公式）と現状のドリフト債務分析を引く。
 
 ## タスク
 

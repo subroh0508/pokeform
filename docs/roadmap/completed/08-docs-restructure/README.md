@@ -6,7 +6,7 @@
 >
 > **棲み分け**: `docs/roadmap/`（旧 `docs/plan/`）= 実装の計画・進捗・完了履歴（mutable WIP）。`docs/design/`（本計画で新設）= 設計の俯瞰・なぜ（現在どう成り立っているか・コードなし Explanation）。
 >
-> **実施順**: 先行計画 [`07-rules-skills-simplify`](../completed/07-rules-skills-simplify/README.md) を先、本計画（08）を後にする（先に冗長を削ってから構造を動かす。ハードな相互依存はなく、重なるファイルは後発がリベース）。
+> **実施順**: 先行計画 [`07-rules-skills-simplify`](../07-rules-skills-simplify/README.md) を先、本計画（08）を後にする（先に冗長を削ってから構造を動かす。ハードな相互依存はなく、重なるファイルは後発がリベース）。
 
 ## フェーズ依存グラフ
 
@@ -32,6 +32,6 @@ flowchart TD
 
 ## 補足
 
-- 各 phase doc は [plan-templates.md](../../../.claude/skills/plans-new/references/plan-templates.md) の「phase-NN-<slug>.md」節に従う。
+- 各 phase doc は [plan-templates.md](../../../../.claude/skills/plans-new/references/plan-templates.md) の「phase-NN-<slug>.md」節に従う。
 - ADR は `adr-new`、skill 改修は `skill-creator`（[[adr]] / [[skill-authoring]]）。各 PR は `harness-review` でセルフレビューし cross-agent パリティを点検する（[[cross-agent]]）。
-- rules / skills の純シンプル化（文体圧縮）は先行 [`07-rules-skills-simplify`](../completed/07-rules-skills-simplify/README.md)。
+- rules / skills の純シンプル化（文体圧縮）は先行 [`07-rules-skills-simplify`](../07-rules-skills-simplify/README.md)。

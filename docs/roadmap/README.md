@@ -10,7 +10,6 @@ pokeform の実装ロードマップは **計画ディレクトリ単位**で分
 
 active（未着手・進行中）は直下、完了した計画群は [`completed/`](./completed/) 配下に集約する。
 
-- ドキュメント構成再編（`docs/design/` 新設・`docs/plan` → `docs/roadmap` 改名・front matter 規約・AGENTS.md 刷新・SoT 二重管理解消）計画 → [`08-docs-restructure/README.md`](./08-docs-restructure/)
 - M-A 全種族投入（新レイアウト + 整理済みパイプライン上での全量投入）計画 → [`XX-ma-full-data/README.md`](./XX-ma-full-data/)
 - **完了計画群** → [`completed/`](./completed/)（下記ロールアップ表参照）
 - 設計俯瞰（旧 `01-mvp/architecture.md` をテーマ別に分割昇格・コードなし）→ [`docs/design/`](../design/README.md)
@@ -49,7 +48,7 @@ active（未着手・進行中）は直下、完了した計画群は [`complete
 | [completed/04-generated-layout-redesign](./completed/04-generated-layout-redesign/README.md) | ✅ 完了 |
 | [completed/05-move-master-scraper-refactor](./completed/05-move-master-scraper-refactor/README.md) | ✅ 完了 |
 | [completed/07-rules-skills-simplify](./completed/07-rules-skills-simplify/README.md) | ✅ 完了 |
-| [08-docs-restructure](./08-docs-restructure/README.md) | ✅ 完了 |
+| [completed/08-docs-restructure](./completed/08-docs-restructure/README.md) | ✅ 完了 |
 | [XX-ma-full-data](./XX-ma-full-data/README.md) | ⬜ 未着手 |
 
 ## MVP の範囲

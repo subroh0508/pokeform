@@ -22,7 +22,7 @@
 
 ## 設計方針
 
-- **実施順は本計画（07）を先、[`08-docs-restructure`](../../08-docs-restructure/README.md) を後**にする。先に冗長を削ってから構造（design 分割・roadmap 改名・参照張り替え・front matter 付与）を動かすほうが、後発の対象がスリムになり rework が減る。両計画は `code-review.md` / `planning.md` 等で一部ファイルが重なるため、07 → 08 の順で進め後発をリベースする（ハードな相互依存はない）。
+- **実施順は本計画（07）を先、[`08-docs-restructure`](../08-docs-restructure/README.md) を後**にする。先に冗長を削ってから構造（design 分割・roadmap 改名・参照張り替え・front matter 付与）を動かすほうが、後発の対象がスリムになり rework が減る。両計画は `code-review.md` / `planning.md` 等で一部ファイルが重なるため、07 → 08 の順で進め後発をリベースする（ハードな相互依存はない）。
 - **本計画は文体圧縮に専念し、front matter（後続 08 が design / rules へ導入する `last_modified` / `adr` キー）は触らない**。圧縮対象は rule / skill の本文と frontmatter description の冗長のみ。front matter スキーマの導入は 08 の責務（関心分離で衝突を避ける）。
 - **シンプル化の判断線（やりすぎ防止）を厳守**:
   1. **rule の自己完結性は保つ**: 「なぜ」を全部 ADR へ出さない。1 行要約は残し、詳細のみ ADR 委譲。
@@ -41,7 +41,7 @@
 
 ## スコープ外
 
-- **ドキュメント構成再編**（design 新設・roadmap 改名・AGENTS.md 刷新・二重管理解消・front matter 規約導入）= 後続計画 [`08-docs-restructure`](../../08-docs-restructure/README.md)。本計画は文体圧縮に専念し、配置・参照・front matter は変えない。
+- **ドキュメント構成再編**（design 新設・roadmap 改名・AGENTS.md 刷新・二重管理解消・front matter 規約導入）= 後続計画 [`08-docs-restructure`](../08-docs-restructure/README.md)。本計画は文体圧縮に専念し、配置・参照・front matter は変えない。
 - **M-A 全種族投入**（[`XX-ma-full-data`](../../XX-ma-full-data/README.md)）。
 - 機械ゲート・レビュー観点・規約の**意味**の変更。圧縮は文面のみ。
 - skill の trigger（description の意味）を変える改修（精度を保つ圧縮のみ。意味変更は別 PR）。

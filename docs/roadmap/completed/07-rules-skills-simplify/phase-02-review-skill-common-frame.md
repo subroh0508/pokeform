@@ -10,7 +10,7 @@
 
 ## 前提（依存）
 
-- なし。本計画は後続 [`08-docs-restructure`](../../08-docs-restructure/README.md) より先に実施する。`code-review.md:27` の plan 参照違反是正は 08 が行う（本 Phase の共通フレーム抽出とは別編集で、08 が本計画の圧縮後にリベースする）。
+- なし。本計画は後続 [`08-docs-restructure`](../08-docs-restructure/README.md) より先に実施する。`code-review.md:27` の plan 参照違反是正は 08 が行う（本 Phase の共通フレーム抽出とは別編集で、08 が本計画の圧縮後にリベースする）。
 
 ## タスク
 
