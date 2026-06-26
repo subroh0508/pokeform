@@ -283,6 +283,92 @@ export const itemSpecsDex = {
     megaStoneFor: "tyranitar",
     megaSpecies: "tyranitar-mega",
   },
+  "big-root": {
+    id: "big-root",
+    category: "held-items",
+  },
+  "damp-rock": {
+    id: "damp-rock",
+    category: "held-items",
+  },
+  "expert-belt": {
+    id: "expert-belt",
+    category: "held-items",
+  },
+  "heat-rock": {
+    id: "heat-rock",
+    category: "held-items",
+  },
+  "icy-rock": {
+    id: "icy-rock",
+    category: "held-items",
+  },
+  "iron-ball": {
+    id: "iron-ball",
+    category: "bad-held-items",
+  },
+  "light-clay": {
+    id: "light-clay",
+    category: "held-items",
+  },
+  metronome: {
+    id: "metronome",
+    category: "held-items",
+  },
+  "muscle-band": {
+    id: "muscle-band",
+    category: "held-items",
+  },
+  "shed-shell": {
+    id: "shed-shell",
+    category: "held-items",
+  },
+  "smooth-rock": {
+    id: "smooth-rock",
+    category: "held-items",
+  },
+  "wide-lens": {
+    id: "wide-lens",
+    category: "held-items",
+  },
+  "wise-glasses": {
+    id: "wise-glasses",
+    category: "held-items",
+  },
+  "zoom-lens": {
+    id: "zoom-lens",
+    category: "held-items",
+  },
+  blazikenite: {
+    id: "blazikenite",
+    category: "mega-stones",
+    megaStoneFor: "blaziken",
+    megaSpecies: "blaziken-mega",
+  },
+  mawilite: {
+    id: "mawilite",
+    category: "mega-stones",
+    megaStoneFor: "mawile",
+    megaSpecies: "mawile-mega",
+  },
+  metagrossite: {
+    id: "metagrossite",
+    category: "mega-stones",
+    megaStoneFor: "metagross",
+    megaSpecies: "metagross-mega",
+  },
+  sceptilite: {
+    id: "sceptilite",
+    category: "mega-stones",
+    megaStoneFor: "sceptile",
+    megaSpecies: "sceptile-mega",
+  },
+  swampertite: {
+    id: "swampertite",
+    category: "mega-stones",
+    megaStoneFor: "swampert",
+    megaSpecies: "swampert-mega",
+  },
 } as const;
 
 export type ItemSpecsDex = typeof itemSpecsDex;

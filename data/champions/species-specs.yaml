@@ -63,6 +63,8 @@ species:
     abilities:
       - clear-body
       - light-metal
+    megaEvolvesTo:
+      - metagross-mega
   rotom-wash:
     dex: 479
     types:
@@ -466,3 +468,331 @@ species:
       - illuminate
       - natural-cure
       - analytic
+  vileplume:
+    dex: 45
+    types:
+      - grass
+      - poison
+    stats:
+      H: 75
+      A: 80
+      B: 85
+      C: 110
+      D: 90
+      S: 50
+    abilities:
+      - chlorophyll
+      - effect-spore
+  qwilfish:
+    dex: 211
+    types:
+      - water
+      - poison
+    stats:
+      H: 65
+      A: 95
+      B: 85
+      C: 55
+      D: 55
+      S: 85
+    abilities:
+      - poison-point
+      - swift-swim
+      - intimidate
+  sceptile:
+    dex: 254
+    types:
+      - grass
+    stats:
+      H: 70
+      A: 85
+      B: 65
+      C: 105
+      D: 85
+      S: 120
+    abilities:
+      - overgrow
+      - unburden
+    megaEvolvesTo:
+      - sceptile-mega
+  blaziken:
+    dex: 257
+    types:
+      - fire
+      - fighting
+    stats:
+      H: 80
+      A: 120
+      B: 70
+      C: 110
+      D: 70
+      S: 80
+    abilities:
+      - blaze
+      - speed-boost
+    megaEvolvesTo:
+      - blaziken-mega
+  swampert:
+    dex: 260
+    types:
+      - water
+      - ground
+    stats:
+      H: 100
+      A: 110
+      B: 90
+      C: 85
+      D: 90
+      S: 60
+    abilities:
+      - torrent
+      - damp
+    megaEvolvesTo:
+      - swampert-mega
+  mawile:
+    dex: 303
+    types:
+      - steel
+      - fairy
+    stats:
+      H: 50
+      A: 85
+      B: 85
+      C: 55
+      D: 55
+      S: 50
+    abilities:
+      - hyper-cutter
+      - intimidate
+      - sheer-force
+    megaEvolvesTo:
+      - mawile-mega
+  staraptor:
+    dex: 398
+    types:
+      - normal
+      - flying
+    stats:
+      H: 85
+      A: 120
+      B: 70
+      C: 50
+      D: 60
+      S: 100
+    abilities:
+      - intimidate
+      - reckless
+  musharna:
+    dex: 518
+    types:
+      - psychic
+    stats:
+      H: 116
+      A: 55
+      B: 85
+      C: 107
+      D: 95
+      S: 29
+    abilities:
+      - forewarn
+      - synchronize
+      - telepathy
+  scolipede:
+    dex: 545
+    types:
+      - bug
+      - poison
+    stats:
+      H: 60
+      A: 100
+      B: 89
+      C: 55
+      D: 69
+      S: 112
+    abilities:
+      - poison-point
+      - swarm
+      - speed-boost
+  scrafty:
+    dex: 560
+    types:
+      - dark
+      - fighting
+    stats:
+      H: 65
+      A: 90
+      B: 115
+      C: 45
+      D: 115
+      S: 58
+    abilities:
+      - shed-skin
+      - moxie
+      - intimidate
+  eelektross:
+    dex: 604
+    types:
+      - electric
+    stats:
+      H: 85
+      A: 115
+      B: 80
+      C: 105
+      D: 80
+      S: 50
+    abilities:
+      - levitate
+  pyroar:
+    dex: 668
+    types:
+      - fire
+      - normal
+    stats:
+      H: 86
+      A: 68
+      B: 72
+      C: 109
+      D: 66
+      S: 106
+    abilities:
+      - rivalry
+      - unnerve
+      - moxie
+  malamar:
+    dex: 687
+    types:
+      - dark
+      - psychic
+    stats:
+      H: 86
+      A: 92
+      B: 88
+      C: 68
+      D: 75
+      S: 73
+    abilities:
+      - contrary
+      - suction-cups
+      - infiltrator
+  barbaracle:
+    dex: 689
+    types:
+      - rock
+      - water
+    stats:
+      H: 72
+      A: 105
+      B: 115
+      C: 54
+      D: 86
+      S: 68
+    abilities:
+      - tough-claws
+      - sniper
+      - pickpocket
+  dragalge:
+    dex: 691
+    types:
+      - poison
+      - dragon
+    stats:
+      H: 65
+      A: 75
+      B: 90
+      C: 97
+      D: 123
+      S: 44
+    abilities:
+      - poison-point
+      - poison-touch
+      - adaptability
+  grimmsnarl:
+    dex: 861
+    types:
+      - dark
+      - fairy
+    stats:
+      H: 95
+      A: 120
+      B: 65
+      C: 95
+      D: 75
+      S: 60
+    abilities:
+      - prankster
+      - frisk
+      - pickpocket
+  falinks:
+    dex: 870
+    types:
+      - fighting
+    stats:
+      H: 65
+      A: 100
+      B: 100
+      C: 70
+      D: 60
+      S: 75
+    abilities:
+      - battle-armor
+      - defiant
+  overqwil:
+    dex: 904
+    types:
+      - dark
+      - poison
+    stats:
+      H: 85
+      A: 115
+      B: 95
+      C: 65
+      D: 65
+      S: 85
+    abilities:
+      - poison-point
+      - swift-swim
+      - intimidate
+  houndstone:
+    dex: 972
+    types:
+      - ghost
+    stats:
+      H: 72
+      A: 101
+      B: 100
+      C: 50
+      D: 97
+      S: 68
+    abilities:
+      - sand-rush
+      - fluffy
+  annihilape:
+    dex: 979
+    types:
+      - fighting
+      - ghost
+    stats:
+      H: 110
+      A: 115
+      B: 80
+      C: 50
+      D: 90
+      S: 90
+    abilities:
+      - vital-spirit
+      - inner-focus
+      - defiant
+  gholdengo:
+    dex: 1000
+    types:
+      - steel
+      - ghost
+    stats:
+      H: 87
+      A: 60
+      B: 95
+      C: 133
+      D: 91
+      S: 84
+    abilities:
+      - good-as-gold

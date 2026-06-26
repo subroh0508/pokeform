@@ -9,6 +9,13 @@ export const regulationNames = {
       ja: "チャンピオンズ レギュレーションM-A",
     },
   },
+  "champions-m-b": {
+    id: "champions-m-b",
+    name: {
+      en: "Champions Regulation M-B",
+      ja: "チャンピオンズ レギュレーションM-B",
+    },
+  },
 } as const satisfies Record<string, NameEntry>;
 
 export type RegulationNames = typeof regulationNames;

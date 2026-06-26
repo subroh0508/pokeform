@@ -147,3 +147,51 @@ items:
     megaStoneFor: tyranitar
     megaSpecies: tyranitar-mega
     category: mega-stones
+  big-root:
+    category: held-items
+  damp-rock:
+    category: held-items
+  expert-belt:
+    category: held-items
+  heat-rock:
+    category: held-items
+  icy-rock:
+    category: held-items
+  iron-ball:
+    category: bad-held-items
+  light-clay:
+    category: held-items
+  metronome:
+    category: held-items
+  muscle-band:
+    category: held-items
+  shed-shell:
+    category: held-items
+  smooth-rock:
+    category: held-items
+  wide-lens:
+    category: held-items
+  wise-glasses:
+    category: held-items
+  zoom-lens:
+    category: held-items
+  blazikenite:
+    megaStoneFor: blaziken
+    megaSpecies: blaziken-mega
+    category: mega-stones
+  mawilite:
+    megaStoneFor: mawile
+    megaSpecies: mawile-mega
+    category: mega-stones
+  metagrossite:
+    megaStoneFor: metagross
+    megaSpecies: metagross-mega
+    category: mega-stones
+  sceptilite:
+    megaStoneFor: sceptile
+    megaSpecies: sceptile-mega
+    category: mega-stones
+  swampertite:
+    megaStoneFor: swampert
+    megaSpecies: swampert-mega
+    category: mega-stones

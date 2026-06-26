@@ -471,6 +471,139 @@ export const itemNames = {
       ja: "バンギラスナイト",
     },
   },
+  "big-root": {
+    id: "big-root",
+    name: {
+      en: "Big Root",
+      ja: "おおきなねっこ",
+    },
+  },
+  "damp-rock": {
+    id: "damp-rock",
+    name: {
+      en: "Damp Rock",
+      ja: "しめったいわ",
+    },
+  },
+  "expert-belt": {
+    id: "expert-belt",
+    name: {
+      en: "Expert Belt",
+      ja: "たつじんのおび",
+    },
+  },
+  "heat-rock": {
+    id: "heat-rock",
+    name: {
+      en: "Heat Rock",
+      ja: "あついいわ",
+    },
+  },
+  "icy-rock": {
+    id: "icy-rock",
+    name: {
+      en: "Icy Rock",
+      ja: "つめたいいわ",
+    },
+  },
+  "iron-ball": {
+    id: "iron-ball",
+    name: {
+      en: "Iron Ball",
+      ja: "くろいてっきゅう",
+    },
+  },
+  "light-clay": {
+    id: "light-clay",
+    name: {
+      en: "Light Clay",
+      ja: "ひかりのねんど",
+    },
+  },
+  metronome: {
+    id: "metronome",
+    name: {
+      en: "Metronome",
+      ja: "メトロノーム",
+    },
+  },
+  "muscle-band": {
+    id: "muscle-band",
+    name: {
+      en: "Muscle Band",
+      ja: "ちからのハチマキ",
+    },
+  },
+  "shed-shell": {
+    id: "shed-shell",
+    name: {
+      en: "Shed Shell",
+      ja: "きれいなぬけがら",
+    },
+  },
+  "smooth-rock": {
+    id: "smooth-rock",
+    name: {
+      en: "Smooth Rock",
+      ja: "さらさらいわ",
+    },
+  },
+  "wide-lens": {
+    id: "wide-lens",
+    name: {
+      en: "Wide Lens",
+      ja: "こうかくレンズ",
+    },
+  },
+  "wise-glasses": {
+    id: "wise-glasses",
+    name: {
+      en: "Wise Glasses",
+      ja: "ものしりメガネ",
+    },
+  },
+  "zoom-lens": {
+    id: "zoom-lens",
+    name: {
+      en: "Zoom Lens",
+      ja: "フォーカスレンズ",
+    },
+  },
+  blazikenite: {
+    id: "blazikenite",
+    name: {
+      en: "Blazikenite",
+      ja: "バシャーモナイト",
+    },
+  },
+  mawilite: {
+    id: "mawilite",
+    name: {
+      en: "Mawilite",
+      ja: "クチートナイト",
+    },
+  },
+  metagrossite: {
+    id: "metagrossite",
+    name: {
+      en: "Metagrossite",
+      ja: "メタグロスナイト",
+    },
+  },
+  sceptilite: {
+    id: "sceptilite",
+    name: {
+      en: "Sceptilite",
+      ja: "ジュカインナイト",
+    },
+  },
+  swampertite: {
+    id: "swampertite",
+    name: {
+      en: "Swampertite",
+      ja: "ラグラージナイト",
+    },
+  },
 } as const satisfies Record<string, NameEntry>;
 
 export type ItemNames = typeof itemNames;

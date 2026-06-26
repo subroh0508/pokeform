@@ -870,3 +870,261 @@ moves:
   stored-power:
     en: Stored Power
     ja: アシストパワー
+  after-you:
+    en: After You
+    ja: おさきにどうぞ
+  attract:
+    en: Attract
+    ja: メロメロ
+  charm:
+    en: Charm
+    ja: あまえる
+  flail:
+    en: Flail
+    ja: じたばた
+  grassy-terrain:
+    en: Grassy Terrain
+    ja: グラスフィールド
+  growth:
+    en: Growth
+    ja: せいちょう
+  ingrain:
+    en: Ingrain
+    ja: ねをはる
+  leech-seed:
+    en: Leech Seed
+    ja: やどりぎのタネ
+  moonblast:
+    en: Moonblast
+    ja: ムーンフォース
+  moonlight:
+    en: Moonlight
+    ja: つきのひかり
+  petal-blizzard:
+    en: Petal Blizzard
+    ja: はなふぶき
+  petal-dance:
+    en: Petal Dance
+    ja: はなびらのまい
+  poison-powder:
+    en: Poison Powder
+    ja: どくのこな
+  pollen-puff:
+    en: Pollen Puff
+    ja: かふんだんご
+  seed-bomb:
+    en: Seed Bomb
+    ja: タネばくだん
+  sleep-powder:
+    en: Sleep Powder
+    ja: ねむりごな
+  solar-blade:
+    en: Solar Blade
+    ja: ソーラーブレード
+  strength-sap:
+    en: Strength Sap
+    ja: ちからをすいとる
+  stun-spore:
+    en: Stun Spore
+    ja: しびれごな
+  sweet-scent:
+    en: Sweet Scent
+    ja: あまいかおり
+  synthesis:
+    en: Synthesis
+    ja: こうごうせい
+  teeter-dance:
+    en: Teeter Dance
+    ja: フラフラダンス
+  tickle:
+    en: Tickle
+    ja: くすぐる
+  acupressure:
+    en: Acupressure
+    ja: つぼをつく
+  barb-barrage:
+    en: Barb Barrage
+    ja: どくばりセンボン
+  fell-stinger:
+    en: Fell Stinger
+    ja: とどめばり
+  spit-up:
+    en: Spit Up
+    ja: はきだす
+  steel-roller:
+    en: Steel Roller
+    ja: アイアンローラー
+  stockpile:
+    en: Stockpile
+    ja: たくわえる
+  cross-poison:
+    en: Cross Poison
+    ja: クロスポイズン
+  endeavor:
+    en: Endeavor
+    ja: がむしゃら
+  frenzy-plant:
+    en: Frenzy Plant
+    ja: ハードプラント
+  shed-tail:
+    en: Shed Tail
+    ja: しっぽきり
+  worry-seed:
+    en: Worry Seed
+    ja: なやみのタネ
+  bounce:
+    en: Bounce
+    ja: とびはねる
+  crush-claw:
+    en: Crush Claw
+    ja: ブレイククロー
+  feather-dance:
+    en: Feather Dance
+    ja: フェザーダンス
+  amnesia:
+    en: Amnesia
+    ja: ドわすれ
+  aqua-ring:
+    en: Aqua Ring
+    ja: アクアリング
+  hammer-arm:
+    en: Hammer Arm
+    ja: アームハンマー
+  hydro-cannon:
+    en: Hydro Cannon
+    ja: ハイドロカノン
+  yawn:
+    en: Yawn
+    ja: あくび
+  draining-kiss:
+    en: Draining Kiss
+    ja: ドレインキッス
+  dynamic-punch:
+    en: Dynamic Punch
+    ja: ばくれつパンチ
+  fake-tears:
+    en: Fake Tears
+    ja: うそなき
+  guard-swap:
+    en: Guard Swap
+    ja: ガードスワップ
+  misty-terrain:
+    en: Misty Terrain
+    ja: ミストフィールド
+  poison-fang:
+    en: Poison Fang
+    ja: どくどくのキバ
+  seismic-toss:
+    en: Seismic Toss
+    ja: ちきゅうなげ
+  swallow:
+    en: Swallow
+    ja: のみこむ
+  explosion:
+    en: Explosion
+    ja: だいばくはつ
+  future-sight:
+    en: Future Sight
+    ja: みらいよち
+  magnet-rise:
+    en: Magnet Rise
+    ja: でんじふゆう
+  sky-attack:
+    en: Sky Attack
+    ja: ゴッドバード
+  healing-wish:
+    en: Healing Wish
+    ja: いやしのねがい
+  misty-explosion:
+    en: Misty Explosion
+    ja: ミストバースト
+  power-swap:
+    en: Power Swap
+    ja: パワースワップ
+  psychic-terrain:
+    en: Psychic Terrain
+    ja: サイコフィールド
+  leech-life:
+    en: Leech Life
+    ja: きゅうけつ
+  super-fang:
+    en: Super Fang
+    ja: いかりのまえば
+  torment:
+    en: Torment
+    ja: いちゃもん
+  coil:
+    en: Coil
+    ja: とぐろをまく
+  gastro-acid:
+    en: Gastro Acid
+    ja: いえき
+  supercell-slam:
+    en: Supercell Slam
+    ja: サンダーダイブ
+  zap-cannon:
+    en: Zap Cannon
+    ja: でんじほう
+  burning-jealousy:
+    en: Burning Jealousy
+    ja: しっとのほのお
+  entrainment:
+    en: Entrainment
+    ja: なかまづくり
+  noble-roar:
+    en: Noble Roar
+    ja: おたけび
+  pluck:
+    en: Pluck
+    ja: ついばむ
+  switcheroo:
+    en: Switcheroo
+    ja: すりかえ
+  topsy-turvy:
+    en: Topsy-Turvy
+    ja: ひっくりかえす
+  aqua-cutter:
+    en: Aqua Cutter
+    ja: アクアカッター
+  razor-shell:
+    en: Razor Shell
+    ja: シェルブレード
+  rock-polish:
+    en: Rock Polish
+    ja: ロックカット
+  acid-armor:
+    en: Acid Armor
+    ja: とける
+  flatter:
+    en: Flatter
+    ja: おだてる
+  parting-shot:
+    en: Parting Shot
+    ja: すてゼリフ
+  power-whip:
+    en: Power Whip
+    ja: パワーウィップ
+  spirit-break:
+    en: Spirit Break
+    ja: ソウルクラッシュ
+  first-impression:
+    en: First Impression
+    ja: であいがしら
+  no-retreat:
+    en: No Retreat
+    ja: はいすいのじん
+  last-respects:
+    en: Last Respects
+    ja: おはかまいり
+  memento:
+    en: Memento
+    ja: おきみやげ
+  rage-fist:
+    en: Rage Fist
+    ja: ふんどのこぶし
+  storm-throw:
+    en: Storm Throw
+    ja: やまあらし
+  make-it-rain:
+    en: Make It Rain
+    ja: ゴールドラッシュ

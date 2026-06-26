@@ -25,7 +25,7 @@ flowchart TD
 ## フェーズ一覧（この順で実施）
 
 - [x] [Phase 1 — レコード全削除 + M-A 限定投入（リザードン・スターミー・ゲンガー含む 10 体 + 全持ち物）](./phase-01-reset-and-ma-limited.md)
-- [ ] [Phase 2 — M-B 限定投入（M-A の 10 体 + M-B 追加解禁全種 + 全持ち物）](./phase-02-mb-limited.md)
+- [x] [Phase 2 — M-B 限定投入（M-A の 10 体 + M-B 追加解禁全種 + 全持ち物）](./phase-02-mb-limited.md)
 - [ ] [Phase 3 — 人間による `survey-regulation` skill 動作検証ゲート（NG なら P1-2 サイクル再実行）](./phase-03-skill-verification-gate.md)
 - [ ] [Phase 4 — M-A・M-B 全解禁情報の本投入（全種・全技・全持ち物・全メガ）](./phase-04-full-rollout.md)
 
