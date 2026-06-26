@@ -19,7 +19,7 @@
 
 ## タスク
 
-- [ ] `code-review.md:27` の「Phase 9」phase doc 参照を [ADR 0013](../../adr/0013-git-hooks-over-claude-hooks.md) 参照へ張り替え（plan 参照違反解消）。
+- [ ] `code-review.md:27` の「Phase 9」phase doc 参照を [ADR 0013](../../../adr/0013-git-hooks-over-claude-hooks.md) 参照へ張り替え（plan 参照違反解消）。
 - [ ] 全 `.claude/rules/*.md` の front matter に `last_modified`（ISO8601）+ `adr`（関連 ADR 配列）キーを追加し、`pnpm prepare`（`gen-rules-index.ts`）で rules-index が正しく再生成される（`paths` 解釈非干渉）ことを確認。
 - [ ] `harness-meta/SKILL.md` の「Phase 7 で新設される skill-authoring.md」を「確定済み skill-authoring.md」へ更新。
 - [ ] `survey-regulation/references/serebii-sourcing.md` の「過去の人手調査（Phase 7）」表記を文脈補強（plan phase 番号への依存を外す）。
@@ -48,4 +48,4 @@
 ## リスク・備考
 
 - description 変更は trigger 精度に直結する。短縮ではなく明確化に徹し、under-trigger を招かない（文体圧縮は先行計画 07 で eval 付きで行う）。
-- 本 Phase 完了で計画 08（ドキュメント構成再編）が完了。文体圧縮は先行計画 [`07-rules-skills-simplify`](../completed/07-rules-skills-simplify/README.md)。
+- 本 Phase 完了で計画 08（ドキュメント構成再編）が完了。文体圧縮は先行計画 [`07-rules-skills-simplify`](../07-rules-skills-simplify/README.md)。

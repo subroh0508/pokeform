@@ -22,7 +22,7 @@
 
 ## 前提（依存）
 
-- なし。本計画は後続 [`08-docs-restructure`](../../08-docs-restructure/README.md) より先に実施する。`planning.md` の `paths` は本計画時点では `docs/plan/**`（`docs/roadmap/**` への追従は 08 が行う）。本 Phase は本文圧縮のみで `paths` は変えないため競合しない。
+- なし。本計画は後続 [`08-docs-restructure`](../08-docs-restructure/README.md) より先に実施する。`planning.md` の `paths` は本計画時点では `docs/plan/**`（`docs/roadmap/**` への追従は 08 が行う）。本 Phase は本文圧縮のみで `paths` は変えないため競合しない。
 
 ## タスク
 

@@ -14,7 +14,7 @@
 
 ## 前提（依存）
 
-- なし。本計画は後続 [`08-docs-restructure`](../../08-docs-restructure/README.md) より先に実施する。データ系 skill は 08 の構造再編の影響が小さく、独立に着手できる。
+- なし。本計画は後続 [`08-docs-restructure`](../08-docs-restructure/README.md) より先に実施する。データ系 skill は 08 の構造再編の影響が小さく、独立に着手できる。
 
 ## タスク
 

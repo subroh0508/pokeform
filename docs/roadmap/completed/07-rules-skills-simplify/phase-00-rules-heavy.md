@@ -11,7 +11,7 @@
 
 ## 前提（依存）
 
-- なし。本計画は後続 [`08-docs-restructure`](../../08-docs-restructure/README.md) より先に実施する（先に冗長を削ってから構造を動かす）。`data-pipeline.md` は本 Phase の圧縮対象。
+- なし。本計画は後続 [`08-docs-restructure`](../08-docs-restructure/README.md) より先に実施する（先に冗長を削ってから構造を動かす）。`data-pipeline.md` は本 Phase の圧縮対象。
 
 ## タスク
 

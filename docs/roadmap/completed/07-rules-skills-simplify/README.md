@@ -4,7 +4,7 @@
 
 > 設計の正本は [`OVERVIEW.md`](./OVERVIEW.md)（ゴール / 背景 / 設計方針 / 実装指針 / スコープ外 / 計画群全体の受け入れ基準 + やりすぎ防止の判断線）。
 >
-> **実施順**: 本計画（07）を先、[`08-docs-restructure`](../../08-docs-restructure/README.md) を後にする。先に冗長を削ってから構造を動かす（ハードな相互依存はなく、重なるファイルは後発がリベース）。
+> **実施順**: 本計画（07）を先、[`08-docs-restructure`](../08-docs-restructure/README.md) を後にする。先に冗長を削ってから構造を動かす（ハードな相互依存はなく、重なるファイルは後発がリベース）。
 
 ## フェーズ依存グラフ
 
@@ -34,4 +34,4 @@ flowchart TD
 - 各 phase doc は [plan-templates.md](../../../../.claude/skills/plans-new/references/plan-templates.md) の「phase-NN-<slug>.md」節に従う。
 - skill 改修は `skill-creator`、rule 改修は [[skill-authoring]] 基準を直接適用。各 PR は `harness-review` でセルフレビューし trigger 精度・cross-agent パリティ・references dangling を点検する（[[cross-agent]]）。
 - **やりすぎ防止**: 圧縮の判断線は OVERVIEW の設計方針（5 点）を厳守する。
-- front matter（`last_modified` / `adr` キー）の導入は後続 [`08-docs-restructure`](../../08-docs-restructure/README.md) の責務。本計画は本文・description の圧縮のみ。
+- front matter（`last_modified` / `adr` キー）の導入は後続 [`08-docs-restructure`](../08-docs-restructure/README.md) の責務。本計画は本文・description の圧縮のみ。
