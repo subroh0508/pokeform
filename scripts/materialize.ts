@@ -1,64 +1,48 @@
 /**
- * materialize.ts — `data/raw/`（PokeAPI キャッシュ）から構造データ（図鑑番号 / タイプ / 種族値 /
- * 特性 id / 持ち物 category）と日本語名 ja を読み、新ツリーの該当フィールドへ**転記**する専任スクリプト。
+ * materialize.ts — `data/raw/`（PokeAPI `names` キャッシュ）から日本語名 ja を読み、名前 SoT
+ * `data/languages/*.yaml` の該当エントリへ **backfill** する ja 専任スクリプト。
  *
- * 転記先（ADR 0035/0036・3 軸直交）:
- *   構造 → `data/champions/species-specs.yaml`（base・dex/types/stats/abilities）/ `mega-specs.yaml`
- *          （メガ・dex/types/stats）/ `item-specs.yaml`（category）。
- *   名前 ja → `data/languages/{species,items,moves,abilities}.yaml`（ゲーム非依存・名前 SoT）。
- *   メガ名 ja / タイプ名は PokeAPI に無いため skill 著述（materialize は触れない）。
+ * **ja 専任**（plan 10）: 構造データ（図鑑番号 / タイプ / 種族値 / 特性 id / 持ち物 category）の転記は
+ * pokemon-showdown 経路（`scripts/sync-showdown.ts` + `src/codegen/showdown/*`）へ移管した。本スクリプトは
+ * `languages/{species,items,moves,abilities}.yaml` の ja（技 / 特性は ja/en）補完だけを担う。メガ名 ja /
+ * タイプ名は PokeAPI に無いため対象外（skill 著述 / Serebii 速報・[[data-pipeline]]）。
  *
- * vendor 方式（ADR 0012 / 0027）の転記段: raw=取得キャッシュ（materialize 元）/ specs・languages=SoT。
- * `generate.ts` は YAML のみを変換し raw を読まない（ADR 0027）。本スクリプトだけが raw を必要とする。
+ * **raw best-effort（不在 skip）**: `fetch:ja-names` が ja/en 欠落エントリのみ best-effort 取得するため、raw が
+ * 無いエントリ（Champions 固有メガストーン等の PokeAPI 非存在・取得済みで欠落なし）は転記をスキップする。
  *
- * **raw 必須・fail-fast（species / mega）**: raw が無ければ `readFileSync` が ENOENT で即エラー終了する（raw
- * 存在の担保は呼び出し側 `update-catalog` skill の責務・ADR 0027 / [[data-pipeline]]）。**例外: 持ち物（item）は
- * best-effort**（`rawOpt`）で、Champions 固有メガストーン（PokeAPI 非存在・`fetch:data` が 404 skip）は raw が
- * 無いので materialize をスキップする（`category` は Serebii 由来で specs に既にあり・ja は人間が手入力で補完）。
+ * **append/既存尊重**: 未設定フィールドだけを raw 由来 ja/en で埋め、既に値があるフィールドは raw と異なっても
+ * 上書きしない（Champions 実態に合わせた skill 著述 / 速報値を保護）。差分は conflict として標準出力に提示する。
  *
- * **append/既存尊重**: 未設定フィールドだけを raw 由来値で埋め、既に値があるフィールドは raw と異なっても
- * 上書きしない（Champions 実態に合わせた skill 著述値を保護）。差分は conflict として標準出力に提示する。
- *
- * 実行: `pnpm materialize`（fetch:data 後・ネットワーク不要）。
+ * 実行: `pnpm sync:ja-names`（fetch:ja-names 後・ネットワーク不要）。
  */
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Document, parseDocument, type YAMLMap } from "yaml";
 import {
-  extractItemCategory,
   extractJaName,
   extractNames,
-  extractSpeciesStructural,
   type FieldPlan,
   planFields,
 } from "../src/codegen/materialize.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const RAW = join(ROOT, "data", "raw");
-const CH = join(ROOT, "data", "champions");
 const LANG = join(ROOT, "data", "languages");
 
-/** raw JSON を 1 件読む（不在なら ENOENT で fail-fast）。 */
-const raw = <T>(category: string, name: string): T =>
-  JSON.parse(readFileSync(join(RAW, category, `${name}.json`), "utf8")) as T;
+type RawNamed = { names?: { name: string; language: { name: string } }[] };
 
-/** raw JSON を best-effort で読む（不在なら null）。move / ability の ja/en 補完は取得が無くても続行する。 */
-const rawOpt = <T>(category: string, name: string): T | null => {
+/** raw JSON を best-effort で読む（不在なら null）。ja/en 補完は取得が無くても続行する。 */
+const rawOpt = (category: string, name: string): RawNamed | null => {
   const file = join(RAW, category, `${name}.json`);
-  return existsSync(file) ? (JSON.parse(readFileSync(file, "utf8")) as T) : null;
+  return existsSync(file) ? (JSON.parse(readFileSync(file, "utf8")) as RawNamed) : null;
 };
 
-/** raw names から ja のみの転記欄を組む（取得できなければ空）。en は Serebii 著述に委ねる。 */
-const jaOnly = (
-  r: { names?: { name: string; language: { name: string } }[] } | null,
-): { ja?: string } => {
-  const ja = r ? extractJaName(r) : undefined;
+/** raw names から ja のみの転記欄を組む（取得できなければ空）。en は skill 著述 / 速報に委ねる。 */
+const jaOnly = (r: RawNamed): { ja?: string } => {
+  const ja = extractJaName(r);
   return ja !== undefined ? { ja } : {};
 };
-
-/** エントリが ja/en の少なくとも一方を欠くか（PokeAPI names 補完の対象判定）。 */
-const needsName = (entry: { ja?: string; en?: string }): boolean => !entry.ja || !entry.en;
 
 let conflictCount = 0;
 /** plan の fill をノードへ適用し、conflict を提示する。 */
@@ -74,7 +58,7 @@ const apply = <T extends object>(
   for (const c of plan.conflicts) {
     conflictCount++;
     console.warn(
-      `[materialize] conflict ${id}.${String(c.key)}: keep skill-authored ${JSON.stringify(
+      `[sync:ja-names] conflict ${id}.${String(c.key)}: keep authored ${JSON.stringify(
         c.existing,
       )} (raw=${JSON.stringify(c.fresh)})`,
     );
@@ -82,109 +66,17 @@ const apply = <T extends object>(
   return Object.keys(plan.fill).length;
 };
 
-type RawPoke = {
-  stats: { base_stat: number; stat: { name: string } }[];
-  types: { type: { name: string } }[];
-  abilities: { ability: { name: string } }[];
-  species: { name: string };
-};
-type RawSpecies = { id: number; names?: { name: string; language: { name: string } }[] };
-
-// --- species-specs（base・dex/types/stats/abilities）+ languages/species（ja） ----------
-const speciesDoc = parseDocument(readFileSync(join(CH, "species-specs.yaml"), "utf8"));
-const speciesMap = speciesDoc.get("species") as YAMLMap;
-const langSpeciesDoc = parseDocument(readFileSync(join(LANG, "species.yaml"), "utf8"));
-const langSpeciesMap = langSpeciesDoc.get("species") as YAMLMap;
-let speciesFilled = 0;
-let langSpeciesFilled = 0;
-for (const item of speciesMap.items) {
-  const slug = String((item.key as { value: string }).value);
-  const node = item.value as YAMLMap;
-  const poke = raw<RawPoke>("pokemon", slug);
-  const speciesJson = raw<RawSpecies>("pokemon-species", poke.species.name);
-  const fresh = extractSpeciesStructural(poke, speciesJson);
-  speciesFilled += apply(
-    speciesDoc,
-    node,
-    slug,
-    planFields(node.toJS(speciesDoc) as Partial<typeof fresh>, fresh),
-  );
-  // 日本語名 ja は languages/species.yaml（名前 SoT・ADR 0035）。
-  const nameNode = langSpeciesMap.get(slug, true) as YAMLMap | undefined;
-  if (nameNode) {
-    const ja = jaOnly(speciesJson);
-    langSpeciesFilled += apply(
-      langSpeciesDoc,
-      nameNode,
-      slug,
-      planFields(nameNode.toJS(langSpeciesDoc) as { ja?: string }, ja),
-    );
-  }
-}
-writeFileSync(join(CH, "species-specs.yaml"), speciesDoc.toString());
-if (langSpeciesFilled > 0) writeFileSync(join(LANG, "species.yaml"), langSpeciesDoc.toString());
-
-// --- mega-specs（dex/types/stats のみ・ability/baseSpecies は skill 著述で触れない） ----------
-const megaDoc = parseDocument(readFileSync(join(CH, "mega-specs.yaml"), "utf8"));
-const megaMap = megaDoc.get("mega") as YAMLMap;
-let megaFilled = 0;
-for (const item of megaMap.items) {
-  const id = String((item.key as { value: string }).value);
-  const node = item.value as YAMLMap;
-  const poke = raw<RawPoke>("pokemon", id);
-  const speciesJson = raw<RawSpecies>("pokemon-species", poke.species.name);
-  const { dex, types, stats } = extractSpeciesStructural(poke, speciesJson);
-  const fresh = { dex, types, stats };
-  megaFilled += apply(
-    megaDoc,
-    node,
-    id,
-    planFields(node.toJS(megaDoc) as Partial<typeof fresh>, fresh),
-  );
-}
-if (megaFilled > 0) writeFileSync(join(CH, "mega-specs.yaml"), megaDoc.toString());
-
-// --- item-specs（category）+ languages/items（ja） --------------------------------------------
-const itemsDoc = parseDocument(readFileSync(join(CH, "item-specs.yaml"), "utf8"));
-const itemsMap = itemsDoc.get("items") as YAMLMap;
-const langItemsDoc = parseDocument(readFileSync(join(LANG, "items.yaml"), "utf8"));
-const langItemsMap = langItemsDoc.get("items") as YAMLMap;
-let itemsFilled = 0;
-let langItemsFilled = 0;
-for (const entry of itemsMap.items) {
-  const id = String((entry.key as { value: string }).value);
-  const node = entry.value as YAMLMap;
-  // Champions 固有メガストーン（starminite 等）は PokeAPI に存在せず raw が無い（fetch:data が 404 で skip）。
-  // その場合は materialize の充填をスキップする（category は Serebii 由来で specs に既に入っており、ja は人間が
-  // 手入力で補完する）。mainline 持ち物は raw があり従来通り category / ja を埋める。
-  const itemJson = rawOpt<{
-    category: { name: string };
-    names?: { name: string; language: { name: string } }[];
-  }>("item", id);
-  if (itemJson === null) continue;
-  const fresh = { category: extractItemCategory(itemJson) };
-  itemsFilled += apply(
-    itemsDoc,
-    node,
-    id,
-    planFields(node.toJS(itemsDoc) as Partial<typeof fresh>, fresh),
-  );
-  const nameNode = langItemsMap.get(id, true) as YAMLMap | undefined;
-  if (nameNode) {
-    const ja = jaOnly(itemJson);
-    langItemsFilled += apply(
-      langItemsDoc,
-      nameNode,
-      id,
-      planFields(nameNode.toJS(langItemsDoc) as { ja?: string }, ja),
-    );
-  }
-}
-if (itemsFilled > 0) writeFileSync(join(CH, "item-specs.yaml"), itemsDoc.toString());
-if (langItemsFilled > 0) writeFileSync(join(LANG, "items.yaml"), langItemsDoc.toString());
-
-// --- languages/moves・abilities の日英名 backfill（PokeAPI names・名前欠落のみ） --------------
-const backfillNames = (file: string, mapKey: string, category: string): number => {
+/**
+ * languages/<file> の各エントリへ raw `names` 由来の名前を backfill する。`needs` で欠落エントリのみ raw を引き
+ * （最小取得）、`extract` で raw → { ja?, en? } を取り出して append/既存尊重で適用する。
+ */
+const backfillNames = (
+  file: string,
+  mapKey: string,
+  category: string,
+  extract: (r: RawNamed) => { ja?: string; en?: string },
+  needs: (e: { ja?: string; en?: string }) => boolean,
+): number => {
   const doc = parseDocument(readFileSync(join(LANG, file), "utf8"));
   const map = doc.get(mapKey) as YAMLMap;
   let filled = 0;
@@ -192,17 +84,30 @@ const backfillNames = (file: string, mapKey: string, category: string): number =
     const id = String((entry.key as { value: string }).value);
     const node = entry.value as YAMLMap;
     const current = node.toJS(doc) as { ja?: string; en?: string };
-    if (!needsName(current)) continue;
-    const json = rawOpt<{ names?: { name: string; language: { name: string } }[] }>(category, id);
+    if (!needs(current)) continue;
+    const json = rawOpt(category, id);
     if (json === null) continue;
-    filled += apply(doc, node, id, planFields(current, extractNames(json)));
+    filled += apply(doc, node, id, planFields(current, extract(json)));
   }
   if (filled > 0) writeFileSync(join(LANG, file), doc.toString());
   return filled;
 };
-const movesFilled = backfillNames("moves.yaml", "moves", "move");
-const abilitiesFilled = backfillNames("abilities.yaml", "abilities", "ability");
+
+const needsJa = (e: { ja?: string; en?: string }): boolean => !e.ja;
+const needsJaEn = (e: { ja?: string; en?: string }): boolean => !e.ja || !e.en;
+
+// 種族 / 持ち物は ja のみ PokeAPI 由来（en は skill 著述）。技 / 特性は ja/en とも PokeAPI 由来。
+const speciesFilled = backfillNames("species.yaml", "species", "pokemon-species", jaOnly, needsJa);
+const itemsFilled = backfillNames("items.yaml", "items", "item", jaOnly, needsJa);
+const movesFilled = backfillNames("moves.yaml", "moves", "move", extractNames, needsJaEn);
+const abilitiesFilled = backfillNames(
+  "abilities.yaml",
+  "abilities",
+  "ability",
+  extractNames,
+  needsJaEn,
+);
 
 console.log(
-  `[materialize] filled ${speciesFilled} species / ${megaFilled} mega / ${itemsFilled} item structural, ${langSpeciesFilled} species / ${langItemsFilled} item / ${movesFilled} move / ${abilitiesFilled} ability name field(s), ${conflictCount} conflict(s)`,
+  `[sync:ja-names] filled ${speciesFilled} species / ${itemsFilled} item / ${movesFilled} move / ${abilitiesFilled} ability name field(s), ${conflictCount} conflict(s)`,
 );
