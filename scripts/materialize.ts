@@ -11,8 +11,10 @@
  * vendor 方式（ADR 0012 / 0027）の転記段: raw=取得キャッシュ（materialize 元）/ specs・languages=SoT。
  * `generate.ts` は YAML のみを変換し raw を読まない（ADR 0027）。本スクリプトだけが raw を必要とする。
  *
- * **raw 必須・fail-fast**: raw が無ければ `readFileSync` が ENOENT で即エラー終了する（raw 存在の担保は
- * 呼び出し側 `update-catalog` skill の責務・ADR 0027 / [[data-pipeline]]）。
+ * **raw 必須・fail-fast（species / mega）**: raw が無ければ `readFileSync` が ENOENT で即エラー終了する（raw
+ * 存在の担保は呼び出し側 `update-catalog` skill の責務・ADR 0027 / [[data-pipeline]]）。**例外: 持ち物（item）は
+ * best-effort**（`rawOpt`）で、Champions 固有メガストーン（PokeAPI 非存在・`fetch:data` が 404 skip）は raw が
+ * 無いので materialize をスキップする（`category` は Serebii 由来で specs に既にあり・ja は人間が手入力で補完）。
  *
  * **append/既存尊重**: 未設定フィールドだけを raw 由来値で埋め、既に値があるフィールドは raw と異なっても
  * 上書きしない（Champions 実態に合わせた skill 著述値を保護）。差分は conflict として標準出力に提示する。

@@ -104,7 +104,8 @@ M-B 解禁持ち物 = **M-A の 64 件 + M-B 新規 20 件 = 84 件**:
   shed-shell / big-root。**`life-orb` は M-A 非解禁 → M-B 解禁**（reg 差分の代表例・item-specs には旧 m-b 由来で
   append-only 残存していたものを per-reg へ追加）。
 - **新規メガストーン 5 件**（mainline メガ用）: sceptilite / blazikenite / swampertite / mawilite / metagrossite。
-  Champions 固有メガ用ストーン（staraptite 等）は PokeAPI 非存在ゆえ投入対象外（メガ本体と整合）。
+  Champions 固有メガ用ストーン（staraptite 等）は PokeAPI 非存在ゆえ本フェーズでは投入対象外（メガ本体は
+  PokeAPI 200・後述ギャップ 1 の訂正どおり Phase 3 改修後は Serebii 由来で記録可能）。
 - M-A 由来 64 件（一般 + きのみ 58 + M-A ロスターメガストーン 6）は M-B でも解禁のため per-reg `m-b/items.yaml` に
   再掲（append-only・union）。
 
@@ -112,8 +113,11 @@ M-B 解禁持ち物 = **M-A の 64 件 + M-B 新規 20 件 = 84 件**:
 
 Phase 1 で炙り出した skill / pipeline の不備が M-B 限定投入でも再現した。本投入（Phase 4）の前に Phase 3 で是正すべき:
 
-1. **Champions 固有メガが materialize できない**（Phase 1 ギャップ 1 と同一）: M-B は固有メガが 9 形と多く、
-   投入対象外にした影響が大きい。Serebii scrape 由来でメガ構造を著述する経路が要る。
+1. **【plan 09 Phase 3 で是正済】Champions 固有メガのストーンが PokeAPI に無い**（当初「メガ本体も非存在」と
+   誤記・訂正）: 上記「メガの扱い」節の訂正と同じく、**メガ pokemon 本体は PokeAPI に存在（200）し materialize
+   可能**で、404 するのはメガ"ストーン"のみ。Phase 3 skill 改修（issue #185）でメガストーンの category 取得元を
+   Serebii 化 + item 404 graceful skip を入れ、メガはストーンの PokeAPI 有無に関わらず記録可能にした。除外した
+   M-B の固有メガ 9 形 + Mega Raichu X/Y は改修後に再投入可能（ストーン ja のみ人間手入力補完）。
 2. **新規種族の null placeholder で materialize がクラッシュ + メガ linking 取りこぼし**（Phase 1 ギャップ 2 の拡張）:
    `serebii:catalog species` が新規種族を `null` placeholder で登録し、`materialize` が null を受けてクラッシュするため、
    本フェーズでも 21 種 + 14 持ち物を空 map（`{}`）へ手動変換して回避した。**さらに同 placeholder 起因で、メガ運用の
