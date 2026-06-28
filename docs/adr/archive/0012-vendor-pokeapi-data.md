@@ -1,6 +1,6 @@
 ---
 id: 0012
-status: Accepted
+status: Superseded by ADR-0039
 date: 2026-06-07
 ---
 

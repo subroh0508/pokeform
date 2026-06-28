@@ -8,7 +8,7 @@ date: 2026-06-11
 
 ## Context
 
-[ADR 0012](../0012-vendor-pokeapi-data.md) の vendor 方式では、エンティティの日英名を `generate.ts` が
+[ADR 0012](./0012-vendor-pokeapi-data.md) の vendor 方式では、エンティティの日英名を `generate.ts` が
 `data/raw`（PokeAPI の `names`）から導出し、タイプ相性も `type` リソースの `damage_relations` から導出して
 いた。これは「名前 / 相性の SoT が PokeAPI 由来の生成物にある」ことを意味し、(a) チャンピオンズ独自表記・
 表記揺れの補正が `overrides` 頼みになる、(b) `generate.ts` が名前のために raw 取得へ依存し続ける、(c) 名前が

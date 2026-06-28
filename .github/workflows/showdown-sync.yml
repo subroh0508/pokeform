@@ -1,0 +1,119 @@
+# showdown-sync — pokemon-showdown を第一の正としたレギュレーション解禁データの自動取得 PR（authoritative）
+#
+# 目的: `smogon/pokemon-showdown` を clone → build → 抽出し、解禁種族 / 技 / 持ち物 / 特性 / メガ /
+#       構造データを SoT YAML（data/champions・data/languages）へ転記、ja 名を PokeAPI で backfill し、
+#       generate + verify を通したうえで `data:authoritative` ラベルの YAML 更新 PR を自動作成する。
+#       取得元の根本転換（showdown 第一の正・PokeAPI ja 専任・構造取得廃止）は ADR 0039。
+# トリガー: `workflow_dispatch` 手動のみ（cron なし）。showdown checkout は `ref: master` + `fetch-depth: 1`
+#       で軽量化する。CI 緑（.github/workflows/ci.yml の verify）は生成された PR 側で別途回る。
+name: showdown-sync
+
+on:
+  workflow_dispatch:
+    inputs:
+      regulation:
+        description: "対象レギュレーション id（m-a = championsregma / m-b = champions）"
+        type: choice
+        required: true
+        default: m-a
+        options:
+          - m-a
+          - m-b
+
+# create-pull-request が branch push + PR open するため最小権限を明示付与する（[[redaction]]）。
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: showdown-sync-${{ github.event.inputs.regulation }}
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    name: showdown 抽出 → 転記 → verify → PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pokeform
+        uses: actions/checkout@v6
+
+      # pokemon-showdown は master 最新 commit のみ shallow clone（ADR 0039 / 軽量化）。
+      - name: Checkout pokemon-showdown
+        uses: actions/checkout@v6
+        with:
+          repository: smogon/pokemon-showdown
+          ref: master
+          fetch-depth: 1
+          path: pokemon-showdown
+
+      # Node 版の SoT は .node-version（ADR 0008）。pnpm は corepack を使わず直接入れる（ADR 0005）。
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install pokeform deps
+        run: pnpm install --frozen-lockfile
+
+      # showdown 本体を build（dist/sim/dex 等を生成）してから、pokeform の抽出層を
+      # tools/showdown へ copy し再 build（dist/tools/showdown/cli.js を生成）。
+      - name: Build pokemon-showdown
+        working-directory: pokemon-showdown
+        run: |
+          npm ci
+          node build
+
+      - name: Copy extractor and rebuild
+        run: |
+          mkdir -p pokemon-showdown/tools/showdown
+          cp -r scripts/showdown/. pokemon-showdown/tools/showdown/
+          cd pokemon-showdown && node build
+
+      # 抽出（showdown ツリー）→ 中間 JSON → src/codegen/showdown 純関数で SoT YAML へ転記。
+      # sync-showdown.ts が SHOWDOWN_DIR=./pokemon-showdown を解決して cli.js を spawn する。
+      - name: Extract and sync datasets
+        env:
+          SHOWDOWN_DIR: ${{ github.workspace }}/pokemon-showdown
+        run: |
+          for dataset in species moves items abilities mega; do
+            echo "::group::showdown:$dataset ${{ github.event.inputs.regulation }}"
+            pnpm "showdown:$dataset" "${{ github.event.inputs.regulation }}"
+            echo "::endgroup::"
+          done
+
+      # 日本語名 ja を PokeAPI `names` で backfill（構造取得は廃止・ja 専任・ADR 0039）。
+      - name: Backfill Japanese names
+        run: |
+          pnpm fetch:ja-names
+          pnpm sync:ja-names
+
+      # 参照整合（check:regulation）→ 生成（generate:data）→ 緑ゲート（verify）。
+      - name: Validate, generate, verify
+        run: |
+          pnpm check:regulation data/champions
+          pnpm generate:data
+          pnpm verify
+
+      # 差分があれば data:authoritative ラベルの PR を自動作成する。
+      # 本文の commit SHA / mod / 件数は redaction 不要の公開メタ（showdown public repo・[[redaction]]）。
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: data/showdown-${{ github.event.inputs.regulation }}-${{ github.run_id }}
+          base: main
+          labels: data:authoritative
+          commit-message: "data(showdown): ${{ github.event.inputs.regulation }} 解禁データを pokemon-showdown から同期"
+          title: "data(showdown): ${{ github.event.inputs.regulation }} 解禁データ同期（authoritative）"
+          body: |
+            pokemon-showdown を第一の正（authoritative）として解禁データを自動同期した PR です（ADR 0039）。
+
+            - **regulation**: `${{ github.event.inputs.regulation }}`
+            - **showdown ref**: `master`（shallow `fetch-depth: 1`）
+            - **dataset**: species / moves / items / abilities / mega + ja 名 backfill（PokeAPI）
+            - **検証**: `check:regulation` → `generate:data` → `pnpm verify` を通過
+            - **workflow run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            > 出典は Smogon コミュニティの再現データ。正確性は `verify-showdown-pr` の Serebii 照合で裏取りする。

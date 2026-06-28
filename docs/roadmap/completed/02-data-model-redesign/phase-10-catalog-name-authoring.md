@@ -44,7 +44,7 @@ id の列挙しか持たない。これを **catalog YAML に `id → { ja, en }
 - **Phase 20（全量投入）の手前**: 名前を YAML 記録するスキーマを全量投入の前に確定し、`survey-regulation` skill が
   全186種の ja/en も同時に materialize できるようにする（やり直しを避ける）。
 - 確定済み rule: [[data-pipeline]] / [[cli-and-io]] / [[type-conventions]] / [[testing]]。
-- 関連 ADR: [ADR 0012](../../../adr/0012-vendor-pokeapi-data.md)（vendor 方式・本 phase は**名前部分のみ** skill-authored へ
+- 関連 ADR: [ADR 0012](../../../adr/archive/0012-vendor-pokeapi-data.md)（vendor 方式・本 phase は**名前部分のみ** skill-authored へ
   改訂）/ [ADR 0023](../../../adr/0023-generate-transformer-and-check-regulation.md)（generate 変換専任）。
 
 ## タスク
