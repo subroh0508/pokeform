@@ -218,11 +218,12 @@ function syncMega(regId: string, json: Record<string, unknown>): string {
     applyFill(langDoc, ensureEntry(langDoc, langMap, id), megaEnName(rec));
   }
   // base→[mega id] を species-specs.megaEvolvesTo と <reg>/mega.yaml へ。
+  // <reg>/mega.yaml は mega: { <base>: [mega id..] }（species-moves と同型・base キーへ seq 直挿し）。
   const byBase = groupMegaByBase(records);
   for (const [base, megaIds] of Object.entries(byBase)) {
     const baseNode = mapEntry(speciesMap, base);
     if (baseNode) unionSeq(speciesDoc, baseNode, "megaEvolvesTo", megaIds);
-    unionSeq(regDoc, ensureEntry(regDoc, regMap, base), base, megaIds);
+    unionSeq(regDoc, regMap, base, megaIds);
   }
   write(join(CH, "mega-specs.yaml"), specsDoc);
   write(join(LANG, "mega.yaml"), langDoc);
