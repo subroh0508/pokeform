@@ -50,11 +50,11 @@ describe("itemCatalogFields", () => {
     ...over,
   });
 
-  it("omits megaStoneFor for non mega-stone items", () => {
+  it("omits category/megaStoneFor for non mega-stone items (category は materialize 委譲)", () => {
     expect(itemCatalogFields(item({}))).toEqual({ en: "Leftovers" });
   });
 
-  it("includes megaStoneFor + megaSpecies for single mega stones", () => {
+  it("includes category + megaStoneFor + megaSpecies for single mega stones", () => {
     expect(
       itemCatalogFields(
         item({
@@ -64,7 +64,12 @@ describe("itemCatalogFields", () => {
           megaStoneFor: "garchomp",
         }),
       ),
-    ).toEqual({ en: "Garchompite", megaStoneFor: "garchomp", megaSpecies: "garchomp-mega" });
+    ).toEqual({
+      en: "Garchompite",
+      category: "mega-stones",
+      megaStoneFor: "garchomp",
+      megaSpecies: "garchomp-mega",
+    });
   });
 
   it("derives X/Y megaSpecies from the stone id suffix", () => {
@@ -79,13 +84,29 @@ describe("itemCatalogFields", () => {
       ),
     ).toEqual({
       en: "Charizardite X",
+      category: "mega-stones",
       megaStoneFor: "charizard",
       megaSpecies: "charizard-mega-x",
     });
   });
 
+  it("sets category for a Champions 固有 mega stone whose target can't be derived (megaStoneFor null)", () => {
+    // Champions 固有ストーンで desc からメガ先を取れない場合でも category は Serebii 由来で確定する
+    // （メガ pokemon 自体は別途 materialize 可・PokeAPI 非存在ゆえ category は Serebii が正）。
+    expect(
+      itemCatalogFields(
+        item({
+          name: "Mystery Stone",
+          id: "mysterite",
+          category: "mega-stone",
+          megaStoneFor: null,
+        }),
+      ),
+    ).toEqual({ en: "Mystery Stone", category: "mega-stones" });
+  });
+
   it("omits megaSpecies when the derived id is not a catalog id shape (guard)", () => {
-    // megaStoneFor が catalog id 形でないと megaSpecies は付けない（誤 id 注入防止）。
+    // megaStoneFor が catalog id 形でないと megaSpecies は付けない（誤 id 注入防止）。category は付く。
     expect(
       itemCatalogFields(
         item({
@@ -95,7 +116,7 @@ describe("itemCatalogFields", () => {
           megaStoneFor: "Foo Bar",
         }),
       ),
-    ).toEqual({ en: "Weird Stone", megaStoneFor: "Foo Bar" });
+    ).toEqual({ en: "Weird Stone", category: "mega-stones", megaStoneFor: "Foo Bar" });
   });
 });
 

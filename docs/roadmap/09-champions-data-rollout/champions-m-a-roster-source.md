@@ -71,15 +71,18 @@
 限定セット投入で `survey-regulation` skill / データパイプラインの**不備を 2 点炙り出した**。本投入（Phase 4）の前に
 Phase 3 で skill / pipeline を是正すべき:
 
-1. **Champions 固有メガが materialize できない**: Serebii Champions 図鑑は本作で新規追加されたメガ
-   （**Mega Starmie**［みず/エスパー・huge-power・620］・**Mega Dragonite**［ドラゴン/ひこう・multiscale・700］）を
-   掲載しており、`serebii:catalog species` のメガ自動著述（ADR 0033）は正しくこれらを per-reg / mega-specs へ
-   起こす。しかし **PokeAPI（vendor・ADR 0027）にはこれらの mega slug が存在せず** `fetch:data` が
-   `pokemon/starmie-mega` 等で 404 になり、`materialize` が構造データ（dex/types/stats/ability）を埋められない。
-   そのストーン（starminite / dragoninite）も同様に PokeAPI 非存在。
-   → **本フェーズでは starmie-mega / dragonite-mega とそのストーンを投入対象から外した**（mainline メガ
-   charizard X/Y・gengar・garchomp・tyranitar・lucario は PokeAPI 解決可で投入済）。Phase 3 で「Champions 固有
-   メガ / アイテムの構造データを Serebii scrape 由来で著述する経路」を skill / materialize に補う必要がある。
+1. **Champions 固有メガのストーンが PokeAPI に無い**（※当初「メガ本体も非存在」と誤記・下記訂正）: Serebii
+   Champions 図鑑は本作で新規追加されたメガ（**Mega Starmie**［みず/エスパー・huge-power・620］・**Mega Dragonite**
+   ［ドラゴン/ひこう・multiscale・700］）を掲載しており、`serebii:catalog species` のメガ自動著述（ADR 0033）は
+   正しくこれらを per-reg / mega-specs へ起こす。本フェーズでは starmie-mega / dragonite-mega とそのストーンを
+   投入対象から外した（mainline メガ charizard X/Y・gengar・garchomp・tyranitar・lucario は投入済）。
+   - **訂正（plan 09 Phase 3 skill 改修で検証・本 PR）**: 当初「PokeAPI に mega slug が存在せず materialize 不可」と
+     記したが**誤り**。実測で **メガ pokemon 本体（`pokemon/starmie-mega` 等）は PokeAPI に存在（HTTP 200）**し
+     dex/types/stats は materialize 可能。404 するのは **メガ"ストーン"（`item/starminite` / `item/dragoninite` 等）
+     のみ**。`fetch:data` のクラッシュ原因はストーンの 404 であってメガ本体ではなかった。Phase 3 で**メガストーンの
+     構造（category）取得元を Serebii に変更 + item の 404 graceful skip** を skill / codegen に入れ、メガはストーンの
+     PokeAPI 有無に関わらず記録できるようにした（ストーン ja のみ人間が手入力で補完）。除外した
+     starmie-mega / dragonite-mega は改修後に再投入可能。
 
 2. **新規種族の null 構造 placeholder で materialize が落ちる**: `serebii:catalog species` は新規種族を
    species-specs に **null placeholder** で登録するが、`materialize` の `planFields` が null を受けて
