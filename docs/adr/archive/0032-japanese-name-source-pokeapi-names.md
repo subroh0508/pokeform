@@ -26,7 +26,7 @@ PokeAPI に無し」記述を「ja 取得元 = PokeAPI names」へ改める。
 
 - **catalog が SoT である点は不変**: PokeAPI names は**初期値の補完源**で、`materialize` は append/既存尊重
   （未設定 ja のみ埋め、既存 skill-authored 値は上書きせず conflict 提示）。Champions 実態に合わせた表記
-  （メガ / 地域フォルムの form 別名など）は catalog 側が勝つ（[ADR 0027](../0027-structural-data-catalog-sot.md)
+  （メガ / 地域フォルムの form 別名など）は catalog 側が勝つ（[ADR 0027](./0027-structural-data-catalog-sot.md)
   の設計を names に拡張）。
 - **取得対象**: 種族 / 持ち物の `names` は既存取得 raw（`pokemon-species` / `item`）に含まれる。技 / 特性は
   **日英名が欠けるエントリのみ** `move` / `ability` を best-effort 取得（404 等は skip）し、`names` から ja

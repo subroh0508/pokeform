@@ -16,7 +16,7 @@ date: 2026-06-14
 できる。
 
 この刷新は既存の不変決定（[ADR 0026](./0026-pokeapi-not-champions-legality-source.md) Serebii 第一優先・
-PokeAPI を legality / 技メタの信頼源にしない / [ADR 0027](../0027-structural-data-catalog-sot.md) 構造データ
+PokeAPI を legality / 技メタの信頼源にしない / [ADR 0027](./0027-structural-data-catalog-sot.md) 構造データ
 catalog SoT・materialize append/既存尊重 / [ADR 0030](../0030-data-champions-skill-authored.md) skill-authored）
 の**上に取得手段だけを差し替える**もので、これらを覆さない。「Serebii から**どう**取るか」を変える決定であり、
 何を正とするか（Serebii）は不変である。

@@ -9,7 +9,7 @@ date: 2026-06-21
 ## Context
 
 [ADR 0025](./archive/0025-catalog-name-and-type-chart-sot.md)（名前 / タイプ相性の SoT を catalog YAML へ）/
-[ADR 0027](./0027-structural-data-catalog-sot.md)（構造データの SoT を catalog へ）/
+[ADR 0027](./archive/0027-structural-data-catalog-sot.md)（構造データの SoT を catalog へ）/
 [ADR 0032](./archive/0032-japanese-name-source-pokeapi-names.md)（ja 取得元 = PokeAPI names）/
 [ADR 0034](./archive/0034-move-meta-per-game-sot.md)（技メタ SoT を per-game regulations へ）の積み上げで、
 `data/champions/catalog/*.yaml` は **構造データ（種族値 / タイプ / 特性 id / category）と名前（ja/en）を同居**させ、

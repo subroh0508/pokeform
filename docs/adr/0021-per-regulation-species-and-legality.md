@@ -11,7 +11,7 @@ date: 2026-06-08
 ## Context
 
 ポケモンチャンピオンズはレギュレーションごとに解禁される種族・**習得技**・持ち物・メガシンカが変化する。
-MVP（[ADR 0012](./0012-vendor-pokeapi-data.md)）では各種族が「解禁レギュレーション」を逆引き配列で持ち、
+MVP（[ADR 0012](./archive/0012-vendor-pokeapi-data.md)）では各種族が「解禁レギュレーション」を逆引き配列で持ち、
 型レベル / ランタイムのパーティ検証がその配列を参照していた。データ保持モデル再設計
 （02-data-model-redesign）で、解禁判定の正本を per-regulation に寄せる必要が生じた。
 
@@ -32,8 +32,8 @@ MVP（[ADR 0012](./0012-vendor-pokeapi-data.md)）では各種族が「解禁レ
 
 仕様の詳細は [[type-conventions]] / [[data-pipeline]] /
 [[cli-and-io]] を正本とし、本 ADR は「なぜ」を記録する。catalog 分離は
-[ADR 0012](./0012-vendor-pokeapi-data.md) の vendor 方式の拡張であり、本 ADR は
-[ADR 0012](./0012-vendor-pokeapi-data.md) / [ADR 0014](./0014-yaml-lang-per-file.md) を
+[ADR 0012](./archive/0012-vendor-pokeapi-data.md) の vendor 方式の拡張であり、本 ADR は
+[ADR 0012](./archive/0012-vendor-pokeapi-data.md) / [ADR 0014](./0014-yaml-lang-per-file.md) を
 **supersede しない**（vendor 方式・入力言語のファイル単位宣言は不変）。
 
 ## Decision

@@ -9,7 +9,7 @@ date: 2026-06-13
 ## Context
 
 現行の rule / skill / ADR は `data/champions/**`（`catalog/*.yaml` / `regulations/*.yaml` / `rules.yaml`）を
-「**手動管理**」「**手書き編集**」「**hand-authored**」と表現し、[ADR 0027](./0027-structural-data-catalog-sot.md)
+「**手動管理**」「**手書き編集**」「**hand-authored**」と表現し、[ADR 0027](./archive/0027-structural-data-catalog-sot.md)
 の `materialize`（append/既存尊重）も「**hand-authored 修正を保護**」と書いてきた。
 
 これらの語は「人間が手作業でエディタに書く」と読めるが、実際の著述主体は **`survey-regulation` /
