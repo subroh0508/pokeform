@@ -10,7 +10,8 @@ pokeform の実装ロードマップは **計画ディレクトリ単位**で分
 
 active（未着手・進行中）は直下、完了した計画群は [`completed/`](./completed/) 配下に集約する。
 
-- M-A/M-B 解禁データ投入（限定セットでのスキル実地検証 → 本投入）計画 → [`09-champions-data-rollout/README.md`](./09-champions-data-rollout/)
+- M-A/M-B 解禁データ投入（限定セットでのスキル実地検証）計画 → [`09-champions-data-rollout/README.md`](./09-champions-data-rollout/)（本投入は 10 へ移動）
+- データ取得を pokemon-showdown 第一の正へ刷新（Serebii 速報 / PokeAPI ja 専任）計画 → [`10-showdown-first-data/README.md`](./10-showdown-first-data/)
 - **完了計画群** → [`completed/`](./completed/)（下記ロールアップ表参照）
 - 設計俯瞰（旧 `01-mvp/architecture.md` をテーマ別に分割昇格・コードなし）→ [`docs/design/`](../design/README.md)
 
@@ -20,8 +21,8 @@ active（未着手・進行中）は直下、完了した計画群は [`complete
 
 - 計画ディレクトリは **`NN-<slug>/` 形式**（**ゼロ埋め 2 桁連番** + **kebab-case スラッグ**）。例: `08-docs-restructure/`・`completed/00-harness-setup/`。
 - **例外: `XX-<slug>/`（番号プレースホルダ）** — 「常に最後に実施し、手前に計画が挿入されても採番やり直しを避けたい」計画は `XX-` 接尾で置く。数値採番（`NN-`）は辞書順で常に `XX-` の手前に並ぶため、新計画追加時に `XX-` を振り直さずに済む。**現在 `XX-` を使う計画は無い**（旧 `XX-ma-full-data` は `09-champions-data-rollout` に採番確定した）。
-- **確定済み**: `00-harness-setup`（ハーネス）/ `01-mvp`（ライブラリ本体 MVP）/ `02-data-model-redesign`（データ保持モデル再設計）/ `03-survey-regulation-rework`（survey-regulation 刷新）/ `04-generated-layout-redesign`（generated / YAML ディレクトリ再編）/ `05-move-master-scraper-refactor`（技マスター専用取得 + スクレイパー役割分割 + skill オーケストレーター化）/ `07-rules-skills-simplify`（rules / skills 純シンプル化）/ `08-docs-restructure`（ドキュメント構成再編）/ `09-champions-data-rollout`（M-A/M-B 解禁データ投入・限定セット検証 → 本投入）。**`06` は欠番**（旧 ma-full-data の番号・`XX-` 移行に伴い再利用しない）。
-- **`10-<slug>/` 以降は事前スタブを作らない**。作業（テーマ）が出るたびに、その内容から slug を**都度生成**して採番する（例: 本格ダメージ計算なら `10-damage-calc/`）。`XX-` の手前（数値）に並ぶ。
+- **確定済み**: `00-harness-setup`（ハーネス）/ `01-mvp`（ライブラリ本体 MVP）/ `02-data-model-redesign`（データ保持モデル再設計）/ `03-survey-regulation-rework`（survey-regulation 刷新）/ `04-generated-layout-redesign`（generated / YAML ディレクトリ再編）/ `05-move-master-scraper-refactor`（技マスター専用取得 + スクレイパー役割分割 + skill オーケストレーター化）/ `07-rules-skills-simplify`（rules / skills 純シンプル化）/ `08-docs-restructure`（ドキュメント構成再編）/ `09-champions-data-rollout`（M-A/M-B 解禁データ投入・限定セット検証） / `10-showdown-first-data`（データ取得を pokemon-showdown 第一の正へ刷新・Serebii 速報 / PokeAPI ja 専任）。**`06` は欠番**（旧 ma-full-data の番号・`XX-` 移行に伴い再利用しない）。
+- **`11-<slug>/` 以降は事前スタブを作らない**。作業（テーマ）が出るたびに、その内容から slug を**都度生成**して採番する（例: 本格ダメージ計算なら `11-damage-calc/`）。`XX-` の手前（数値）に並ぶ。
 - 各計画ディレクトリ配下の Phase doc も同様に **`phase-NN-<slug>.md`**（ゼロ埋め 2 桁）。ディレクトリ直下に当該計画の `README.md`（インデックス）を置く。
 
 ## `completed/` 運用
@@ -50,6 +51,7 @@ active（未着手・進行中）は直下、完了した計画群は [`complete
 | [completed/07-rules-skills-simplify](./completed/07-rules-skills-simplify/README.md) | ✅ 完了 |
 | [completed/08-docs-restructure](./completed/08-docs-restructure/README.md) | ✅ 完了 |
 | [09-champions-data-rollout](./09-champions-data-rollout/README.md) | 🚧 進行中 |
+| [10-showdown-first-data](./10-showdown-first-data/README.md) | ⬜ 未着手 |
 
 ## MVP の範囲
 

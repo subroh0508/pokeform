@@ -17,7 +17,7 @@
   - per-reg `data/champions/m-a/*`（block 記法）を 10 体 + 全持ち物で著述（各種族 `species-moves` = M-A 使用可能技全量、メガ運用種に `mega[]`、`items` = 全持ち物）。
   - `check:regulation` 0 終了 → `generate:data` 再生成 → `pokemon-data-reviewer` レビュー。
 - スコープ外:
-  - M-A の残り全種族（Phase 4 の本投入）。M-B（Phase 2）。
+  - M-A の残り全種族（本投入は [10-showdown-first-data Phase 6](../10-showdown-first-data/phase-06-full-rollout.md) へ移管）。M-B（Phase 2）。
   - スキーマ / generate の再設計（02 で確定済み）。スクレイパー / skill / legality / メガ取り込みの実装（03 + 05 で完了済み）。技マスターの値是正（05 Phase 2 で完了済み）。
   - 検証で判明する前の skill 改修（Phase 3 のゲート判定後に行う）。
 
