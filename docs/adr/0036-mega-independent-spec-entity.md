@@ -12,7 +12,7 @@ date: 2026-06-21
 `megaEvolvesTo?` / `megaLinks` でメガ先 id を指し、メガ先種族の構造データ（種族値 / タイプ / 特性）は
 catalog の種族エントリ（base と同じ `pokemon` マップ）に**メガ先 id をキーにした別エントリ**として混在し、
 per-reg では base 種族下の `mega[]` 配列でメガを列挙していた。メガ関連データの決定論自動著述は
-[ADR 0033](./0033-deterministic-mega-auto-authoring.md) が、メガ先 per-reg moves の base 継承は
+[ADR 0033](./archive/0033-deterministic-mega-auto-authoring.md) が、メガ先 per-reg moves の base 継承は
 [ADR 0024](./0024-mega-moves-inherit-base.md) が定めている。
 
 この相乗り表現には弱点がある。**base 種族とメガ形態は別物**（メガは戦闘中の変身で、種族値 / タイプ / 特性が

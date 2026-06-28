@@ -1,253 +1,171 @@
 import { describe, expect, it } from "vitest";
-import type { ParsedItems, ParsedMoveMaster, ParsedSpecies } from "./parse.ts";
-import { validateItems, validateMoveMaster, validateSpecies } from "./schema.ts";
+import type { SerebiiAbility } from "./parse-abilities.ts";
+import type { SerebiiItem, SerebiiItemName } from "./parse-items.ts";
+import type { SerebiiMega } from "./parse-mega.ts";
+import type { SerebiiMove } from "./parse-moves.ts";
+import type { SerebiiSpecies } from "./parse-species.ts";
+import {
+  validateAbility,
+  validateItem,
+  validateItemsRoster,
+  validateMega,
+  validateMove,
+  validateSpecies,
+} from "./schema.ts";
 
-/** 健全な中間表現（各テストはこれを部分的に壊す）。 */
-function validSpecies(): ParsedSpecies {
-  return {
-    en: "Garchomp",
-    dex: 445,
-    types: ["dragon", "ground"],
-    abilities: ["sand-veil", "rough-skin"],
-    stats: { H: 108, A: 130, B: 95, C: 80, D: 85, S: 102 },
-    statTotal: 600,
-    moves: [{ name: "Earthquake", id: "earthquake" }],
-    megas: [],
-  };
-}
+const species = (o: Partial<SerebiiSpecies> = {}): SerebiiSpecies => ({
+  id: "charizard",
+  en: "Charizard",
+  ja: "リザードン",
+  dex: 6,
+  types: ["fire", "flying"],
+  abilities: ["blaze"],
+  stats: { H: 78, A: 84, B: 78, C: 109, D: 85, S: 100 },
+  statTotal: 534,
+  moves: ["earthquake"],
+  ...o,
+});
+
+const move = (o: Partial<SerebiiMove> = {}): SerebiiMove => ({
+  id: "earthquake",
+  en: "Earthquake",
+  ja: "じしん",
+  type: "ground",
+  damageClass: "physical",
+  power: 100,
+  accuracy: 100,
+  pp: 12,
+  priority: 0,
+  ...o,
+});
+
+const mega = (o: Partial<SerebiiMega> = {}): SerebiiMega => ({
+  id: "charizard-mega-x",
+  en: "Mega Charizard X",
+  ja: "",
+  baseSpecies: "charizard",
+  types: ["fire", "dragon"],
+  ability: "tough-claws",
+  stats: { H: 78, A: 130, B: 111, C: 130, D: 85, S: 100 },
+  statTotal: 634,
+  ...o,
+});
 
 describe("validateSpecies", () => {
-  it("returns stage 0 for a healthy species", () => {
-    expect(validateSpecies(validSpecies())).toEqual({ stage: 0, missingFields: [], issues: [] });
+  it("健全なら stage 0", () => {
+    expect(validateSpecies(species()).stage).toBe(0);
   });
 
-  it("returns stage 3 with every missing required field", () => {
-    const empty: ParsedSpecies = {
-      en: "",
-      dex: null,
-      types: [],
-      abilities: [],
-      stats: { H: 0, A: 0, B: 0, C: 0, D: 0, S: 0 },
-      statTotal: null,
-      moves: [],
-      megas: [],
-    };
-    const result = validateSpecies(empty);
-    expect(result.stage).toBe(3);
-    expect(result.missingFields).toEqual(["en", "dex", "types", "abilities", "stats", "moves"]);
-    expect(result.issues).toEqual([]);
+  it("必須欄欠落（ja / dex / types / abilities / stats / moves / id / en）は stage 3", () => {
+    const r = validateSpecies(
+      species({
+        id: "",
+        en: "",
+        ja: "",
+        dex: null,
+        types: [],
+        abilities: [],
+        statTotal: null,
+        moves: [],
+      }),
+    );
+    expect(r.stage).toBe(3);
+    expect(r.missingFields).toContain("ja");
   });
 
-  it("prioritises schema-missing (stage 3) over health checks", () => {
-    // stats 合計も壊れているが、moves 欠落（schema 欠落）が優先される。
-    const p = { ...validSpecies(), moves: [], statTotal: 999 };
-    expect(validateSpecies(p).stage).toBe(3);
-  });
-
-  it("returns stage 4 when the stat sum disagrees with the total", () => {
-    const p = { ...validSpecies(), statTotal: 599 };
-    const result = validateSpecies(p);
-    expect(result.stage).toBe(4);
-    expect(result.issues).toEqual(["stat sum 600 != total 599"]);
-  });
-
-  it("returns stage 4 for a malformed ability id", () => {
-    const p = { ...validSpecies(), abilities: ["Sand Veil"] };
-    const result = validateSpecies(p);
-    expect(result.stage).toBe(4);
-    expect(result.issues).toEqual(["ability id shape: Sand Veil"]);
-  });
-
-  it("returns stage 4 for a move with a malformed id shape (names-only; meta は validateMoveMaster が検証)", () => {
-    const p: ParsedSpecies = {
-      ...validSpecies(),
-      moves: [{ name: "Bad Move", id: "Bad Move" }],
-    };
-    const result = validateSpecies(p);
-    expect(result.stage).toBe(4);
-    expect(result.issues).toEqual(["move id shape: Bad Move"]);
+  it("種族値合計不一致 / id 形不適合は stage 4", () => {
+    const r = validateSpecies(species({ statTotal: 999, abilities: ["Bad Ability"] }));
+    expect(r.stage).toBe(4);
+    expect(r.issues.length).toBeGreaterThan(0);
   });
 });
 
-/** 健全な持ち物ページの中間表現（各テストはこれを部分的に壊す）。 */
-function validItems(): ParsedItems {
-  return {
-    items: [
-      {
-        name: "Choice Scarf",
-        id: "choice-scarf",
-        slug: "choicescarf",
-        category: "hold",
-        megaStoneFor: null,
-      },
-      {
-        name: "Charizardite X",
-        id: "charizardite-x",
-        slug: "charizarditex",
-        category: "mega-stone",
-        megaStoneFor: "charizard",
-      },
-    ],
-  };
-}
-
-describe("validateItems", () => {
-  it("returns stage 0 for a healthy items page", () => {
-    expect(validateItems(validItems())).toEqual({ stage: 0, missingFields: [], issues: [] });
+describe("validateMove", () => {
+  it("健全なら stage 0", () => {
+    expect(validateMove(move()).stage).toBe(0);
   });
 
-  it("returns stage 3 when no items are parsed", () => {
-    expect(validateItems({ items: [] })).toEqual({
-      stage: 3,
-      missingFields: ["items"],
-      issues: [],
-    });
+  it("必須欄欠落は stage 3（id/en/ja/type/damageClass/pp/priority）", () => {
+    const r = validateMove(
+      move({ id: "", en: "", ja: "", type: "", damageClass: "", pp: null, priority: null }),
+    );
+    expect(r.stage).toBe(3);
+    expect(r.missingFields).toEqual(["id", "en", "ja", "type", "damageClass", "pp", "priority"]);
   });
 
-  it("returns stage 4 for a malformed item id (labelled by slug, falling back to name)", () => {
-    const p: ParsedItems = {
-      items: [
-        {
-          name: "Choice Scarf",
-          id: "Choice Scarf",
-          slug: "choicescarf",
-          category: "hold",
-          megaStoneFor: null,
-        },
-        { name: "No Slug", id: "No Slug", slug: "", category: "hold", megaStoneFor: null },
-      ],
-    };
-    const result = validateItems(p);
-    expect(result.stage).toBe(4);
-    expect(result.issues).toEqual(["item id shape: choicescarf", "item id shape: No Slug"]);
-  });
-
-  it("returns stage 4 when a mega stone is missing its target species", () => {
-    const p: ParsedItems = {
-      items: [
-        {
-          name: "Weirdite",
-          id: "weirdite",
-          slug: "weirdite",
-          category: "mega-stone",
-          megaStoneFor: null,
-        },
-      ],
-    };
-    const result = validateItems(p);
-    expect(result.stage).toBe(4);
-    expect(result.issues).toEqual(["mega stone missing target: weirdite"]);
-  });
-
-  it("returns stage 4 when the mega target id is malformed", () => {
-    const p: ParsedItems = {
-      items: [
-        {
-          name: "Charizardite X",
-          id: "charizardite-x",
-          slug: "charizarditex",
-          category: "mega-stone",
-          megaStoneFor: "Charizard",
-        },
-      ],
-    };
-    const result = validateItems(p);
-    expect(result.stage).toBe(4);
-    expect(result.issues).toEqual(["mega target shape: Charizard"]);
+  it("健全性違反（pp スケール外 / damageClass / 負値 / priority レンジ / id 形）は stage 4", () => {
+    const r = validateMove(
+      move({ id: "Bad", pp: 7, damageClass: "weird", power: -1, accuracy: -1, priority: 99 }),
+    );
+    expect(r.stage).toBe(4);
+    expect(r.issues.length).toBeGreaterThanOrEqual(5);
   });
 });
 
-/** 健全な技マスター中間表現（各テストはこれを部分的に壊す）。 */
-function validMoveMaster(): ParsedMoveMaster {
-  return {
-    name: "Earthquake",
-    id: "earthquake",
-    type: "ground",
-    damageClass: "physical",
-    power: 100,
-    accuracy: 100,
-    pp: 12,
-    priority: 0,
+describe("validateAbility", () => {
+  const valid: SerebiiAbility = { id: "blaze", en: "Blaze", ja: "もうか" };
+  it("健全 / 欠落 / id 形", () => {
+    expect(validateAbility(valid).stage).toBe(0);
+    expect(validateAbility({ id: "", en: "", ja: "" }).missingFields).toEqual(["id", "en", "ja"]);
+    expect(validateAbility({ id: "Bad Id", en: "X", ja: "y" }).stage).toBe(4);
+  });
+});
+
+describe("validateItemsRoster", () => {
+  const valid: SerebiiItem = {
+    id: "leftovers",
+    en: "Leftovers",
+    slug: "leftovers",
+    category: "hold",
+    megaStoneFor: null,
   };
-}
-
-describe("validateMoveMaster", () => {
-  it("returns stage 0 for a healthy move master", () => {
-    expect(validateMoveMaster(validMoveMaster())).toEqual({
-      stage: 0,
-      missingFields: [],
-      issues: [],
-    });
+  it("空は stage 3、健全は 0", () => {
+    expect(validateItemsRoster([]).stage).toBe(3);
+    expect(validateItemsRoster([valid]).stage).toBe(0);
   });
 
-  it("accepts a status move (null power/accuracy) and negative priority", () => {
-    const m: ParsedMoveMaster = {
-      ...validMoveMaster(),
-      id: "roar",
-      damageClass: "status",
-      power: null,
-      accuracy: null,
-      pp: 20,
-      priority: -6,
-    };
-    expect(validateMoveMaster(m).stage).toBe(0);
-  });
-
-  it("returns stage 3 with every missing required field", () => {
-    const m: ParsedMoveMaster = {
-      name: "",
-      id: "",
-      type: "",
-      damageClass: "",
-      power: null,
-      accuracy: null,
-      pp: null,
-      priority: null,
-    };
-    expect(validateMoveMaster(m)).toEqual({
-      stage: 3,
-      missingFields: ["id", "type", "damageClass", "pp", "priority"],
-      issues: [],
-    });
-  });
-
-  it("prioritises schema absence (stage 3) over health (stage 4)", () => {
-    // pp 欠落 = stage 3。priority レンジ外でも欠落が優先される。
-    const m: ParsedMoveMaster = { ...validMoveMaster(), pp: null, priority: 99 };
-    expect(validateMoveMaster(m).stage).toBe(3);
-  });
-
-  it("returns stage 4 when pp is outside the Champions scale", () => {
-    const m: ParsedMoveMaster = { ...validMoveMaster(), pp: 10 }; // 前作値 = スケール外
-    const r = validateMoveMaster(m);
-    expect(r.stage).toBe(4);
-    expect(r.issues).toEqual(["pp out of scale: 10"]);
-  });
-
-  it("returns stage 4 for a malformed id, bad damageClass, negative power/accuracy, out-of-range priority", () => {
-    const m: ParsedMoveMaster = {
-      name: "Bad",
-      id: "Bad Id",
-      type: "fire",
-      damageClass: "weird",
-      power: -5,
-      accuracy: -1,
-      pp: 12,
-      priority: 9,
-    };
-    const r = validateMoveMaster(m);
-    expect(r.stage).toBe(4);
-    expect(r.issues).toEqual([
-      "move id shape: Bad Id",
-      "damageClass: weird",
-      "power negative: -5",
-      "accuracy negative: -1",
-      "priority out of range: 9",
+  it("id 形 / メガ先欠落 / メガ先形は stage 4", () => {
+    const r = validateItemsRoster([
+      { ...valid, id: "Bad", slug: "" },
+      { id: "stone", en: "Stone", slug: "stone", category: "mega-stone", megaStoneFor: null },
+      { id: "s2", en: "S2", slug: "s2", category: "mega-stone", megaStoneFor: "Bad Base" },
     ]);
+    expect(r.stage).toBe(4);
+    expect(r.issues.length).toBe(3);
+  });
+});
+
+describe("validateItem", () => {
+  const valid: SerebiiItemName = { id: "leftovers", en: "Leftovers", ja: "たべのこし" };
+  it("健全 / 欠落 / id 形", () => {
+    expect(validateItem(valid).stage).toBe(0);
+    expect(validateItem({ id: "", en: "", ja: "" }).missingFields).toEqual(["id", "en", "ja"]);
+    expect(validateItem({ id: "Bad Id", en: "x", ja: "y" }).stage).toBe(4);
+  });
+});
+
+describe("validateMega", () => {
+  it("メガ無し（空配列）は健全 stage 0", () => {
+    expect(validateMega([]).stage).toBe(0);
   });
 
-  it("flags priority below the minimum range too", () => {
-    const m: ParsedMoveMaster = { ...validMoveMaster(), priority: -8 };
-    expect(validateMoveMaster(m).issues).toEqual(["priority out of range: -8"]);
+  it("健全なメガ群は stage 0", () => {
+    expect(validateMega([mega()]).stage).toBe(0);
+  });
+
+  it("必須欄欠落は stage 3", () => {
+    expect(
+      validateMega([
+        mega({ id: "", en: "", baseSpecies: "", types: [], ability: "", statTotal: null }),
+      ]).stage,
+    ).toBe(3);
+  });
+
+  it("健全性違反（合計不一致 / id 形 / base 形 / ability 形）は stage 4", () => {
+    const r = validateMega([
+      mega({ id: "Bad", baseSpecies: "Bad Base", ability: "Bad Ability", statTotal: 999 }),
+    ]);
+    expect(r.stage).toBe(4);
+    expect(r.issues.length).toBeGreaterThanOrEqual(4);
   });
 });

@@ -69,7 +69,7 @@
 
 ## Phase 1 確定事項（追補）
 
-本 phase で確定し、[ADR 0037](../../../adr/0037-serebii-move-master-dedicated-path.md)（設計メモ 1-4）に記録した:
+本 phase で確定し、[ADR 0037](../../../adr/archive/0037-serebii-move-master-dedicated-path.md)（設計メモ 1-4）に記録した:
 
 - **ADR 0034 補完/supersede の判断 = 補完**: SoT 所在（`move-specs`）も出自（Serebii 第一優先）も「PokeAPI を技メタ
   信頼源にしない」核も不変で、変わるのは取得方式（副産物抽出 → 専用取得）のみのため supersede しない。補完先は
