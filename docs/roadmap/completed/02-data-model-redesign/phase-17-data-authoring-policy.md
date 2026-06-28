@@ -43,7 +43,7 @@ Serebii 等を閲覧して YAML に転記している。語と実態が乖離し
 - 確定済み rule: [[data-pipeline]] / [[cross-agent]] / [[adr]]。
 
 [ADR 0026]: ../../adr/archive/0026-pokeapi-not-champions-legality-source.md
-[ADR 0027]: ../../adr/0027-structural-data-catalog-sot.md
+[ADR 0027]: ../../adr/archive/0027-structural-data-catalog-sot.md
 
 ## タスク
 
