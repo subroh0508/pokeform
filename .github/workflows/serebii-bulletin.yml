@@ -1,0 +1,95 @@
+# serebii-bulletin — Serebii を速報（provisional）経路としたレギュレーション解禁データの自動取得 PR
+#
+# 目的: 指定 Serebii Champions ページ群（pokemon.shtml / pokedex-champions / attackdex-champions /
+#       items.shtml + itemdex / abilitydex）をスクレイプし、解禁種族 / 技 / 持ち物 / 特性 / メガ + 日本語名
+#       ja（種族・メガ=カタカナ / 特性・持ち物・技=ひらがな）を SoT YAML へ転記、generate + verify を通して
+#       `data:provisional` ラベルの速報 PR を自動作成する。Serebii を速報経路へ降格する決定は ADR 0040。
+# トリガー: `workflow_dispatch` 手動のみ（cron なし）。速報は暫定値で、showdown-sync（authoritative）が
+#       追いついたら上書きされる。
+name: serebii-bulletin
+
+on:
+  workflow_dispatch:
+    inputs:
+      regulation:
+        description: "対象レギュレーション id（m-a / m-b）"
+        type: choice
+        required: true
+        default: m-a
+        options:
+          - m-a
+          - m-b
+
+# create-pull-request が branch push + PR open するため最小権限を明示付与する（[[redaction]]）。
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: serebii-bulletin-${{ github.event.inputs.regulation }}
+  cancel-in-progress: true
+
+jobs:
+  bulletin:
+    name: Serebii 速報スクレイプ → 転記 → verify → PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pokeform
+        uses: actions/checkout@v6
+
+      # Node 版の SoT は .node-version（ADR 0008）。pnpm は corepack を使わず直接入れる（ADR 0005）。
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install pokeform deps
+        run: pnpm install --frozen-lockfile
+
+      # 速報スクレイプ + 転記（src/codegen/serebii 純関数・健全性 exit code）。species を先に回し、
+      # moves / abilities がその per-reg / specs YAML から対象 id を読めるようにする（順序依存）。
+      - name: Scrape and sync datasets
+        run: |
+          for dataset in species mega items moves abilities; do
+            echo "::group::serebii:$dataset ${{ github.event.inputs.regulation }}"
+            pnpm "serebii:$dataset" "${{ github.event.inputs.regulation }}"
+            echo "::endgroup::"
+          done
+
+      # 参照整合（check:regulation）→ 生成（generate:data）→ 緑ゲート（verify）。
+      - name: Validate, generate, verify
+        run: |
+          pnpm check:regulation data/champions
+          pnpm generate:data
+          pnpm verify
+
+      # 差分があれば data:provisional ラベルの速報 PR を自動作成する。
+      # 出典 URL は Serebii public ページで redaction 不要の公開メタ（[[redaction]]）。
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: data/serebii-bulletin-${{ github.event.inputs.regulation }}-${{ github.run_id }}
+          base: main
+          labels: data:provisional
+          commit-message: "data(serebii): ${{ github.event.inputs.regulation }} 解禁データを Serebii から速報取得"
+          title: "data(serebii): ${{ github.event.inputs.regulation }} 解禁データ速報（provisional）"
+          body: |
+            Serebii を速報（provisional）経路としてスクレイプした解禁データの **速報 PR** です（ADR 0040）。
+
+            > ⚠️ **速報・暫定値です。showdown-sync（authoritative）が追いついたら上書きされます。**
+
+            - **regulation**: `${{ github.event.inputs.regulation }}`
+            - **dataset**: species / mega / items / moves / abilities（ja: 種族・メガ=カタカナ / 特性・持ち物・技=ひらがな）
+            - **検証**: `check:regulation` → `generate:data` → `pnpm verify` を通過
+            - **検証日**: ${{ github.event.repository.updated_at }}（workflow run 時点）
+            - **workflow run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            出典（Serebii Champions ページ群）:
+            - 解禁種族: https://www.serebii.net/pokemonchampions/pokemon.shtml
+            - 種族別（構造 / 技 / メガ / ja）: https://www.serebii.net/pokedex-champions/
+            - 技別: https://www.serebii.net/attackdex-champions/
+            - 持ち物: https://www.serebii.net/pokemonchampions/items.shtml ・ https://www.serebii.net/itemdex/
+            - 特性: https://www.serebii.net/abilitydex/
