@@ -29,10 +29,7 @@
     "showdown:abilities": "node scripts/sync-showdown.ts abilities",
     "showdown:mega": "node scripts/sync-showdown.ts mega",
     "fetch:ja-names": "node scripts/fetch-pokeapi.ts",
-    "fetch:serebii": "node scripts/fetch-serebii.ts",
     "sync:ja-names": "node scripts/materialize.ts",
-    "scrape:serebii": "node scripts/scrape-serebii.ts",
-    "serebii:catalog": "node scripts/serebii-to-catalog.ts",
     "generate:data": "node scripts/generate.ts",
     "gen:rules-index": "node scripts/gen-rules-index.ts",
     "prepare": "git config core.hooksPath .githooks && node scripts/gen-rules-index.ts"
