@@ -43,21 +43,38 @@ export function speciesCatalogFields(p: ParsedSpecies): SpeciesCatalogFields {
 }
 
 /**
- * items.yaml の Serebii 由来欄（en + メガストーンのメガ先 `megaStoneFor`（base 種族）+ メガ形態
- * `megaSpecies`（ストーン→形態リンク）。ja / category は materialize が埋める）。
+ * items.yaml の Serebii 由来欄（en + メガストーンの `category` / メガ先 `megaStoneFor`（base 種族）+
+ * メガ形態 `megaSpecies`（ストーン→形態リンク））。
+ *
+ * **メガストーンの `category` は Serebii 由来で確定する**（PokeAPI 非依存）。Champions 固有メガストーン
+ * （Mega Starmie 等のストーン）は PokeAPI に存在せず `fetch:data` が 404 になるため、PokeAPI（materialize）を
+ * category の取得元にできない。Serebii items ページ（Mega Stone セクション）が全メガストーンを列挙するので
+ * これを正とする。**非メガストーン（hold / berry）の `category` は従来通り materialize（PokeAPI）が埋める**
+ * （PokeAPI の方が粒度が細かい: held-items / medicine / berries 等）ため本欄では空に残す。ja は名前 SoT で
+ * materialize（PokeAPI names）が埋めるが、Champions 固有ストーンは PokeAPI 非存在ゆえ**人間が手入力で補完**する
+ * （`generate` の ja/en 必須ゲートが未補完を検出）。
  */
 export interface ItemCatalogFields {
   en: string;
+  category?: string;
   megaStoneFor?: string;
   megaSpecies?: string;
 }
 
-/** `ParsedItem` → items.yaml 転記欄（メガストーンのみ `megaStoneFor` / `megaSpecies` を持つ）。 */
+/**
+ * `ParsedItem` → items.yaml 転記欄。メガストーン（Serebii section = `mega-stone`）は `category` を
+ * PokeAPI-canonical な `"mega-stones"`（複数形）で確定する（Serebii の section enum は単数 `mega-stone` なので
+ * 既存 catalog 値・PokeAPI 値と揃うよう正規化する）。メガ先が取れたストーンのみ `megaStoneFor` / `megaSpecies`
+ * を持つ。
+ */
 export function itemCatalogFields(it: ParsedItem): ItemCatalogFields {
-  if (it.megaStoneFor === null) return { en: it.name };
-  const fields: ItemCatalogFields = { en: it.name, megaStoneFor: it.megaStoneFor };
-  const megaSpecies = megaStoneSpeciesId(it.id, it.megaStoneFor);
-  if (megaSpecies !== null) fields.megaSpecies = megaSpecies;
+  const fields: ItemCatalogFields = { en: it.name };
+  if (it.category === "mega-stone") fields.category = "mega-stones";
+  if (it.megaStoneFor !== null) {
+    fields.megaStoneFor = it.megaStoneFor;
+    const megaSpecies = megaStoneSpeciesId(it.id, it.megaStoneFor);
+    if (megaSpecies !== null) fields.megaSpecies = megaSpecies;
+  }
   return fields;
 }
 

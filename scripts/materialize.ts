@@ -152,10 +152,14 @@ let langItemsFilled = 0;
 for (const entry of itemsMap.items) {
   const id = String((entry.key as { value: string }).value);
   const node = entry.value as YAMLMap;
-  const itemJson = raw<{
+  // Champions 固有メガストーン（starminite 等）は PokeAPI に存在せず raw が無い（fetch:data が 404 で skip）。
+  // その場合は materialize の充填をスキップする（category は Serebii 由来で specs に既に入っており、ja は人間が
+  // 手入力で補完する）。mainline 持ち物は raw があり従来通り category / ja を埋める。
+  const itemJson = rawOpt<{
     category: { name: string };
     names?: { name: string; language: { name: string } }[];
   }>("item", id);
+  if (itemJson === null) continue;
   const fresh = { category: extractItemCategory(itemJson) };
   itemsFilled += apply(
     itemsDoc,

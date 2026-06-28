@@ -80,6 +80,37 @@ async function fetchNamesInto(category: string, name: string): Promise<void> {
   console.log(`[fetch] ${category}/${name} (names)`);
 }
 
+/**
+ * 持ち物 raw を取得する（**404 は graceful skip**・他のエラーはリトライ後 throw）。Champions 固有メガストーン
+ * （Mega Starmie 等のストーン）は PokeAPI に存在せず 404 になるが、これは正常（category は Serebii 由来で確定
+ * 済み・ja は人間が手入力で補完）。よって 404 で全体を落とさず当該 item だけ skip する。pokemon /
+ * pokemon-species は実在前提のため `fetchInto`（404 を throw）のまま厳格に扱う（404 = slug 誤り = 実エラー）。
+ */
+async function fetchItemInto(name: string): Promise<void> {
+  const file = join(RAW, "item", `${name}.json`);
+  if (existsSync(file)) return;
+  const url = `${API}/item/${name}`;
+  for (let attempt = 1; ; attempt++) {
+    const res = await fetch(url);
+    if (res.ok) {
+      const json = (await res.json()) as Record<string, unknown>;
+      mkdirSync(dirname(file), { recursive: true });
+      writeFileSync(file, `${JSON.stringify(json, null, 2)}\n`);
+      await sleep(50); // PokeAPI への礼儀
+      console.log(`[fetch] item/${name}`);
+      return;
+    }
+    if (res.status === 404) {
+      console.warn(
+        `[fetch] skip item/${name} (PokeAPI 非存在・Champions 固有メガストーン等は Serebii 由来 category で記録, 404)`,
+      );
+      return;
+    }
+    if (attempt >= 3) throw new Error(`fetch failed (${res.status}): ${url}`);
+    await sleep(500 * attempt);
+  }
+}
+
 async function main(): Promise<void> {
   // 構造 specs は id→構造マップ。構造データ取得は id（キー）の列挙が要る（base + mega 両方を取る）。
   const { species } = readChampions<{ species: Record<string, unknown> }>(
@@ -105,8 +136,8 @@ async function main(): Promise<void> {
     await fetchInto("pokemon-species", sp);
   }
 
-  // item は category + names のソース。
-  for (const i of Object.keys(items)) await fetchInto("item", i);
+  // item は category + names のソース。Champions 固有メガストーンは PokeAPI 非存在（404）ゆえ graceful skip。
+  for (const i of Object.keys(items)) await fetchItemInto(i);
 
   // 技 / 特性は **日英名が欠けるエントリのみ** names 補完取得（技メタには使わない・ADR 0026 不変）。
   for (const [id, v] of Object.entries(moves)) {

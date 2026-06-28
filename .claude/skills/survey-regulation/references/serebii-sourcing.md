@@ -225,13 +225,34 @@ append/既存尊重で補完）。技メタの構造欠落は `generate.ts` の 
 ## 解禁持ち物 全件の取得
 
 `items.shtml` から解禁持ち物を**全件**取得し、`item-specs.yaml`（append-only・`megaStoneFor`（メガ先 base
-SpeciesId）/ `category` を付与）+ `languages/items.yaml`（`id: { ja, en }`）と per-reg `<reg>/items.yaml` へ反映する:
+SpeciesId）/ `megaSpecies`（ストーン→形態）/ メガストーンは `category` も Serebii 由来）+
+`languages/items.yaml`（`id: { ja, en }`）と per-reg `<reg>/items.yaml` へ反映する:
 
 - 一般持ち物・きのみ・該当メガストーンを漏れなく列挙する（M-A は一般30 + きのみ27 + メガストーン）。
+- **メガストーンの `category` は Serebii 由来で確定する**（PokeAPI 非依存）。`serebii:catalog items` が
+  `item-specs.yaml` に `category: mega-stones` を書く（Serebii section enum 単数 `mega-stone` を PokeAPI-canonical な
+  複数形へ正規化）。**非メガストーン（一般 / きのみ）の `category` は従来通り `materialize`（PokeAPI）が埋める**
+  （PokeAPI の方が粒度が細かい）。
 - **PokeAPI item slug の正確な綴り**を `fetch:data` 前に確認する（例: `oran-berry` / `charizardite-x` /
   `garchompite`）。Serebii 表記と PokeAPI slug がずれる持ち物に注意。
 - 非解禁持ち物（`items.shtml` に無いもの）は per-reg `<reg>/items.yaml` に入れない。`item-specs.yaml` からは
   append-only で消さない。
+
+### Champions 固有メガストーンは PokeAPI に無い（Serebii 由来で記録・ja は手動補完）
+
+本作で新規追加されたメガ（Mega Starmie / Mega Staraptor 等）の**メガストーン**（`starminite` / `staraptite` 等）は
+**PokeAPI に存在しない**（`fetch:data` が `item/<slug>` で 404）。一方**メガ pokemon 本体**（`starmie-mega` /
+`staraptor-mega` 等）は PokeAPI に存在し（HTTP 200）`materialize` で dex/types/stats を埋められる。よって:
+
+- **メガ形態はメガストーンの PokeAPI 有無に関わらず記録する**。メガ pokemon は PokeAPI materialize、ストーンの
+  identity / `category` / メガ先は Serebii 由来。これまで「Champions 固有メガは PokeAPI 非存在ゆえ投入不可」と
+  判断していたのは誤りで、404 するのはメガ"ストーン"のみ。
+- `fetch:data` は PokeAPI 非存在の **item を 404 で graceful skip**する（pokemon / pokemon-species の 404 は slug 誤り
+  = 実エラーとして throw・厳格を維持）。`materialize` は raw 不在の item を skip し、Serebii 由来 `category` を上書き
+  しない。
+- メガストーンの **ja は Serebii に無いため空のまま残し、人間が手入力で補完する**（決定論転写はしない）。
+  `generate` の ja/en 必須ゲート（`languages/<kind>: '<id>' missing ja/en`）が未補完を検出して補完を促す。
+  mainline メガストーン（`charizardite-x` 等）の ja は従来通り `materialize`（PokeAPI names）が埋める。
 
 ## レギュ更新時の routine（M-B 以降）
 
