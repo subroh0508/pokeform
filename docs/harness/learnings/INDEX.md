@@ -86,6 +86,7 @@ PR ごとの KPT レトロスペクティブ learning の索引。`pr-retrospect
 | #176 | plan08 Phase 6（最終）: code-review.md の Phase 9 参照を ADR 0013 へ張替（plan 参照違反解消）+ 全 15 rule へ front matter（last_modified+adr）付与・active のみ・gen-rules-index 再生成 diff ゼロで paths 非干渉実証。front matter adr が背景 archive ADR を網羅しない基準未定（nb）・design↔rule 体裁差（nit）・last_modified 一括手入力 | 2026-06-25 | 08-docs-restructure/phase-06 | draft | [2026-06-25-pr-176.md](./2026-06-25-pr-176.md) |
 | #182 | plan09 Phase 1: M-A リセット + 代表10体 skill 投入。限定セット de-risk で 3 pipeline ギャップ検出（Champions 固有メガ materialize 不可・新規種族 null placeholder crash・空 regulation gate 非互換）。team サンプルとロスターの暗黙結合・削除レグ stale 生成物残存 | 2026-06-26 | 09-champions-data-rollout/phase-01 | draft | [2026-06-26-pr-182.md](./2026-06-26-pr-182.md) |
 | #184 | plan09 Phase 2: M-B 限定投入（M-A 10 + 追加解禁 22 種 + 持ち物 84・catalog 純追加 1550 行）。Phase 1 の 3 ギャップ（固有メガ materialize 不可 / null placeholder クラッシュ / mega ja・ability 手動）再現 + 新規 2 件（gendered 種 pyroar の PokeAPI form-slug 不一致 / null placeholder 起因の megaEvolvesTo 自動著述スキップ）。skill 改修は Phase 3 へ集約 | 2026-06-26 | 09-champions-data-rollout/phase-02 | draft | [2026-06-26-pr-184.md](./2026-06-26-pr-184.md) |
+| #186 | plan09 Phase 3 skill 改修: メガストーン情報源を Serebii 化（itemCatalogFields に category 透過 + item 404 graceful skip + materialize raw 不在 skip）しメガを常時記録可能に。**Champions 固有メガを「PokeAPI 非存在」とした Phase 1/2 の判断が未検証の誤り**（メガ本体は 200・404 はストーンのみ）と判明し是正。教訓: 外部 API 非存在は実 HTTP で検証してから記録する | 2026-06-28 | 09-champions-data-rollout/phase-03 | draft | [2026-06-28-pr-186.md](./2026-06-28-pr-186.md) |
 
 <!--
 追記フォーマット例（ファイル列は [表示名](./YYYY-MM-DD-pr-N.md) のリンク形式）:
