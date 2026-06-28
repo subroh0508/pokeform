@@ -60,7 +60,10 @@ const needsJa = (v: { ja?: string; en?: string }): boolean => !v.ja;
 /** ja / en の少なくとも一方を欠くか（技 / 特性は ja/en とも PokeAPI 由来）。 */
 const needsJaEn = (v: { ja?: string; en?: string }): boolean => !v.ja || !v.en;
 
-/** 名前 SoT のデータセットと PokeAPI 取得元の対応（5 軸のうち ja を持つ 4 種・メガは PokeAPI 非対応で除外）。 */
+/**
+ * 名前 SoT（`languages/*.yaml`）のうち PokeAPI `names` から ja を取れる 4 種と取得元 category の対応。
+ * メガ名 ja・タイプ名は PokeAPI に無いため対象外（skill 著述 / Serebii 速報・[[data-pipeline]]）。
+ */
 const DATASETS: {
   file: string;
   mapKey: string;
