@@ -14,13 +14,13 @@ pokemon-showdown から解禁・構造・技メタ・メガ・持ち物を抽出
 
 ## タスク
 
-- [ ] `champions-data.ts`（346 行モノリス）を `scripts/showdown/` へデータセット別に分割: `dex.ts`（Dex.mod 解決 + calculatePP + isUsable* フィルタ）/ `species.ts` / `moves.ts` / `items.ts` / `abilities.ts` / `mega.ts` / `cli.ts`。
-- [ ] `tsconfig.json` の `exclude` に `scripts/showdown/**` を追加（`../sim/dex` 依存ゆえ typecheck/coverage 非対象）。
-- [ ] `src/codegen/showdown/{species,moves,items,abilities,mega}-fields.ts`（純関数）+ コロケーション test を作成（id kebab 化・types 小文字化・damageClass 写像・accuracy `true→null`・power `0(status)→null`・PP 8/12/16/20 検証）。カバレッジ 100%。
-- [ ] `scripts/sync-showdown.ts`（薄い配線・fs/YAML I/O のみ）を作成し、中間 JSON → `*-specs.yaml` + `<reg>/*.yaml` + `languages/*.yaml`(en) を append/上書き是正で更新。
-- [ ] `package.json` に `showdown:species/moves/items/abilities/mega` を追加（抽出 → 転記をデータセット別に駆動）。
-- [ ] `scripts/showdown/README.md` に `CHAMPIONS-DATA.md` の要点（mod 機構・calculatePP・実行手順）を移植する（scratchpad のスクラッチプロトは正式分割で役目を終える）。
-- [ ] M-A/M-B を showdown 経路で再生成し、既存 `data/champions/<reg>/*` と `src/generated/` の diff を確認（等価検証）。
+- [x] `champions-data.ts`（346 行モノリス）を `scripts/showdown/` へデータセット別に分割: `dex.ts`（Dex.mod 解決 + calculatePP + isUsable* フィルタ）/ `species.ts` / `moves.ts` / `items.ts` / `abilities.ts` / `mega.ts` / `cli.ts`。
+- [x] `tsconfig.json` の `exclude` に `scripts/showdown/**` を追加（`../sim/dex` 依存ゆえ typecheck/coverage 非対象）。
+- [x] `src/codegen/showdown/{species,moves,items,abilities,mega}-fields.ts`（純関数）+ コロケーション test を作成（id kebab 化・types 小文字化・damageClass 写像・accuracy `true→null`・power `0(status)→null`・PP 8/12/16/20 検証）。カバレッジ 100%。
+- [x] `scripts/sync-showdown.ts`（薄い配線・fs/YAML I/O のみ）を作成し、中間 JSON → `*-specs.yaml` + `<reg>/*.yaml` + `languages/*.yaml`(en) を append/上書き是正で更新。
+- [x] `package.json` に `showdown:species/moves/items/abilities/mega` を追加（抽出 → 転記をデータセット別に駆動）。
+- [x] `scripts/showdown/README.md` に `CHAMPIONS-DATA.md` の要点（mod 機構・calculatePP・実行手順）を移植する（scratchpad のスクラッチプロトは正式分割で役目を終える）。
+- [x] M-A/M-B を showdown 経路で再生成し、既存 `data/champions/<reg>/*` と `src/generated/` の diff を確認（等価検証）。
 
 ## この Phase で育てるハーネス（rule・skill）
 
