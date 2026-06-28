@@ -24,7 +24,7 @@
 - **04-generated-layout-redesign の Phase 1-3 完了**（`move-specs` が独立エンティティ・新ツリー）。
 - 技の出自は **Serebii 第一優先・PokeAPI 非依存**（ADR 0026 の核を継承する ADR 0035）。技メタ SoT は `move-specs`（ADR 0035）。
   専用取得経路の DOM 契約（`attackdex-champions/<move>.shtml`・Speed Priority 含む）・exit code 契約（0/2/3/4）は
-  [ADR 0037](../../../adr/0037-serebii-move-master-dedicated-path.md) を正とする。
+  [ADR 0037](../../../adr/archive/0037-serebii-move-master-dedicated-path.md) を正とする。
 - 層1-3 ハイブリッド構造（決定論スクレイパー + Workflow 自己修復）は 03 で確立済み（[[data-pipeline]] /
   [`serebii-sourcing.md`](../../../../.claude/skills/survey-regulation/references/serebii-sourcing.md)）。
 

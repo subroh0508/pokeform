@@ -1,6 +1,6 @@
 ---
 id: 0037
-status: Accepted
+status: Superseded by ADR-0040
 date: 2026-06-21
 ---
 
@@ -10,9 +10,9 @@ date: 2026-06-21
 
 技メタ（`type` / `damageClass` / `power` / `accuracy` / `pp` / `priority`）の **SoT は per-game の
 `move-specs.yaml`**（Champions 固有値・skill-authored・PokeAPI を技威力等の信頼源にしない）であり、技の
-**出自は Serebii 第一優先**である。この決定の核は [ADR 0026](./archive/0026-pokeapi-not-champions-legality-source.md)
-で確立し、[ADR 0034](./archive/0034-move-meta-per-game-sot.md)（所在 = per-game）を経て、現行は
-[ADR 0035](./0035-specs-languages-layout-redesign.md) が **`move-specs`（specs 軸・per-game）を SoT とする所在**で
+**出自は Serebii 第一優先**である。この決定の核は [ADR 0026](./0026-pokeapi-not-champions-legality-source.md)
+で確立し、[ADR 0034](./0034-move-meta-per-game-sot.md)（所在 = per-game）を経て、現行は
+[ADR 0035](../0035-specs-languages-layout-redesign.md) が **`move-specs`（specs 軸・per-game）を SoT とする所在**で
 継承保持している（0026 / 0034 は archive・本質は不変）。本 ADR はこの SoT・出自を**変えない**。
 
 問題は技メタの**取得方式**にある。現状は各種族の Serebii 種族ページ（`pokedex-champions/<species>/`）の
@@ -25,14 +25,14 @@ date: 2026-06-21
   `pp` のみで、`move-specs` が必須とする `priority` を種族ページから取れない（副産物方式の構造的限界）。
 - 技メタ値を**人手で Champions 準拠へ是正する旧アプローチ**（別計画群で計画されていた手動是正フェーズ）は、
   根本解決ではなく対症療法であった。手動是正は出典との同期・再現性（skill 再実行で同じ結果に収束する性質・
-  [ADR 0030](./0030-data-champions-skill-authored.md)）を担保できない。
+  [ADR 0030](../0030-data-champions-skill-authored.md)）を担保できない。
 
 Serebii には技そのものの専用ページ（`attackdex-champions/<move>.shtml`）が存在し、種族ページの技リンク
 （`a[href*='/attackdex-champions/']`）が指す先がこれである。実ページ確認の結果、専用ページは技メタを**全項目
 （priority を含む）**明示しており、Champions 準拠値（例 Earthquake PP=12・前作 10 ではない）を持つ。よって
 「種族が覚える技の名前一覧」取得と同様に「技マスター取得」を**独立した決定論スクレイパー経路**にすべきである。
 スクレイパー基盤（決定論層1 + 自己検証 exit code + Workflow 自己修復層2-3）は
-[ADR 0031](./archive/0031-deterministic-serebii-scraper-hybrid-layers.md)（[ADR 0033](./0033-deterministic-mega-auto-authoring.md)
+[ADR 0031](./0031-deterministic-serebii-scraper-hybrid-layers.md)（[ADR 0033](./0033-deterministic-mega-auto-authoring.md)
 へ supersede・基盤は現行）で確立済みで、新経路もこの枠組みを再利用する。
 
 ## Decision
@@ -46,7 +46,7 @@ Serebii には技そのものの専用ページ（`attackdex-champions/<move>.sh
 経路へ吸収する（手動是正の経緯は mutable な OVERVIEW / README に記録する）。
 
 仕様の詳細（取得元 / SoT / 転記の対応表）の正本は [[data-pipeline]]、情報源の役割・スクレイパー DOM 契約の
-正本は [`serebii-sourcing.md`](../../.claude/skills/survey-regulation/references/serebii-sourcing.md) とし、本 ADR は
+正本は [`serebii-sourcing.md`](../../../.claude/skills/survey-regulation/references/serebii-sourcing.md) とし、本 ADR は
 「なぜ」と確定した設計契約（次の設計メモ）を記録する。実装は後続フェーズが担い、実装着手時に DOM 契約を
 `serebii-sourcing.md` へ反映する。
 
@@ -57,7 +57,7 @@ Serebii には技そのものの専用ページ（`attackdex-champions/<move>.sh
 - **URL**: `https://www.serebii.net/attackdex-champions/<slug>.shtml`。`<slug>` は **圧縮 slug**（`earthquake` /
   `quickattack` / `swordsdance`）で、種族ページの技リンク `a[href*='/attackdex-champions/']` と同一規約。圧縮 slug
   からハイフン位置を復元できないため、catalog id は**表示名**（`Quick Attack`）を `toCatalogId` で kebab 化して得る
-  （既存 slug 正規化方針を踏襲・[`serebii-sourcing.md`](../../.claude/skills/survey-regulation/references/serebii-sourcing.md)）。
+  （既存 slug 正規化方針を踏襲・[`serebii-sourcing.md`](../../../.claude/skills/survey-regulation/references/serebii-sourcing.md)）。
 - **抽出フィールド**: `type`（18 タイプ id）/ `damageClass`（Physical/Special/Other → physical/special/**status**）/
   `power` / `accuracy` / `pp` / **`priority`**（種族ページに無い新フィールド・"Speed Priority" として明示）。
 - **罠（既存パーサ helper で吸収可）**:
