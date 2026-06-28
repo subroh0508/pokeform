@@ -65,8 +65,12 @@ function unionSeq(doc: Document, map: YAMLMap, key: string, ids: string[]): void
   map.set(key, doc.createNode(sorted([...(existing ?? []), ...ids])));
 }
 
-/** 名前材料（ja/en・速報は両方埋める）。 */
-const nameOf = (ja: string, en: string): { ja: string; en: string } => ({ ja, en });
+/**
+ * 名前材料（ja/en・速報は両方埋める）。ja が空（Serebii ページにカナが無い・メガ `<h3>` は英語等）の
+ * ときは ja キーを落とし、空文字を languages へ書き込まない（generate の名前検証 fail-fast を避け、
+ * ja は showdown / skill 著述に委ねる）。en は常に埋める。
+ */
+const nameOf = (ja: string, en: string): { ja?: string; en: string } => (ja ? { ja, en } : { en });
 
 function syncSpecies(regId: string, json: Record<string, unknown>): string {
   const records = json.species as SerebiiSpecies[];
