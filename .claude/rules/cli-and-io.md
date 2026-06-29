@@ -16,7 +16,7 @@ adr:
 ## 入力言語はファイル単位で宣言
 
 - YAML / パーティ MD は**先頭の `lang: ja|en` 宣言で記述言語を 1 ファイル単位に固定**する（既定 `ja`）。
-- loader/codegen は宣言言語に従い、**languages の forward マップ（`speciesNamesAll` / `moveNames` / `itemNames` 等・`id → { id, name }`）から実行時導出した照合テーブル**で**正規 ID へ正規化**してから型生成・検証する（ja は `reverseJa(forward)` で日本語名 → id 逆引き・en/id は forward のキー集合 `ids` で直接照合）。専用の生成逆引き `names.ts` は廃止・名前 SoT は languages（[[type-conventions]] / ADR 0035）。
+- loader/codegen は宣言言語に従い、**languages の forward マップ（`speciesNamesAll` / `moveNames` / `itemNames` 等・`id → { id, name }`）から実行時導出した照合テーブル**で**正規 ID へ正規化**してから型生成・検証する（ja は `reverseJa(forward)` で日本語名 → id 逆引き・en/id は forward のキー集合 `ids` で直接照合）。専用の生成逆引き `names.ts` は廃止・名前 SoT は languages（[[type-conventions]] / ADR 0035）。名前（en/ja）の取得元と権威序列（en = showdown 正 / Serebii 速報・ja = PokeAPI 正 / Serebii 速報）は [[data-pipeline]]（ADR 0039 / 0040）が SoT で、本 rule は languages dex を引く側に専念する。
 - 名称正規化は**個体・パーティ・`regulation` を含む全フィールド**で `lang` 宣言に従う。一部フィールド（例 `emit-party` の `regulation`）が生値を素通りすると per-file lang 厳格化が崩れるため例外を作らない。
 - **厳格化**: 宣言言語に一致しない名称（例 `lang: ja` なのに `species: pikachu`）はエラー。未知の名称は「不明な技『○○』」と**行番号付き**で報告する。
 

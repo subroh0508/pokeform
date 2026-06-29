@@ -71,7 +71,7 @@ moves: [earthquake, dragon-claw, stone-edge, swords-dance]  # speciesDex[species
   例 `MoveNotLearnedBy<"champions-m-a","garchomp","surf">`）+ 行番号で弾かれる。複数レギュ宣言時は**各レギュ
   分**の診断が出る（fan-out・[[cli-and-io]]）。technical 詳細は [[tsc-verification]]、ゲーム数値は [[game-spec]]。
 - **未知種族 / 未 vendor 技**: `*-specs.yaml` / `languages/*.yaml` 未登録の種族・技は ID 解決できない。データ拡張は
-  `update-catalog` / `survey-regulation`→`generate:data` の範囲（[[data-pipeline]]）であり本 skill の外。
+  showdown 経路（`showdown:*`・構造 / 解禁）/ `update-catalog`（ja）→`generate:data` の範囲（[[data-pipeline]]）であり本 skill の外。
 - **パーティ単位の点検は別 skill**: 同種族重複・未解禁混入・弱点集中・技範囲は `review-party` が担う。
 
 ## 関連

@@ -42,8 +42,8 @@ adr:
 
 ## 例外・誤検出の扱い
 
-- **コミット SHA**（40 桁 hex）は learning の正規項目なので `commit <sha>` 文脈では redact しない（汎用 hex パターン適用時は SHA 行を除外）。
-- 公開 URL・PokeAPI 等の外部公開エンドポイントは redact 不要。
+- **コミット SHA**（40 桁 hex）は learning の正規項目なので `commit <sha>` 文脈では redact しない（汎用 hex パターン適用時は SHA 行を除外）。pokemon-showdown PR 本文や `verify-showdown-pr` の照合コメントが引く **showdown の master commit SHA** も出典メタなので同様に残す（取得元の再現性記録）。
+- 公開 URL・PokeAPI 等の外部公開エンドポイントは redact 不要。**`smogon/pokemon-showdown` リポジトリ URL / コミット URL と Serebii の公開ページ URL**（`serebii.net/pokemonchampions/...` / `pokedex-champions/...` / `attackdex-champions/...` / `abilitydex/...` / `itemdex/...`）も公開の出典 URL ゆえ redact 不要（showdown-sync / serebii-bulletin の PR 本文・`verify-showdown-pr` の照合コメントが出典として引く・ADR 0039 / 0040）。
 - bot のコミット署名メール（`noreply@anthropic.com` 等の公開アドレス）は文脈上必要なら残してよいが、**人間の個人メール**は `[REDACTED-EMAIL]` にする。
 
 ## 検証例（受け入れ基準 5）
