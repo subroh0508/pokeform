@@ -32,7 +32,7 @@ flowchart TD
 
 > 計画群全体の受け入れ基準は [`OVERVIEW.md` の「受け入れ基準」節](./OVERVIEW.md#受け入れ基準) を参照。
 > **依存は一方通行**: 先行する [04-generated-layout-redesign](../04-generated-layout-redesign/README.md)（Phase 1-3 再編）
-> を完了 → 本計画群（05）→ [09-champions-data-rollout](../../09-champions-data-rollout/README.md)（全種族投入）。04 / 06 へ戻る依存は無い。
+> を完了 → 本計画群（05）→ [09-champions-data-rollout](../09-champions-data-rollout/README.md)（全種族投入）。04 / 06 へ戻る依存は無い。
 
 ## 補足
 
@@ -44,4 +44,4 @@ flowchart TD
   Phase 2 の技マスター専用取得経路が Serebii から Champions 準拠値を取得して `move-specs` を正す（根本解決）。
 - **着手前提**: 先行する [04-generated-layout-redesign](../04-generated-layout-redesign/README.md) を Phase 1-3
   （レイアウト再編・`move-specs` 独立エンティティ化）まで完了してから本計画群に入る。本計画群完了後、`move-specs` が
-  Champions 準拠で揃い整理済みパイプラインができた状態で [09-champions-data-rollout](../../09-champions-data-rollout/README.md) の全種族投入へ繋ぐ。
+  Champions 準拠で揃い整理済みパイプラインができた状態で [09-champions-data-rollout](../09-champions-data-rollout/README.md) の全種族投入へ繋ぐ。

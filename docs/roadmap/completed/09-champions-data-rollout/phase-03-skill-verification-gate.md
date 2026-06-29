@@ -25,7 +25,7 @@
 - [ ] Phase 1-2 の投入結果を人間が点検する（チェック観点は下記「検証手順」）。
 - [ ] 不備があれば、`survey-regulation`（オーケストレーター）/ 層2-3 Workflow / `serebii-to-catalog` 等のどこに原因があるかを切り分け、改修方針を確定する。
 - [ ] **判定を記録する**:
-  - **健全（OK）**: 全量本投入（[10-showdown-first-data Phase 6](../10-showdown-first-data/phase-06-full-rollout.md) へ cross-plan move 済み）へ進む。判定根拠を本 phase doc / PR コメント等に残す。
+  - **健全（OK）**: 全量本投入（[10-showdown-first-data Phase 6](../../10-showdown-first-data/phase-06-full-rollout.md) へ cross-plan move 済み）へ進む。判定根拠を本 phase doc / PR コメント等に残す。
   - **不備あり（NG）**: skill 改修を別 PR（`skill-creator` 経由・[[skill-authoring]]・cross-agent パリティ）で実施し、マージ後に **Phase 1 から「全削除 → M-A 限定 → M-B 限定」サイクルを再実行**して本ゲートに戻る。
 
 ## この Phase で育てるハーネス（rule・skill）
