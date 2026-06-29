@@ -9,7 +9,7 @@ description: >-
   スクレイパー（`node scripts/scrape-serebii.ts`）の中間 JSON で照合する。レビュー観点・出力は code-review /
   redaction に準拠し、機械ゲート（型 / カバレッジ / Biome）は再実装しない。構造データ取得は showdown 経路、
   日本語名 ja の取り込みは update-catalog の責務で、本 skill は照合専任。
-allowed-tools: Bash(gh pr *), Bash(gh api *), Bash(node scripts/*), Bash(pnpm *), Bash(git diff*), Read, Write
+allowed-tools: Bash(gh pr diff:*), Bash(gh pr view:*), Bash(gh pr comment:*), Bash(node scripts/*), Bash(git diff:*), Read, Write
 ---
 
 # verify-showdown-pr — showdown 経路の data PR を Serebii で照合する
