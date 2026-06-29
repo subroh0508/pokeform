@@ -10,7 +10,6 @@ pokeform の実装ロードマップは **計画ディレクトリ単位**で分
 
 active（未着手・進行中）は直下、完了した計画群は [`completed/`](./completed/) 配下に集約する。
 
-- M-A/M-B 解禁データ投入（限定セットでのスキル実地検証）計画 → [`09-champions-data-rollout/README.md`](./09-champions-data-rollout/)（本投入は 10 へ移動）
 - データ取得を pokemon-showdown 第一の正へ刷新（Serebii 速報 / PokeAPI ja 専任）計画 → [`10-showdown-first-data/README.md`](./10-showdown-first-data/)
 - **完了計画群** → [`completed/`](./completed/)（下記ロールアップ表参照）
 - 設計俯瞰（旧 `01-mvp/architecture.md` をテーマ別に分割昇格・コードなし）→ [`docs/design/`](../design/README.md)
@@ -50,7 +49,7 @@ active（未着手・進行中）は直下、完了した計画群は [`complete
 | [completed/05-move-master-scraper-refactor](./completed/05-move-master-scraper-refactor/README.md) | ✅ 完了 |
 | [completed/07-rules-skills-simplify](./completed/07-rules-skills-simplify/README.md) | ✅ 完了 |
 | [completed/08-docs-restructure](./completed/08-docs-restructure/README.md) | ✅ 完了 |
-| [09-champions-data-rollout](./09-champions-data-rollout/README.md) | 🚧 進行中 |
+| [completed/09-champions-data-rollout](./completed/09-champions-data-rollout/README.md) | ✅ 完了 |
 | [10-showdown-first-data](./10-showdown-first-data/README.md) | ⬜ 未着手 |
 
 ## MVP の範囲

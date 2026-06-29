@@ -2,7 +2,7 @@
 
 > 09-champions-data-rollout **Phase 2**（M-B 限定投入）で `survey-regulation` skill を実地検証するため、
 > M-B を**「M-A の 10 体 + M-B 追加解禁全種」+ 全持ち物**に絞って投入した際の出典付き記録。情報源方針の正本は
-> [`serebii-sourcing.md`](../../../.claude/skills/survey-regulation/references/serebii-sourcing.md)
+> 当時の `serebii-sourcing.md`（survey-regulation skill 内・**plan 10 Phase 5 で skill ごと廃止**・現存せず）
 > （① Serebii 第一優先 / ② 補助件数裏取り / ③ PokeAPI 構造データ）。Phase 1 の記録は
 > [`champions-m-a-roster-source.md`](./champions-m-a-roster-source.md)。
 

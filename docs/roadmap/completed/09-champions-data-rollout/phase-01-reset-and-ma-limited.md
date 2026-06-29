@@ -2,7 +2,7 @@
 
 > 投入手段は **03-survey-regulation-rework で構築した新パイプライン（決定論スクレイパー + Haiku 取得 fan-out +
 > 自己修復ループ）+ 05-move-master-scraper-refactor で整理した役割分割済みパイプライン**経由。投入先は
-> [04-generated-layout-redesign の Phase 1-3](../completed/04-generated-layout-redesign/README.md) で再編した新レイアウト
+> [04-generated-layout-redesign の Phase 1-3](../04-generated-layout-redesign/README.md) で再編した新レイアウト
 > （specs / languages / per-reg 4 オブジェクト・`data/champions/m-a/*` / `data/languages/*`）。技メタは 05 Phase 2 で
 > Champions 準拠へ是正済みの `move-specs` を使う。
 
@@ -17,14 +17,14 @@
   - per-reg `data/champions/m-a/*`（block 記法）を 10 体 + 全持ち物で著述（各種族 `species-moves` = M-A 使用可能技全量、メガ運用種に `mega[]`、`items` = 全持ち物）。
   - `check:regulation` 0 終了 → `generate:data` 再生成 → `pokemon-data-reviewer` レビュー。
 - スコープ外:
-  - M-A の残り全種族（本投入は [10-showdown-first-data Phase 6](../10-showdown-first-data/phase-06-full-rollout.md) へ移管）。M-B（Phase 2）。
+  - M-A の残り全種族（本投入は [10-showdown-first-data Phase 6](../../10-showdown-first-data/phase-06-full-rollout.md) へ移管）。M-B（Phase 2）。
   - スキーマ / generate の再設計（02 で確定済み）。スクレイパー / skill / legality / メガ取り込みの実装（03 + 05 で完了済み）。技マスターの値是正（05 Phase 2 で完了済み）。
   - 検証で判明する前の skill 改修（Phase 3 のゲート判定後に行う）。
 
 ## 前提（依存）
 
 - **04-generated-layout-redesign の Phase 1-3 完了**（新レイアウト）/ **05-move-master-scraper-refactor 完了**（技マスター専用取得で `move-specs` 是正済み + スクレイパー役割分割 + `survey-regulation` オーケストレーター化）/ **03-survey-regulation-rework 完了（Phase 1-12）**（新パイプライン + legality / メガ / 生成整備）/ **02-data-model-redesign 完了**（新スキーマ + `check:regulation` ゲート + catalog 化 + materialize）。
-- メガ先の技プールは base 継承（[ADR 0024](../../adr/0024-mega-moves-inherit-base.md)）。技の出自 = Serebii 第一優先（ADR 0026）。append-only / skill-authored（ADR 0027 / 0030）。
+- メガ先の技プールは base 継承（[ADR 0024](../../../adr/0024-mega-moves-inherit-base.md)）。技の出自 = Serebii 第一優先（ADR 0026）。append-only / skill-authored（ADR 0027 / 0030）。
 - 確定済み rule: [[data-pipeline]] / [[cli-and-io]] / [[type-conventions]] / [[testing]]。
 
 ## タスク
@@ -64,4 +64,4 @@
 - **限定セットは skill の実地検証手段**。10 体規模はレビュー可能で、本投入前に skill の不備を炙り出す。種族を絞っても skill 駆動経路は本投入と同一にする（検証の妥当性のため）。
 - **全削除はサイクルの起点**。Phase 3 の検証で skill を直すたびに本 phase からやり直す（プレースホルダ・前サイクルの残骸を残さない）。
 - 代表 7 体の選定は本 phase 実行時に確定する（タイプ・メガ運用・持ち物運用が多様な代表種を選び、skill の各経路を踏む）。
-- 技の出自は Serebii 第一優先・PokeAPI learnset 非依存（ADR 0026）。メガの多重表現（種族 `megaLinks` / 持ち物 megaStone / per-reg `mega[]`）の整合は `check:regulation` で担保。メガ先の技プールは base 継承（[ADR 0024](../../adr/0024-mega-moves-inherit-base.md)）。
+- 技の出自は Serebii 第一優先・PokeAPI learnset 非依存（ADR 0026）。メガの多重表現（種族 `megaLinks` / 持ち物 megaStone / per-reg `mega[]`）の整合は `check:regulation` で担保。メガ先の技プールは base 継承（[ADR 0024](../../../adr/0024-mega-moves-inherit-base.md)）。

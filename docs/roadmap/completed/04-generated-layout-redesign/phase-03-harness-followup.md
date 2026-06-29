@@ -43,4 +43,4 @@
 ## リスク・備考
 
 - skill のパス参照追従漏れは利用者（エージェント）の誤動作を生む。`git grep` で機械的に拾う（learning #104/#117/#122 反復の dangling 防止）。
-- 本 phase 完了で 04 計画群が完了。次は後続 [05-move-master-scraper-refactor](../05-move-master-scraper-refactor/README.md)（技マスター取得 + 役割分割 + skill 再編）→ [09-champions-data-rollout](../../09-champions-data-rollout/README.md)（全種族投入）。
+- 本 phase 完了で 04 計画群が完了。次は後続 [05-move-master-scraper-refactor](../05-move-master-scraper-refactor/README.md)（技マスター取得 + 役割分割 + skill 再編）→ [09-champions-data-rollout](../09-champions-data-rollout/README.md)（全種族投入）。

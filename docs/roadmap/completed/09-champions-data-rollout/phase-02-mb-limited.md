@@ -1,7 +1,7 @@
 # Phase 2 — M-B 限定投入（M-A の 10 体 + M-B 追加解禁全種 + 全持ち物）
 
 > Phase 1 と同じく **03 + 05 で整えた取得パイプライン + `survey-regulation` オーケストレーター**経由で、
-> [04 の新レイアウト](../completed/04-generated-layout-redesign/README.md) の `data/champions/m-b/*` へ投入する。
+> [04 の新レイアウト](../04-generated-layout-redesign/README.md) の `data/champions/m-b/*` へ投入する。
 
 ## 目的 / スコープ
 
@@ -13,7 +13,7 @@
   - per-reg `data/champions/m-b/*`（block 記法）を「M-A の 10 体 + M-B 追加解禁全種」+ 全持ち物で著述（各種族 `species-moves` = M-B 使用可能技全量、メガ運用種に `mega[]`、`items` = 解禁済み全持ち物、`index.yaml` の period は現行維持）。
   - `check:regulation` 0 終了 → `generate:data` 再生成 → `pokemon-data-reviewer` レビュー。
 - スコープ外:
-  - M-B の残り全種族（本投入は [10-showdown-first-data Phase 6](../10-showdown-first-data/phase-06-full-rollout.md) で M-A とともに全量化）。
+  - M-B の残り全種族（本投入は [10-showdown-first-data Phase 6](../../10-showdown-first-data/phase-06-full-rollout.md) で M-A とともに全量化）。
   - skill 改修（Phase 3 のゲート判定後）。スクレイパー / skill / legality 実装（03 + 05 完了済み）。
 
 ## 前提（依存）
