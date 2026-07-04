@@ -1,18 +1,19 @@
-# Phase 7 — レギュレーション取得の author-regulation-data skill 新設
+# Phase 8 — レギュレーション取得の author-regulation-data skill 新設
 
-> `author-static-data`（Phase 6・reg 非依存の全件名辞書）と対になる **per-reg 取得オーケストレーション skill** を新設する。`data/` 完全削除からの復元を「全件名辞書（Phase 6・`author-static-data`）」と「reg 取得（本 phase・`author-regulation-data`）」に分離する方針の後段。既存の `showdown-sync.yml` workflow は**据え置き**、本 skill がそれを dispatch する取得層として利用する（skill は手順オーケストレーション・workflow は取得実体という役割分担）。
+> `author-static-data`（Phase 6-7・reg 非依存の全件名辞書）と対になる **per-reg 取得オーケストレーション skill** を新設する。`data/` 完全削除からの復元を「全件名辞書（Phase 6 基盤 / Phase 7 投入・`author-static-data`）」と「reg 取得（本 phase・`author-regulation-data`）」に分離する方針の後段。既存の `showdown-sync.yml` workflow は**据え置き**、本 skill がそれを dispatch する取得層として利用する（skill は手順オーケストレーション・workflow は取得実体という役割分担）。
 
 ## 目的 / スコープ
 
 指定レギュレーション 1 つ分の解禁データを、`data/` 完全削除・部分欠損・完成済みのいずれの状態からでも同じ手順で収束させる**冪等な取得 skill** `author-regulation-data <reg>` を新設する。skill は取得実体を再実装せず、確定済みの機械経路（`showdown-sync.yml` / `verify-showdown-pr` / `check:regulation` / `generate:data`）を**オーケストレーション**する。**名前は Phase 6 で全件辞書化済みのため、ja gap 補完は per-reg 取得の主タスクから外れ、PokeAPI 未存在の新規 id が出たときの差分突き合わせ（`author-static-data` へ委譲）に縮小する**。
 
 - スコープ内: skill 新設（canonical + symlink）、前提ゲート（`author-static-data`（全件名辞書）が整備済みか + `rules.yaml`・`type-specs.yaml`（静的コミット）が存在するかの欠落チェックの fail-fast 誘導）、per-reg reset → `showdown-sync.yml` dispatch → `verify-showdown-pr` 照合 → per-reg 著述（`<reg>/index.yaml` の period・`languages/regulations.yaml` エントリ）→ `pokemon-data-reviewer` 依頼、までの手順化。新規 id の名前欠落は `author-static-data`（差分追加）へ委譲。冪等スキップ（存在レコードは append/既存尊重で触れない）の明文化。
-- スコープ外: **M-A・M-B の実データ投入そのもの（Phase 8 が本 skill を実行）**。`showdown-sync.yml` workflow の改修（据え置き・本 skill は dispatch するのみ）。名前辞書の全件整備（Phase 6 `author-static-data`）。`rules.yaml`・`type-specs.yaml`（静的コミット・自動化対象外）。`showdown:types` 抽出の新設（OVERVIEW スコープ外の維持）。M-C 以降のレギュレーション。
+- スコープ外: **M-A・M-B の実データ投入そのもの（Phase 9 が本 skill を実行）**。`showdown-sync.yml` workflow の改修（据え置き・本 skill は dispatch するのみ）。名前辞書の全件整備（Phase 6-7 `author-static-data`）。`rules.yaml`・`type-specs.yaml`（静的コミット・自動化対象外）。`showdown:types` 抽出の新設（OVERVIEW スコープ外の維持）。M-C 以降のレギュレーション。
 
 ## 前提（依存）
 
 - **Phase 1-5 完了**: showdown 経路（抽出 + 転記 + `showdown-sync.yml`）/ PokeAPI ja 専任 / Serebii 速報スクレイパー / `verify-showdown-pr` skill が揃っている。
-- **Phase 6 完了**: `author-static-data` skill（全件名辞書・[phase-06](./phase-06-author-static-data.md)）が整備され、`languages/*.yaml` が全件で埋まり `generate.ts` が languages ⊋ specs を許容する。これにより per-reg 取得時に大半の名前が既存し ja gap ループが原則不要になる。本 skill は前提ゲートとして `author-static-data` の整備状況を確認する。
+- **Phase 6 完了**: 全件名辞書の基盤（`pokeapi-catalog.yml` / `author-static-data` skill / `generate.ts` superset 緩和・[phase-06](./phase-06-author-static-data.md)）。
+- **Phase 7 完了**: `languages/*.yaml` が全件名辞書で投入済み（[phase-07](./phase-07-languages-catalog-populate.md)）。これにより per-reg 取得時に大半の名前が既存し ja gap ループが原則不要になる。本 skill は前提ゲートとして `author-static-data` の整備状況（全件辞書投入 + `rules.yaml`/`type-specs.yaml` 存在）を確認する。mega 名の en は本 phase の showdown 取得で埋まる。
 - `rules.yaml` / `type-specs.yaml` がコミット済みで存在（静的コミット・本計画では自動化しない）。
 - 確定済み rule: [[data-pipeline]]（取得元の権威序列・append/既存尊重・「項目の取得元」表）/ [[skill-authoring]] / [[cross-agent]]。
 
@@ -53,6 +54,6 @@
 ## リスク・備考
 
 - **ja gap は原則解消済み**: 名前は Phase 6（`author-static-data` 全件名辞書）で事前整備されるため、per-reg 取得時の ja gap は原則出ない。showdown が全件辞書に無い**新規 id**（新登場ポケモン等）を導入した稀なケースのみ `author-static-data`（差分追加・手作業 commit 可）で補い再 generate する。従来の「投入のたびに ja を埋める」ループは不要になった。
-- **skill と投入の分離**: 本 phase は harness 資産（skill + rule 追記）のみ、実データ投入は Phase 8。Phase 6/7 で前提層 + skill を確定し Phase 8 でデータ投入する構造で、harness-review 対象（skill）と pokemon-data-reviewer 対象（データ）の PR を分離しレビュー性を保つ。
+- **skill と投入の分離**: 本 phase は harness 資産（skill + rule 追記）のみ、実データ投入は Phase 9。Phase 6-8 で前提層 + skill を確定し Phase 9 でデータ投入する構造で、harness-review 対象（skill）と pokemon-data-reviewer 対象（データ）の PR を分離しレビュー性を保つ。
 - **cross-agent フォールバック**: 本 skill は `gh` / GitHub Actions dispatch を含むため、Claude / Codex いずれからも `gh workflow run` で駆動できる。dispatch 不可環境では各 npm script の逐次実行 + 人手へ縮退する旨を skill 本文に明示する（[[cross-agent]]）。
 - 独立レビューは `harness-review`（ハーネス資産）。

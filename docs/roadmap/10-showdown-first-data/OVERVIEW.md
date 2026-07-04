@@ -34,9 +34,9 @@
 - **GitHub Actions**: `showdown-sync.yml`（正）/ `serebii-bulletin.yml`（速報）。両者末尾で `check:regulation` → `generate:data` → `pnpm verify` → `create-pull-request`。
 - **照合スキル** `verify-showdown-pr`: WebFetch ではなく**新 Serebii スクレイパースクリプトを流用**して showdown PR の diff を Serebii と照合し、一致 exit 0 / 差異 exit 1 + PR コメント。survey-regulation はこのスキルへ置換し廃止。
 - **データ著述の 2 skill 分割**（`data/` 完全削除からの復元を「reg 非依存の全件名辞書」と「reg 依存の解禁データ」に分離。`author-static-data` ↔ `author-regulation-data` の対）:
-  - **全件名辞書 `author-static-data`**（Phase 6・`update-catalog` をリネーム）: `languages/{species,items,moves,abilities,mega,types}.yaml` を **PokeAPI 由来の全件**（未解禁含む全ポケモン・持ち物・技・特性・タイプ名）で満たす。成果物は **担当 YAML の作成 / データ更新 PR**。取得 + 整形 + 書き込み + PR 作成は **新 GitHub Actions workflow**（`pokeapi-catalog.yml`・`showdown-sync.yml` と同型）で実行し、PokeAPI 非存在（メガ ja 等）は **PR への手作業追加 commit** で補う。以降は差分（未記録 id）だけ追加。`fetch-pokeapi.ts` 全件化 + en 取得、`generate.ts` superset 緩和、`languages/*.yaml` scaffold も担う。これで per-reg 取得の ja gap が原則消える。
-  - **レギュレーション取得 `author-regulation-data`**（Phase 7・`author-static-data` と対の命名）: 指定 reg 1 つの解禁データ取得を**オーケストレーション**（前提ゲート → per-reg reset → `showdown-sync.yml` dispatch → `verify-showdown-pr` 照合 → per-reg 著述）。名前は全件辞書済みゆえ **ja gap 補完は新規 id の差分追加（`author-static-data` 委譲）に縮小**。取得実体は再実装せず既存経路へ委譲し、**`showdown-sync.yml` workflow は据え置き**（skill が dispatch する取得層）。
-  - **`rules.yaml` / `type-specs.yaml`** はどの skill も触らない静的コミット（上記「設計方針」参照）。`languages/regulations.yaml`（per-reg 名）は `author-regulation-data` が reg 取得時に著述する。
+  - **全件名辞書 `author-static-data`**（`update-catalog` をリネーム・基盤 Phase 6 / 投入 Phase 7）: `languages/{species,items,moves,abilities,types}.yaml` を **PokeAPI 由来の全件**（未解禁含む全ポケモン・持ち物・技・特性・タイプ名）で満たす。成果物は **担当 YAML の作成 / データ更新 PR**。取得 + 整形 + 書き込み + PR 作成は **新 GitHub Actions workflow**（`pokeapi-catalog.yml`・`showdown-sync.yml` と同型）で実行し、PokeAPI 非存在は **PR への手作業追加 commit** で補う。以降は差分（未記録 id）だけ追加。`fetch-pokeapi.ts` 全件化 + en 取得、`generate.ts` superset 緩和、`languages/*.yaml` scaffold も担う。これで per-reg 取得の ja gap が原則消える。**基盤（workflow/src/rename/generate緩和/ADR = Phase 6・code/harness-review）と全件データ投入（Phase 7・pokemon-data-reviewer）を別 phase に分ける**。
+  - **レギュレーション取得 `author-regulation-data`**（Phase 8・`author-static-data` と対の命名）: 指定 reg 1 つの解禁データ取得を**オーケストレーション**（前提ゲート → per-reg reset → `showdown-sync.yml` dispatch → `verify-showdown-pr` 照合 → per-reg 著述）。名前は全件辞書済みゆえ **ja gap 補完は新規 id の差分追加（`author-static-data` 委譲）に縮小**。取得実体は再実装せず既存経路へ委譲し、**`showdown-sync.yml` workflow は据え置き**（skill が dispatch する取得層）。
+  - **名前の取得元分担**: `species/items/moves/abilities/types` 名は **PokeAPI 全件**（`author-static-data`）。**`languages/mega.yaml` は PokeAPI 対象外**で、**en = showdown**（`sync-showdown`・per-reg = Phase 8）/ **ja = 手作業**（scaffold のみ `author-static-data`）。`languages/regulations.yaml`（per-reg 名）は `author-regulation-data` が reg 取得時に著述。**`rules.yaml` / `type-specs.yaml`** はどの skill も触らない静的コミット（上記「設計方針」参照）。
 
 ## スコープ外
 
@@ -54,9 +54,10 @@
 4. `showdown-sync.yml` / `serebii-bulletin.yml` を `workflow_dispatch` で手動実行すると PR が立ち CI（`pnpm verify`）が緑（Phase 3 / 4）。
 5. 旧 Serebii スクレイパー・survey-regulation skill が削除され、`verify-showdown-pr` skill と新 Serebii スクレイパーへ置換される（Phase 4 / 5）。
 6. 取得元・第一優先・vendor 方式の変更が ADR 0039 / 0040 に記録され、被 supersede ADR が archive へ退避し inbound 参照が追従される。
-7. `update-catalog` が `author-static-data` へリネームされ、新 GitHub Actions workflow（PokeAPI 全件取得 → 整形 → `languages/*.yaml` 書き込み → PR）で `languages/{species,items,moves,abilities,mega,types}.yaml` が PokeAPI 由来の全件（未解禁含む）で満たされる。PokeAPI 非存在（メガ ja 等）は PR への手作業追加 commit で補える。`generate.ts` が languages ⊋ specs（orphan 許容）でも 0 終了し、`fetch:ja-names` 再実行は未記録 id のみ差分追加する。ADR 0035 を refine する新 ADR が起票される（Phase 6）。
-8. reg ごとの取得オーケストレーション（前提ゲート → reset → dispatch → 照合 → per-reg 著述）が `author-regulation-data` skill に定式化され、`showdown-sync.yml` workflow を据え置いたまま既存経路へ委譲する（Phase 7）。
-9. Phase 8 完了時: M-A・M-B の**全解禁情報（全種・全技・全持ち物・全メガ）**が `author-regulation-data` skill 実行で投入され、`verify-showdown-pr` の Serebii 照合と `pokemon-data-reviewer` レビューで重大な不整合が無い。
+7. `update-catalog` が `author-static-data` へリネームされ、新 GitHub Actions workflow（`pokeapi-catalog.yml`）+ `fetch-pokeapi` 全件化 + `generate.ts` superset 緩和 + ADR 0035 refine の**基盤**が揃う。`generate.ts` が languages ⊋ specs（orphan 許容）でも 0 終了し、`fetch:ja-names` 再実行は未記録 id のみ差分追加する（Phase 6）。
+8. `languages/{species,items,moves,abilities,types}.yaml` が PokeAPI 由来の全件（未解禁含む）で満たされ ja/en が揃う（PokeAPI 非存在は手作業 commit）。`src/generated/languages/*.ts` に全件が反映される（Phase 7・`pokemon-data-reviewer` レビュー）。
+9. reg ごとの取得オーケストレーション（前提ゲート → reset → dispatch → 照合 → per-reg 著述）が `author-regulation-data` skill に定式化され、`showdown-sync.yml` workflow を据え置いたまま既存経路へ委譲する（Phase 8）。
+10. Phase 9 完了時: M-A・M-B の**全解禁情報（全種・全技・全持ち物・全メガ）**が `author-regulation-data` skill 実行で投入され、`verify-showdown-pr` の Serebii 照合と `pokemon-data-reviewer` レビューで重大な不整合が無い。
 
 ## phase 分割（6 基準の評価サマリ）
 
@@ -69,8 +70,9 @@
 | Phase 3 | `showdown-sync.yml` + ADR 0039（0012/0027 supersede） | CI + ADR（中） |
 | Phase 4 | Serebii 完全廃止 + 新スクレイパー + `serebii-bulletin.yml` + ADR 0040（0033/0037 supersede） | 削除 + 新規 + CI + ADR（大） |
 | Phase 5 | `verify-showdown-pr` skill + `.claude/rules/*` 5 ファイル + docs / AGENTS 改訂 | skill + rule + docs（中） |
-| Phase 6 | 全件名辞書 `author-static-data`（`update-catalog` リネーム）+ PokeAPI カタログ workflow + `fetch-pokeapi` 全件化 + `generate` superset 緩和 + ADR（**本投入の手前へ挿入**） | workflow + src + skill + ADR（中・data 大） |
-| Phase 7 | reg 取得オーケストレーション skill `author-regulation-data` 新設（`showdown-sync.yml` は据え置き） | skill + rule 追記（小） |
-| Phase 8 | M-A・M-B 全データセット本投入（`author-regulation-data` 実行・**plan 09 Phase 4 の cross-plan move を含む**） | data 投入 PR（>1000 行・例外 1 PR） |
+| Phase 6 | 全件名辞書の**基盤**（`author-static-data` リネーム + `pokeapi-catalog.yml` workflow + `fetch-pokeapi` 全件化 + `generate` superset 緩和 + ADR）（**本投入の手前へ挿入**） | workflow + src + skill + ADR（中） |
+| Phase 7 | 全件名辞書の**初回データ投入**（`author-static-data` 実行・PokeAPI 全件 + 手作業 gap） | data 投入 PR（大・pokemon-data-reviewer） |
+| Phase 8 | reg 取得オーケストレーション skill `author-regulation-data` 新設（`showdown-sync.yml` は据え置き） | skill + rule 追記（小） |
+| Phase 9 | M-A・M-B 全データセット本投入（`author-regulation-data` 実行・**plan 09 Phase 4 の cross-plan move を含む**） | data 投入 PR（>1000 行・例外 1 PR） |
 
-直列チェーン: Phase 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 の一方通行。Phase 8 は全パイプライン（正 + 速報 + 照合スキル + 全件名辞書 + reg 取得スキル）が揃ってから全量投入する。**Phase 6 / 7 は本投入の手前へ後から挿入した 2 skill 分割 phase**（`data/` 完全削除からの復元を「reg 非依存の全件名辞書（6・`author-static-data`）」と「reg 依存の解禁取得（7・`author-regulation-data`）」に分離する方針・`rules.yaml`・`type-specs.yaml` はどちらでも触らない静的コミット・renumber の参照追従は [[planning]] の insert / renumber チェックリストに従う）。**Phase 8 は plan 09 の最終 Phase 4（全データセット本投入）を本計画群へ移植して新パイプライン版に改訂したもの**（[[planning]] cross-plan move チェックリストに従い移動・参照追従する）。本投入は全種・全 movepool で >1000 行になるが、データセット追加で意味ある分割が困難なため 1 PR を許容する（[[planning]] 6 基準⑤ の例外）。skill / src 手順（Phase 6/7）とデータ投入（Phase 8）を分離し、harness-review / code-review 対象と pokemon-data-reviewer 対象の PR を分ける。
+直列チェーン: Phase 1 → 2 → 3 → 4 → 5 → 6 → 7 → 8 → 9 の一方通行。Phase 9 は全パイプライン（正 + 速報 + 照合スキル + 全件名辞書 + reg 取得スキル）が揃ってから全量投入する。**Phase 6-8 は本投入の手前へ後から挿入した分割 phase**（`data/` 完全削除からの復元を「reg 非依存の全件名辞書（基盤 6 + 投入 7・`author-static-data`）」と「reg 依存の解禁取得（8・`author-regulation-data`）」に分離。基盤（src/workflow/skill/ADR）とデータ投入（Phase 7・9）を別 phase に割り、`code-review`/`harness-review` 対象と `pokemon-data-reviewer` 対象の PR を分ける方針。`rules.yaml`・`type-specs.yaml` はどの skill も触らない静的コミット。renumber の参照追従は [[planning]] の insert / renumber チェックリストに従う）。**Phase 9 は plan 09 の最終 Phase 4（全データセット本投入）を本計画群へ移植して新パイプライン版に改訂したもの**（[[planning]] cross-plan move チェックリストに従い移動・参照追従する）。本投入は全種・全 movepool で >1000 行になるが、データセット追加で意味ある分割が困難なため 1 PR を許容する（[[planning]] 6 基準⑤ の例外）。
