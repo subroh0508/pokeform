@@ -40,15 +40,21 @@ const readLangMap = (
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
 /**
- * category の list endpoint を全件ページングして id（`results[].name` スラグ）を列挙する。全件名辞書を満たす
- * ため未解禁を含む全 id を取る（`limit` を大きく取り 1 リクエストで受ける・ADR 0041）。取得失敗は fail-fast
- * （全件列挙が欠けると差分判定が不正になるため best-effort にしない）。
+ * category の list endpoint から id（`results[].name` スラグ）を全件列挙する。全件名辞書を満たすため未解禁を
+ * 含む全 id を取る（`limit` を全件数より大きく取り 1 リクエストで受け切る・ADR 0041）。取得失敗は fail-fast
+ * （全件列挙が欠けると差分判定が不正になるため best-effort にしない）。`count`（総数）と実受信 `results.length`
+ * の不一致も fail-fast にする（`limit` cap 等で全件を受け切れていない = 差分判定が不正になる状態を検出する）。
  */
 async function listAllIds(category: string): Promise<string[]> {
   const url = `${API}/${category}?limit=100000&offset=0`;
   const res = await fetch(url);
   if (!res.ok) throw new Error(`[fetch] list ${category} failed (${res.status})`);
-  const json = (await res.json()) as { results: { name: string }[] };
+  const json = (await res.json()) as { count: number; results: { name: string }[] };
+  if (json.results.length !== json.count) {
+    throw new Error(
+      `[fetch] list ${category} incomplete (${json.results.length}/${json.count}; raise limit)`,
+    );
+  }
   return json.results.map((r) => r.name);
 }
 
