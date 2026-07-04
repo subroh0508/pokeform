@@ -128,6 +128,27 @@ export const typeNames = {
       ja: "フェアリー",
     },
   },
+  shadow: {
+    id: "shadow",
+    name: {
+      en: "Shadow",
+      ja: "ダーク",
+    },
+  },
+  stellar: {
+    id: "stellar",
+    name: {
+      en: "Stellar",
+      ja: "ステラ",
+    },
+  },
+  unknown: {
+    id: "unknown",
+    name: {
+      en: "???",
+      ja: "？？？",
+    },
+  },
 } as const satisfies Record<string, NameEntry>;
 
 export type TypeNames = typeof typeNames;

@@ -234,3 +234,702 @@ abilities:
   huge-power:
     ja: ちからもち
     en: Huge Power
+  aerilate:
+    ja: スカイスキン
+    en: Aerilate
+  aftermath:
+    ja: ゆうばく
+    en: Aftermath
+  air-lock:
+    ja: エアロック
+    en: Air Lock
+  anger-shell:
+    ja: いかりのこうら
+    en: Anger Shell
+  anticipation:
+    ja: きけんよち
+    en: Anticipation
+  arena-trap:
+    ja: ありじごく
+    en: Arena Trap
+  armor-tail:
+    ja: テイルアーマー
+    en: Armor Tail
+  aroma-veil:
+    ja: アロマベール
+    en: Aroma Veil
+  as-one-glastrier:
+    ja: じんばいったい
+    en: As One
+  as-one-spectrier:
+    ja: じんばいったい
+    en: As One
+  aura-break:
+    ja: オーラブレイク
+    en: Aura Break
+  bad-dreams:
+    ja: ナイトメア
+    en: Bad Dreams
+  ball-fetch:
+    ja: たまひろい
+    en: Ball Fetch
+  battery:
+    ja: バッテリー
+    en: Battery
+  battle-bond:
+    ja: きずなへんげ
+    en: Battle Bond
+  beads-of-ruin:
+    ja: わざわいのたま
+    en: Beads of Ruin
+  beast-boost:
+    ja: ビーストブースト
+    en: Beast Boost
+  berserk:
+    ja: ぎゃくじょう
+    en: Berserk
+  big-pecks:
+    ja: はとむね
+    en: Big Pecks
+  bulletproof:
+    ja: ぼうだん
+    en: Bulletproof
+  cheek-pouch:
+    ja: ほおぶくろ
+    en: Cheek Pouch
+  chilling-neigh:
+    ja: しろのいななき
+    en: Chilling Neigh
+  cloud-nine:
+    ja: ノーてんき
+    en: Cloud Nine
+  color-change:
+    ja: へんしょく
+    en: Color Change
+  comatose:
+    ja: ぜったいねむり
+    en: Comatose
+  commander:
+    ja: しれいとう
+    en: Commander
+  compound-eyes:
+    ja: ふくがん
+    en: Compound Eyes
+  corrosion:
+    ja: ふしょく
+    en: Corrosion
+  costar:
+    ja: きょうえん
+    en: Costar
+  cotton-down:
+    ja: わたげ
+    en: Cotton Down
+  cud-chew:
+    ja: はんすう
+    en: Cud Chew
+  curious-medicine:
+    ja: きみょうなくすり
+    en: Curious Medicine
+  dancer:
+    ja: おどりこ
+    en: Dancer
+  dark-aura:
+    ja: ダークオーラ
+    en: Dark Aura
+  dauntless-shield:
+    ja: ふくつのたて
+    en: Dauntless Shield
+  dazzling:
+    ja: ビビッドボディ
+    en: Dazzling
+  defeatist:
+    ja: よわき
+    en: Defeatist
+  delta-stream:
+    ja: デルタストリーム
+    en: Delta Stream
+  desolate-land:
+    ja: おわりのだいち
+    en: Desolate Land
+  disguise:
+    ja: ばけのかわ
+    en: Disguise
+  download:
+    ja: ダウンロード
+    en: Download
+  dragonize:
+    ja: ドラゴンスキン
+    en: Dragonize
+  dragons-maw:
+    ja: りゅうのあぎと
+    en: Dragon’s Maw
+  drizzle:
+    ja: あめふらし
+    en: Drizzle
+  dry-skin:
+    ja: かんそうはだ
+    en: Dry Skin
+  early-bird:
+    ja: はやおき
+    en: Early Bird
+  earth-eater:
+    ja: どしょく
+    en: Earth Eater
+  electric-surge:
+    ja: エレキメイカー
+    en: Electric Surge
+  electromorphosis:
+    ja: でんきにかえる
+    en: Electromorphosis
+  embody-aspect:
+    ja: おもかげやどし
+    en: Embody Aspect
+  emergency-exit:
+    ja: ききかいひ
+    en: Emergency Exit
+  fairy-aura:
+    ja: フェアリーオーラ
+    en: Fairy Aura
+  filter:
+    ja: フィルター
+    en: Filter
+  flare-boost:
+    ja: ねつぼうそう
+    en: Flare Boost
+  flower-gift:
+    ja: フラワーギフト
+    en: Flower Gift
+  flower-veil:
+    ja: フラワーベール
+    en: Flower Veil
+  forecast:
+    ja: てんきや
+    en: Forecast
+  friend-guard:
+    ja: フレンドガード
+    en: Friend Guard
+  full-metal-body:
+    ja: メタルプロテクト
+    en: Full Metal Body
+  fur-coat:
+    ja: ファーコート
+    en: Fur Coat
+  galvanize:
+    ja: エレキスキン
+    en: Galvanize
+  gluttony:
+    ja: くいしんぼう
+    en: Gluttony
+  gooey:
+    ja: ぬめぬめ
+    en: Gooey
+  gorilla-tactics:
+    ja: ごりむちゅう
+    en: Gorilla Tactics
+  grass-pelt:
+    ja: くさのけがわ
+    en: Grass Pelt
+  grassy-surge:
+    ja: グラスメイカー
+    en: Grassy Surge
+  grim-neigh:
+    ja: くろのいななき
+    en: Grim Neigh
+  guard-dog:
+    ja: ばんけん
+    en: Guard Dog
+  gulp-missile:
+    ja: うのミサイル
+    en: Gulp Missile
+  hadron-engine:
+    ja: ハドロンエンジン
+    en: Hadron Engine
+  harvest:
+    ja: しゅうかく
+    en: Harvest
+  healer:
+    ja: いやしのこころ
+    en: Healer
+  heatproof:
+    ja: たいねつ
+    en: Heatproof
+  honey-gather:
+    ja: みつあつめ
+    en: Honey Gather
+  hospitality:
+    ja: おもてなし
+    en: Hospitality
+  hunger-switch:
+    ja: はらぺこスイッチ
+    en: Hunger Switch
+  hustle:
+    ja: はりきり
+    en: Hustle
+  hydration:
+    ja: うるおいボディ
+    en: Hydration
+  ice-body:
+    ja: アイスボディ
+    en: Ice Body
+  ice-face:
+    ja: アイスフェイス
+    en: Ice Face
+  ice-scales:
+    ja: こおりのりんぷん
+    en: Ice Scales
+  illusion:
+    ja: イリュージョン
+    en: Illusion
+  immunity:
+    ja: めんえき
+    en: Immunity
+  imposter:
+    ja: かわりもの
+    en: Imposter
+  innards-out:
+    ja: とびだすなかみ
+    en: Innards Out
+  insomnia:
+    ja: ふみん
+    en: Insomnia
+  intrepid-sword:
+    ja: ふとうのけん
+    en: Intrepid Sword
+  iron-barbs:
+    ja: てつのトゲ
+    en: Iron Barbs
+  iron-fist:
+    ja: てつのこぶし
+    en: Iron Fist
+  keen-eye:
+    ja: するどいめ
+    en: Keen Eye
+  klutz:
+    ja: ぶきよう
+    en: Klutz
+  leaf-guard:
+    ja: リーフガード
+    en: Leaf Guard
+  libero:
+    ja: リベロ
+    en: Libero
+  limber:
+    ja: じゅうなん
+    en: Limber
+  lingering-aroma:
+    ja: とれないにおい
+    en: Lingering Aroma
+  liquid-ooze:
+    ja: ヘドロえき
+    en: Liquid Ooze
+  liquid-voice:
+    ja: うるおいボイス
+    en: Liquid Voice
+  magic-bounce:
+    ja: マジックミラー
+    en: Magic Bounce
+  magician:
+    ja: マジシャン
+    en: Magician
+  magma-armor:
+    ja: マグマのよろい
+    en: Magma Armor
+  magnet-pull:
+    ja: じりょく
+    en: Magnet Pull
+  mega-launcher:
+    ja: メガランチャー
+    en: Mega Launcher
+  mega-sol:
+    ja: メガソーラー
+    en: Mega Sol
+  merciless:
+    ja: ひとでなし
+    en: Merciless
+  mimicry:
+    ja: ぎたい
+    en: Mimicry
+  minds-eye:
+    ja: しんがん
+    en: Mind’s Eye
+  minus:
+    ja: マイナス
+    en: Minus
+  misty-surge:
+    ja: ミストメイカー
+    en: Misty Surge
+  moody:
+    ja: ムラっけ
+    en: Moody
+  motor-drive:
+    ja: でんきエンジン
+    en: Motor Drive
+  multitype:
+    ja: マルチタイプ
+    en: Multitype
+  mummy:
+    ja: ミイラ
+    en: Mummy
+  mycelium-might:
+    ja: きんしのちから
+    en: Mycelium Might
+  neuroforce:
+    ja: ブレインフォース
+    en: Neuroforce
+  neutralizing-gas:
+    ja: かがくへんかガス
+    en: Neutralizing Gas
+  no-guard:
+    ja: ノーガード
+    en: No Guard
+  normalize:
+    ja: ノーマルスキン
+    en: Normalize
+  oblivious:
+    ja: どんかん
+    en: Oblivious
+  opportunist:
+    ja: びんじょう
+    en: Opportunist
+  orichalcum-pulse:
+    ja: ひひいろのこどう
+    en: Orichalcum Pulse
+  overcoat:
+    ja: ぼうじん
+    en: Overcoat
+  own-tempo:
+    ja: マイペース
+    en: Own Tempo
+  parental-bond:
+    ja: おやこあい
+    en: Parental Bond
+  pastel-veil:
+    ja: パステルベール
+    en: Pastel Veil
+  perish-body:
+    ja: ほろびのボディ
+    en: Perish Body
+  pickup:
+    ja: ものひろい
+    en: Pickup
+  piercing-drill:
+    ja: かんつうドリル
+    en: Piercing Drill
+  pixilate:
+    ja: フェアリースキン
+    en: Pixilate
+  plus:
+    ja: プラス
+    en: Plus
+  poison-heal:
+    ja: ポイズンヒール
+    en: Poison Heal
+  poison-puppeteer:
+    ja: どくくぐつ
+    en: Poison Puppeteer
+  power-construct:
+    ja: スワームチェンジ
+    en: Power Construct
+  power-of-alchemy:
+    ja: かがくのちから
+    en: Power of Alchemy
+  power-spot:
+    ja: パワースポット
+    en: Power Spot
+  primordial-sea:
+    ja: はじまりのうみ
+    en: Primordial Sea
+  prism-armor:
+    ja: プリズムアーマー
+    en: Prism Armor
+  propeller-tail:
+    ja: スクリューおびれ
+    en: Propeller Tail
+  protosynthesis:
+    ja: こだいかっせい
+    en: Protosynthesis
+  psychic-surge:
+    ja: サイコメイカー
+    en: Psychic Surge
+  punk-rock:
+    ja: パンクロック
+    en: Punk Rock
+  pure-power:
+    ja: ヨガパワー
+    en: Pure Power
+  quark-drive:
+    ja: クォークチャージ
+    en: Quark Drive
+  queenly-majesty:
+    ja: じょおうのいげん
+    en: Queenly Majesty
+  quick-draw:
+    ja: クイックドロウ
+    en: Quick Draw
+  quick-feet:
+    ja: はやあし
+    en: Quick Feet
+  rattled:
+    ja: びびり
+    en: Rattled
+  receiver:
+    ja: レシーバー
+    en: Receiver
+  refrigerate:
+    ja: フリーズスキン
+    en: Refrigerate
+  regenerator:
+    ja: さいせいりょく
+    en: Regenerator
+  ripen:
+    ja: じゅくせい
+    en: Ripen
+  rks-system:
+    ja: ＡＲシステム
+    en: RKS System
+  rocky-payload:
+    ja: いわはこび
+    en: Rocky Payload
+  run-away:
+    ja: にげあし
+    en: Run Away
+  sand-spit:
+    ja: すなはき
+    en: Sand Spit
+  sap-sipper:
+    ja: そうしょく
+    en: Sap Sipper
+  schooling:
+    ja: ぎょぐん
+    en: Schooling
+  scrappy:
+    ja: きもったま
+    en: Scrappy
+  screen-cleaner:
+    ja: バリアフリー
+    en: Screen Cleaner
+  seed-sower:
+    ja: こぼれダネ
+    en: Seed Sower
+  serene-grace:
+    ja: てんのめぐみ
+    en: Serene Grace
+  shadow-shield:
+    ja: ファントムガード
+    en: Shadow Shield
+  sharpness:
+    ja: きれあじ
+    en: Sharpness
+  shell-armor:
+    ja: シェルアーマー
+    en: Shell Armor
+  shield-dust:
+    ja: りんぷん
+    en: Shield Dust
+  shields-down:
+    ja: リミットシールド
+    en: Shields Down
+  simple:
+    ja: たんじゅん
+    en: Simple
+  skill-link:
+    ja: スキルリンク
+    en: Skill Link
+  slow-start:
+    ja: スロースタート
+    en: Slow Start
+  slush-rush:
+    ja: ゆきかき
+    en: Slush Rush
+  snow-cloak:
+    ja: ゆきがくれ
+    en: Snow Cloak
+  snow-warning:
+    ja: ゆきふらし
+    en: Snow Warning
+  solid-rock:
+    ja: ハードロック
+    en: Solid Rock
+  soul-heart:
+    ja: ソウルハート
+    en: Soul-Heart
+  soundproof:
+    ja: ぼうおん
+    en: Soundproof
+  spicy-spray:
+    ja: とびだすハバネロ
+    en: Spicy Spray
+  stakeout:
+    ja: はりこみ
+    en: Stakeout
+  stall:
+    ja: あとだし
+    en: Stall
+  stalwart:
+    ja: すじがねいり
+    en: Stalwart
+  stamina:
+    ja: じきゅうりょく
+    en: Stamina
+  stance-change:
+    ja: バトルスイッチ
+    en: Stance Change
+  static:
+    ja: せいでんき
+    en: Static
+  steam-engine:
+    ja: じょうききかん
+    en: Steam Engine
+  steelworker:
+    ja: はがねつかい
+    en: Steelworker
+  steely-spirit:
+    ja: はがねのせいしん
+    en: Steely Spirit
+  stench:
+    ja: あくしゅう
+    en: Stench
+  sticky-hold:
+    ja: ねんちゃく
+    en: Sticky Hold
+  storm-drain:
+    ja: よびみず
+    en: Storm Drain
+  strong-jaw:
+    ja: がんじょうあご
+    en: Strong Jaw
+  super-luck:
+    ja: きょううん
+    en: Super Luck
+  supersweet-syrup:
+    ja: かんろなミツ
+    en: Supersweet Syrup
+  supreme-overlord:
+    ja: そうだいしょう
+    en: Supreme Overlord
+  surge-surfer:
+    ja: サーフテール
+    en: Surge Surfer
+  sweet-veil:
+    ja: スイートベール
+    en: Sweet Veil
+  sword-of-ruin:
+    ja: わざわいのつるぎ
+    en: Sword of Ruin
+  symbiosis:
+    ja: きょうせい
+    en: Symbiosis
+  tablets-of-ruin:
+    ja: わざわいのおふだ
+    en: Tablets of Ruin
+  tangled-feet:
+    ja: ちどりあし
+    en: Tangled Feet
+  tangling-hair:
+    ja: カーリーヘアー
+    en: Tangling Hair
+  technician:
+    ja: テクニシャン
+    en: Technician
+  tera-shell:
+    ja: テラスシェル
+    en: Tera Shell
+  tera-shift:
+    ja: テラスチェンジ
+    en: Tera Shift
+  teraform-zero:
+    ja: ゼロフォーミング
+    en: Teraform Zero
+  teravolt:
+    ja: テラボルテージ
+    en: Teravolt
+  thermal-exchange:
+    ja: ねつこうかん
+    en: Thermal Exchange
+  thick-fat:
+    ja: あついしぼう
+    en: Thick Fat
+  tinted-lens:
+    ja: いろめがね
+    en: Tinted Lens
+  toxic-boost:
+    ja: どくぼうそう
+    en: Toxic Boost
+  toxic-chain:
+    ja: どくのくさり
+    en: Toxic Chain
+  toxic-debris:
+    ja: どくげしょう
+    en: Toxic Debris
+  trace:
+    ja: トレース
+    en: Trace
+  transistor:
+    ja: トランジスタ
+    en: Transistor
+  triage:
+    ja: ヒーリングシフト
+    en: Triage
+  truant:
+    ja: なまけ
+    en: Truant
+  turboblaze:
+    ja: ターボブレイズ
+    en: Turboblaze
+  unseen-fist:
+    ja: ふかしのこぶし
+    en: Unseen Fist
+  vessel-of-ruin:
+    ja: わざわいのうつわ
+    en: Vessel of Ruin
+  victory-star:
+    ja: しょうりのほし
+    en: Victory Star
+  volt-absorb:
+    ja: ちくでん
+    en: Volt Absorb
+  wandering-spirit:
+    ja: さまようたましい
+    en: Wandering Spirit
+  water-absorb:
+    ja: ちょすい
+    en: Water Absorb
+  water-bubble:
+    ja: すいほう
+    en: Water Bubble
+  water-compaction:
+    ja: みずがため
+    en: Water Compaction
+  water-veil:
+    ja: みずのベール
+    en: Water Veil
+  weak-armor:
+    ja: くだけるよろい
+    en: Weak Armor
+  well-baked-body:
+    ja: こんがりボディ
+    en: Well-Baked Body
+  white-smoke:
+    ja: しろいけむり
+    en: White Smoke
+  wimp-out:
+    ja: にげごし
+    en: Wimp Out
+  wind-power:
+    ja: ふうりょくでんき
+    en: Wind Power
+  wind-rider:
+    ja: かぜのり
+    en: Wind Rider
+  wonder-guard:
+    ja: ふしぎなまもり
+    en: Wonder Guard
+  wonder-skin:
+    ja: ミラクルスキン
+    en: Wonder Skin
+  zen-mode:
+    ja: ダルマモード
+    en: Zen Mode
+  zero-to-hero:
+    ja: マイティチェンジ
+    en: Zero to Hero

@@ -54,3 +54,12 @@ types:
   fairy:
     ja: フェアリー
     en: Fairy
+  shadow:
+    ja: ダーク
+    en: Shadow
+  stellar:
+    ja: ステラ
+    en: Stellar
+  unknown:
+    ja: ？？？
+    en: ???
