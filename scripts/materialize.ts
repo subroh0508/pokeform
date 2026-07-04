@@ -1,6 +1,6 @@
 /**
  * materialize.ts — `data/raw/`（PokeAPI `names` キャッシュ）から名前（ja/en）を読み、名前 SoT
- * `data/languages/*.yaml` の該当エントリへ **backfill** する名前専任スクリプト。
+ * `data/languages/*.yaml` へ **append/既存尊重で転記**する名前専任スクリプト。
  *
  * **名前専任**（plan 10）: 構造データ（図鑑番号 / タイプ / 種族値 / 特性 id / 持ち物 category）の転記は
  * pokemon-showdown 経路（`scripts/sync-showdown.ts` + `src/codegen/showdown/*`）へ移管した。本スクリプトは
@@ -8,15 +8,18 @@
  * **全件名辞書**（ADR 0041）で、PokeAPI から ja/en を両取りして満たす。メガ名は PokeAPI のカテゴリに無いため
  * 対象外（en=showdown / ja=手作業・[[data-pipeline]]）。
  *
- * **raw best-effort（不在 skip）**: `fetch:ja-names` が ja/en 欠落エントリのみ best-effort 取得するため、raw が
- * 無いエントリ（Champions 固有メガストーン等の PokeAPI 非存在・取得済みで欠落なし）は転記をスキップする。
+ * **raw 起点の append/backfill**（ADR 0041 の「append/既存尊重転記」）: `fetch:ja-names` が全件列挙で未記録 /
+ * ja・en 欠落の id のみ raw を書くため、`data/raw/<category>/*.json` を決定論順（sort）で走査し —
+ *   - **未記録 id**（languages に無い）は新規エントリとして **append**（全件名辞書を満たす）、
+ *   - **既存だが ja・en 欠落**の id は不足欄だけ **backfill**、
+ * を行う。既に ja/en 完備の id は raw を持たない（fetch が skip）ため触れない。
  *
- * **append/既存尊重**: 未設定フィールドだけを raw 由来 ja/en で埋め、既に値があるフィールドは raw と異なっても
- * 上書きしない（Champions 実態に合わせた skill 著述 / 速報値を保護）。差分は conflict として標準出力に提示する。
+ * **既存尊重**: 既に値があるフィールドは raw と異なっても上書きしない（Champions 実態に合わせた skill 著述 /
+ * 速報値を保護）。差分は conflict として標準出力に提示する（append される新規 id は既存値が無く conflict しない）。
  *
  * 実行: `pnpm sync:ja-names`（fetch:ja-names 後・ネットワーク不要）。
  */
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Document, parseDocument, type YAMLMap } from "yaml";
@@ -35,6 +38,7 @@ const rawOpt = (category: string, name: string): RawNamed | null => {
 };
 
 let conflictCount = 0;
+let skippedCount = 0;
 /** plan の fill をノードへ適用し、conflict を提示する。 */
 const apply = <T extends object>(
   doc: Document,
@@ -56,9 +60,21 @@ const apply = <T extends object>(
   return Object.keys(plan.fill).length;
 };
 
+/** `data/raw/<category>/` に取得済みの id（`<id>.json` のベース名）を決定論順（sort）で列挙する。fetch が全件
+ * 列挙で未記録 / 欠落 id のみ raw を書くため、この集合が「append すべき新規 + backfill すべき欠落」の対象になる。 */
+const listRawIds = (category: string): string[] => {
+  const dir = join(RAW, category);
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .filter((f) => f.endsWith(".json"))
+    .map((f) => f.slice(0, -".json".length))
+    .sort();
+};
+
 /**
- * languages/<file> の各エントリへ raw `names` 由来の名前を backfill する。`needs` で欠落エントリのみ raw を引き
- * （最小取得）、`extract` で raw → { ja?, en? } を取り出して append/既存尊重で適用する。
+ * languages/<file> を raw 起点で満たす。`data/raw/<category>/` の id を走査し、languages に無い id は
+ * **新規エントリとして append**（全件名辞書化・ADR 0041）、既存だが `needs` を満たす（ja・en 欠落）id は
+ * 不足欄だけ **backfill**（既存尊重）。`extract` で raw → { ja?, en? } を取り出して適用する。
  */
 const backfillNames = (
   file: string,
@@ -70,13 +86,30 @@ const backfillNames = (
   const doc = parseDocument(readFileSync(join(LANG, file), "utf8"));
   const map = doc.get(mapKey) as YAMLMap;
   let filled = 0;
-  for (const entry of map.items) {
-    const id = String((entry.key as { value: string }).value);
-    const node = entry.value as YAMLMap;
-    const current = node.toJS(doc) as { ja?: string; en?: string };
-    if (!needs(current)) continue;
+  for (const id of listRawIds(category)) {
     const json = rawOpt(category, id);
     if (json === null) continue;
+    const node = map.get(id) as YAMLMap | undefined;
+    if (node === undefined) {
+      // 未記録 id: ja/en を両取りできたものだけ新規エントリとして append する。PokeAPI が ja を持たない id
+      // （Pokémon GO 専用特性 is_main_series:false / LA の未ローカライズ球 / 未ローカライズの新特性 等）は
+      // 全件名辞書の「各エントリ ja/en 完備」不変条件（ADR 0041）を満たせないため辞書へ入れず skip する
+      // （必要になれば手作業で ja を補って append する・[[data-pipeline]]）。既存値が無いため conflict しない。
+      const names = extract(json);
+      if (names.ja === undefined || names.en === undefined) {
+        skippedCount++;
+        console.warn(
+          `[sync:ja-names] skip append ${category}/${id} (ja/en incomplete from PokeAPI)`,
+        );
+        continue;
+      }
+      map.set(doc.createNode(id), doc.createNode(names));
+      filled += Object.keys(names).length;
+      continue;
+    }
+    // 既存 id: ja・en 欠落のみ backfill（既存値は上書きしない）。
+    const current = node.toJS(doc) as { ja?: string; en?: string };
+    if (!needs(current)) continue;
     filled += apply(doc, node, id, planFields(current, extract(json)));
   }
   if (filled > 0) writeFileSync(join(LANG, file), doc.toString());
@@ -106,5 +139,5 @@ const abilitiesFilled = backfillNames(
 const typesFilled = backfillNames("types.yaml", "types", "type", extractNames, needsJaEn);
 
 console.log(
-  `[sync:ja-names] filled ${speciesFilled} species / ${itemsFilled} item / ${movesFilled} move / ${abilitiesFilled} ability / ${typesFilled} type name field(s), ${conflictCount} conflict(s)`,
+  `[sync:ja-names] filled ${speciesFilled} species / ${itemsFilled} item / ${movesFilled} move / ${abilitiesFilled} ability / ${typesFilled} type name field(s), ${conflictCount} conflict(s), ${skippedCount} skipped (ja/en incomplete)`,
 );
