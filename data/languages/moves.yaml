@@ -1128,3 +1128,1686 @@ moves:
   make-it-rain:
     en: Make It Rain
     ja: ゴールドラッシュ
+  10-000-000-volt-thunderbolt:
+    ja: １０００まんボルト
+    en: 10,000,000 Volt Thunderbolt
+  absorb:
+    ja: すいとる
+    en: Absorb
+  accelerock:
+    ja: アクセルロック
+    en: Accelerock
+  acid:
+    ja: ようかいえき
+    en: Acid
+  acid-downpour--physical:
+    ja: アシッドポイズンデリート
+    en: Acid Downpour
+  acid-downpour--special:
+    ja: アシッドポイズンデリート
+    en: Acid Downpour
+  aeroblast:
+    ja: エアロブラスト
+    en: Aeroblast
+  all-out-pummeling--physical:
+    ja: ぜんりょくむそうげきれつけん
+    en: All-Out Pummeling
+  all-out-pummeling--special:
+    ja: ぜんりょくむそうげきれつけん
+    en: All-Out Pummeling
+  alluring-voice:
+    ja: みわくのボイス
+    en: Alluring Voice
+  anchor-shot:
+    ja: アンカーショット
+    en: Anchor Shot
+  apple-acid:
+    ja: りんごさん
+    en: Apple Acid
+  arm-thrust:
+    ja: つっぱり
+    en: Arm Thrust
+  armor-cannon:
+    ja: アーマーキャノン
+    en: Armor Cannon
+  aromatherapy:
+    ja: アロマセラピー
+    en: Aromatherapy
+  aromatic-mist:
+    ja: アロマミスト
+    en: Aromatic Mist
+  assist:
+    ja: ねこのて
+    en: Assist
+  astonish:
+    ja: おどろかす
+    en: Astonish
+  astral-barrage:
+    ja: アストラルビット
+    en: Astral Barrage
+  attack-order:
+    ja: こうげきしれい
+    en: Attack Order
+  aura-wheel:
+    ja: オーラぐるま
+    en: Aura Wheel
+  aurora-beam:
+    ja: オーロラビーム
+    en: Aurora Beam
+  aurora-veil:
+    ja: オーロラベール
+    en: Aurora Veil
+  autotomize:
+    ja: ボディパージ
+    en: Autotomize
+  axe-kick:
+    ja: かかとおとし
+    en: Axe Kick
+  baby-doll-eyes:
+    ja: つぶらなひとみ
+    en: Baby-Doll Eyes
+  baddy-bad:
+    ja: わるわるゾーン
+    en: Baddy Bad
+  baneful-bunker:
+    ja: トーチカ
+    en: Baneful Bunker
+  barrage:
+    ja: たまなげ
+    en: Barrage
+  barrier:
+    ja: バリアー
+    en: Barrier
+  beak-blast:
+    ja: くちばしキャノン
+    en: Beak Blast
+  behemoth-bash:
+    ja: きょじゅうだん
+    en: Behemoth Bash
+  behemoth-blade:
+    ja: きょじゅうざん
+    en: Behemoth Blade
+  bestow:
+    ja: ギフトパス
+    en: Bestow
+  bide:
+    ja: がまん
+    en: Bide
+  bind:
+    ja: しめつける
+    en: Bind
+  bitter-blade:
+    ja: むねんのつるぎ
+    en: Bitter Blade
+  bitter-malice:
+    ja: うらみつらみ
+    en: Bitter Malice
+  black-hole-eclipse--physical:
+    ja: ブラックホールイクリプス
+    en: Black Hole Eclipse
+  black-hole-eclipse--special:
+    ja: ブラックホールイクリプス
+    en: Black Hole Eclipse
+  blazing-torque:
+    ja: バーンアクセル
+    en: Blazing Torque
+  bleakwind-storm:
+    ja: こがらしあらし
+    en: Bleakwind Storm
+  block:
+    ja: とおせんぼう
+    en: Block
+  blood-moon:
+    ja: ブラッドムーン
+    en: Blood Moon
+  bloom-doom--physical:
+    ja: ブルームシャインエクストラ
+    en: Bloom Doom
+  bloom-doom--special:
+    ja: ブルームシャインエクストラ
+    en: Bloom Doom
+  blue-flare:
+    ja: あおいほのお
+    en: Blue Flare
+  bolt-beak:
+    ja: でんげきくちばし
+    en: Bolt Beak
+  bolt-strike:
+    ja: らいげき
+    en: Bolt Strike
+  bone-club:
+    ja: ホネこんぼう
+    en: Bone Club
+  bonemerang:
+    ja: ホネブーメラン
+    en: Bonemerang
+  boomburst:
+    ja: ばくおんぱ
+    en: Boomburst
+  bouncy-bubble:
+    ja: いきいきバブル
+    en: Bouncy Bubble
+  branch-poke:
+    ja: えだづき
+    en: Branch Poke
+  breakneck-blitz--physical:
+    ja: ウルトラダッシュアタック
+    en: Breakneck Blitz
+  breakneck-blitz--special:
+    ja: ウルトラダッシュアタック
+    en: Breakneck Blitz
+  brine:
+    ja: しおみず
+    en: Brine
+  bubble:
+    ja: あわ
+    en: Bubble
+  bubble-beam:
+    ja: バブルこうせん
+    en: Bubble Beam
+  bug-buzz:
+    ja: むしのさざめき
+    en: Bug Buzz
+  burn-up:
+    ja: もえつきる
+    en: Burn Up
+  burning-bulwark:
+    ja: かえんのまもり
+    en: Burning Bulwark
+  buzzy-buzz:
+    ja: びりびりエレキ
+    en: Buzzy Buzz
+  camouflage:
+    ja: ほごしょく
+    en: Camouflage
+  captivate:
+    ja: ゆうわく
+    en: Captivate
+  catastropika:
+    ja: ひっさつのピカチュート
+    en: Catastropika
+  ceaseless-edge:
+    ja: ひけん・ちえなみ
+    en: Ceaseless Edge
+  celebrate:
+    ja: おいわい
+    en: Celebrate
+  chatter:
+    ja: おしゃべり
+    en: Chatter
+  chilly-reception:
+    ja: さむいギャグ
+    en: Chilly Reception
+  chip-away:
+    ja: なしくずし
+    en: Chip Away
+  chloroblast:
+    ja: クロロブラスト
+    en: Chloroblast
+  clamp:
+    ja: からではさむ
+    en: Clamp
+  clanging-scales:
+    ja: スケイルノイズ
+    en: Clanging Scales
+  clangorous-soul:
+    ja: ソウルビート
+    en: Clangorous Soul
+  clangorous-soulblaze:
+    ja: ブレイジングソウルビート
+    en: Clangorous Soulblaze
+  collision-course:
+    ja: アクセルブレイク
+    en: Collision Course
+  combat-torque:
+    ja: ファイトアクセル
+    en: Combat Torque
+  comet-punch:
+    ja: れんぞくパンチ
+    en: Comet Punch
+  comeuppance:
+    ja: ほうふく
+    en: Comeuppance
+  confide:
+    ja: ないしょばなし
+    en: Confide
+  confusion:
+    ja: ねんりき
+    en: Confusion
+  constrict:
+    ja: からみつく
+    en: Constrict
+  continental-crush--physical:
+    ja: ワールズエンドフォール
+    en: Continental Crush
+  continental-crush--special:
+    ja: ワールズエンドフォール
+    en: Continental Crush
+  conversion:
+    ja: テクスチャー
+    en: Conversion
+  conversion-2:
+    ja: テクスチャー２
+    en: Conversion 2
+  core-enforcer:
+    ja: コアパニッシャー
+    en: Core Enforcer
+  corkscrew-crash--physical:
+    ja: ちょうぜつらせんれんげき
+    en: Corkscrew Crash
+  corkscrew-crash--special:
+    ja: ちょうぜつらせんれんげき
+    en: Corkscrew Crash
+  cotton-guard:
+    ja: コットンガード
+    en: Cotton Guard
+  cotton-spore:
+    ja: わたほうし
+    en: Cotton Spore
+  court-change:
+    ja: コートチェンジ
+    en: Court Change
+  covet:
+    ja: ほしがる
+    en: Covet
+  crabhammer:
+    ja: クラブハンマー
+    en: Crabhammer
+  crafty-shield:
+    ja: トリックガード
+    en: Crafty Shield
+  crush-grip:
+    ja: にぎりつぶす
+    en: Crush Grip
+  cut:
+    ja: いあいぎり
+    en: Cut
+  dark-void:
+    ja: ダークホール
+    en: Dark Void
+  decorate:
+    ja: デコレーション
+    en: Decorate
+  defend-order:
+    ja: ぼうぎょしれい
+    en: Defend Order
+  defense-curl:
+    ja: まるくなる
+    en: Defense Curl
+  devastating-drake--physical:
+    ja: アルティメットドラゴンバーン
+    en: Devastating Drake
+  devastating-drake--special:
+    ja: アルティメットドラゴンバーン
+    en: Devastating Drake
+  diamond-storm:
+    ja: ダイヤストーム
+    en: Diamond Storm
+  dire-claw:
+    ja: フェイタルクロー
+    en: Dire Claw
+  dizzy-punch:
+    ja: ピヨピヨパンチ
+    en: Dizzy Punch
+  doodle:
+    ja: うつしえ
+    en: Doodle
+  doom-desire:
+    ja: はめつのねがい
+    en: Doom Desire
+  double-iron-bash:
+    ja: ダブルパンツァー
+    en: Double Iron Bash
+  double-kick:
+    ja: にどげり
+    en: Double Kick
+  double-shock:
+    ja: でんこうそうげき
+    en: Double Shock
+  double-slap:
+    ja: おうふくビンタ
+    en: Double Slap
+  dragon-ascent:
+    ja: ガリョウテンセイ
+    en: Dragon Ascent
+  dragon-breath:
+    ja: りゅうのいぶき
+    en: Dragon Breath
+  dragon-energy:
+    ja: ドラゴンエナジー
+    en: Dragon Energy
+  dragon-hammer:
+    ja: ドラゴンハンマー
+    en: Dragon Hammer
+  dragon-rage:
+    ja: りゅうのいかり
+    en: Dragon Rage
+  dream-eater:
+    ja: ゆめくい
+    en: Dream Eater
+  drum-beating:
+    ja: ドラムアタック
+    en: Drum Beating
+  dual-chop:
+    ja: ダブルチョップ
+    en: Dual Chop
+  dynamax-cannon:
+    ja: ダイマックスほう
+    en: Dynamax Cannon
+  echoed-voice:
+    ja: エコーボイス
+    en: Echoed Voice
+  eerie-spell:
+    ja: ぶきみなじゅもん
+    en: Eerie Spell
+  egg-bomb:
+    ja: タマゴばくだん
+    en: Egg Bomb
+  electrify:
+    ja: そうでん
+    en: Electrify
+  electro-drift:
+    ja: イナズマドライブ
+    en: Electro Drift
+  electro-shot:
+    ja: エレクトロビーム
+    en: Electro Shot
+  embargo:
+    ja: さしおさえ
+    en: Embargo
+  ember:
+    ja: ひのこ
+    en: Ember
+  eruption:
+    ja: ふんか
+    en: Eruption
+  esper-wing:
+    ja: オーラウイング
+    en: Esper Wing
+  eternabeam:
+    ja: ムゲンダイビーム
+    en: Eternabeam
+  extreme-evoboost:
+    ja: ナインエボルブースト
+    en: Extreme Evoboost
+  fairy-lock:
+    ja: フェアリーロック
+    en: Fairy Lock
+  fairy-wind:
+    ja: ようせいのかぜ
+    en: Fairy Wind
+  false-surrender:
+    ja: どげざつき
+    en: False Surrender
+  false-swipe:
+    ja: みねうち
+    en: False Swipe
+  feint-attack:
+    ja: だましうち
+    en: Feint Attack
+  fickle-beam:
+    ja: きまぐレーザー
+    en: Fickle Beam
+  fiery-dance:
+    ja: ほのおのまい
+    en: Fiery Dance
+  fiery-wrath:
+    ja: もえあがるいかり
+    en: Fiery Wrath
+  fillet-away:
+    ja: みをけずる
+    en: Fillet Away
+  fire-lash:
+    ja: ほのおのムチ
+    en: Fire Lash
+  fire-pledge:
+    ja: ほのおのちかい
+    en: Fire Pledge
+  fishious-rend:
+    ja: エラがみ
+    en: Fishious Rend
+  fissure:
+    ja: じわれ
+    en: Fissure
+  flame-burst:
+    ja: はじけるほのお
+    en: Flame Burst
+  flame-wheel:
+    ja: かえんぐるま
+    en: Flame Wheel
+  flash:
+    ja: フラッシュ
+    en: Flash
+  fleur-cannon:
+    ja: フルールカノン
+    en: Fleur Cannon
+  floaty-fall:
+    ja: ふわふわフォール
+    en: Floaty Fall
+  floral-healing:
+    ja: フラワーヒール
+    en: Floral Healing
+  flower-shield:
+    ja: フラワーガード
+    en: Flower Shield
+  flying-press:
+    ja: フライングプレス
+    en: Flying Press
+  follow-me:
+    ja: このゆびとまれ
+    en: Follow Me
+  force-palm:
+    ja: はっけい
+    en: Force Palm
+  foresight:
+    ja: みやぶる
+    en: Foresight
+  forests-curse:
+    ja: もりののろい
+    en: Forest’s Curse
+  freeze-dry:
+    ja: フリーズドライ
+    en: Freeze-Dry
+  freeze-shock:
+    ja: フリーズボルト
+    en: Freeze Shock
+  freezing-glare:
+    ja: いてつくしせん
+    en: Freezing Glare
+  freezy-frost:
+    ja: こちこちフロスト
+    en: Freezy Frost
+  frost-breath:
+    ja: こおりのいぶき
+    en: Frost Breath
+  frustration:
+    ja: やつあたり
+    en: Frustration
+  fury-attack:
+    ja: みだれづき
+    en: Fury Attack
+  fury-cutter:
+    ja: れんぞくぎり
+    en: Fury Cutter
+  fury-swipes:
+    ja: みだれひっかき
+    en: Fury Swipes
+  fusion-bolt:
+    ja: クロスサンダー
+    en: Fusion Bolt
+  fusion-flare:
+    ja: クロスフレイム
+    en: Fusion Flare
+  gear-grind:
+    ja: ギアソーサー
+    en: Gear Grind
+  gear-up:
+    ja: アシストギア
+    en: Gear Up
+  genesis-supernova:
+    ja: オリジンズスーパーノヴァ
+    en: Genesis Supernova
+  geomancy:
+    ja: ジオコントロール
+    en: Geomancy
+  gigaton-hammer:
+    ja: デカハンマー
+    en: Gigaton Hammer
+  gigavolt-havoc--physical:
+    ja: スパーキングギガボルト
+    en: Gigavolt Havoc
+  gigavolt-havoc--special:
+    ja: スパーキングギガボルト
+    en: Gigavolt Havoc
+  glacial-lance:
+    ja: ブリザードランス
+    en: Glacial Lance
+  glaciate:
+    ja: こごえるせかい
+    en: Glaciate
+  glaive-rush:
+    ja: きょけんとつげき
+    en: Glaive Rush
+  glare:
+    ja: へびにらみ
+    en: Glare
+  glitzy-glow:
+    ja: どばどばオーラ
+    en: Glitzy Glow
+  grass-pledge:
+    ja: くさのちかい
+    en: Grass Pledge
+  grass-whistle:
+    ja: くさぶえ
+    en: Grass Whistle
+  grav-apple:
+    ja: Ｇのちから
+    en: Grav Apple
+  growl:
+    ja: なきごえ
+    en: Growl
+  grudge:
+    ja: おんねん
+    en: Grudge
+  guard-split:
+    ja: ガードシェア
+    en: Guard Split
+  guardian-of-alola:
+    ja: ガーディアン・デ・アローラ
+    en: Guardian of Alola
+  guillotine:
+    ja: ハサミギロチン
+    en: Guillotine
+  gust:
+    ja: かぜおこし
+    en: Gust
+  hail:
+    ja: あられ
+    en: Hail
+  happy-hour:
+    ja: ハッピータイム
+    en: Happy Hour
+  harden:
+    ja: かたくなる
+    en: Harden
+  head-charge:
+    ja: アフロブレイク
+    en: Head Charge
+  headbutt:
+    ja: ずつき
+    en: Headbutt
+  headlong-rush:
+    ja: ぶちかまし
+    en: Headlong Rush
+  heal-bell:
+    ja: いやしのすず
+    en: Heal Bell
+  heal-block:
+    ja: かいふくふうじ
+    en: Heal Block
+  heal-order:
+    ja: かいふくしれい
+    en: Heal Order
+  heart-stamp:
+    ja: ハートスタンプ
+    en: Heart Stamp
+  heart-swap:
+    ja: ハートスワップ
+    en: Heart Swap
+  hidden-power:
+    ja: めざめるパワー
+    en: Hidden Power
+  hold-back:
+    ja: てかげん
+    en: Hold Back
+  hold-hands:
+    ja: てをつなぐ
+    en: Hold Hands
+  horn-attack:
+    ja: つのでつく
+    en: Horn Attack
+  horn-drill:
+    ja: つのドリル
+    en: Horn Drill
+  horn-leech:
+    ja: ウッドホーン
+    en: Horn Leech
+  hydro-steam:
+    ja: ハイドロスチーム
+    en: Hydro Steam
+  hydro-vortex--physical:
+    ja: スーパーアクアトルネード
+    en: Hydro Vortex
+  hydro-vortex--special:
+    ja: スーパーアクアトルネード
+    en: Hydro Vortex
+  hyper-drill:
+    ja: ハイパードリル
+    en: Hyper Drill
+  hyper-fang:
+    ja: ひっさつまえば
+    en: Hyper Fang
+  hyperspace-fury:
+    ja: いじげんラッシュ
+    en: Hyperspace Fury
+  hyperspace-hole:
+    ja: いじげんホール
+    en: Hyperspace Hole
+  ice-ball:
+    ja: アイスボール
+    en: Ice Ball
+  ice-burn:
+    ja: コールドフレア
+    en: Ice Burn
+  ice-hammer:
+    ja: アイスハンマー
+    en: Ice Hammer
+  ice-shard:
+    ja: こおりのつぶて
+    en: Ice Shard
+  icicle-crash:
+    ja: つららおとし
+    en: Icicle Crash
+  icicle-spear:
+    ja: つららばり
+    en: Icicle Spear
+  incinerate:
+    ja: やきつくす
+    en: Incinerate
+  infernal-parade:
+    ja: ひゃっきやこう
+    en: Infernal Parade
+  inferno-overdrive--physical:
+    ja: ダイナミックフルフレイム
+    en: Inferno Overdrive
+  inferno-overdrive--special:
+    ja: ダイナミックフルフレイム
+    en: Inferno Overdrive
+  instruct:
+    ja: さいはい
+    en: Instruct
+  ion-deluge:
+    ja: プラズマシャワー
+    en: Ion Deluge
+  ivy-cudgel:
+    ja: ツタこんぼう
+    en: Ivy Cudgel
+  jaw-lock:
+    ja: くらいつく
+    en: Jaw Lock
+  jet-punch:
+    ja: ジェットパンチ
+    en: Jet Punch
+  judgment:
+    ja: さばきのつぶて
+    en: Judgment
+  jump-kick:
+    ja: とびげり
+    en: Jump Kick
+  jungle-healing:
+    ja: ジャングルヒール
+    en: Jungle Healing
+  karate-chop:
+    ja: からてチョップ
+    en: Karate Chop
+  kinesis:
+    ja: スプーンまげ
+    en: Kinesis
+  kings-shield:
+    ja: キングシールド
+    en: King’s Shield
+  kowtow-cleave:
+    ja: ドゲザン
+    en: Kowtow Cleave
+  lands-wrath:
+    ja: グランドフォース
+    en: Land’s Wrath
+  laser-focus:
+    ja: とぎすます
+    en: Laser Focus
+  lava-plume:
+    ja: ふんえん
+    en: Lava Plume
+  leaf-tornado:
+    ja: グラスミキサー
+    en: Leaf Tornado
+  leafage:
+    ja: このは
+    en: Leafage
+  leer:
+    ja: にらみつける
+    en: Leer
+  lets-snuggle-forever:
+    ja: ぽかぼかフレンドタイム
+    en: Let’s Snuggle Forever
+  lick:
+    ja: したでなめる
+    en: Lick
+  light-of-ruin:
+    ja: はめつのひかり
+    en: Light of Ruin
+  light-that-burns-the-sky:
+    ja: てんこがすめつぼうのひかり
+    en: Light That Burns the Sky
+  lovely-kiss:
+    ja: あくまのキッス
+    en: Lovely Kiss
+  lucky-chant:
+    ja: おまじない
+    en: Lucky Chant
+  lumina-crash:
+    ja: ルミナコリジョン
+    en: Lumina Crash
+  lunar-blessing:
+    ja: みかづきのいのり
+    en: Lunar Blessing
+  lunar-dance:
+    ja: みかづきのまい
+    en: Lunar Dance
+  luster-purge:
+    ja: ラスターパージ
+    en: Luster Purge
+  mach-punch:
+    ja: マッハパンチ
+    en: Mach Punch
+  magic-coat:
+    ja: マジックコート
+    en: Magic Coat
+  magic-powder:
+    ja: まほうのこな
+    en: Magic Powder
+  magic-room:
+    ja: マジックルーム
+    en: Magic Room
+  magical-leaf:
+    ja: マジカルリーフ
+    en: Magical Leaf
+  magical-torque:
+    ja: マジカルアクセル
+    en: Magical Torque
+  magma-storm:
+    ja: マグマストーム
+    en: Magma Storm
+  magnet-bomb:
+    ja: マグネットボム
+    en: Magnet Bomb
+  magnetic-flux:
+    ja: じばそうさ
+    en: Magnetic Flux
+  magnitude:
+    ja: マグニチュード
+    en: Magnitude
+  malicious-moonsault:
+    ja: ハイパーダーククラッシャー
+    en: Malicious Moonsault
+  malignant-chain:
+    ja: じゃどくのくさり
+    en: Malignant Chain
+  mat-block:
+    ja: たたみがえし
+    en: Mat Block
+  matcha-gotcha:
+    ja: シャカシャカほう
+    en: Matcha Gotcha
+  max-airstream:
+    ja: ダイジェット
+    en: Max Airstream
+  max-darkness:
+    ja: ダイアーク
+    en: Max Darkness
+  max-flare:
+    ja: ダイバーン
+    en: Max Flare
+  max-flutterby:
+    ja: ダイワーム
+    en: Max Flutterby
+  max-geyser:
+    ja: ダイストリーム
+    en: Max Geyser
+  max-guard:
+    ja: ダイウォール
+    en: Max Guard
+  max-hailstorm:
+    ja: ダイアイス
+    en: Max Hailstorm
+  max-knuckle:
+    ja: ダイナックル
+    en: Max Knuckle
+  max-lightning:
+    ja: ダイサンダー
+    en: Max Lightning
+  max-mindstorm:
+    ja: ダイサイコ
+    en: Max Mindstorm
+  max-ooze:
+    ja: ダイアシッド
+    en: Max Ooze
+  max-overgrowth:
+    ja: ダイソウゲン
+    en: Max Overgrowth
+  max-phantasm:
+    ja: ダイホロウ
+    en: Max Phantasm
+  max-quake:
+    ja: ダイアース
+    en: Max Quake
+  max-rockfall:
+    ja: ダイロック
+    en: Max Rockfall
+  max-starfall:
+    ja: ダイフェアリー
+    en: Max Starfall
+  max-steelspike:
+    ja: ダイスチル
+    en: Max Steelspike
+  max-strike:
+    ja: ダイアタック
+    en: Max Strike
+  max-wyrmwind:
+    ja: ダイドラグーン
+    en: Max Wyrmwind
+  me-first:
+    ja: さきどり
+    en: Me First
+  meditate:
+    ja: ヨガのポーズ
+    en: Meditate
+  mega-drain:
+    ja: メガドレイン
+    en: Mega Drain
+  mega-punch:
+    ja: メガトンパンチ
+    en: Mega Punch
+  menacing-moonraze-maelstrom:
+    ja: ムーンライトブラスター
+    en: Menacing Moonraze Maelstrom
+  metal-burst:
+    ja: メタルバースト
+    en: Metal Burst
+  metal-claw:
+    ja: メタルクロー
+    en: Metal Claw
+  meteor-assault:
+    ja: スターアサルト
+    en: Meteor Assault
+  metronome:
+    ja: ゆびをふる
+    en: Metronome
+  mighty-cleave:
+    ja: パワフルエッジ
+    en: Mighty Cleave
+  milk-drink:
+    ja: ミルクのみ
+    en: Milk Drink
+  mimic:
+    ja: ものまね
+    en: Mimic
+  mind-blown:
+    ja: ビックリヘッド
+    en: Mind Blown
+  mind-reader:
+    ja: こころのめ
+    en: Mind Reader
+  miracle-eye:
+    ja: ミラクルアイ
+    en: Miracle Eye
+  mirror-move:
+    ja: オウムがえし
+    en: Mirror Move
+  mirror-shot:
+    ja: ミラーショット
+    en: Mirror Shot
+  mist:
+    ja: しろいきり
+    en: Mist
+  mist-ball:
+    ja: ミストボール
+    en: Mist Ball
+  moongeist-beam:
+    ja: シャドーレイ
+    en: Moongeist Beam
+  morning-sun:
+    ja: あさのひざし
+    en: Morning Sun
+  mortal-spin:
+    ja: キラースピン
+    en: Mortal Spin
+  mountain-gale:
+    ja: ひょうざんおろし
+    en: Mountain Gale
+  mud-bomb:
+    ja: どろばくだん
+    en: Mud Bomb
+  mud-sport:
+    ja: どろあそび
+    en: Mud Sport
+  multi-attack:
+    ja: マルチアタック
+    en: Multi-Attack
+  mystical-power:
+    ja: しんぴのちから
+    en: Mystical Power
+  natural-gift:
+    ja: しぜんのめぐみ
+    en: Natural Gift
+  nature-power:
+    ja: しぜんのちから
+    en: Nature Power
+  natures-madness:
+    ja: しぜんのいかり
+    en: Nature’s Madness
+  needle-arm:
+    ja: ニードルアーム
+    en: Needle Arm
+  never-ending-nightmare--physical:
+    ja: むげんあんやへのいざない
+    en: Never-Ending Nightmare
+  never-ending-nightmare--special:
+    ja: むげんあんやへのいざない
+    en: Never-Ending Nightmare
+  night-daze:
+    ja: ナイトバースト
+    en: Night Daze
+  nightmare:
+    ja: あくむ
+    en: Nightmare
+  noxious-torque:
+    ja: ポイズンアクセル
+    en: Noxious Torque
+  nuzzle:
+    ja: ほっぺすりすり
+    en: Nuzzle
+  oblivion-wing:
+    ja: デスウイング
+    en: Oblivion Wing
+  obstruct:
+    ja: ブロッキング
+    en: Obstruct
+  oceanic-operetta:
+    ja: わだつみのシンフォニア
+    en: Oceanic Operetta
+  octazooka:
+    ja: オクタンほう
+    en: Octazooka
+  octolock:
+    ja: たこがため
+    en: Octolock
+  odor-sleuth:
+    ja: かぎわける
+    en: Odor Sleuth
+  ominous-wind:
+    ja: あやしいかぜ
+    en: Ominous Wind
+  order-up:
+    ja: いっちょうあがり
+    en: Order Up
+  origin-pulse:
+    ja: こんげんのはどう
+    en: Origin Pulse
+  overdrive:
+    ja: オーバードライブ
+    en: Overdrive
+  parabolic-charge:
+    ja: パラボラチャージ
+    en: Parabolic Charge
+  pay-day:
+    ja: ネコにこばん
+    en: Pay Day
+  peck:
+    ja: つつく
+    en: Peck
+  photon-geyser:
+    ja: フォトンゲイザー
+    en: Photon Geyser
+  pika-papow:
+    ja: ピカピカサンダー
+    en: Pika Papow
+  plasma-fists:
+    ja: プラズマフィスト
+    en: Plasma Fists
+  play-nice:
+    ja: なかよくする
+    en: Play Nice
+  poison-gas:
+    ja: どくガス
+    en: Poison Gas
+  poison-sting:
+    ja: どくばり
+    en: Poison Sting
+  poison-tail:
+    ja: ポイズンテール
+    en: Poison Tail
+  population-bomb:
+    ja: ネズミざん
+    en: Population Bomb
+  pound:
+    ja: はたく
+    en: Pound
+  powder:
+    ja: ふんじん
+    en: Powder
+  powder-snow:
+    ja: こなゆき
+    en: Powder Snow
+  power-shift:
+    ja: パワーシフト
+    en: Power Shift
+  power-split:
+    ja: パワーシェア
+    en: Power Split
+  power-trick:
+    ja: パワートリック
+    en: Power Trick
+  power-up-punch:
+    ja: グロウパンチ
+    en: Power-Up Punch
+  precipice-blades:
+    ja: だんがいのつるぎ
+    en: Precipice Blades
+  present:
+    ja: プレゼント
+    en: Present
+  prismatic-laser:
+    ja: プリズムレーザー
+    en: Prismatic Laser
+  psybeam:
+    ja: サイケこうせん
+    en: Psybeam
+  psyblade:
+    ja: "サイコブレイド "
+    en: Psyblade
+  psycho-boost:
+    ja: サイコブースト
+    en: Psycho Boost
+  psycho-shift:
+    ja: サイコシフト
+    en: Psycho Shift
+  psyshield-bash:
+    ja: バリアーラッシュ
+    en: Psyshield Bash
+  psywave:
+    ja: サイコウェーブ
+    en: Psywave
+  pulverizing-pancake:
+    ja: ほんきをだす　こうげき
+    en: Pulverizing Pancake
+  punishment:
+    ja: おしおき
+    en: Punishment
+  purify:
+    ja: じょうか
+    en: Purify
+  pursuit:
+    ja: おいうち
+    en: Pursuit
+  pyro-ball:
+    ja: かえんボール
+    en: Pyro Ball
+  quash:
+    ja: さきおくり
+    en: Quash
+  quiver-dance:
+    ja: ちょうのまい
+    en: Quiver Dance
+  rage:
+    ja: いかり
+    en: Rage
+  rage-powder:
+    ja: いかりのこな
+    en: Rage Powder
+  raging-bull:
+    ja: レイジングブル
+    en: Raging Bull
+  raging-fury:
+    ja: だいふんげき
+    en: Raging Fury
+  razor-leaf:
+    ja: はっぱカッター
+    en: Razor Leaf
+  razor-wind:
+    ja: かまいたち
+    en: Razor Wind
+  recycle:
+    ja: リサイクル
+    en: Recycle
+  refresh:
+    ja: リフレッシュ
+    en: Refresh
+  relic-song:
+    ja: いにしえのうた
+    en: Relic Song
+  retaliate:
+    ja: かたきうち
+    en: Retaliate
+  return:
+    ja: おんがえし
+    en: Return
+  revelation-dance:
+    ja: めざめるダンス
+    en: Revelation Dance
+  revenge:
+    ja: リベンジ
+    en: Revenge
+  revival-blessing:
+    ja: さいきのいのり
+    en: Revival Blessing
+  roar-of-time:
+    ja: ときのほうこう
+    en: Roar of Time
+  rock-climb:
+    ja: ロッククライム
+    en: Rock Climb
+  rock-smash:
+    ja: いわくだき
+    en: Rock Smash
+  rock-throw:
+    ja: いわおとし
+    en: Rock Throw
+  rock-wrecker:
+    ja: がんせきほう
+    en: Rock Wrecker
+  role-play:
+    ja: なりきり
+    en: Role Play
+  rolling-kick:
+    ja: まわしげり
+    en: Rolling Kick
+  rollout:
+    ja: ころがる
+    en: Rollout
+  rototiller:
+    ja: たがやす
+    en: Rototiller
+  ruination:
+    ja: カタストロフィ
+    en: Ruination
+  sacred-fire:
+    ja: せいなるほのお
+    en: Sacred Fire
+  sacred-sword:
+    ja: せいなるつるぎ
+    en: Sacred Sword
+  sand-attack:
+    ja: すなかけ
+    en: Sand Attack
+  sandsear-storm:
+    ja: ねっさのあらし
+    en: Sandsear Storm
+  sappy-seed:
+    ja: すくすくボンバー
+    en: Sappy Seed
+  savage-spin-out--physical:
+    ja: ぜったいほしょくかいてんざん
+    en: Savage Spin-Out
+  savage-spin-out--special:
+    ja: ぜったいほしょくかいてんざん
+    en: Savage Spin-Out
+  scratch:
+    ja: ひっかく
+    en: Scratch
+  searing-shot:
+    ja: かえんだん
+    en: Searing Shot
+  searing-sunraze-smash:
+    ja: サンシャインスマッシャー
+    en: Searing Sunraze Smash
+  secret-power:
+    ja: ひみつのちから
+    en: Secret Power
+  secret-sword:
+    ja: しんぴのつるぎ
+    en: Secret Sword
+  seed-flare:
+    ja: シードフレア
+    en: Seed Flare
+  shadow-blast:
+    ja: ダークブラスト
+    en: Shadow Blast
+  shadow-blitz:
+    ja: ダークアタック
+    en: Shadow Blitz
+  shadow-bolt:
+    ja: ダークサンダー
+    en: Shadow Bolt
+  shadow-bone:
+    ja: シャドーボーン
+    en: Shadow Bone
+  shadow-break:
+    ja: ダークブレイク
+    en: Shadow Break
+  shadow-chill:
+    ja: ダークフリーズ
+    en: Shadow Chill
+  shadow-down:
+    ja: ダークダウン
+    en: Shadow Down
+  shadow-end:
+    ja: ダークエンド
+    en: Shadow End
+  shadow-fire:
+    ja: ダークファイア
+    en: Shadow Fire
+  shadow-force:
+    ja: シャドーダイブ
+    en: Shadow Force
+  shadow-half:
+    ja: ダークハーフ
+    en: Shadow Half
+  shadow-hold:
+    ja: ダークホールド
+    en: Shadow Hold
+  shadow-mist:
+    ja: ダークミスト
+    en: Shadow Mist
+  shadow-panic:
+    ja: ダークパニック
+    en: Shadow Panic
+  shadow-rave:
+    ja: ダークレイブ
+    en: Shadow Rave
+  shadow-rush:
+    ja: ダークラッシュ
+    en: Shadow Rush
+  shadow-shed:
+    ja: ダークリムーブ
+    en: Shadow Shed
+  shadow-sky:
+    ja: ダークウェザー
+    en: Shadow Sky
+  shadow-storm:
+    ja: ダークストーム
+    en: Shadow Storm
+  shadow-wave:
+    ja: ダークウェーブ
+    en: Shadow Wave
+  sharpen:
+    ja: かくばる
+    en: Sharpen
+  shattered-psyche--physical:
+    ja: マキシマムサイブレイカー
+    en: Shattered Psyche
+  shattered-psyche--special:
+    ja: マキシマムサイブレイカー
+    en: Shattered Psyche
+  sheer-cold:
+    ja: ぜったいれいど
+    en: Sheer Cold
+  shell-side-arm:
+    ja: シェルアームズ
+    en: Shell Side Arm
+  shell-trap:
+    ja: トラップシェル
+    en: Shell Trap
+  shelter:
+    ja: たてこもる
+    en: Shelter
+  shift-gear:
+    ja: ギアチェンジ
+    en: Shift Gear
+  shock-wave:
+    ja: でんげきは
+    en: Shock Wave
+  shore-up:
+    ja: すなあつめ
+    en: Shore Up
+  signal-beam:
+    ja: シグナルビーム
+    en: Signal Beam
+  silk-trap:
+    ja: スレッドトラップ
+    en: Silk Trap
+  silver-wind:
+    ja: ぎんいろのかぜ
+    en: Silver Wind
+  simple-beam:
+    ja: シンプルビーム
+    en: Simple Beam
+  sing:
+    ja: うたう
+    en: Sing
+  sinister-arrow-raid:
+    ja: シャドーアローズストライク
+    en: Sinister Arrow Raid
+  sizzly-slide:
+    ja: めらめらバーン
+    en: Sizzly Slide
+  sketch:
+    ja: スケッチ
+    en: Sketch
+  skull-bash:
+    ja: ロケットずつき
+    en: Skull Bash
+  sky-drop:
+    ja: フリーフォール
+    en: Sky Drop
+  sky-uppercut:
+    ja: スカイアッパー
+    en: Sky Uppercut
+  slack-off:
+    ja: なまける
+    en: Slack Off
+  slam:
+    ja: たたきつける
+    en: Slam
+  slash:
+    ja: きりさく
+    en: Slash
+  sludge:
+    ja: ヘドロこうげき
+    en: Sludge
+  smelling-salts:
+    ja: きつけ
+    en: Smelling Salts
+  smog:
+    ja: スモッグ
+    en: Smog
+  smokescreen:
+    ja: えんまく
+    en: Smokescreen
+  snap-trap:
+    ja: トラバサミ
+    en: Snap Trap
+  snatch:
+    ja: よこどり
+    en: Snatch
+  snipe-shot:
+    ja: ねらいうち
+    en: Snipe Shot
+  soak:
+    ja: みずびたし
+    en: Soak
+  soft-boiled:
+    ja: タマゴうみ
+    en: Soft-Boiled
+  sonic-boom:
+    ja: ソニックブーム
+    en: Sonic Boom
+  soul-stealing-7-star-strike:
+    ja: しちせいだっこんたい
+    en: Soul-Stealing 7-Star Strike
+  spacial-rend:
+    ja: あくうせつだん
+    en: Spacial Rend
+  spark:
+    ja: スパーク
+    en: Spark
+  sparkling-aria:
+    ja: うたかたのアリア
+    en: Sparkling Aria
+  sparkly-swirl:
+    ja: きらきらストーム
+    en: Sparkly Swirl
+  spectral-thief:
+    ja: シャドースチール
+    en: Spectral Thief
+  speed-swap:
+    ja: スピードスワップ
+    en: Speed Swap
+  spicy-extract:
+    ja: ハバネロエキス
+    en: Spicy Extract
+  spider-web:
+    ja: クモのす
+    en: Spider Web
+  spike-cannon:
+    ja: とげキャノン
+    en: Spike Cannon
+  spiky-shield:
+    ja: ニードルガード
+    en: Spiky Shield
+  spin-out:
+    ja: ホイールスピン
+    en: Spin Out
+  splash:
+    ja: はねる
+    en: Splash
+  splintered-stormshards:
+    ja: ラジアルエッジストーム
+    en: Splintered Stormshards
+  splishy-splash:
+    ja: ざぶざぶサーフ
+    en: Splishy Splash
+  spore:
+    ja: キノコのほうし
+    en: Spore
+  spotlight:
+    ja: スポットライト
+    en: Spotlight
+  springtide-storm:
+    ja: はるのあらし
+    en: Springtide Storm
+  steam-eruption:
+    ja: スチームバースト
+    en: Steam Eruption
+  steamroller:
+    ja: ハードローラー
+    en: Steamroller
+  sticky-web:
+    ja: ねばねばネット
+    en: Sticky Web
+  stoked-sparksurfer:
+    ja: ライトニングサーフライド
+    en: Stoked Sparksurfer
+  stomp:
+    ja: ふみつけ
+    en: Stomp
+  stone-axe:
+    ja: がんせきアックス
+    en: Stone Axe
+  strange-steam:
+    ja: ワンダースチーム
+    en: Strange Steam
+  strength:
+    ja: かいりき
+    en: Strength
+  string-shot:
+    ja: いとをはく
+    en: String Shot
+  struggle:
+    ja: わるあがき
+    en: Struggle
+  struggle-bug:
+    ja: むしのていこう
+    en: Struggle Bug
+  stuff-cheeks:
+    ja: ほおばる
+    en: Stuff Cheeks
+  submission:
+    ja: じごくぐるま
+    en: Submission
+  subzero-slammer--physical:
+    ja: レイジングジオフリーズ
+    en: Subzero Slammer
+  subzero-slammer--special:
+    ja: レイジングジオフリーズ
+    en: Subzero Slammer
+  sunsteel-strike:
+    ja: メテオドライブ
+    en: Sunsteel Strike
+  supersonic:
+    ja: ちょうおんぱ
+    en: Supersonic
+  supersonic-skystrike--physical:
+    ja: ファイナルダイブクラッシュ
+    en: Supersonic Skystrike
+  supersonic-skystrike--special:
+    ja: ファイナルダイブクラッシュ
+    en: Supersonic Skystrike
+  surging-strikes:
+    ja: すいりゅうれんだ
+    en: Surging Strikes
+  sweet-kiss:
+    ja: てんしのキッス
+    en: Sweet Kiss
+  swift:
+    ja: スピードスター
+    en: Swift
+  synchronoise:
+    ja: シンクロノイズ
+    en: Synchronoise
+  syrup-bomb:
+    ja: みずあめボム
+    en: Syrup Bomb
+  tachyon-cutter:
+    ja: タキオンカッター
+    en: Tachyon Cutter
+  tackle:
+    ja: たいあたり
+    en: Tackle
+  tail-glow:
+    ja: ほたるび
+    en: Tail Glow
+  tail-slap:
+    ja: スイープビンタ
+    en: Tail Slap
+  tail-whip:
+    ja: しっぽをふる
+    en: Tail Whip
+  take-down:
+    ja: とっしん
+    en: Take Down
+  take-heart:
+    ja: ブレイブチャージ
+    en: Take Heart
+  tar-shot:
+    ja: タールショット
+    en: Tar Shot
+  tearful-look:
+    ja: なみだめ
+    en: Tearful Look
+  teatime:
+    ja: おちゃかい
+    en: Teatime
+  techno-blast:
+    ja: テクノバスター
+    en: Techno Blast
+  tectonic-rage--physical:
+    ja: ライジングランドオーバー
+    en: Tectonic Rage
+  tectonic-rage--special:
+    ja: ライジングランドオーバー
+    en: Tectonic Rage
+  telekinesis:
+    ja: テレキネシス
+    en: Telekinesis
+  teleport:
+    ja: テレポート
+    en: Teleport
+  tera-blast:
+    ja: テラバースト
+    en: Tera Blast
+  tera-starstorm:
+    ja: テラクラスター
+    en: Tera Starstorm
+  thousand-arrows:
+    ja: サウザンアロー
+    en: Thousand Arrows
+  thousand-waves:
+    ja: サウザンウェーブ
+    en: Thousand Waves
+  thunder-cage:
+    ja: サンダープリズン
+    en: Thunder Cage
+  thunder-shock:
+    ja: でんきショック
+    en: Thunder Shock
+  thunderclap:
+    ja: じんらい
+    en: Thunderclap
+  thunderous-kick:
+    ja: らいめいげり
+    en: Thunderous Kick
+  tidy-up:
+    ja: おかたづけ
+    en: Tidy Up
+  toxic-thread:
+    ja: どくのいと
+    en: Toxic Thread
+  transform:
+    ja: へんしん
+    en: Transform
+  trick-or-treat:
+    ja: ハロウィン
+    en: Trick-or-Treat
+  triple-arrows:
+    ja: ３ぼんのや
+    en: Triple Arrows
+  triple-dive:
+    ja: トリプルダイブ
+    en: Triple Dive
+  triple-kick:
+    ja: トリプルキック
+    en: Triple Kick
+  trop-kick:
+    ja: トロピカルキック
+    en: Trop Kick
+  trump-card:
+    ja: きりふだ
+    en: Trump Card
+  twin-beam:
+    ja: ツインビーム
+    en: Twin Beam
+  twineedle:
+    ja: ダブルニードル
+    en: Twineedle
+  twinkle-tackle--physical:
+    ja: ラブリースターインパクト
+    en: Twinkle Tackle
+  twinkle-tackle--special:
+    ja: ラブリースターインパクト
+    en: Twinkle Tackle
+  twister:
+    ja: たつまき
+    en: Twister
+  v-create:
+    ja: Ｖジェネレート
+    en: V-create
+  veevee-volley:
+    ja: ブイブイブレイク
+    en: Veevee Volley
+  venom-drench:
+    ja: ベノムトラップ
+    en: Venom Drench
+  vice-grip:
+    ja: はさむ
+    en: Vise Grip
+  victory-dance:
+    ja: しょうりのまい
+    en: Victory Dance
+  vine-whip:
+    ja: つるのムチ
+    en: Vine Whip
+  vital-throw:
+    ja: あてみなげ
+    en: Vital Throw
+  volt-tackle:
+    ja: ボルテッカー
+    en: Volt Tackle
+  wake-up-slap:
+    ja: めざましビンタ
+    en: Wake-Up Slap
+  water-gun:
+    ja: みずでっぽう
+    en: Water Gun
+  water-pledge:
+    ja: みずのちかい
+    en: Water Pledge
+  water-sport:
+    ja: みずあそび
+    en: Water Sport
+  water-spout:
+    ja: しおふき
+    en: Water Spout
+  wicked-blow:
+    ja: あんこくきょうだ
+    en: Wicked Blow
+  wicked-torque:
+    ja: ダークアクセル
+    en: Wicked Torque
+  wildbolt-storm:
+    ja: かみなりあらし
+    en: Wildbolt Storm
+  wing-attack:
+    ja: つばさでうつ
+    en: Wing Attack
+  wish:
+    ja: ねがいごと
+    en: Wish
+  withdraw:
+    ja: からにこもる
+    en: Withdraw
+  wood-hammer:
+    ja: ウッドハンマー
+    en: Wood Hammer
+  work-up:
+    ja: ふるいたてる
+    en: Work Up
+  wring-out:
+    ja: しぼりとる
+    en: Wring Out
+  zing-zap:
+    ja: びりびりちくちく
+    en: Zing Zap
+  zippy-zap:
+    ja: ばちばちアクセル
+    en: Zippy Zap
