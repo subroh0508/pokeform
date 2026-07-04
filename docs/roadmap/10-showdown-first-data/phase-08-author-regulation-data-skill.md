@@ -13,7 +13,7 @@
 
 - **Phase 1-5 完了**: showdown 経路（抽出 + 転記 + `showdown-sync.yml`）/ PokeAPI ja 専任 / Serebii 速報スクレイパー / `verify-showdown-pr` skill が揃っている。
 - **Phase 6 完了**: 全件名辞書の基盤（`pokeapi-names.yml` / `author-static-data` skill / `generate.ts` superset 緩和・[phase-06](./phase-06-author-static-data.md)）。
-- **Phase 7 完了**: `languages/*.yaml` が全件名辞書で投入済み（[phase-07](./phase-07-languages-catalog-populate.md)）。これにより per-reg 取得時に大半の名前が既存し ja gap ループが原則不要になる。本 skill は前提ゲートとして `author-static-data` の整備状況（全件辞書投入 + `rules.yaml`/`type-specs.yaml` 存在）を確認する。mega 名の en は本 phase の showdown 取得で埋まる。
+- **Phase 7 完了**: `languages/*.yaml` が全件名辞書で投入済み（[phase-07](./phase-07-languages-populate.md)）。これにより per-reg 取得時に大半の名前が既存し ja gap ループが原則不要になる。本 skill は前提ゲートとして `author-static-data` の整備状況（全件辞書投入 + `rules.yaml`/`type-specs.yaml` 存在）を確認する。mega 名の en は本 phase の showdown 取得で埋まる。
 - `rules.yaml` / `type-specs.yaml` がコミット済みで存在（静的コミット・本計画では自動化しない）。
 - 確定済み rule: [[data-pipeline]]（取得元の権威序列・append/既存尊重・「項目の取得元」表）/ [[skill-authoring]] / [[cross-agent]]。
 

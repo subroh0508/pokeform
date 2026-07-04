@@ -12,7 +12,7 @@ Phase 1-8 で揃った新パイプライン（showdown 抽出 + 転記 + 全件�
 ## 前提（依存）
 
 - **Phase 1-5 完了**: showdown 抽出 + 転記（1）/ PokeAPI ja 専任（2）/ `showdown-sync.yml`（3）/ Serebii 速報 + 新スクレイパー（4）/ `verify-showdown-pr` skill + rules 改訂（5）がすべて揃っている。
-- **Phase 6-7 完了**: 全件名辞書の基盤（Phase 6）+ 全件投入（Phase 7）で `languages/*.yaml` が全件揃う（[phase-06](./phase-06-author-static-data.md) / [phase-07](./phase-07-languages-catalog-populate.md)）。名前が事前に全件揃うため投入時の ja gap が原則出ない。
+- **Phase 6-7 完了**: 全件名辞書の基盤（Phase 6）+ 全件投入（Phase 7）で `languages/*.yaml` が全件揃う（[phase-06](./phase-06-author-static-data.md) / [phase-07](./phase-07-languages-populate.md)）。名前が事前に全件揃うため投入時の ja gap が原則出ない。
 - **Phase 8 完了**: `author-regulation-data` skill（reg ごとの取得オーケストレーション = reset → `showdown-sync.yml` dispatch → 照合 → per-reg 著述・[phase-08](./phase-08-author-regulation-data-skill.md)）が新設されている。
 - `rules.yaml` / `type-specs.yaml` がコミット済みで存在（静的コミット・自動化対象外）。
 - 確定済み rule: [[data-pipeline]] / [[cli-and-io]] / [[type-conventions]] / [[testing]]。ADR 0039 / 0040。

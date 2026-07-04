@@ -26,7 +26,7 @@ flowchart TD
 - [x] [Phase 4 — Serebii 完全廃止 + 新スクレイパー + serebii-bulletin + ADR 0040](./phase-04-serebii-bulletin-rebuild.md)
 - [x] [Phase 5 — verify-showdown-pr skill + rules / docs 改訂](./phase-05-verify-skill-and-rules.md)
 - [ ] [Phase 6 — 全件名辞書の基盤（author-static-data リネーム + pokeapi-names workflow + generate 緩和 + ADR）](./phase-06-author-static-data.md)
-- [ ] [Phase 7 — 全件名辞書の初回データ投入（author-static-data 実行）](./phase-07-languages-catalog-populate.md)
+- [ ] [Phase 7 — 全件名辞書の初回データ投入（author-static-data 実行）](./phase-07-languages-populate.md)
 - [ ] [Phase 8 — レギュレーション取得の author-regulation-data skill 新設](./phase-08-author-regulation-data-skill.md)
 - [ ] [Phase 9 — M-A・M-B 全データセット本投入（plan 09 Phase 4 の cross-plan move）](./phase-09-full-rollout.md)
 
