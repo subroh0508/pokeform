@@ -1,20 +1,20 @@
-# Phase 9 — M-A・M-B 全データセット本投入（author-regulation-data skill 実行）
+# Phase 8 — M-A・M-B 全データセット本投入（author-regulation-data skill 実行）
 
-> **plan 09 Phase 4（全データセット本投入）の cross-plan move 先**。旧フェーズは `survey-regulation` skill + `fetch:data`/`materialize` + Serebii 第一優先で全量投入する設計だったが、本計画群（10）の取得元転換に伴い **`author-regulation-data` skill（Phase 8）で全量投入し `verify-showdown-pr` で Serebii 照合する**新パイプライン版へ改訂した。移動・参照追従は [[planning]] の cross-plan move チェックリストに従う。
+> **plan 09 Phase 4（全データセット本投入）の cross-plan move 先**。旧フェーズは `survey-regulation` skill + `fetch:data`/`materialize` + Serebii 第一優先で全量投入する設計だったが、本計画群（10）の取得元転換に伴い **`author-regulation-data` skill（Phase 7）で全量投入し `verify-showdown-pr` で Serebii 照合する**新パイプライン版へ改訂した。移動・参照追従は [[planning]] の cross-plan move チェックリストに従う。
 
 ## 目的 / スコープ
 
-Phase 1-8 で揃った新パイプライン（showdown 抽出 + 転記 + 全件名辞書 + GitHub Actions + 照合スキル + 静的著述 skill + reg 取得 skill）を使い、M-A・M-B の**全解禁情報（全種族・全使用可能技・全解禁持ち物・全メガ）**を **`author-regulation-data` skill を各レギュに対して実行**して投入し、両レギュを完成させる（skill の dogfood でもある）。
+Phase 1-7 で揃った新パイプライン（showdown 抽出 + 転記 + 全件名辞書 + GitHub Actions + 照合スキル + reg 取得 skill）を使い、M-A・M-B の**全解禁情報（全種族・全使用可能技・全解禁持ち物・全メガ）**を **`author-regulation-data` skill を各レギュに対して実行**して投入し、両レギュを完成させる（skill の dogfood でもある）。
 
 - スコープ内: `author-regulation-data` skill を M-A → M-B の順で実行して本投入、`verify-showdown-pr` で Serebii 照合、`pokemon-data-reviewer` レビュー。
-- スコープ外: M-C 以降のレギュレーション。新機能・新 rule。スキーマ / generate / skill の再設計（確定済み）。skill 手順そのものの新設（Phase 6/7/8 で確定）。
+- スコープ外: M-C 以降のレギュレーション。新機能・新 rule。スキーマ / generate / skill の再設計（確定済み）。skill 手順そのものの新設（Phase 6/7 で確定）。
 
 ## 前提（依存）
 
 - **Phase 1-5 完了**: showdown 抽出 + 転記（1）/ PokeAPI ja 専任（2）/ `showdown-sync.yml`（3）/ Serebii 速報 + 新スクレイパー（4）/ `verify-showdown-pr` skill + rules 改訂（5）がすべて揃っている。
-- **Phase 6 完了**: `author-static-data` skill（静的データの欠落チェック + 導出著述・[phase-06](./phase-06-static-data-skill.md)）。
-- **Phase 7 完了**: `languages/*.yaml` の全件名辞書化 + `generate.ts` の superset 判定（[phase-07](./phase-07-languages-full-catalog.md)）。名前が事前に揃うため投入時の ja gap が原則出ない。
-- **Phase 8 完了**: `author-regulation-data` skill（reg ごとの取得オーケストレーション = reset → `showdown-sync.yml` dispatch → 照合 → per-reg 静的著述・[phase-08](./phase-08-author-regulation-data-skill.md)）が新設されている。
+- **Phase 6 完了**: `author-static-data` skill（全件名辞書）+ PokeAPI カタログ workflow + `generate.ts` superset 緩和（[phase-06](./phase-06-author-static-data.md)）。名前が事前に全件揃うため投入時の ja gap が原則出ない。
+- **Phase 7 完了**: `author-regulation-data` skill（reg ごとの取得オーケストレーション = reset → `showdown-sync.yml` dispatch → 照合 → per-reg 著述・[phase-07](./phase-07-author-regulation-data-skill.md)）が新設されている。
+- `rules.yaml` / `type-specs.yaml` がコミット済みで存在（静的コミット・自動化対象外）。
 - 確定済み rule: [[data-pipeline]] / [[cli-and-io]] / [[type-conventions]] / [[testing]]。ADR 0039 / 0040。
 
 ## タスク
@@ -27,7 +27,7 @@ Phase 1-8 で揃った新パイプライン（showdown 抽出 + 転記 + 全件�
 
 ## この Phase で育てるハーネス（rule・skill）
 
-- なし（Phase 1-8 で確定したパイプライン・skill を**実行**する phase）。M-A・M-B 確定に合わせ [[champions-regulation-data-placeholder]] メモリを解消（全量投入済みへ更新）。`author-regulation-data` skill を実運用で dogfood し、手順の粗を Phase 8 skill へフィードバックする（改修が要れば別 PR）。
+- なし（Phase 1-7 で確定したパイプライン・skill を**実行**する phase）。M-A・M-B 確定に合わせ [[champions-regulation-data-placeholder]] メモリを解消（全量投入済みへ更新）。`author-regulation-data` skill を実運用で dogfood し、手順の粗を Phase 7 skill へフィードバックする（改修が要れば別 PR）。
 
 ## 受け入れ基準
 
@@ -47,7 +47,7 @@ Phase 1-8 で揃った新パイプライン（showdown 抽出 + 転記 + 全件�
 
 ## リスク・備考
 
-- **データ投入 PR（>1000 行）を 1 PR 許容**: 全種・全 movepool 規模で意味ある粒度分割が困難なため各レギュ 1 PR とする（[[planning]] 6 基準⑤ の例外・OVERVIEW に根拠）。skill 手順（harness 資産）は Phase 6/7/8 で分離済みゆえ、本 phase の PR はデータのみ（harness 資産を混ぜない）。レビュー容易性のため specs / per-reg YAML の差分と生成物差分を分けて説明する。
+- **データ投入 PR（>1000 行）を 1 PR 許容**: 全種・全 movepool 規模で意味ある粒度分割が困難なため各レギュ 1 PR とする（[[planning]] 6 基準⑤ の例外・OVERVIEW に根拠）。skill 手順（harness 資産）は Phase 6/7 で分離済みゆえ、本 phase の PR はデータのみ（harness 資産を混ぜない）。レビュー容易性のため specs / per-reg YAML の差分と生成物差分を分けて説明する。
 - 大量投入の取りこぼし・名称ゆれ・フォルム扱いは showdown 抽出の決定論性 + `verify-showdown-pr` の Serebii 照合 + `pokemon-data-reviewer` レビューで吸収する。
 - メガの多重表現（`species-specs.megaEvolvesTo` / 持ち物 `megaSpecies` / per-reg `mega.yaml`）の整合は `check:regulation` で担保。
 - 本 phase 完了で 10 計画群が完了。`finish-phase` で `completed/10-showdown-first-data` への集約を促す。
