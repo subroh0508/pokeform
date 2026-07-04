@@ -100,7 +100,7 @@ jobs:
       # 差分があれば data:authoritative ラベルの PR を自動作成する。
       # 本文の commit SHA / mod / 件数は redaction 不要の公開メタ（showdown public repo・[[redaction]]）。
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           branch: data/showdown-${{ github.event.inputs.regulation }}-${{ github.run_id }}
           base: main
