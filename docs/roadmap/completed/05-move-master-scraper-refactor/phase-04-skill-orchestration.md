@@ -23,7 +23,7 @@
 - **Phase 2-3 完了**（技マスター専用取得経路の実装・スクレイパー役割分割が済み、skill が委譲すべき実装単位が確定）。
 - 既存 rule: [[skill-authoring]] / [[cross-agent]] / [[data-pipeline]]。skill は `skill-creator` で改修
   （手書きしない）。Workflow 配置は `.claude/skills/<name>/workflows/*.workflow`。
-- 関連 skill: [`update-catalog`](../../../../.claude/skills/update-catalog/SKILL.md)（PokeAPI 構造データ・責務分離維持）。
+- 関連 skill: `update-catalog`（当時の PokeAPI 構造データ担当・責務分離維持。当時の記述。skill は plan 10 Phase 6 で `author-static-data` へリネーム）。
 
 ## タスク
 

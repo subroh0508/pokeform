@@ -108,21 +108,20 @@ const langRegulations = rd<{ regulations: Record<string, NamePair> }>(
 const TYPES = Object.keys(typeSpecs);
 const abilitySet = new Set(abilityList);
 
-// --- authoring ゲート: 名前突き合わせ（languages の id 集合 = specs の id 集合・ja/en 完備） ---------
+// --- authoring ゲート: 名前突き合わせ（specs ⊆ languages・各 spec に ja/en 完備） ---------
+// languages は reg 非依存の**全件名辞書**（未解禁名も持つ・ADR 0041）。よって「spec が名前を持つ / ja・en
+// 完備」だけを保護し、**余剰 languages エントリ（spec を持たない orphan 名）は許容**する（bijection →
+// superset へ緩和・ADR 0041 が ADR 0035 の id 集合一致不変条件を refine）。過剰緩和を避け、緩めるのは
+// orphan チェックのみ（spec の名前欠落 / ja・en 欠けは従来どおり非0終了する）。
 const requireNames = (
   kind: string,
   ids: readonly string[],
   names: Record<string, NamePair>,
 ): void => {
-  const nameIds = new Set(Object.keys(names));
   for (const id of ids) {
     const n = names[id];
     if (!n) throw new Error(`languages/${kind}: '${id}' has no name entry (name SoT is languages)`);
     if (!n.ja || !n.en) throw new Error(`languages/${kind}: '${id}' missing ja/en`);
-    nameIds.delete(id);
-  }
-  if (nameIds.size > 0) {
-    throw new Error(`languages/${kind}: orphan name ids without spec: ${[...nameIds].join(", ")}`);
   }
 };
 requireNames("species", Object.keys(speciesSpecs), langSpecies);

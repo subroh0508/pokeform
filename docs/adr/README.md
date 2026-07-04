@@ -72,6 +72,7 @@ pokeform の重要なアーキテクチャ決定を**不変の連番ログ**と�
 | [0038](./0038-docs-placement-and-front-matter.md) | docs/design 新設・front matter 規約とドキュメント配置・roadmap 改名の責務境界（知識の種類ごとに SoT 一意・design はコードなし俯瞰・plan→roadmap 改名・rules/design に last_modified + adr） | Accepted |
 | [0039](./0039-showdown-authoritative-pokeapi-ja-only.md) | pokemon-showdown を第一の正にし PokeAPI を ja 専任へ縮小・構造取得を廃止する（取得元の根本転換・GitHub Actions 自動 PR・0012/0027 supersede） | Accepted |
 | [0040](./0040-serebii-provisional-scraper-rebuild.md) | Serebii を速報経路へ降格し第一優先を撤回・既存スクレイパーを全廃して新スクレイパー（5 データセット軸・ja 抽出）へ刷新する（0033/0037 supersede） | Accepted |
+| [0041](./0041-languages-full-name-dictionary.md) | languages を reg 非依存の全件名辞書化し generate の名前突き合わせを bijection → superset（specs ⊆ languages）へ緩和・PokeAPI 名前取得 workflow 新設（ADR 0035 の id 集合一致不変条件を refine・中核 3 軸直交は不変） | Accepted |
 
 > 一覧は ADR 追加・Status 変更のたびに更新します。`adr-new` は新規 ADR をこの表に追記します。
 

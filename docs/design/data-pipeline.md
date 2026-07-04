@@ -94,9 +94,9 @@ flowchart LR
 
 - 規約・レイアウト・具体値・取得元の権威序列: [[data-pipeline]]（`.claude/rules/data-pipeline.md`）。型と値の単一ソース化は [[type-conventions]]。
 - showdown PR の Serebii 照合手順: [`verify-showdown-pr`](../../.claude/skills/verify-showdown-pr/SKILL.md)。
-  日本語名 ja の取り込み手順: [`update-catalog`](../../.claude/skills/update-catalog/SKILL.md)。
+  全件名（ja/en）の取り込み手順: [`author-static-data`](../../.claude/skills/author-static-data/SKILL.md)。
 - 取得・転記・生成スクリプト: `scripts/`（`scripts/showdown/*`（抽出）/ `sync-showdown.ts` / `scrape-serebii.ts` / `sync-serebii.ts` / `fetch-pokeapi.ts` / `materialize.ts` / `generate.ts`）。純関数は `src/codegen/{showdown,serebii}/*`。
-- GitHub Actions: `.github/workflows/showdown-sync.yml`（正）/ `serebii-bulletin.yml`（速報）。
+- GitHub Actions: `.github/workflows/showdown-sync.yml`（正）/ `serebii-bulletin.yml`（速報）/ `pokeapi-names.yml`（全件名 ja/en・reg 非依存）。
 - 入力 SoT（構造 / 名前 / per-regulation）: `data/champions/` / `data/languages/`。
 - 生成物: `src/generated/`。
 - 決定の「なぜ」: [ADR 0039](../adr/0039-showdown-authoritative-pokeapi-ja-only.md)（showdown 第一の正・PokeAPI ja 専任）/
