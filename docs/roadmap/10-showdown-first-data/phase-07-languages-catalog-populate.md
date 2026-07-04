@@ -1,22 +1,22 @@
 # Phase 7 — languages 全件名辞書の初回投入（author-static-data 実行）
 
-> Phase 6 で用意した基盤（`pokeapi-catalog.yml` workflow + `author-static-data` skill + `generate.ts` superset 緩和）を使い、`languages/*.yaml` を **PokeAPI 由来の全件**（未解禁含む全ポケモン・持ち物・技・特性・タイプ名）で**初回投入**する phase。基盤（Phase 6・code-review/harness-review 対象）とデータ投入（本 phase・pokemon-data-reviewer 対象）を分離する。
+> Phase 6 で用意した基盤（`pokeapi-names.yml` workflow + `author-static-data` skill + `generate.ts` superset 緩和）を使い、`languages/*.yaml` を **PokeAPI 由来の全件**（未解禁含む全ポケモン・持ち物・技・特性・タイプ名）で**初回投入**する phase。基盤（Phase 6・code-review/harness-review 対象）とデータ投入（本 phase・pokemon-data-reviewer 対象）を分離する。
 
 ## 目的 / スコープ
 
-`author-static-data` skill を実行して `pokeapi-catalog.yml` を dispatch し、全件名辞書データを投入する。PokeAPI で取れない分（メガ ja 等）は生成 PR への**手作業追加 commit** で補い、`generate:data` / `pnpm verify` 緑まで仕上げてマージする。以降のレギュ追加時は差分（未記録 id）だけを本 skill が突き合わせて追加する運用にする。
+`author-static-data` skill を実行して `pokeapi-names.yml` を dispatch し、全件名辞書データを投入する。PokeAPI で取れない分（メガ ja 等）は生成 PR への**手作業追加 commit** で補い、`generate:data` / `pnpm verify` 緑まで仕上げてマージする。以降のレギュ追加時は差分（未記録 id）だけを本 skill が突き合わせて追加する運用にする。
 
-- スコープ内: `author-static-data` skill 実行（`pokeapi-catalog.yml` dispatch → 全件 languages PR）、PokeAPI 非存在分の手作業 gap commit、`pokemon-data-reviewer` レビュー、マージ。以降の差分追加運用の確立。
+- スコープ内: `author-static-data` skill 実行（`pokeapi-names.yml` dispatch → 全件 languages PR）、PokeAPI 非存在分の手作業 gap commit、`pokemon-data-reviewer` レビュー、マージ。以降の差分追加運用の確立。
 - スコープ外: 基盤（workflow / fetch / generate / skill）の新設（Phase 6 で確定）。`languages/mega.yaml` の名前投入（en=showdown・Phase 8 / ja=手作業）。per-reg 解禁データ・`regulations.yaml`（Phase 8）。`rules.yaml`・`type-specs.yaml`（静的コミット）。
 
 ## 前提（依存）
 
-- **Phase 6 完了**: `pokeapi-catalog.yml` workflow / `fetch-pokeapi` 全件化 / `generate.ts` superset 緩和 / `update-catalog`→`author-static-data` リネーム / ADR が揃っている（[phase-06](./phase-06-author-static-data.md)）。
+- **Phase 6 完了**: `pokeapi-names.yml` workflow / `fetch-pokeapi` 全件化 / `generate.ts` superset 緩和 / `update-catalog`→`author-static-data` リネーム / ADR が揃っている（[phase-06](./phase-06-author-static-data.md)）。
 - `rules.yaml` / `type-specs.yaml` がコミット済みで存在（`generate:data` の前提）。
 
 ## タスク
 
-- [ ] **全件投入 PR 作成**: `author-static-data` skill 実行 → `pokeapi-catalog.yml` を dispatch → `languages/{species,items,moves,abilities,types}.yaml` を PokeAPI 全件で満たす data PR を生成。
+- [ ] **全件投入 PR 作成**: `author-static-data` skill 実行 → `pokeapi-names.yml` を dispatch → `languages/{species,items,moves,abilities,types}.yaml` を PokeAPI 全件で満たす data PR を生成。
 - [ ] **手作業 gap 補完**: PokeAPI 非存在（メガ ja 等・必要なら一部）を PR への追加 commit で手入力（block スタイル・`check:yaml-style` 通過）。mega.yaml は本 phase では en が未投入（Phase 8 で showdown 由来）ゆえ、mega の名前完備は Phase 8 完了時点で担保する。
 - [ ] **検証 + レビュー**: `generate:data` が languages ⊋ specs（orphan 許容）で 0 終了 → `pnpm verify` 緑 → `pokemon-data-reviewer` レビュー（名前の妥当性・欠落）→ マージ。
 - [ ] [[champions-regulation-data-placeholder]] 等、名前辞書が全件化された旨を関連メモリ/doc に反映（必要時）。
