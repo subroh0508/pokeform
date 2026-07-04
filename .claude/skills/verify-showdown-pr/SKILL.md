@@ -8,7 +8,7 @@ description: >-
   または showdown-sync.yml が立てた解禁データ PR をマージ前に検証したいときに使う。WebFetch は使わず Serebii
   スクレイパー（`node scripts/scrape-serebii.ts`）の中間 JSON で照合する。レビュー観点・出力は code-review /
   redaction に準拠し、機械ゲート（型 / カバレッジ / Biome）は再実装しない。構造データ取得は showdown 経路、
-  日本語名 ja の取り込みは update-catalog の責務で、本 skill は照合専任。
+  全件名（ja/en）の取り込みは author-static-data の責務で、本 skill は照合専任。
 allowed-tools: Bash(gh pr diff:*), Bash(gh pr view:*), Bash(gh pr comment:*), Bash(node scripts/*), Bash(git diff:*), Read, Write
 ---
 
@@ -115,7 +115,7 @@ Write し、**投稿前に [[redaction]] を適用**してから `gh pr comment 
   [ADR 0040](../../../docs/adr/0040-serebii-provisional-scraper-rebuild.md)（Serebii 速報降格・スクレイパー刷新）。
 - Serebii スクレイパー（照合に流用）: `scripts/scrape-serebii.ts` / 純関数 `src/codegen/serebii/parse-*`。
 - showdown 経路（authoritative・照合対象の生成元）: `.github/workflows/showdown-sync.yml` / `scripts/showdown/*` / `src/codegen/showdown/*-fields.ts`。
-- 日本語名 ja の取り込み: [`update-catalog`](../update-catalog/SKILL.md)。
+- 全件名（ja/en）の取り込み: [`author-static-data`](../author-static-data/SKILL.md)。
 - レビュー基準・出力 / redaction: [[code-review]] / [[redaction]]。
 - 生成データ妥当性: `pokemon-data-reviewer` agent / 利用者パーティ点検: [`review-party`](../review-party/SKILL.md)。
 - skill 作成方針・cross-agent: [[skill-authoring]] / [[cross-agent]]。

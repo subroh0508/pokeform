@@ -1,11 +1,11 @@
 /**
- * materialize.ts（codegen 純関数）— PokeAPI raw JSON から日本語名 ja（および技 / 特性の en）を
- * 抽出・転記計画する純変換。fs / YAML I/O は `scripts/materialize.ts`（薄い orchestrator・coverage 除外）が担う。
+ * materialize.ts（codegen 純関数）— PokeAPI raw JSON から名前（ja/en）を抽出・転記計画する純変換。
+ * fs / YAML I/O は `scripts/materialize.ts`（薄い orchestrator・coverage 除外）が担う。
  *
- * **ja 専任**（plan 10）: 構造データ（種族値 / タイプ / 特性 id / 図鑑番号 / category）の取得・転記は
+ * **名前専任**（plan 10）: 構造データ（種族値 / タイプ / 特性 id / 図鑑番号 / category）の取得・転記は
  * pokemon-showdown 経路（`src/codegen/showdown/*`）へ移管した。本ファイルは **名前 SoT（`languages/*.yaml`）** の
- * ja を PokeAPI `names` から補完する材料だけを持つ（[[data-pipeline]]）。skill 著述値は `planFields` で
- * 「既存尊重・上書きしない」（未設定のみ fill・差分は conflict 報告）。
+ * ja/en を PokeAPI `names` から補完する材料だけを持つ（全件名辞書・ADR 0041・[[data-pipeline]]）。skill 著述値は
+ * `planFields` で「既存尊重・上書きしない」（未設定のみ fill・差分は conflict 報告）。
  */
 
 /** PokeAPI の `names` を持つ raw（pokemon-species / item / move / ability に共通）。 */

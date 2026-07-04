@@ -1,0 +1,78 @@
+# pokeapi-names — PokeAPI の全件名（ja/en）で名前 SoT languages を満たす自動取得 PR
+#
+# 目的: PokeAPI の list endpoint で全 species / items / moves / abilities / types を列挙し、`names`（ja-Hrkt +
+#       en）を取得 → 名前 SoT YAML（data/languages・mega 除く）へ append/既存尊重で転記、generate + verify を
+#       通したうえで `data:names` ラベルの languages 更新 PR を自動作成する。languages を reg 非依存の全件名辞書に
+#       する決定は ADR 0041（ADR 0035 の id 集合一致不変条件を refine）。
+# トリガー: `workflow_dispatch` 手動のみ（cron なし）。showdown-sync.yml / serebii-bulletin.yml と同型。全件列挙
+#       のため regulation 入力は持たない（名前は reg 非依存）。メガ名は PokeAPI のカテゴリに無く対象外
+#       （en=showdown / ja=手作業・author-static-data skill が PR へ手動 commit）。
+name: pokeapi-names
+
+on:
+  workflow_dispatch: {}
+
+# create-pull-request が branch push + PR open するため最小権限を明示付与する（[[redaction]]）。
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: pokeapi-names
+  cancel-in-progress: true
+
+jobs:
+  names:
+    name: PokeAPI 全件名取得 → 転記 → verify → PR
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout pokeform
+        uses: actions/checkout@v6
+
+      # Node 版の SoT は .node-version（ADR 0008）。pnpm は corepack を使わず直接入れる（ADR 0005）。
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install pokeform deps
+        run: pnpm install --frozen-lockfile
+
+      # 全件列挙で languages に未記録 / ja・en 欠落の id を PokeAPI `names`（ja/en）で埋める（差分・冪等）。
+      # fetch は raw キャッシュへ best-effort 取得（404 skip）、sync は raw → languages/*.yaml へ append/既存尊重転記。
+      - name: Fetch and sync PokeAPI names
+        run: |
+          pnpm fetch:ja-names
+          pnpm sync:ja-names
+
+      # スタイル lint（flow 禁止）→ 生成（generate:data・raw 非依存・superset 許容）→ 緑ゲート（verify）。
+      - name: Style, generate, verify
+        run: |
+          pnpm check:yaml-style
+          pnpm generate:data
+          pnpm verify
+
+      # 差分があれば data:names ラベルの languages 更新 PR を自動作成する。
+      # 本文の件数 / workflow run は redaction 不要の公開メタ（PokeAPI public data・[[redaction]]）。
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: data/pokeapi-names-${{ github.run_id }}
+          base: main
+          labels: data:names
+          commit-message: "data(languages): PokeAPI 全件名（ja/en）を languages へ同期"
+          title: "data(languages): PokeAPI 全件名同期（names）"
+          body: |
+            PokeAPI の全件名（ja/en）を名前 SoT `data/languages/*.yaml`（mega 除く）へ同期した PR です（ADR 0041）。
+
+            - **dataset**: species / items / moves / abilities / types（全件列挙・reg 非依存の全件名辞書）
+            - **取得元**: PokeAPI `names`（ja = ja-Hrkt 優先 / en）。append/既存尊重で既存の en（showdown 正 /
+              Serebii 速報）は上書きしない。
+            - **mega は対象外**: PokeAPI のカテゴリに無い（en=showdown / ja=手作業で別途 PR へ追加）。
+            - **検証**: `check:yaml-style` → `generate:data` → `pnpm verify` を通過
+            - **workflow run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            > 名前の取得元分担は [[data-pipeline]] を参照。全件データ投入は author-static-data skill がドライブする。

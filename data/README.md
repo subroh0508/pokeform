@@ -29,7 +29,7 @@ flowchart LR
 - `raw/` は `sync:ja-names`（PokeAPI ja）/ `scrape-serebii.ts`（Serebii 速報）の**取得キャッシュ**（`.gitignore`・`generate` は読まない）。showdown 抽出は CI 上の showdown ツリーで完結し raw を残さない。
 - 構造データ（種族値 / タイプ / 特性 / 図鑑番号 / 持ち物 category）の **SoT は specs YAML**、名前（ja/en）の **SoT は languages YAML**、解禁の **SoT は per-reg YAML**。構造 / 解禁 / 技メタ / en の正は **① pokemon-showdown**、ja の正は **③ PokeAPI**、速報は **② Serebii**。
 - **取得元の役割・権威序列（① 第一の正 showdown / ② 速報 Serebii / ③ ja 補完 PokeAPI）の SoT** は [`data-pipeline.md`](../.claude/rules/data-pipeline.md) の「取得元の権威序列」節。showdown PR の Serebii 照合手順は [`verify-showdown-pr`](../.claude/skills/verify-showdown-pr/SKILL.md)。本 README はそこへ誘導する索引（重複させない）。
-- **責務分離**: PokeAPI ja の `raw/` の存在担保は [`update-catalog`](../.claude/skills/update-catalog/SKILL.md) **skill の責務**（手順で `fetch:ja-names` → `sync:ja-names` の順を保証）。`materialize`（sync:ja-names）/ `generate` などスクリプトは前提が揃っている前提で動き、欠けたら **fail-fast**（責務の二重化を避ける）。
+- **責務分離**: PokeAPI ja の `raw/` の存在担保は [`author-static-data`](../.claude/skills/author-static-data/SKILL.md) **skill の責務**（手順で `fetch:ja-names` → `sync:ja-names` の順を保証）。`materialize`（sync:ja-names）/ `generate` などスクリプトは前提が揃っている前提で動き、欠けたら **fail-fast**（責務の二重化を避ける）。
 - 詳細は [`data-pipeline.md`](../.claude/rules/data-pipeline.md) / [ADR 0039](../docs/adr/0039-showdown-authoritative-pokeapi-ja-only.md)（showdown 第一の正・PokeAPI ja 専任・構造取得廃止 / vendor 運用は不変）/ [ADR 0040](../docs/adr/0040-serebii-provisional-scraper-rebuild.md)（Serebii 速報降格・スクレイパー刷新）/ [ADR 0035](../docs/adr/0035-specs-languages-layout-redesign.md)（specs / languages / per-reg の 3 軸直交・名前 SoT を languages へ）/ [ADR 0036](../docs/adr/0036-mega-independent-spec-entity.md)（メガ独立 spec）。
 
 ## 索引
@@ -41,7 +41,7 @@ flowchart LR
 
 | パス | 何を表すか | 取得元 | SoT | 取得・更新（責務） | スキーマ詳細 |
 |---|---|---|---|---|---|
-| `raw/{pokemon,pokemon-species,move,item}/*.json` | PokeAPI レスポンスの取得キャッシュ。`sync:ja-names`（materialize）の ja 転記元。`generate` は読まない | PokeAPI（ja） | —（キャッシュ・非コミット） | `fetch:ja-names`（生成）。存在担保は [`update-catalog`](../.claude/skills/update-catalog/SKILL.md) skill の責務 | [data-pipeline.md（vendor）](../.claude/rules/data-pipeline.md) |
+| `raw/{pokemon,pokemon-species,move,item}/*.json` | PokeAPI レスポンスの取得キャッシュ。`sync:ja-names`（materialize）の ja 転記元。`generate` は読まない | PokeAPI（ja） | —（キャッシュ・非コミット） | `fetch:ja-names`（生成）。存在担保は [`author-static-data`](../.claude/skills/author-static-data/SKILL.md) skill の責務 | [data-pipeline.md（vendor）](../.claude/rules/data-pipeline.md) |
 | `raw/serebii/*.html` | Serebii 速報スクレイプの取得キャッシュ（latin-1）。`serebii:*` の転記元。`generate` は読まない | Serebii（速報） | —（キャッシュ・非コミット） | `scrape-serebii.ts`（`serebii:*` が spawn・生成） | [data-pipeline.md](../.claude/rules/data-pipeline.md) / [ADR 0040](../docs/adr/0040-serebii-provisional-scraper-rebuild.md) |
 
 ### `champions/` — 構造 specs + per-reg・skill 著述（人間直編集 NG・コミット）
@@ -61,7 +61,7 @@ flowchart LR
 
 | パス | 何を表すか | 取得元 | SoT | 取得・更新（責務） | スキーマ詳細 |
 |---|---|---|---|---|---|
-| `languages/{species,mega,items,moves,abilities,types}.yaml` | 各エンティティの名前 `id → { ja, en }`（ゲーム非依存・名前の SoT・ADR 0035） | en=showdown `.name`（正）/ Serebii（速報）・ja=PokeAPI `names`（正）/ Serebii（速報） | languages | en: `showdown:*` / ja: `sync:ja-names`（[`update-catalog`](../.claude/skills/update-catalog/SKILL.md)）/ 速報: `serebii:*` | [data-pipeline.md](../.claude/rules/data-pipeline.md) / [ADR 0035](../docs/adr/0035-specs-languages-layout-redesign.md) |
+| `languages/{species,mega,items,moves,abilities,types}.yaml` | 各エンティティの名前 `id → { ja, en }`（ゲーム非依存・名前の SoT・ADR 0035） | en=showdown `.name`（正）/ Serebii（速報）・ja=PokeAPI `names`（正）/ Serebii（速報） | languages | en: `showdown:*` / ja: `sync:ja-names`（[`author-static-data`](../.claude/skills/author-static-data/SKILL.md)）/ 速報: `serebii:*` | [data-pipeline.md](../.claude/rules/data-pipeline.md) / [ADR 0035](../docs/adr/0035-specs-languages-layout-redesign.md) |
 
 ### `generated/` — 生成物（コミット・手書き編集禁止）
 
@@ -82,7 +82,7 @@ flowchart LR
 
 - **レギュレーション解禁データ（種族 / 全技 / 持ち物 / メガ）を投入・更新**: pokemon-showdown 経路（正）が `showdown-sync.yml`（GitHub Actions・`workflow_dispatch`）で `showdown:*`（抽出 + 転記）→ `check:regulation` → `generate:data` → 自動 PR（`data:authoritative`）。その PR を [`verify-showdown-pr`](../.claude/skills/verify-showdown-pr/SKILL.md) で Serebii 照合する。速報は `serebii-bulletin.yml`（`serebii:*`・`data:provisional`）。
 - **育成済み個体 YAML を作成・検証**: [`author-individual`](../.claude/skills/author-individual/SKILL.md)（per-reg 種族 dex の許容値に絞り `check:individual` で検証。個体は `data/champions/` ではなく利用者の team 配下）。
-- **日本語名 ja を補完する**: [`update-catalog`](../.claude/skills/update-catalog/SKILL.md)（`fetch:ja-names`（raw 取得）→ `sync:ja-names`（raw → languages の ja 転記・**append/既存尊重**で既存値を上書きしない）→ `generate:data`）。
+- **日本語名 ja を補完する**: [`author-static-data`](../.claude/skills/author-static-data/SKILL.md)（`fetch:ja-names`（raw 取得）→ `sync:ja-names`（raw → languages の ja 転記・**append/既存尊重**で既存値を上書きしない）→ `generate:data`）。
 - **生成物を作り直す**: `generate:data`（specs / languages / per-reg を変換・合成・raw 不在でも動く）。
 - **検証ゲート**: `pnpm verify`（型 / カバレッジ100% / Biome / **`check:yaml-style`**）。解禁データの参照整合・schema は `check:regulation`。
 - **YAML スタイル**: `data/` 配下の YAML は**全 block スタイル**（flow `[ a, b ]` / `{ k: v }` 禁止）。`check:yaml-style`（`pnpm pokeform check:yaml-style data`）が flow 混入を AST ベースで検出して非0終了する（local `.githooks/pre-commit` + CI `pnpm verify` で強制）。詳細は [data-pipeline.md](../.claude/rules/data-pipeline.md)。

@@ -18,7 +18,7 @@ pokeform は「Pokemon as Code」な TypeScript npm モジュール（ポケモ�
 | `pnpm typecheck` / `pnpm test` / `pnpm test:cov` | 型チェック / テスト / カバレッジ付きテスト |
 | `pnpm lint` / `pnpm format` | Biome チェック / 自動修正 |
 
-データ著述・検証・生成・CLI（`check:party` / `check:individual` / `check:regulation` / `check:yaml-style` / `analyze:coverage` / `generate:data` / `showdown:*`（構造 + 解禁の正・抽出 + 転記）/ `serebii:*`（速報スクレイプ + 転記）/ `fetch:ja-names` / `sync:ja-names`（PokeAPI ja 専任）/ `pokeform` / `compile` 等）は **`package.json` scripts が正本**で、手順は各 skill（`verify-showdown-pr` / `update-catalog` / `author-individual` / `review-party` 等）に従う。
+データ著述・検証・生成・CLI（`check:party` / `check:individual` / `check:regulation` / `check:yaml-style` / `analyze:coverage` / `generate:data` / `showdown:*`（構造 + 解禁の正・抽出 + 転記）/ `serebii:*`（速報スクレイプ + 転記）/ `fetch:ja-names` / `sync:ja-names`（PokeAPI 全件名 ja/en）/ `pokeform` / `compile` 等）は **`package.json` scripts が正本**で、手順は各 skill（`verify-showdown-pr` / `author-static-data` / `author-individual` / `review-party` 等）に従う。
 
 前進の単位は `pnpm verify` が**緑**になること。コミット / プッシュは Git hooks（`.githooks/`）が同じゲートを強制する（ツール非依存）。
 
@@ -75,7 +75,7 @@ skill は両ツール共有（canonical `.claude/skills/<name>/` + `.agents/skil
 - **実装駆動**: `implementation-workflow`（worktree〜マージ〜レトロ〜後片付けを多段で統合）。単発は `start-phase`（着手）/ `verify`（検証ゲート）/ `finish-phase`（締め）。
 - **レビュー**: `code-review`（`src/**` / `scripts/**`）/ `harness-review`（ハーネス資産）。→ `code-review.md`
 - **レトロ / メタ**: `pr-retrospective`（マージ済 1 PR → KPT learning）/ `harness-meta`（複数 learning 集約 → ハーネス書き戻し）。
-- **データ著述 / 照合**: `verify-showdown-pr`（showdown 経路の data PR を Serebii で照合）/ `update-catalog`（PokeAPI 日本語名 ja）/ `author-individual`（個体）/ `review-party`（パーティ点検）/ `stat-tuning`（振り調整）。
+- **データ著述 / 照合**: `verify-showdown-pr`（showdown 経路の data PR を Serebii で照合）/ `author-static-data`（PokeAPI 全件名辞書 ja/en）/ `author-individual`（個体）/ `review-party`（パーティ点検）/ `stat-tuning`（振り調整）。
 - **その他**: `adr-new`（ADR 採番・supersede 対応）/ `dep-update`（依存更新 PR の可否判断）。
 
 ## 規約索引へのポインタ
