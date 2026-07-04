@@ -31,6 +31,7 @@
 - **PokeAPI は ja 専任**へ縮小（`fetch:ja-names` / `sync:ja-names`）。構造取得は廃止。
 - **GitHub Actions**: `showdown-sync.yml`（正）/ `serebii-bulletin.yml`（速報）。両者末尾で `check:regulation` → `generate:data` → `pnpm verify` → `create-pull-request`。
 - **照合スキル** `verify-showdown-pr`: WebFetch ではなく**新 Serebii スクレイパースクリプトを流用**して showdown PR の diff を Serebii と照合し、一致 exit 0 / 差異 exit 1 + PR コメント。survey-regulation はこのスキルへ置換し廃止、update-catalog は ja 専任へ縮小。
+- **静的データ著述スキル** `author-static-data`（Phase 6 挿入）: 取得経路が存在しない静的データ（`rules.yaml` / `type-specs.yaml` / `languages/types.yaml`）の**欠落チェック + 導出著述**を skill 化する。シードは持たず既存 SoT（[[game-spec]] rule / showdown `typechart.ts` / 固定 18 タイプ名）から導出し、**存在するデータはスキップ**（ファイル単位の冪等）。`data/` 完全削除からの復元を「静的著述（本 skill）」と「reg 取得（showdown / PokeAPI / Serebii 経路）」に分離する。
 
 ## スコープ外
 
@@ -47,7 +48,8 @@
 4. `showdown-sync.yml` / `serebii-bulletin.yml` を `workflow_dispatch` で手動実行すると PR が立ち CI（`pnpm verify`）が緑（Phase 3 / 4）。
 5. 旧 Serebii スクレイパー・survey-regulation skill が削除され、`verify-showdown-pr` skill と新 Serebii スクレイパーへ置換される（Phase 4 / 5）。
 6. 取得元・第一優先・vendor 方式の変更が ADR 0039 / 0040 に記録され、被 supersede ADR が archive へ退避し inbound 参照が追従される。
-7. Phase 6 完了時: M-A・M-B の**全解禁情報（全種・全技・全持ち物・全メガ）**が showdown 経路で投入され、`verify-showdown-pr` の Serebii 照合と `pokemon-data-reviewer` レビューで重大な不整合が無い。
+7. 静的データ（`rules.yaml` / `type-specs.yaml` / `languages/types.yaml`・取得経路なし）の欠落チェック + 導出著述が `author-static-data` skill に定式化され、存在するデータに触れない冪等スキップで動く（Phase 6）。
+8. Phase 7 完了時: M-A・M-B の**全解禁情報（全種・全技・全持ち物・全メガ）**が showdown 経路で投入され、`verify-showdown-pr` の Serebii 照合と `pokemon-data-reviewer` レビューで重大な不整合が無い。
 
 ## phase 分割（6 基準の評価サマリ）
 
@@ -60,6 +62,7 @@
 | Phase 3 | `showdown-sync.yml` + ADR 0039（0012/0027 supersede） | CI + ADR（中） |
 | Phase 4 | Serebii 完全廃止 + 新スクレイパー + `serebii-bulletin.yml` + ADR 0040（0033/0037 supersede） | 削除 + 新規 + CI + ADR（大） |
 | Phase 5 | `verify-showdown-pr` skill + `.claude/rules/*` 5 ファイル + docs / AGENTS 改訂 | skill + rule + docs（中） |
-| Phase 6 | M-A・M-B 全データセット本投入（**plan 09 Phase 4 の cross-plan move を含む**） | data 投入 PR（>1000 行・例外 1 PR） |
+| Phase 6 | 静的データ（取得経路なし）の欠落チェック + 導出著述 skill `author-static-data` 新設（**本投入の手前へ挿入**） | skill + rule 追記（小） |
+| Phase 7 | M-A・M-B 全データセット本投入（**plan 09 Phase 4 の cross-plan move を含む**） | data 投入 PR（>1000 行・例外 1 PR） |
 
-直列チェーン: Phase 1 → 2 → 3 → 4 → 5 → 6 の一方通行。Phase 6 は全パイプライン（正 + 速報 + 照合スキル）が揃ってから全量投入する。**Phase 6 は plan 09 の最終 Phase 4（全データセット本投入）を本計画群へ移植して新パイプライン版に改訂したもの**（[[planning]] cross-plan move チェックリストに従い移動・参照追従する）。本投入は全種・全 movepool で >1000 行になるが、データセット追加で意味ある分割が困難なため 1 PR を許容する（[[planning]] 6 基準⑤ の例外）。
+直列チェーン: Phase 1 → 2 → 3 → 4 → 5 → 6 → 7 の一方通行。Phase 7 は全パイプライン（正 + 速報 + 照合スキル + 静的著述スキル）が揃ってから全量投入する。**Phase 6 は本投入の手前へ後から挿入した phase**（`data/` 完全削除からの復元を静的著述と reg 取得に分離する方針・renumber の参照追従は [[planning]] の insert / renumber チェックリストに従う）。**Phase 7 は plan 09 の最終 Phase 4（全データセット本投入）を本計画群へ移植して新パイプライン版に改訂したもの**（[[planning]] cross-plan move チェックリストに従い移動・参照追従する）。本投入は全種・全 movepool で >1000 行になるが、データセット追加で意味ある分割が困難なため 1 PR を許容する（[[planning]] 6 基準⑤ の例外）。

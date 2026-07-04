@@ -12,7 +12,8 @@ flowchart TD
     P2 --> P3[phase-03 — showdown-sync.yml + ADR 0039]
     P3 --> P4[phase-04 — Serebii 全廃 + 新スクレイパー + serebii-bulletin.yml + ADR 0040]
     P4 --> P5[phase-05 — verify-showdown-pr skill + rules/docs 改訂]
-    P5 --> P6[phase-06 — M-A・M-B 全データセット本投入（plan 09 Phase 4 移植）]
+    P5 --> P6[phase-06 — 静的データ欠落チェック + 導出著述 skill 新設]
+    P6 --> P7[phase-07 — M-A・M-B 全データセット本投入（plan 09 Phase 4 移植）]
 ```
 
 ## フェーズ一覧（この順で実施）
@@ -22,11 +23,13 @@ flowchart TD
 - [x] [Phase 3 — showdown-sync ワークフロー + ADR 0039](./phase-03-showdown-sync-workflow.md)
 - [x] [Phase 4 — Serebii 完全廃止 + 新スクレイパー + serebii-bulletin + ADR 0040](./phase-04-serebii-bulletin-rebuild.md)
 - [x] [Phase 5 — verify-showdown-pr skill + rules / docs 改訂](./phase-05-verify-skill-and-rules.md)
-- [ ] [Phase 6 — M-A・M-B 全データセット本投入（plan 09 Phase 4 の cross-plan move）](./phase-06-full-rollout.md)
+- [ ] [Phase 6 — 静的データの欠落チェック + 導出著述 skill（author-static-data）新設](./phase-06-static-data-skill.md)
+- [ ] [Phase 7 — M-A・M-B 全データセット本投入（plan 09 Phase 4 の cross-plan move）](./phase-07-full-rollout.md)
 
 ## 補足
 
 - 各 phase doc は本テンプレ（[plan-templates.md](../../../.claude/skills/plans-new/references/plan-templates.md) の「phase-NN-<slug>.md」節）に従う。
 - スキル作成は `skill-creator`、ADR は `adr-new`（[[skill-authoring]] / [[adr]]）。
-- **Phase 6 は plan 09 Phase 4 の移植**: 旧 [09-champions-data-rollout](../completed/09-champions-data-rollout/README.md) の最終フェーズ（全データセット本投入）を本計画群へ cross-plan move し、新パイプライン（showdown-sync 全量投入 + verify-showdown-pr 照合）へ改訂したもの。移動・参照追従は [[planning]] の cross-plan move チェックリストに従う。
-- **Phase 6（本投入）は >1000 行を 1 PR 許容**: 全種・全 movepool 規模で意味ある粒度分割が困難なため（[[planning]] 6 基準⑤ の例外・[`OVERVIEW.md`](./OVERVIEW.md#phase-分割6-基準の評価サマリ) に根拠）。
+- **Phase 6 は後から挿入した phase**: `data/` 完全削除からの復元を「静的データ著述（`author-static-data` skill）」と「reg 取得（showdown / PokeAPI / Serebii 経路）」に分離するため、本投入の手前へ挿入した（旧 Phase 6 = 本投入は Phase 7 へ renumber・参照追従は [[planning]] の insert / renumber チェックリストに従う）。
+- **Phase 7 は plan 09 Phase 4 の移植**: 旧 [09-champions-data-rollout](../completed/09-champions-data-rollout/README.md) の最終フェーズ（全データセット本投入）を本計画群へ cross-plan move し、新パイプライン（showdown-sync 全量投入 + verify-showdown-pr 照合）へ改訂したもの。移動・参照追従は [[planning]] の cross-plan move チェックリストに従う。
+- **Phase 7（本投入）は >1000 行を 1 PR 許容**: 全種・全 movepool 規模で意味ある粒度分割が困難なため（[[planning]] 6 基準⑤ の例外・[`OVERVIEW.md`](./OVERVIEW.md#phase-分割6-基準の評価サマリ) に根拠）。

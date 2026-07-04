@@ -1,4 +1,4 @@
-# Phase 6 — M-A・M-B 全データセット本投入（showdown 経路）
+# Phase 7 — M-A・M-B 全データセット本投入（showdown 経路）
 
 > **plan 09 Phase 4（全データセット本投入）の cross-plan move 先**。旧フェーズは `survey-regulation` skill + `fetch:data`/`materialize` + Serebii 第一優先で全量投入する設計だったが、本計画群（10）の取得元転換に伴い **showdown-sync（手動 dispatch）で全量投入し `verify-showdown-pr` で Serebii 照合する**新パイプライン版へ改訂した。移動・参照追従は [[planning]] の cross-plan move チェックリストに従う。
 
@@ -12,11 +12,12 @@ Phase 1-5 で揃った新パイプライン（showdown 抽出 + 転記 + ja back
 ## 前提（依存）
 
 - **Phase 1-5 完了**: showdown 抽出 + 転記（1）/ PokeAPI ja 専任（2）/ `showdown-sync.yml`（3）/ Serebii 速報 + 新スクレイパー（4）/ `verify-showdown-pr` skill + rules 改訂（5）がすべて揃っている。
+- **Phase 6 完了**: `author-static-data` skill が新設され、静的データ（`rules.yaml` / `type-specs.yaml` / `languages/types.yaml`・取得経路なし）の欠落チェック + 導出著述が skill 化されている（[phase-06](./phase-06-static-data-skill.md)）。
 - 確定済み rule: [[data-pipeline]] / [[cli-and-io]] / [[type-conventions]] / [[testing]]。ADR 0039 / 0040。
 
 ## タスク
 
-- [ ] **全削除から再開**: per-reg / specs / languages の限定セット残骸を初期化し、新パイプラインでゼロから全量を組み直す（限定セットを本投入に混ぜない）。
+- [ ] **全削除から再開**: per-reg / specs / languages の限定セット残骸を初期化し、新パイプラインでゼロから全量を組み直す（限定セットを本投入に混ぜない）。取得開始前に `author-static-data` skill の欠落チェックを通し、静的データ（取得経路なし）を導出著述で復元する（fail-fast 前提ゲート・Phase 6）。per-reg 静的（`<reg>/index.yaml` の period・`languages/regulations.yaml` エントリ）は reg 依存ゆえ Phase 6 スコープ外で、本 phase が著述する。
 - [ ] `showdown-sync.yml` を M-A・M-B 各レギュで全量実行（全種・全 learnset・全持ち物・全メガ・全特性）→ authoritative PR を作成。
 - [ ] `fetch:ja-names` → `sync:ja-names` で日本語名を全量補完。Champions 固有メガストーン等の ja 欠落は Serebii 速報 ja または手入力で補完。
 - [ ] `verify-showdown-pr` で各 authoritative PR を Serebii 照合し、差異（roster 数 / 技件数 / 持ち物・メガ / 技メタ / ja・en）を解消。
