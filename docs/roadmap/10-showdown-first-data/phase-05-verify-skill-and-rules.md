@@ -5,7 +5,7 @@
 showdown-sync が作る authoritative PR の正確性を **Serebii で照合するスキル `verify-showdown-pr`** を新設し、旧 `survey-regulation` skill を廃止して置換する。取得元転換に伴うハーネス資産（`.claude/rules/*` / `docs/design` / `AGENTS.md`）を実態へ整合させる。
 
 - スコープ内: `verify-showdown-pr` skill 新設、`survey-regulation` 廃止、`.claude/rules/*` 5 ファイル改訂、`docs/design/data-pipeline.md` / `AGENTS.md` / `data/README.md` 改訂。
-- スコープ外: 全量本投入（Phase 7）。
+- スコープ外: 全量本投入（Phase 8）。
 
 ## 前提（依存）
 

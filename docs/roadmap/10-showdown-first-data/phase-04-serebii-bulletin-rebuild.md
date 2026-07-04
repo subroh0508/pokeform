@@ -5,7 +5,7 @@
 既存の Serebii スクレイパー（第一優先前提）を**完全廃止**し、指定ページ群向けの**新スクレイパー**を実装する。GitHub Actions（`workflow_dispatch` 手動）で Serebii をスクレイピングして**速報 PR** を立てる経路を作り、Serebii を速報経路へ降格する決定を ADR 0040 に記録する。
 
 - スコープ内: 旧 Serebii コード削除、新 `src/codegen/serebii/parse-*` + `scrape-serebii`(新) / `sync-serebii`、`serebii-bulletin.yml`、ADR 0040（0033/0037 supersede）。
-- スコープ外: 照合 skill（Phase 5）、全量本投入（Phase 7）。
+- スコープ外: 照合 skill（Phase 5）、全量本投入（Phase 8）。
 
 ## 前提（依存）
 

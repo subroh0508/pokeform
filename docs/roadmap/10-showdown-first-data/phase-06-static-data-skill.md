@@ -1,13 +1,13 @@
 # Phase 6 — 静的データの欠落チェック + 導出著述 skill（author-static-data）新設
 
-> 全量本投入（Phase 7）の手前に**挿入**した phase。`data/` 完全削除状態からの復元を「**静的データ（取得経路なし・reg 非依存）の著述**」と「**レギュレーション情報の取得**（showdown / PokeAPI / Serebii 経路）」に分離し、前者を skill 化する（静的 bootstrap と reg 取得の 2 skill 分割方針）。挿入に伴う renumber（旧 Phase 6 → Phase 7）の参照追従は [[planning]] の insert / renumber チェックリストに従う。
+> 全量本投入（Phase 8）の手前に**挿入**した phase。`data/` 完全削除状態からの復元を「**静的データ（取得経路なし・reg 非依存）の著述**（本 phase）」と「**レギュレーション情報の取得**（`author-regulation-data` skill・Phase 7）」に分離する 2 skill 分割方針の前段。挿入に伴う renumber（旧 full-rollout Phase 6 → 8）の参照追従は [[planning]] の insert / renumber チェックリストに従う。
 
 ## 目的 / スコープ
 
 `data/` 配下のうち**取得経路が存在しない静的データ** = `data/champions/rules.yaml` / `data/champions/type-specs.yaml` / `data/languages/types.yaml` の 3 ファイルについて、**欠落チェックと導出著述**を行う `author-static-data` skill を新設する。シードファイル（テンプレの複写）は持たず、各ファイルを**既存の SoT から導出**して著述する。存在するデータには触れない（ファイル単位の冪等スキップ）。
 
-- スコープ内: skill 新設（canonical + symlink）、欠落チェック手順、導出著述手順、[[data-pipeline]] への著述経路ポインタ追記、Phase 7（本投入）との責務境界の明文化。
-- スコープ外: レギュレーション情報の取得（showdown 5 データセット / PokeAPI ja / Serebii 速報 = 既存経路と Phase 7 の責務）。per-reg 静的データ（`<reg>/index.yaml` の period・`languages/regulations.yaml` のエントリ = reg 依存ゆえ Phase 7 側）。`type-specs` の showdown 抽出自動化（`showdown:types` 新設 = OVERVIEW スコープ外の維持・将来計画へ送り）。`data/` 全削除の実行そのもの（Phase 7）。
+- スコープ内: skill 新設（canonical + symlink）、欠落チェック手順、導出著述手順、[[data-pipeline]] への著述経路ポインタ追記、`author-regulation-data`（Phase 7）との責務境界の明文化。
+- スコープ外: レギュレーション情報の取得（showdown 5 データセット / PokeAPI ja / Serebii 速報 = `author-regulation-data` skill・Phase 7 の責務）。per-reg 静的データ（`<reg>/index.yaml` の period・`languages/regulations.yaml` のエントリ = reg 依存ゆえ Phase 7 側）。`type-specs` の showdown 抽出自動化（`showdown:types` 新設 = OVERVIEW スコープ外の維持・将来計画へ送り）。`data/` 全削除の実行そのもの（Phase 8）。
 
 ## 前提（依存）
 
@@ -22,7 +22,7 @@
   - `rules.yaml` ← [[game-spec]] rule（Lv50 / 個体値31 固定・能力ポイント合計66・各≤32・性格±10%・二重 floor の計算式定数）から導出。
   - `type-specs.yaml` ← pokemon-showdown `typechart.ts` 由来の相性倍率 `damageTo`（非 1.0 のみ・skill-authored 維持 = OVERVIEW スコープ外と整合）。
   - `languages/types.yaml` ← 18 タイプの ja/en（固定知識）。
-- [ ] **Phase 7 前提ゲートの明文化**: reg 取得（showdown-sync / serebii 経路）を実行する前に本 skill の欠落チェックを通す **fail-fast 誘導**を skill 本文に記す（skill 間の自動連鎖はしない・束ねる場合は明示的オーケストレーションの責務）。
+- [ ] **前提ゲートの明文化**: reg 取得（`author-regulation-data`・Phase 7）を実行する前に本 skill の欠落チェックを通す **fail-fast 誘導**を skill 本文に記す（skill 間の自動連鎖はしない・束ねる場合は明示的オーケストレーションの責務。author-regulation-data 側からも本ゲートを呼ぶ）。
 - [ ] [[data-pipeline]] の「項目の取得元」表の skill-authored 行（タイプ相性 damageTo / タイプ名 / 計算式定数）に本 skill への著述経路ポインタを追記する。
 
 ## この Phase で育てるハーネス（rule・skill）
@@ -47,5 +47,5 @@
 ## リスク・備考
 
 - **相性表の著述ミス**: type chart は 18×18 で手著述の取り違えが混入しうる。pokemon-showdown `typechart.ts` を参照して著述し、`pokemon-data-reviewer` の相性表点検で裏取りする。将来 `showdown:types` 抽出（6 本目のデータセット）として機械取得へ移す拡張は別計画へ送る。
-- **境界はファイル単位でなくデータ単位**: `languages/regulations.yaml` はファイルとしては reg 非依存だがエントリが per-reg のため本 skill は触らない（Phase 7 の責務）。転記スクリプトが前提とするファイル骨格（空 map）の要否は実装時に確定する。
+- **境界はファイル単位でなくデータ単位**: `languages/regulations.yaml` はファイルとしては reg 非依存だがエントリが per-reg のため本 skill は触らない（`author-regulation-data`・Phase 7 の責務）。転記スクリプトが前提とするファイル骨格（空 map）の要否は実装時に確定する。
 - 本 phase の変更はハーネス資産（skill + rule 追記）のみで src / data 変更なし。独立レビューは `harness-review`。
