@@ -50,7 +50,7 @@ active（未着手・進行中）は直下、完了した計画群は [`complete
 | [completed/07-rules-skills-simplify](./completed/07-rules-skills-simplify/README.md) | ✅ 完了 |
 | [completed/08-docs-restructure](./completed/08-docs-restructure/README.md) | ✅ 完了 |
 | [completed/09-champions-data-rollout](./completed/09-champions-data-rollout/README.md) | ✅ 完了 |
-| [10-showdown-first-data](./10-showdown-first-data/README.md) | ⬜ 未着手 |
+| [10-showdown-first-data](./10-showdown-first-data/README.md) | 🚧 進行中 |
 
 ## MVP の範囲
 

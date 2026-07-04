@@ -1,6 +1,6 @@
 # 09-champions-data-rollout — M-A/M-B 解禁データ投入（限定セットでのスキル実地検証 → 本投入）OVERVIEW
 
-> **本投入（Phase 4）は [10-showdown-first-data](../../10-showdown-first-data/OVERVIEW.md) の Phase 6 へ cross-plan move された**。取得方式が pokemon-showdown 第一の正へ刷新されたため、旧 `survey-regulation` + Serebii 第一優先での全量投入は plan 10 の新パイプライン（showdown-sync + verify-showdown-pr）が引き継ぐ。以下の本文中の Phase 4・「本投入」記述は移動前の歴史的経緯であり、現行の本投入計画は plan 10 を参照すること。
+> **本投入（Phase 4）は [10-showdown-first-data](../../10-showdown-first-data/OVERVIEW.md) の Phase 9 へ cross-plan move された**。取得方式が pokemon-showdown 第一の正へ刷新されたため、旧 `survey-regulation` + Serebii 第一優先での全量投入は plan 10 の新パイプライン（showdown-sync + verify-showdown-pr）が引き継ぐ。以下の本文中の Phase 4・「本投入」記述は移動前の歴史的経緯であり、現行の本投入計画は plan 10 を参照すること。
 
 ## ゴール
 
@@ -35,7 +35,7 @@
 
 各投入フェーズは共通して: `survey-regulation`（オーケストレーター）→ 層2-3 Workflow で対象種を fan-out 取得 + 自己修復 → `serebii-to-catalog` で catalog / per-reg へ append-only 転記 → `update-catalog`（`fetch:data` → `materialize`）で構造データ・ja 名を補完 → `check:regulation` 0 終了 → `generate:data` 再生成 → `pokemon-data-reviewer` レビュー → `verify` 緑。各 phase doc に具体手順を記す。
 
-Phase 3 の人間検証ゲートは PR を伴わない検証マイルストーン。NG なら skill 改修 PR を挟んで Phase 1-2 を再実行する。OK 後の全量本投入は [10-showdown-first-data Phase 6](../../10-showdown-first-data/phase-06-full-rollout.md) が引き継ぐ（cross-plan move 済み・取得方式刷新のため）。
+Phase 3 の人間検証ゲートは PR を伴わない検証マイルストーン。NG なら skill 改修 PR を挟んで Phase 1-2 を再実行する。OK 後の全量本投入は [10-showdown-first-data Phase 9](../../10-showdown-first-data/phase-09-full-rollout.md) が引き継ぐ（cross-plan move 済み・取得方式刷新のため）。
 
 ## スコープ外
 
@@ -50,16 +50,16 @@ Phase 3 の人間検証ゲートは PR を伴わない検証マイルストー�
 2. Phase 1 完了時: 旧プレースホルダ・レコードが全削除され、M-A が代表 10 体（リザードン・スターミー・ゲンガー含む）+ 全持ち物の限定セットで skill 経由投入され、生成 TS に反映される。
 3. Phase 2 完了時: M-B が「M-A の 10 体 + M-B 追加解禁全種」+ 全持ち物の限定セットで skill 経由投入される。
 4. Phase 3（人間ゲート）: `survey-regulation` skill が解禁データ投入を正しく駆動できることを人間が確認。問題があれば skill を改修し、Phase 1-2 サイクルを再実行して再確認する。
-5. （旧 Phase 4 = 全解禁情報の本投入は [10-showdown-first-data Phase 6](../../10-showdown-first-data/phase-06-full-rollout.md) へ移動。本計画群の受け入れは Phase 1-3 まで。）
+5. （旧 Phase 4 = 全解禁情報の本投入は [10-showdown-first-data Phase 9](../../10-showdown-first-data/phase-09-full-rollout.md) へ移動。本計画群の受け入れは Phase 1-3 まで。）
 6. Phase 1-3 で `check:regulation` が 0 終了（参照整合 / schema）、`pokemon-data-reviewer` のレビューで重大な不整合（種族値・タイプ・解禁整合・メガ・技マスター）が無い。
 
 ## phase 分割（6 基準の評価サマリ）
 
-全量投入を限定セット検証で de-risk するため、**当初は 4 phase に分けた**（本投入 Phase 4 はその後 [10-showdown-first-data Phase 6](../../10-showdown-first-data/phase-06-full-rollout.md) へ cross-plan move したため、本計画群は Phase 1-3 に縮小）。データ投入そのものは意味ある粒度での種族分割が困難なため各投入 phase は 1 PR。6 基準:
+全量投入を限定セット検証で de-risk するため、**当初は 4 phase に分けた**（本投入 Phase 4 はその後 [10-showdown-first-data Phase 9](../../10-showdown-first-data/phase-09-full-rollout.md) へ cross-plan move したため、本計画群は Phase 1-3 に縮小）。データ投入そのものは意味ある粒度での種族分割が困難なため各投入 phase は 1 PR。6 基準:
 
 - **意思決定の数 / 不可逆性**: 投入は既定の仕組み（03/04/05 で確定）に沿うデータ追加で新しい設計判断は無い。限定セットの roster 選定（M-A の他 7 体）は Phase 1 実行時に代表種で確定する。
 - **スコープの広さ / 技術的難易度**: catalog / per-reg YAML への append-only 転記 + 生成・検証。難所は 03/05 で解決済み。検証ゲートで skill 改修が必要になった場合のみハーネス改修が混じる。
-- **想定 diff**: Phase 1-2（限定セット）は中規模。本投入（全種・全 movepool で >1000 行）は plan 10 Phase 6 へ移動済み。
+- **想定 diff**: Phase 1-2（限定セット）は中規模。本投入（全種・全 movepool で >1000 行）は plan 10 Phase 9 へ移動済み。
 - **並行実装のしやすさ**: 直列。Phase 1 → 2 → 検証ゲート(3) → 4 の順で、検証 OK が本投入の前提。
 
 | phase | 狙い | 主な diff |
@@ -67,6 +67,6 @@ Phase 3 の人間検証ゲートは PR を伴わない検証マイルストー�
 | Phase 1 | レコード全削除 + M-A 限定投入（10 体 + 全持ち物） | data 投入 PR（中規模） |
 | Phase 2 | M-B 限定投入（M-A の 10 体 + M-B 追加解禁全種 + 全持ち物） | data 投入 PR（中規模） |
 | Phase 3 | 人間による `survey-regulation` skill 動作検証ゲート（PR なし・NG なら P1-2 サイクル再実行） | — |
-| ~~Phase 4~~ | M-A・M-B 全解禁情報の本投入 → **[10 Phase 6](../../10-showdown-first-data/phase-06-full-rollout.md) へ cross-plan move** | （plan 10 へ移動） |
+| ~~Phase 4~~ | M-A・M-B 全解禁情報の本投入 → **[10 Phase 9](../../10-showdown-first-data/phase-09-full-rollout.md) へ cross-plan move** | （plan 10 へ移動） |
 
-直列チェーン: 先行する [04-generated-layout-redesign](../04-generated-layout-redesign/README.md)（Phase 1-3 再編）→ [05-move-master-scraper-refactor](../05-move-master-scraper-refactor/README.md)（技マスター取得 + 役割分割 + skill 再編）→ 本計画群（09 Phase 1 → 2 → 3）の**一方通行**。04 / 05 へ戻る依存は無い。全量本投入（旧 09 Phase 4）は [10-showdown-first-data Phase 6](../../10-showdown-first-data/phase-06-full-rollout.md) が引き継ぐ。
+直列チェーン: 先行する [04-generated-layout-redesign](../04-generated-layout-redesign/README.md)（Phase 1-3 再編）→ [05-move-master-scraper-refactor](../05-move-master-scraper-refactor/README.md)（技マスター取得 + 役割分割 + skill 再編）→ 本計画群（09 Phase 1 → 2 → 3）の**一方通行**。04 / 05 へ戻る依存は無い。全量本投入（旧 09 Phase 4）は [10-showdown-first-data Phase 9](../../10-showdown-first-data/phase-09-full-rollout.md) が引き継ぐ。
