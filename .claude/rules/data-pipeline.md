@@ -49,12 +49,22 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
   ja/en 必須と衝突するため **append せず skip**（推測 ja を発明しない = data 信頼性を守る）。spec が参照する id で
   ja が要るなら手作業 ja で補う。「全件辞書」の**基準は PokeAPI list 列挙**で、live count と languages 件数が僅差に
   なりうる（仕様どおり）。
-- **pokeform 固有フォーム（`pokemon-species` list 外の species id）は `pokemon-form` から取る**（`fetch-pokeapi.ts`
-  の `SPECIES_FORMS` curated whitelist・`ITEM_CATEGORIES` と同型・plan 11 P3）: `rotom-wash` 等は `pokemon-species`
-  列挙で拾えず species 名が空になり `generate` が `no name entry` で fail する。これらは `pokemon-form/{id}` の
-  `form_names`（ja-Hrkt / en）を取得し **`{ names: form_names }` として species raw へ合成**して `materialize` の
-  species 経路（`extractNames`）が透過的に拾う。差分運用（spec が参照する固有フォーム id が出るたび whitelist に
-  追加・先回りで全フォーム列挙しない）。
+- **distinct-forms（`pokemon-species` の非デフォルト variety・タイプ / 種族値が base と異なる form）は含有判定合成で
+  機械生成する**（`fetch-pokeapi.ts` の `fetchDistinctForms`・plan 11 P4 が `SPECIES_FORMS` whitelist を置換）:
+  `rotom-wash` / `raichu-alola` / `basculegion-female` 等は `pokemon-species` list に個別 id が無く species 名が空に
+  なり `generate` が `no name entry` で fail する。これらは各 species の **varieties を辿り**、base（default variety）と
+  **タイプ or 種族値が異なる** variety を採用（純関数 `isDistinctForm`）、canonical id（PokeAPI slug・bare→explicit の
+  default 再キーは Phase 3 の `CANONICAL_ID_OVERRIDE`）でキーイングし、`pokemon-form` の `form_names` を **含有判定合成**
+  （純関数 `composeFormName`: form 名が base 名を含めばそのまま採用・含まねば `base名（form名）` 合成・ja 全角 / en 半角
+  括弧）した ja/en を **`{ names }` として species raw へ合成**して `materialize` の species 経路（`extractNames`）が透過的に
+  拾う。純装飾フォルム（**base と同型・同種族値**の vivillon 模様 / alcremie 等）と `-mega`/`-gmax`/`-primal`/`-starter`
+  （末尾）/ `-totem`（セグメント・`raticate-totem-alola` 等リージョン接尾辞手前も除く）は除外。加えて **base とは type/stat が
+  違うが兄弟間で同型・同種族値な variety 群（minior の 7 色コア等）は先着 1 代表に畳む**（cosmetic-color 膨張の機械抑制）。
+  同ステータスでも別種族にしたい form（`greninja-battle-bond`）は `FORM_INCLUDE`、PokeAPI に ja 無し /
+  名前衝突する form（`greninja-battle-bond` / `tauros-paldea-*-breed` の breed 別 ja）は `MANUAL_NAME_OVERRIDE` で
+  補う（合成結果より優先）。3 リスト（`FORM_INCLUDE` / `MANUAL_NAME_OVERRIDE` / `CANONICAL_ID_OVERRIDE`）と除外パターンの
+  SoT は `fetch-pokeapi.ts`。決定記録（id / en / ja / decision / distinct 根拠）を manifest（`data/raw/distinct-forms.json`）へ
+  残し `pokeapi-names.yml` が PR レビュー表へ整形する（手順 SoT は `author-static-data` skill）。
 - **名前の取得元分担**（languages 各ファイルの ja/en をどこから埋めるか）:
 
   | languages ファイル | 取得元 | 担当 |

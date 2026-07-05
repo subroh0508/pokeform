@@ -20,7 +20,18 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
-import { megaFormCandidates, sortedUnion } from "../src/codegen/materialize.ts";
+import {
+  composeFormName,
+  deriveBaseId,
+  EN_BRACKETS,
+  extractNames,
+  type FormShape,
+  isDistinctForm,
+  JA_BRACKETS,
+  megaFormCandidates,
+  sortedUnion,
+} from "../src/codegen/materialize.ts";
+import { CANONICAL_ID_OVERRIDE } from "../src/codegen/showdown/canonical-species-id.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const RAW = join(ROOT, "data", "raw");
@@ -57,21 +68,41 @@ const ITEM_CATEGORIES = [
 ] as const;
 
 /**
- * pokeform 固有フォーム（PokeAPI `pokemon-species` list 外の species id）の curated whitelist（plan 11 P3）。
- * これらは `pokemon-species` 列挙で拾えず species.yaml の名前が埋まらないため（`generate` が `no name entry` で fail）、
- * `pokemon-form/{id}` の `form_names`（ja-Hrkt / en）から取得して species raw へ合成する。`ITEM_CATEGORIES` と同型の
- * 差分運用（spec が参照する固有フォーム id が出るたび追加・先回りで全フォーム列挙しない・[[data-pipeline]]）。
- * 例: `rotom-wash`（ウォッシュロトム / Wash Rotom）は `pokemon-form/rotom-wash` の form_names に ja/en を持つ。
+ * distinct-forms 列挙（plan 11 P4）で、同型・同種族値でも**別種族にしたい form** を明示追加する `FORM_INCLUDE`。
+ * `isDistinctForm`（type/stat 差）で拾えない form をここで拾う。`greninja-battle-bond` は base（ゲッコウガ）と
+ * 同型（みず/あく）・同種族値だが、きずなへんげは別種族として扱いたい（[[data-pipeline]]）。
  */
-const SPECIES_FORMS = ["rotom-wash"] as const;
+const FORM_INCLUDE = new Set<string>(["greninja-battle-bond"]);
+
+/**
+ * distinct-forms 列挙から除外する form サフィックス / セグメント。`-mega[-x|-y|-z]` は mega.yaml 経路（ADR 0043）、
+ * `-gmax`（キョダイマックス）/ `-primal`（ゲンシカイキ）/ `-starter`（LGPE 相棒）は末尾で除外。`-totem`（ぬしポケモン）は
+ * `raticate-totem-alola` のようにリージョン接尾辞の**手前**にも現れるためセグメント（`-totem-` / 末尾 `-totem`）で除外する
+ * （ぬしは通常個体の大型・オーラ差だけで対戦対象外・[[data-pipeline]]）。
+ */
+const EXCLUDED_FORM = /-(mega(-[xyz])?|gmax|primal|starter)$|-totem(-|$)/;
+
+/**
+ * PokeAPI に ja が無い / 名前が衝突する form の**手動 override**（合成結果より優先・plan 11 P4）。canonical id で
+ * キーイングし、`{ ja?, en? }` を欄ごとに合成名へ上書きする（欄を省けば合成名が残る）。
+ * - `greninja-battle-bond`: form_names 空で合成不能 → ja/en を著述（きずなへんげ）。
+ * - `tauros-paldea-*-breed`: form_names.ja が 3 種とも「パルデアのすがた」で衝突 → breed 別 ja を著述（en は form_names
+ *   の "Combat/Blaze/Aqua Breed" で自動区別されるため合成に委ねる）。
+ */
+const MANUAL_NAME_OVERRIDE: Record<string, { ja?: string; en?: string }> = {
+  "greninja-battle-bond": { ja: "ゲッコウガ（きずなへんげ）", en: "Greninja (Battle Bond)" },
+  "tauros-paldea-combat-breed": { ja: "ケンタロス（パルデアのすがた・コンバット種）" },
+  "tauros-paldea-blaze-breed": { ja: "ケンタロス（パルデアのすがた・ブレイズ種）" },
+  "tauros-paldea-aqua-breed": { ja: "ケンタロス（パルデアのすがた・アクア種）" },
+};
+
+/** languages 名前マップ（id → { ja?, en? }）。 */
+type LangMap = Record<string, { ja?: string; en?: string }>;
 
 /** data/languages/<file> の名前マップ（`{ <mapKey>: { id → { ja?, en? } } }`）を読む。from-scratch 復元
  * （`data/languages/*` 完全削除）ではファイル不在ゆえ空マップを返す（全 id を未記録として fetch 対象にする・
  * plan 11 P2）。空マップ（`mapKey:` = null）も `?? {}` で吸収する。 */
-const readLangMap = (
-  file: string,
-  mapKey: string,
-): Record<string, { ja?: string; en?: string }> => {
+const readLangMap = (file: string, mapKey: string): LangMap => {
   const path = join(ROOT, "data", "languages", file);
   if (!existsSync(path)) return {};
   const doc = parseYaml(readFileSync(path, "utf8")) as Record<
@@ -155,33 +186,179 @@ async function fetchNamesInto(category: string, name: string): Promise<void> {
   console.log(`[fetch] ${category}/${name} (names)`);
 }
 
+/** PokeAPI 詳細エンドポイントの部分形（distinct-forms 列挙で読む欄のみ）。 */
+type LangName = { name: string; language: { name: string } };
+type SpeciesDetail = {
+  names?: LangName[];
+  varieties?: { is_default: boolean; pokemon: { name: string } }[];
+};
+type PokemonDetail = {
+  types: { type: { name: string } }[];
+  stats: { base_stat: number }[];
+  forms: { name: string }[];
+};
+type FormDetail = { form_names?: LangName[] };
+
+/** distinct-forms の 1 件の決定記録（`pokeapi-names.yml` の PR レビュー表用 manifest）。 */
+interface FormDecision {
+  id: string;
+  en: string;
+  ja: string;
+  decision: "passthrough" | "compose" | "canonical-override" | "manual";
+  basis: string;
+}
+
 /**
- * pokeform 固有フォーム（`SPECIES_FORMS`）を `pokemon-form/{id}` から取得し、**`form_names` を `names` として合成**して
- * species raw（`raw/pokemon-species/{id}.json`）へ書く（plan 11 P3）。こうすると `materialize` の species 経路
- * （`extractNames` = `names` から ja/en）が改修なしで透過的に拾える。best-effort（404 / 失敗は警告して skip）。
+ * `${category}/${name}` を best-effort 取得して raw キャッシュへ書き（404 / 失敗は null）、キャッシュ済みなら読む。
+ * distinct-forms 列挙は `pokemon-species`（varieties）/ `pokemon`（types/stats/forms）/ `pokemon-form`（form_names）の
+ * 3 endpoint を横断するため、共通の cached fetch に寄せる（raw は .gitignore の取得キャッシュ）。
  */
-async function fetchSpeciesFormInto(id: string): Promise<void> {
-  const file = join(RAW, "pokemon-species", `${id}.json`);
-  if (existsSync(file)) return;
-  const url = `${API}/pokemon-form/${id}`;
-  const res = await fetch(url);
+async function fetchCached<T>(category: string, name: string): Promise<T | null> {
+  const file = join(RAW, category, `${name}.json`);
+  if (existsSync(file)) {
+    try {
+      return JSON.parse(readFileSync(file, "utf8")) as T;
+    } catch {
+      return null;
+    }
+  }
+  const res = await fetch(`${API}/${category}/${name}`);
   if (!res.ok) {
-    console.warn(`[fetch] skip pokemon-form/${id} (species form, ${res.status})`);
-    return;
+    console.warn(`[fetch] skip ${category}/${name} (distinct-forms, ${res.status})`);
+    return null;
   }
-  const form = (await res.json()) as { form_names?: unknown };
-  const names = Array.isArray(form.form_names) ? form.form_names : [];
-  // form_names が空なら raw を書かない（existsSync ガードで空キャッシュが固定化し再取得不能になるのを避ける・
-  // 将来 SPECIES_FORMS に form_names 欠落フォームを足したとき retry 可能に保つ）。
-  if (names.length === 0) {
-    console.warn(`[fetch] skip pokemon-form/${id} (no form_names)`);
-    return;
-  }
+  const json = (await res.json()) as T;
   mkdirSync(dirname(file), { recursive: true });
-  // form_names を names 欄として合成（materialize の species 経路が extractNames で拾う）。
-  writeFileSync(file, `${JSON.stringify({ names }, null, 2)}\n`);
+  writeFileSync(file, `${JSON.stringify(json, null, 2)}\n`);
   await sleep(50);
-  console.log(`[fetch] pokemon-species/${id} (form_names as names)`);
+  return json;
+}
+
+/** PokeAPI `pokemon` 詳細を distinct 判定用の構造スナップショット（types 列 + baseStats 6 値）へ畳む。 */
+const toShape = (p: PokemonDetail): FormShape => ({
+  types: p.types.map((t) => t.type.name),
+  baseStats: p.stats.map((s) => s.base_stat),
+});
+
+/** 合成名を `{ names: [ja-Hrkt, en] }` として species raw へ書く（`materialize` の species 経路が透過的に拾う）。 */
+const writeComposedNames = (id: string, ja: string, en: string): void => {
+  const file = join(RAW, "pokemon-species", `${id}.json`);
+  const names: LangName[] = [
+    { name: ja, language: { name: "ja-Hrkt" } },
+    { name: en, language: { name: "en" } },
+  ];
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(file, `${JSON.stringify({ names }, null, 2)}\n`);
+};
+
+/** distinct-forms の決定記録 manifest を raw へ書く（`pokeapi-names.yml` が PR レビュー表に整形する）。 */
+const writeDistinctManifest = (decisions: FormDecision[]): void => {
+  const file = join(RAW, "distinct-forms.json");
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(file, `${JSON.stringify(decisions, null, 2)}\n`);
+};
+
+/** distinct 根拠の説明（PR レビュー表用）。FORM_INCLUDE は同型・同種族値ゆえ type/stat 差では説明できない。 */
+const distinctBasis = (base: FormShape, form: FormShape, forced: boolean): string => {
+  if (forced) return "FORM_INCLUDE (same type/stat)";
+  const parts: string[] = [];
+  if (base.types.join() !== form.types.join()) parts.push("type");
+  if (base.baseStats.join() !== form.baseStats.join()) parts.push("stat");
+  return parts.join("+");
+};
+
+/**
+ * distinct-forms 列挙（plan 11 P4・`SPECIES_FORMS` whitelist を置換）。各 `pokemon-species` の varieties を辿り、base
+ * （default variety）と**タイプ or 種族値が異なる** variety を採用（`isDistinctForm` + `FORM_INCLUDE`）、canonical id
+ * （PokeAPI slug・default の bare→explicit 再キーは `CANONICAL_ID_OVERRIDE`）でキーイングして含有合成した ja/en を
+ * species raw へ書く。純装飾（同型・同種族値）と `-mega`/`-gmax`/`-primal`/`-totem`/`-starter` は除外。既に ja/en 完備の
+ * form は skip（差分・冪等）。決定記録は manifest に残し PR レビュー表へ供する。
+ */
+async function fetchDistinctForms(speciesIds: string[], speciesMap: LangMap): Promise<void> {
+  const baseNames = new Map<string, { ja?: string; en?: string }>();
+  const decisions: FormDecision[] = [];
+  for (const speciesId of speciesIds) {
+    const detail = await fetchCached<SpeciesDetail>("pokemon-species", speciesId);
+    const varieties = detail?.varieties ?? [];
+    if (varieties.length <= 1) continue; // 単一 variety は form 無し（大多数の種）
+    baseNames.set(speciesId, extractNames({ names: detail?.names }));
+    // 採用候補（除外パターン外）を key へ写し、既に ja/en 完備なものを落とす（未処理があるときだけ network を叩く）。
+    const pending: { slug: string; key: string; isDefault: boolean }[] = [];
+    for (const v of varieties) {
+      const slug = v.pokemon.name;
+      if (EXCLUDED_FORM.test(slug)) continue;
+      let key: string;
+      if (v.is_default) {
+        if (slug === speciesId) {
+          const ov = CANONICAL_ID_OVERRIDE[slug];
+          if (ov === undefined) continue; // bare default は base 種族名で足りる
+          key = ov; // gimmighoul → gimmighoul-chest（canonical-override）
+        } else {
+          key = slug; // explicit default slug（basculegion-male / deoxys-normal / urshifu-single-strike）
+        }
+      } else {
+        key = slug;
+      }
+      const cur = speciesMap[key] ?? {};
+      if (cur.ja && cur.en) continue; // 既に命名済み（差分・冪等）
+      pending.push({ slug, key, isDefault: v.is_default });
+    }
+    if (pending.length === 0) continue;
+    const defaultV = varieties.find((v) => v.is_default);
+    const basePoke = defaultV
+      ? await fetchCached<PokemonDetail>("pokemon", defaultV.pokemon.name)
+      : null;
+    if (basePoke === null) continue;
+    const baseShape = toShape(basePoke);
+    // 兄弟間の純装飾（同型・同種族値の色 / 模様違い）を畳む署名集合。base と type/stat が違っても互いに同型・同種族値な
+    // 非デフォルト variety 群（minior の 7 色コア等）は 1 代表だけ採用する（cosmetic-color の膨張を機械的に抑える・P4）。
+    const seenShapes = new Set<string>();
+    for (const p of pending) {
+      // default variety の form / types-stats は base（default poke）から、non-default は自身の詳細から取る。
+      let poke = basePoke;
+      let forced = false;
+      let basis: string;
+      if (p.isDefault) {
+        // explicit default / canonical-override は無条件採用（その種の canonical 形態）。
+        basis = "canonical form";
+      } else {
+        const varPoke = await fetchCached<PokemonDetail>("pokemon", p.slug);
+        if (varPoke === null) continue;
+        poke = varPoke;
+        const shape = toShape(varPoke);
+        forced = FORM_INCLUDE.has(p.slug);
+        if (!isDistinctForm(baseShape, shape) && !forced) continue; // 純装飾（base と同型・同種族値）は除外
+        const sig = `${shape.types.join(",")}|${shape.baseStats.join(",")}`;
+        if (seenShapes.has(sig) && !forced) continue; // 兄弟間の純装飾（先着の 1 代表のみ採用）
+        seenShapes.add(sig);
+        basis = distinctBasis(baseShape, shape, forced);
+      }
+      const formSlug = poke.forms[0]?.name ?? p.slug;
+      const formDetail = await fetchCached<FormDetail>("pokemon-form", formSlug);
+      const form = extractNames({ names: formDetail?.form_names });
+      const formJa = form.ja ?? "";
+      const formEn = form.en ?? "";
+      const baseId = deriveBaseId(p.key, speciesIds) ?? speciesId;
+      const bn = baseNames.get(baseId) ?? {};
+      const composedJa = composeFormName(bn.ja ?? "", formJa, JA_BRACKETS);
+      const composedEn = composeFormName(bn.en ?? "", formEn, EN_BRACKETS);
+      const override = MANUAL_NAME_OVERRIDE[p.key] ?? {};
+      const ja = override.ja ?? composedJa;
+      const en = override.en ?? composedEn;
+      const decision: FormDecision["decision"] =
+        p.key in MANUAL_NAME_OVERRIDE
+          ? "manual"
+          : p.isDefault && p.key !== p.slug
+            ? "canonical-override"
+            : formJa.length > 0 && bn.ja !== undefined && formJa.includes(bn.ja)
+              ? "passthrough"
+              : "compose";
+      writeComposedNames(p.key, ja, en);
+      decisions.push({ id: p.key, en, ja, decision, basis });
+      console.log(`[fetch] distinct-form ${p.key} (${decision}: ${ja} / ${en})`);
+    }
+  }
+  writeDistinctManifest(decisions);
 }
 
 /** ja / en の少なくとも一方を欠くか（全 5 種とも languages を ja/en 完備の全件辞書にするため PokeAPI から両取り）。 */
@@ -224,6 +401,7 @@ const DATASETS: {
 ];
 
 async function main(): Promise<void> {
+  let speciesIds: string[] = [];
   for (const ds of DATASETS) {
     const map = readLangMap(ds.file, ds.mapKey);
     // items は item-category whitelist の union で列挙し union manifest を残す（sync:ja-names が剪定に使う・issue #213）。
@@ -234,16 +412,16 @@ async function main(): Promise<void> {
       : await listAllIds(ds.list);
     // mega は全 form slug（count fail-fast は listAllIds で維持）を mega 候補へ絞ってから取得する（ADR 0043）。
     const ids = ds.filterIds ? ds.filterIds(listed) : listed;
+    if (ds.mapKey === "species") speciesIds = ids; // distinct-forms 列挙の母集合に再利用
     if (ds.listCategories) writeItemUnionManifest(ids);
     for (const id of ids) {
       if (needsJaEn(map[id] ?? {})) await fetchNamesInto(ds.category, id);
     }
   }
-  // pokeform 固有フォーム（pokemon-species list 外）は pokemon-form の form_names から species raw へ合成する（P3）。
+  // distinct-forms（タイプ / 種族値が base と異なる全 form）を pokemon-species → varieties から機械列挙して
+  // 含有合成した ja/en を species raw へ書く（`SPECIES_FORMS` whitelist を廃止・plan 11 P4）。
   const speciesMap = readLangMap("species.yaml", "species");
-  for (const id of SPECIES_FORMS) {
-    if (needsJaEn(speciesMap[id] ?? {})) await fetchSpeciesFormInto(id);
-  }
+  await fetchDistinctForms(speciesIds, speciesMap);
   console.log("[fetch] done (names)");
 }
 

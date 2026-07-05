@@ -6,6 +6,10 @@
  * pokemon-showdown 経路（`src/codegen/showdown/*`）へ移管した。本ファイルは **名前 SoT（`languages/*.yaml`）** の
  * ja/en を PokeAPI `names` から補完する材料だけを持つ（全件名辞書・ADR 0041・[[data-pipeline]]）。skill 著述値は
  * `planFields` で「既存尊重・上書きしない」（未設定のみ fill・差分は conflict 報告）。
+ *
+ * **distinct-forms 名前生成**（plan 11 P4）: タイプ / 種族値が base と異なる form の ja/en を含有判定合成する純関数
+ * （`composeFormName` / `isDistinctForm` / `deriveBaseId`）も持つ。IO（varieties の列挙・raw 書き込み）は
+ * `scripts/fetch-pokeapi.ts`（coverage 除外）が担い、判断分岐を持つ純関数を本ファイル（カバレッジ 100%）へ寄せる。
  */
 import { type Document, isMap, YAMLMap } from "yaml";
 
@@ -134,6 +138,68 @@ export function getOrCreateBlockMap(doc: Document, mapKey: string): YAMLMap {
   map.flow = false;
   doc.set(mapKey, map);
   return map;
+}
+
+/**
+ * distinct-forms 名前合成の括弧スタイル（`composeFormName` の `brackets` 引数）。ja は全角「（）」・en は半角 " ()"
+ * を対称に渡す（plan 11 P4・[[data-pipeline]]）。open 側に en の前置スペースを含めて ja/en を同一関数へ寄せる。
+ */
+export const JA_BRACKETS: readonly [string, string] = ["（", "）"];
+export const EN_BRACKETS: readonly [string, string] = [" (", ")"];
+
+/**
+ * form 名の**含有判定合成**（distinct-forms・plan 11 P4）。`form_names` が base 種族名を**含む**ならそのまま採用
+ * （改名フォルム `ヒートロトム` / `ウォッシュロトム` / `サトシゲッコウガ` はアイデンティティを内包する）、**含まない**なら
+ * `base名（formName）`（ja）/ `base名 (formName)`（en）で合成する（`ザシアン（けんのおう）` / `Raichu (Alolan Form)`）。
+ * 合成側は必ず base 名を先頭に置くためアイデンティティを誤らない。`formName` 空（`greninja-battle-bond` の form_names
+ * 欠落等）は base 名のみを返す（呼び出し側が `MANUAL_NAME_OVERRIDE` で最終名を与える）。ja/en は `brackets` の差だけで
+ * 同一ロジックに載る（`JA_BRACKETS` / `EN_BRACKETS`）。
+ */
+export function composeFormName(
+  baseName: string,
+  formName: string,
+  brackets: readonly [string, string],
+): string {
+  if (formName.length === 0) return baseName;
+  if (formName.includes(baseName)) return formName;
+  return `${baseName}${brackets[0]}${formName}${brackets[1]}`;
+}
+
+/** distinct 判定に使う form の構造スナップショット（タイプ列と種族値 6 値・PokeAPI の並び順のまま）。 */
+export interface FormShape {
+  types: string[];
+  baseStats: number[];
+}
+
+const arraysEqual = <T>(a: readonly T[], b: readonly T[]): boolean =>
+  a.length === b.length && a.every((x, i) => x === b[i]);
+
+/**
+ * base と form が**タイプ or 種族値で異なるか**（distinct フィルタ述語・plan 11 P4）。純装飾フォルム（同型・同種族値の
+ * vivillon 模様 / alcremie / minior 色）は false（除外）、リージョン / フォルム差（type/stat が動く）は true（採用）。
+ * PokeAPI の並び（types の slot 順 / stats の hp..speed 順）をそのまま順序比較する（並びが動けば別形態とみなす）。
+ * 同ステータスでも別種族にしたい form（`greninja-battle-bond`）は呼び出し側 `FORM_INCLUDE` で別途拾う。
+ */
+export function isDistinctForm(base: FormShape, form: FormShape): boolean {
+  return !arraysEqual(base.types, form.types) || !arraysEqual(base.baseStats, form.baseStats);
+}
+
+/**
+ * form id → base 種族 id を**最長 base-slug 前置一致**で導く（plan 11 P4）。`baseSlugs`（`pokemon-species` の全 id）の
+ * うち `formId` に完全一致するか `<slug>-` で前置一致するものの中から最長を採る。`raichu-alola`→`raichu` /
+ * `tauros-paldea-combat-breed`→`tauros` / `mr-mime-galar`→`mr-mime`（`mr` より長い前置を優先）。該当なしは undefined。
+ */
+export function deriveBaseId(formId: string, baseSlugs: Iterable<string>): string | undefined {
+  let best: string | undefined;
+  for (const slug of baseSlugs) {
+    if (
+      (formId === slug || formId.startsWith(`${slug}-`)) &&
+      (best === undefined || slug.length > best.length)
+    ) {
+      best = slug;
+    }
+  }
+  return best;
 }
 
 /** 転記計画: 未設定フィールドは fill・既存と raw が食い違うフィールドは conflict（上書きしない）。 */

@@ -89,15 +89,16 @@ PokeAPI 由来で埋まらなかった手作業カバー箇所（メガストー
 **block スタイル**（`check:yaml-style` 通過・flow 禁止・[[data-pipeline]]）で ja/en を書き足して commit する（既存値は
 上書きしない＝ append/既存尊重を手作業でも守る）。追加後 `pnpm generate:data` → `pnpm verify` で緑を確認する。
 
-### 4. `data/` 完全削除からの復元（scaffold 不要・plan 11 P2/P3）
+### 4. `data/` 完全削除からの復元（scaffold 不要・plan 11 P2/P4）
 
 `data/languages/` が無い状態からでも **scaffold / seed は不要**。`sync:ja-names`（`materialize.ts`）が欠損ファイル /
 null map を block `YAMLMap` 新規作成で埋め（純関数 `getOrCreateBlockMap`）、`fetch:ja-names` の `readLangMap` も
 欠損を空マップ扱いで吸収する。よって手順 1 の workflow（または ローカル `fetch:ja-names` → `sync:ja-names`）を
 **そのまま回すだけ**で 6 ファイル（`species` 〜 `types` + `mega`・`pokemon-form` form_names 経路・ADR 0043）が全件で
-埋まる。pokeform 固有フォーム（`rotom-wash` 等・`pokemon-species` 外）は `fetch-pokeapi.ts` の `SPECIES_FORMS`
-whitelist が `pokemon-form` から取得して species raw へ合成する（P3・[[data-pipeline]]）。`rules.yaml` /
-`type-specs.yaml`（`data/champions`）は本 skill の対象外の静的コミットで、削除時は別途手作業復元する（[[data-pipeline]]）。
+埋まる。distinct-forms（`rotom-wash` / `raichu-alola` / `basculegion-female` 等・`pokemon-species` list に個別 id が
+無いタイプ / 種族値差のある form）は `fetch-pokeapi.ts` の `fetchDistinctForms` が varieties を辿って含有判定合成し
+species raw へ合成する（P4・[[data-pipeline]]）。`rules.yaml` / `type-specs.yaml`（`data/champions`）は本 skill の
+対象外の静的コミットで、削除時は別途手作業復元する（[[data-pipeline]]）。
 
 ### 5. generate:data / verify で緑を確認する（委譲）
 
@@ -107,11 +108,12 @@ whitelist が `pokemon-form` から取得して species raw へ合成する（P3
 
 ## Gotchas
 
-- **from-scratch 復元は scaffold/seed 不要・generate を先に**（plan 11 P1/P2/P3）: `data/languages/*` を完全削除
-  しても `sync:ja-names` が欠損ファイルから block map を新規作成し（`getOrCreateBlockMap`）、固有フォーム
-  （`rotom-wash` 等）は `SPECIES_FORMS` whitelist が `pokemon-form` から取得する。workflow は **`generate:data` を
-  `check:yaml-style` の前**に走らせる（`check:yaml-style` は CLI 経由で `src/generated/languages/*.ts` を import
-  するため、生成 ts 撤去状態では generate を先にしないと起動不可）。詳細は [[data-pipeline]]。
+- **from-scratch 復元は scaffold/seed 不要・generate を先に**（plan 11 P1/P2/P4）: `data/languages/*` を完全削除
+  しても `sync:ja-names` が欠損ファイルから block map を新規作成し（`getOrCreateBlockMap`）、distinct-forms
+  （`rotom-wash` / `basculegion-female` 等）は `fetchDistinctForms` が varieties から含有判定合成する。workflow は
+  **`generate:data` を `check:yaml-style` の前**に走らせる（`check:yaml-style` は CLI 経由で
+  `src/generated/languages/*.ts` を import するため、生成 ts 撤去状態では generate を先にしないと起動不可）。詳細は
+  [[data-pipeline]]。
 - **責務は reg 非依存の名前辞書のみ**: 本 skill は名前 SoT（languages）の全件名（ja/en）だけを担う。構造データ
   （種族値 / タイプ / 特性 id / 図鑑番号 / category）と en の正は **pokemon-showdown 経路**（`showdown:*`）、
   Champions 解禁（roster / 技 / メガ**構造 + linking**）は Serebii 速報 / showdown 経路の責務（[[data-pipeline]]）。
@@ -127,10 +129,10 @@ whitelist が `pokemon-form` から取得して species raw へ合成する（P3
   `is_main_series:false` / Legends Arceus 未ローカライズ球 `la*-ball` / 未ローカライズ新特性 等）は `NameEntry` の
   ja/en 必須と衝突するため **append せず skip**（推測 ja を発明しない = data 信頼性を守る・`sync:ja-names` は
   `skippedCount` を warn で可視化する）。spec が参照して ja が要る id だけ手作業 ja で補う。
-- **「全件」の基準は PokeAPI list 列挙**（items を除く）: 全件辞書の母集合は PokeAPI の list endpoint 列挙で、
-  pokeform 固有フォーム（`rotom-wash` 等・PokeAPI `pokemon-species` の外）は対象外。live count（例 species 1025）と
-  languages 件数（1026）が僅差になりうるのは仕様どおりで、「壊れたデータ」ではない（`★XxxNNN` 等の未翻訳カタログ
-  コードも PokeAPI の実データで正）。**`items` の母集合は list 全件でなく item-category whitelist の union**（対戦
+- **「全件」の基準は PokeAPI list 列挙 + distinct-forms**（items を除く）: 全件辞書の母集合は PokeAPI の list endpoint
+  列挙に加え、各 species の varieties から機械列挙した distinct-forms（`rotom-wash` / `basculegion-female` 等・タイプ /
+  種族値が base と異なる form・P4）を含む。live count（例 species 1025）と languages 件数（distinct-forms 約87件を足して
+  1100 超）が食い違うのは仕様どおりで、「壊れたデータ」ではない（`★XxxNNN` 等の未翻訳カタログコードも PokeAPI の実データで正）。**`items` の母集合は list 全件でなく item-category whitelist の union**（対戦
   持ち物 ~270 件・ADR 0042）で、ボール / 回復薬 / TM / 料理素材等が意図的に落ちるのは仕様どおり（whitelist カテゴリの
   正本は [[data-pipeline]]）。
 - **全件辞書は superset を許容**: languages は spec を持たない未解禁名（orphan）も持つ（reg 非依存の全件辞書・
