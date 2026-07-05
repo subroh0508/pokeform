@@ -1,12 +1,3 @@
 # data/champions/m-a/species.yaml — 解禁 base 種族 roster（id 列挙）。
+# フル再取得のため reset（showdown-sync が authoritative で全量投入する）。
 species:
-  - charizard
-  - starmie
-  - gengar
-  - garchomp
-  - dragapult
-  - dragonite
-  - hydreigon
-  - tyranitar
-  - lucario
-  - rotom-wash
