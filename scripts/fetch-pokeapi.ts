@@ -170,9 +170,16 @@ async function fetchSpeciesFormInto(id: string): Promise<void> {
     return;
   }
   const form = (await res.json()) as { form_names?: unknown };
+  const names = Array.isArray(form.form_names) ? form.form_names : [];
+  // form_names が空なら raw を書かない（existsSync ガードで空キャッシュが固定化し再取得不能になるのを避ける・
+  // 将来 SPECIES_FORMS に form_names 欠落フォームを足したとき retry 可能に保つ）。
+  if (names.length === 0) {
+    console.warn(`[fetch] skip pokemon-form/${id} (no form_names)`);
+    return;
+  }
   mkdirSync(dirname(file), { recursive: true });
   // form_names を names 欄として合成（materialize の species 経路が extractNames で拾う）。
-  writeFileSync(file, `${JSON.stringify({ names: form.form_names ?? [] }, null, 2)}\n`);
+  writeFileSync(file, `${JSON.stringify({ names }, null, 2)}\n`);
   await sleep(50);
   console.log(`[fetch] pokemon-species/${id} (form_names as names)`);
 }
