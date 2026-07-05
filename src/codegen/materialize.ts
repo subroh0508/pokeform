@@ -7,6 +7,7 @@
  * ja/en を PokeAPI `names` から補完する材料だけを持つ（全件名辞書・ADR 0041・[[data-pipeline]]）。skill 著述値は
  * `planFields` で「既存尊重・上書きしない」（未設定のみ fill・差分は conflict 報告）。
  */
+import { type Document, isMap, YAMLMap } from "yaml";
 
 /** PokeAPI の多言語名エントリ（`names` / `form_names` 共通の要素形）。 */
 interface LangName {
@@ -112,6 +113,27 @@ export function pruneToKeep(
     else removed.push(id);
   }
   return { kept, removed };
+}
+
+/**
+ * `doc` の `mapKey` 直下の YAMLMap を **取得（無ければ block スタイルで新規作成して set）** する。
+ * from-scratch 復元（`data/languages/*.yaml` 完全削除）で `sync:ja-names` が scaffold / seed 無しに動くための耐性化
+ * （plan 11 P2）。空 block map は YAML 構文上表現できず、`mapKey:`（null）は `doc.get` が undefined を返し
+ * `map.get` で crash、`mapKey: {}`（flow）は追記後も flow のまま残り `check:yaml-style` に弾かれる。そこで
+ * **null / undefined / 非 map のときは `flow=false` の空 YAMLMap を新規作成**して以降の append が block で載るようにする。
+ * 既存が map なら（過去に flow で書かれていても）`flow=false` を強制して block へ寄せる。IO（ファイル存在チェック /
+ * doc 生成）は呼び出し側（`scripts/materialize.ts`）が持ち、本関数は doc 上の map ノード確保だけを純粋に行う。
+ */
+export function getOrCreateBlockMap(doc: Document, mapKey: string): YAMLMap {
+  const existing = doc.get(mapKey);
+  if (isMap(existing)) {
+    existing.flow = false;
+    return existing;
+  }
+  const map = new YAMLMap();
+  map.flow = false;
+  doc.set(mapKey, map);
+  return map;
 }
 
 /** 転記計画: 未設定フィールドは fill・既存と raw が食い違うフィールドは conflict（上書きしない）。 */

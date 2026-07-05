@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
+import { parseDocument } from "yaml";
 import {
   extractEnName,
   extractJaName,
   extractMegaNames,
   extractNames,
+  getOrCreateBlockMap,
   megaFormCandidates,
   planFields,
   pruneToKeep,
@@ -175,5 +177,45 @@ describe("pruneToKeep", () => {
 
   it("removes everything when the whitelist is empty", () => {
     expect(pruneToKeep(["a", "b"], [])).toEqual({ kept: [], removed: ["a", "b"] });
+  });
+});
+
+describe("getOrCreateBlockMap", () => {
+  it("returns the existing map and appended entries serialize as block style", () => {
+    const doc = parseDocument("species:\n  garchomp:\n    ja: ガブリアス\n    en: Garchomp\n");
+    const map = getOrCreateBlockMap(doc, "species");
+    expect(map.get("garchomp")).toBeDefined();
+    map.set(doc.createNode("dragonite"), doc.createNode({ ja: "カイリュー", en: "Dragonite" }));
+    const out = doc.toString();
+    expect(out).toContain("  dragonite:");
+    expect(out).not.toContain("{"); // flow を混ぜない（check:yaml-style 通過）
+  });
+
+  it("creates a block map when the key is null (`mapKey:`) and appends without crashing", () => {
+    const doc = parseDocument("species:\n"); // 値が無い = doc.get は undefined
+    const map = getOrCreateBlockMap(doc, "species");
+    map.set(doc.createNode("garchomp"), doc.createNode({ ja: "ガブリアス", en: "Garchomp" }));
+    const out = doc.toString();
+    expect(out).toContain("species:");
+    expect(out).toContain("  garchomp:");
+    expect(out).not.toContain("{");
+  });
+
+  it("creates the key as a block map when absent entirely (missing-file doc)", () => {
+    const doc = parseDocument("# data/languages/species.yaml — header only\n");
+    const map = getOrCreateBlockMap(doc, "species");
+    map.set(doc.createNode("garchomp"), doc.createNode({ ja: "ガブリアス", en: "Garchomp" }));
+    const out = doc.toString();
+    expect(out).toContain("# data/languages/species.yaml"); // 先頭コメントを保持
+    expect(out).toContain("species:");
+    expect(out).toContain("  garchomp:");
+    expect(out).not.toContain("{");
+  });
+
+  it("forces an existing flow map to block style", () => {
+    const doc = parseDocument("species: {}\n"); // flow empty map
+    const map = getOrCreateBlockMap(doc, "species");
+    map.set(doc.createNode("garchomp"), doc.createNode({ ja: "ガブリアス", en: "Garchomp" }));
+    expect(doc.toString()).not.toContain("{");
   });
 });

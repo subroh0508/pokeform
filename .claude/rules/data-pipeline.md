@@ -47,8 +47,14 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
 - **PokeAPI が ja を持たない id は捏造せず skip する**: list に含まれても ja 未収録の id（GO 専用特性
   `is_main_series:false` / Legends Arceus 未ローカライズ球 `la*-ball` / 未ローカライズ新特性 等）は、`NameEntry` の
   ja/en 必須と衝突するため **append せず skip**（推測 ja を発明しない = data 信頼性を守る）。spec が参照する id で
-  ja が要るなら手作業 ja で補う。「全件辞書」の**基準は PokeAPI list 列挙**で、pokeform 固有フォーム（`rotom-wash`
-  等・PokeAPI `pokemon-species` の外）は対象外ゆえ live count と languages 件数が僅差になりうる（仕様どおり）。
+  ja が要るなら手作業 ja で補う。「全件辞書」の**基準は PokeAPI list 列挙**で、live count と languages 件数が僅差に
+  なりうる（仕様どおり）。
+- **pokeform 固有フォーム（`pokemon-species` list 外の species id）は `pokemon-form` から取る**（`fetch-pokeapi.ts`
+  の `SPECIES_FORMS` curated whitelist・`ITEM_CATEGORIES` と同型・plan 11 P3）: `rotom-wash` 等は `pokemon-species`
+  列挙で拾えず species 名が空になり `generate` が `no name entry` で fail する。これらは `pokemon-form/{id}` の
+  `form_names`（ja-Hrkt / en）を取得し **`{ names: form_names }` として species raw へ合成**して `materialize` の
+  species 経路（`extractNames`）が透過的に拾う。差分運用（spec が参照する固有フォーム id が出るたび whitelist に
+  追加・先回りで全フォーム列挙しない）。
 - **名前の取得元分担**（languages 各ファイルの ja/en をどこから埋めるか）:
 
   | languages ファイル | 取得元 | 担当 |
@@ -83,8 +89,13 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
   - **mega-stones**: ストーン名（`garchompite` 等・`-ite` 語源）が items.yaml に入り、メガ種名（`garchomp-mega` 等・
     `-mega` 語源）を持つ `mega.yaml` とは id が衝突しない（別レイヤ・ストーン=持ち物 / mega.yaml=メガ種）。
 
-- **scaffold 責務**: `data/languages/*.yaml` の空骨格（`mega.yaml` 含む 6 ファイル）の scaffold は `author-static-data`
-  skill が担う（`data/` 完全削除からの復元時）。以降 `species`〜`types` は workflow が全件で満たし、`mega` は手入力。
+- **scaffold 不要（materialize 耐性化・plan 11 P2）**: `data/languages/*.yaml` が完全削除されていても
+  `sync:ja-names`（`materialize.ts`）が **欠損ファイル / null map を block `YAMLMap` 新規作成**して埋める
+  （純関数 `getOrCreateBlockMap`・`src/codegen/materialize.ts`・カバレッジ100%）。空 block map は YAML 構文上
+  表現できないため以前は seed / 空マップ scaffold が必要だったが、耐性化で `author-static-data` の scaffold 手順は
+  不要になった。`fetch-pokeapi.ts` の `readLangMap` も欠損ファイルを空マップ扱いで吸収する。**workflow は
+  `generate:data` を `check:yaml-style` の前に走らせる**（`check:yaml-style` が CLI 経由で `src/generated/languages/*.ts`
+  を import するため、生成 ts 撤去状態では generate を先にしないと CLI 起動不可・plan 11 P1）。
 - **自動化対象外の静的コミット**: `data/champions/rules.yaml`（能力ポイント定数）/ `type-specs.yaml`（タイプ相性表）は
   変更頻度が極小で、いずれの skill / workflow も自動更新しない（必要時のみ AI への直接指示で手編集）。`generate` の
   前提としてコミット済みで存在し、`data/` を完全削除した場合はこの 2 ファイルのみ手作業で復元する。
