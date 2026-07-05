@@ -804,3 +804,18 @@ items:
   zap-plate:
     ja: いかずちプレート
     en: Zap Plate
+  enigma-berry:
+    ja: ナゾのみ
+    en: Enigma Berry
+  jaboca-berry:
+    ja: ジャポのみ
+    en: Jaboca Berry
+  kee-berry:
+    ja: アッキのみ
+    en: Kee Berry
+  maranga-berry:
+    ja: タラプのみ
+    en: Maranga Berry
+  rowap-berry:
+    ja: レンブのみ
+    en: Rowap Berry

@@ -1878,6 +1878,41 @@ export const itemNames = {
       ja: "いかずちプレート",
     },
   },
+  "enigma-berry": {
+    id: "enigma-berry",
+    name: {
+      en: "Enigma Berry",
+      ja: "ナゾのみ",
+    },
+  },
+  "jaboca-berry": {
+    id: "jaboca-berry",
+    name: {
+      en: "Jaboca Berry",
+      ja: "ジャポのみ",
+    },
+  },
+  "kee-berry": {
+    id: "kee-berry",
+    name: {
+      en: "Kee Berry",
+      ja: "アッキのみ",
+    },
+  },
+  "maranga-berry": {
+    id: "maranga-berry",
+    name: {
+      en: "Maranga Berry",
+      ja: "タラプのみ",
+    },
+  },
+  "rowap-berry": {
+    id: "rowap-berry",
+    name: {
+      en: "Rowap Berry",
+      ja: "レンブのみ",
+    },
+  },
 } as const satisfies Record<string, NameEntry>;
 
 export type ItemNames = typeof itemNames;

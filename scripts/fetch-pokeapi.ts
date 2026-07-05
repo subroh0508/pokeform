@@ -50,6 +50,10 @@ const ITEM_CATEGORIES = [
   // issue #213 の除外リストは概念上の「medicine（薬）」を指しており PokeAPI の `medicine` カテゴリ実体と食い違う。
   // 受け入れ基準（オボンのみが残る）と既存個体（lum-berry を持つ）を満たすには本カテゴリの木の実を残す必要があるため含める。
   "medicine",
+  // `other` は現状 5 件すべてが対戦で持たせる木の実（enigma / jaboca / rowap / kee / maranga-berry = 効果反射・
+  // 被弾時能力上昇・こうかばつぐん回復）ゆえ含める。カテゴリ名は catch-all だが実体はこの 5 件（PokeAPI 変更時は
+  // 各 cat 404 + union 空の fail-fast ではなく人手レビューで drift を見る想定・ADR 0042 のカテゴリ改廃留意点）。
+  "other",
 ] as const;
 
 /** data/languages/<file> の名前マップ（`{ <mapKey>: { id → { ja?, en? } } }`）を読む。 */

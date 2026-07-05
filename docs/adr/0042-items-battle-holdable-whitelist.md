@@ -34,8 +34,10 @@ generate は superset 判定）は正しく、本 ADR でも不変**である。
 表す item-category whitelist の union で列挙する。他 4 種（species / moves / abilities / types）は list endpoint 全件の
 まま（変更しない）。**
 
-- **whitelist は category ベース**（属性ベースは上記理由で不採用）。対象カテゴリ・除外カテゴリの正本は
-  [[data-pipeline]] に置く。判断基準は「持って対戦効果があるか」で、**reg 解禁 legality（per-reg・別軸）とは切り離す**
+- **whitelist は category ベース**（属性ベースは上記理由で不採用）。**対象カテゴリの列挙 SoT は
+  `scripts/fetch-pokeapi.ts` の `ITEM_CATEGORIES` 定数**（コード 1 箇所・機械ゲート対象）で、カテゴリの意味・
+  非自明カテゴリ（`medicine` / `other`）の注意・除外方針は [[data-pipeline]] が持つ（列挙を二重管理しない）。
+  判断基準は「持って対戦効果があるか」で、**reg 解禁 legality（per-reg・別軸）とは切り離す**
   （whitelist は reg で切らない・ADR 0041 の reg 非依存の性質は維持）。
 - **取得と剪定**: `scripts/fetch-pokeapi.ts` が各 `/item-category/{cat}` を fetch して union を作り
   （**各 cat が 404 でないこと + union が空でないことを fail-fast**・category endpoint は count/limit ページングを
@@ -66,7 +68,8 @@ ADR 0041 は中核決定が生きているため **Accepted のまま**（supers
   - PokeAPI の `medicine` カテゴリは概念上の「薬（ポーション類）」ではなく**持ち物として持たせる木の実 10 件**
     （オボンのみ / ラムのみ / オレンのみ / 状態異常回復の木の実）で、ポーション類は `healing` カテゴリに別在する。
     受け入れ基準（オボンのみが残る）と既存個体（lum-berry を持つ）を満たすため `medicine` を whitelist に含める。
-    カテゴリ名の額面と実体の乖離に注意（正本の対象カテゴリ一覧は [[data-pipeline]]）。
+    同様に `other`（catch-all 名だが実体は enigma / jaboca / rowap / kee / maranga-berry の対戦木の実）も含める。
+    カテゴリ名の額面と実体が乖離するため、内容の妥当性は生成 PR の `pokemon-data-reviewer` で確認する。
 
 ## Alternatives Considered
 

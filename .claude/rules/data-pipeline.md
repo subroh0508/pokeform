@@ -60,16 +60,20 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
 
 - **items だけ item-category whitelist で絞る**（ADR [0042](../../docs/adr/0042-items-battle-holdable-whitelist.md)）:
   items.yaml は他 4 種と違い list endpoint 全件（2176 件）でなく、**対戦で持たせて意味のある持ち物のカテゴリ union**
-  （~270 件）で列挙する。持てないアイテム（ボール / 回復薬 / TM / 料理素材 / 進化石 / イベント品等）は名前辞書の
+  （~270 件規模）で列挙する。持てないアイテム（ボール / 回復薬 / TM / 料理素材 / 進化石 / イベント品等）は名前辞書の
   ノイズゆえ除外する。**属性（`holdable`）ベースは不採用**（PokeAPI の attribute は古いアイテムにしか付与されず
   assault-vest / booster-energy / mega-stones を取りこぼす）。**category は全 item に付与され堅牢**。判断基準は
   「持って対戦効果があるか」で reg 解禁 legality（per-reg・別軸）では切らない（reg 非依存は維持）。
-  - **whitelist カテゴリ（SoT・`scripts/fetch-pokeapi.ts` の `ITEM_CATEGORIES` と一致）**: `held-items` / `choice` /
-    `bad-held-items` / `type-enhancement` / `species-specific` / `plates` / `type-protection` / `in-a-pinch` /
-    `picky-healing` / `jewels` / `memories` / `mega-stones` / `medicine`。
+  - **whitelist カテゴリの SoT は `scripts/fetch-pokeapi.ts` の `ITEM_CATEGORIES` 定数**（コード 1 箇所に一本化・
+    機械ゲート対象）。本 rule はカテゴリ名を網羅列挙せず、判断基準（上記）と**額面と実体が乖離する非自明カテゴリ**の
+    注意だけを持つ（列挙を二重管理せず drift を避ける）。中核カテゴリは held-items / choice / type-enhancement /
+    plates / type-protection / in-a-pinch / mega-stones 等で、除外は healing / balls / machines / evolution / curry 等。
   - **`medicine` の注意**: PokeAPI の `medicine` カテゴリは概念上の「薬（ポーション類）」ではなく**持ち物として
-    持たせる木の実 10 件**（オボンのみ=sitrus-berry / ラムのみ=lum-berry / オレンのみ=oran-berry / 状態異常回復の
-    木の実）。ポーション類は `healing` カテゴリに別在し除外される。カテゴリ名の額面と実体が乖離する（ADR 0042）。
+    持たせる木の実**（オボンのみ=sitrus-berry / ラムのみ=lum-berry / オレンのみ=oran-berry / 状態異常回復の木の実）。
+    ポーション類は `healing` カテゴリに別在し除外される。カテゴリ名の額面と実体が乖離する（ADR 0042）。
+  - **`other` の注意**: catch-all 名だが実体は対戦で持たせる木の実（enigma / jaboca / rowap / kee / maranga-berry =
+    効果反射・被弾時能力上昇・こうかばつぐん回復）ゆえ含める。将来 PokeAPI が別種を混ぜると silently 入りうるため、
+    生成 PR のデータレビュー（`pokemon-data-reviewer`）で内容を確認する（ADR 0042 のカテゴリ改廃留意点）。
   - **取得 → 剪定フロー**: `fetch:ja-names` が各 `/item-category/{cat}` を fetch して union を作り
     （**各 cat 404 でない + union 空でないを fail-fast**・category endpoint は count/limit ページング無しゆえ件数照合は
     list 用 `listAllIds` のまま維持）、union manifest（`data/raw/item-union.json`）を残す。offline の `sync:ja-names`
