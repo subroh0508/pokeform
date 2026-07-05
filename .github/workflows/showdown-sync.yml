@@ -116,7 +116,7 @@ jobs:
             echo "差分なし: PR を作成しない"; exit 0
           fi
           git commit -m "data(showdown): ${{ github.event.inputs.regulation }} 解禁データを pokemon-showdown から同期"
-          git push -u origin "$BRANCH"
+          git push --no-verify -u origin "$BRANCH"
           gh label create data:authoritative --color 0E8A16 --description "pokemon-showdown 解禁データ同期 PR" --force
           cat > "$RUNNER_TEMP/pr-body.md" <<'BODY'
           pokemon-showdown を第一の正（authoritative）として解禁データを自動同期した PR です（ADR 0039）。

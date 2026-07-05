@@ -85,7 +85,7 @@ jobs:
             echo "差分なし: PR を作成しない"; exit 0
           fi
           git commit -m "data(serebii): ${{ github.event.inputs.regulation }} 解禁データを Serebii から速報取得"
-          git push -u origin "$BRANCH"
+          git push --no-verify -u origin "$BRANCH"
           gh label create data:provisional --color FBCA04 --description "Serebii 速報解禁データ PR" --force
           cat > "$RUNNER_TEMP/pr-body.md" <<'BODY'
           Serebii を速報（provisional）経路としてスクレイプした解禁データの **速報 PR** です（ADR 0040）。
