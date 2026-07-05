@@ -56,5 +56,8 @@
 - P1 は workflow 順序での回避。`check:yaml-style` が `src/cli/index.ts` 経由で generated に依存する eager import
   自体は残る（fresh checkout で generate 前に CLI コマンドを叩くと同様に落ちる）。根本 decouple は将来計画。
 - P3 の whitelist は差分運用（spec が参照する固有フォーム id が出るたび追加）。先回りで全フォーム列挙しない。
+  **（Phase 4 で見直し）**: この `SPECIES_FORMS` 差分運用は [Phase 4](./phase-04-distinct-forms-names.md) で
+  廃止し、タイプ / 種族値が異なる全 form を先回り列挙する distinct-forms 辞書へ置換する（reg 非依存の全件名辞書を
+  form へ拡張・現行 SoT は Phase 4 doc と更新後の [[data-pipeline]] を参照）。
 - 本 phase の PR は languages 復元（機械データ・大 diff）を含む。コード修正部（materialize / fetch / workflow）は
   独立してレビュー可能。データ妥当性は `pokemon-data-reviewer` に委ねる。
