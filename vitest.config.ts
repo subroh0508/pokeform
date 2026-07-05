@@ -15,9 +15,13 @@ export default defineConfig({
         // カバレッジ対象外（[[testing]] の「生成物は明示除外」・配置は data/generated → src/generated）。
         "src/generated/**",
         "src/cli/**",
-        // codegen のトップレベルは薄い配線で除外。判断分岐を持つ純関数を切り出した
-        // `src/codegen/serebii/**`（parse / schema / normalize）は 100% ゲートで網羅する（[[testing]]）。
-        "src/codegen/*.ts",
+        // codegen のトップレベルは薄い配線で個別除外。判断分岐を持つ純関数（serebii/** の parse 等 /
+        // materialize.ts の名前抽出・whitelist union・剪定計画）は 100% ゲートで網羅する（[[testing]]）。
+        // `materialize.ts` は除外せず gate に載せる（除外を狭めて純関数をゲート死角に落とさない）。
+        "src/codegen/normalize.ts",
+        "src/codegen/run-tsc.ts",
+        "src/codegen/emit-individual-ts.ts",
+        "src/codegen/emit-party-ts.ts",
         "src/io/**",
         "src/index.ts",
       ],

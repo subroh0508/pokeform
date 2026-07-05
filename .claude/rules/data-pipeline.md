@@ -23,7 +23,7 @@ adr:
 
 1. **pokemon-showdown = 第一の正（authoritative）**。`smogon/pokemon-showdown` の mod（`champions` / `championsregma`）が解禁・構造・技メタ・メガ・持ち物を一括かつ機械可読に保持し、`calculatePP` 等の Champions 固有仕様まで内包する。構造データ + 解禁データの取得元。GitHub Actions `showdown-sync.yml`（`workflow_dispatch` 手動）で clone → build → 抽出し YAML 更新 PR を自動作成する。
 2. **Serebii = 速報（provisional）**。公式更新の反映が早く、各ページに日本語名を持つ。GitHub Actions `serebii-bulletin.yml`（`workflow_dispatch` 手動）で指定ページ群をスクレイプし `data:provisional` ラベルの速報 PR を立てる。showdown-sync（正）が追いついたら上書きされる暫定値。
-3. **PokeAPI = 名前（全件辞書）**。showdown は ja を持たないため PokeAPI を名前取得に残し、reg 非依存の **全件名辞書**（未解禁含む全 species / items / moves / abilities / types の ja/en）を満たす（ja は `names` ja-Hrkt 優先・en も取得）。list endpoint で全 id を列挙し、GitHub Actions `pokeapi-names.yml`（`workflow_dispatch`・regulation 入力なし＝名前は reg 非依存）で `fetch:ja-names` → `sync:ja-names` → 検証 → `data:names` ラベル PR を自動作成する。構造データ取得は廃止（ADR 0039）。全件辞書化と generate 緩和は ADR 0041。
+3. **PokeAPI = 名前（全件辞書）**。showdown は ja を持たないため PokeAPI を名前取得に残し、reg 非依存の **全件名辞書**（未解禁含む全 species / moves / abilities / types の ja/en）を満たす（ja は `names` ja-Hrkt 優先・en も取得）。list endpoint で全 id を列挙し、GitHub Actions `pokeapi-names.yml`（`workflow_dispatch`・regulation 入力なし＝名前は reg 非依存）で `fetch:ja-names` → `sync:ja-names` → 検証 → `data:names` ラベル PR を自動作成する。**items だけは list 全件でなく item-category whitelist の union で列挙し対戦持ち物 ~270 件に絞る**（下記「全件名辞書」節・ADR 0042）。構造データ取得は廃止（ADR 0039）。全件辞書化と generate 緩和は ADR 0041。
 
 **食い違いの収束**: 速報（Serebii）と正（showdown）が食い違ったら、showdown-sync が追いついた時点で上書きする。showdown PR の正確性は **`verify-showdown-pr` skill が Serebii スクレイパーで機械照合**して裏取りする（公式そのものではない showdown を独立ソースで検証・ADR 0039）。
 
@@ -53,9 +53,35 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
 
   | languages ファイル | 取得元 | 担当 |
   |---|---|---|
-  | `species` / `items` / `moves` / `abilities` / `types`.yaml | **PokeAPI 全件**（ja/en） | `pokeapi-names.yml` / `author-static-data` |
+  | `species` / `moves` / `abilities` / `types`.yaml | **PokeAPI 全件**（list endpoint・ja/en） | `pokeapi-names.yml` / `author-static-data` |
+  | `items.yaml` | **PokeAPI item-category whitelist の union**（ja/en・全件でなく対戦持ち物のみ・ADR 0042） | `pokeapi-names.yml` / `author-static-data` |
   | `mega.yaml` | **en = showdown（`.name`）/ ja = 手作業** | per-reg 取得（`author-regulation-data`）+ 手入力（PokeAPI 非対象） |
   | `regulations.yaml` | **skill 著述**（命名規約・PokeAPI に無い） | `author-regulation-data`（per-reg・ja/en とも著述） |
+
+- **items だけ item-category whitelist で絞る**（ADR [0042](../../docs/adr/0042-items-battle-holdable-whitelist.md)）:
+  items.yaml は他 4 種と違い list endpoint 全件（2176 件）でなく、**対戦で持たせて意味のある持ち物のカテゴリ union**
+  （~270 件規模）で列挙する。持てないアイテム（ボール / 回復薬 / TM / 料理素材 / 進化石 / イベント品等）は名前辞書の
+  ノイズゆえ除外する。**属性（`holdable`）ベースは不採用**（PokeAPI の attribute は古いアイテムにしか付与されず
+  assault-vest / booster-energy / mega-stones を取りこぼす）。**category は全 item に付与され堅牢**。判断基準は
+  「持って対戦効果があるか」で reg 解禁 legality（per-reg・別軸）では切らない（reg 非依存は維持）。
+  - **whitelist カテゴリの SoT は `scripts/fetch-pokeapi.ts` の `ITEM_CATEGORIES` 定数**（コード 1 箇所に一本化・
+    機械ゲート対象）。本 rule はカテゴリ名を網羅列挙せず、判断基準（上記）と**額面と実体が乖離する非自明カテゴリ**の
+    注意だけを持つ（列挙を二重管理せず drift を避ける）。中核カテゴリは held-items / choice / type-enhancement /
+    plates / type-protection / in-a-pinch / mega-stones 等で、除外は healing / balls / machines / evolution / curry 等。
+  - **`medicine` の注意**: PokeAPI の `medicine` カテゴリは概念上の「薬（ポーション類）」ではなく**持ち物として
+    持たせる木の実**（オボンのみ=sitrus-berry / ラムのみ=lum-berry / オレンのみ=oran-berry / 状態異常回復の木の実）。
+    ポーション類は `healing` カテゴリに別在し除外される。カテゴリ名の額面と実体が乖離する（ADR 0042）。
+  - **`other` の注意**: catch-all 名だが実体は対戦で持たせる木の実（enigma / jaboca / rowap / kee / maranga-berry =
+    効果反射・被弾時能力上昇・こうかばつぐん回復）ゆえ含める。将来 PokeAPI が別種を混ぜると silently 入りうるため、
+    生成 PR のデータレビュー（`pokemon-data-reviewer`）で内容を確認する（ADR 0042 のカテゴリ改廃留意点）。
+  - **取得 → 剪定フロー**: `fetch:ja-names` が各 `/item-category/{cat}` を fetch して union を作り
+    （**各 cat 404 でない + union 空でないを fail-fast**・category endpoint は count/limit ページング無しゆえ件数照合は
+    list 用 `listAllIds` のまま維持）、union manifest（`data/raw/item-union.json`）を残す。offline の `sync:ja-names`
+    が manifest を読み **items.yaml を union のみへ剪定**する（純関数 `sortedUnion` / `pruneToKeep` は
+    `src/codegen/materialize.ts`・カバレッジ 100%・剪定の YAML ノード削除は `scripts/materialize.ts`）。generate は
+    superset 判定（ADR 0041）ゆえ剪定後でも orphan 許容で 0 終了する。
+  - **mega-stones**: ストーン名（`garchompite` 等・`-ite` 語源）が items.yaml に入り、メガ種名（`garchomp-mega` 等・
+    `-mega` 語源）を持つ `mega.yaml` とは id が衝突しない（別レイヤ・ストーン=持ち物 / mega.yaml=メガ種）。
 
 - **scaffold 責務**: `data/languages/*.yaml` の空骨格（`mega.yaml` 含む 6 ファイル）の scaffold は `author-static-data`
   skill が担う（`data/` 完全削除からの復元時）。以降 `species`〜`types` は workflow が全件で満たし、`mega` は手入力。
@@ -91,7 +117,7 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
 - **showdown 抽出層** `scripts/showdown/*`（`dex` / `species` / `moves` / `items` / `abilities` / `mega` / `cli`）= showdown ツリーで動く抽出（`../sim/dex` import ゆえ pokeform の `tsconfig.json` `exclude`・typecheck/coverage 非対象）。CI で `pokemon-showdown/tools/` へ copy → `node build` 後に実行し、データセット別の中間 JSON を stdout に出す（`calculatePP` で実 PP=8/12/16/20 を適用済み）。
 - **showdown 転記層** `src/codegen/showdown/*-fields.ts`（純関数 + コロケーション test・カバレッジ 100%）+ `scripts/sync-showdown.ts`（薄い配線・fs/YAML I/O 専任・coverage 除外）= 中間 JSON → `*-specs.yaml` / `<reg>/*` / `languages`(en) へ **append/既存尊重**で転記。`showdown:<dataset> <regId>` で起動。**ja は書かない**（PokeAPI 経路が埋める）。
 - **Serebii 速報層** `src/codegen/serebii/parse-*`（純関数 + コロケーション test + `__fixtures__`・カバレッジ 100%）+ `scripts/scrape-serebii.ts`（取得 + 配線・健全性 exit code 0/2/3/4）/ `scripts/sync-serebii.ts`（中間 JSON → SoT YAML・**速報ゆえ ja / en を埋める**）。`serebii:<dataset> <regId>` で起動。Serebii は latin-1 + CRLF + 数値文字参照の日本語で、文字コードと健全性 exit code を設計に含む（ADR 0040）。
-- **`scripts/fetch-pokeapi.ts`（取得・`fetch:ja-names`）/ `scripts/materialize.ts`（転記・`sync:ja-names`）** = PokeAPI `names`（ja-Hrkt + en）の **全件名 backfill 専任**（ADR 0041）。各 category の list endpoint で **全 id を列挙**し、`languages/*.yaml` に ja/en が揃って記録済みの id はスキップ・未記録 / 欠落 id のみ best-effort 取得（404 は skip・差分・冪等）。`materialize` は raw を決定論順（sort）で走査し、**未記録 id は新規エントリとして append**（全件名辞書化）・**既存 id は欠落欄のみ backfill**（**append/既存尊重**＝既存の著述 / 速報値は上書きせず conflict 提示）。**ただし PokeAPI が ja を持たない id（Pokémon GO 専用特性 `is_main_series:false` / LA の未ローカライズ球 / 未ローカライズの新特性 等）は「各エントリ ja/en 完備」不変条件（ADR 0041）を満たせないため append せず skip する**（必要になれば手作業で ja を補い append）。対象は `species` / `items` / `moves` / `abilities` / `types`（`mega` は PokeAPI 非対象）。構造データ取得・転記は廃止（ADR 0039）。raw 必須・fail-fast（自前の存在チェックや取得誘導を持たない・raw 存在の担保は `author-static-data` skill の責務）。
+- **`scripts/fetch-pokeapi.ts`（取得・`fetch:ja-names`）/ `scripts/materialize.ts`（転記・`sync:ja-names`）** = PokeAPI `names`（ja-Hrkt + en）の **全件名 backfill 専任**（ADR 0041）。各 category の list endpoint で **全 id を列挙**し（**items だけは item-category whitelist の union で列挙 + 剪定**・ADR 0042）、`languages/*.yaml` に ja/en が揃って記録済みの id はスキップ・未記録 / 欠落 id のみ best-effort 取得（404 は skip・差分・冪等）。`materialize` は raw を決定論順（sort）で走査し、**未記録 id は新規エントリとして append**（全件名辞書化）・**既存 id は欠落欄のみ backfill**（**append/既存尊重**＝既存の著述 / 速報値は上書きせず conflict 提示）。**ただし PokeAPI が ja を持たない id（Pokémon GO 専用特性 `is_main_series:false` / LA の未ローカライズ球 / 未ローカライズの新特性 等）は「各エントリ ja/en 完備」不変条件（ADR 0041）を満たせないため append せず skip する**（必要になれば手作業で ja を補い append）。対象は `species` / `items` / `moves` / `abilities` / `types`（`mega` は PokeAPI 非対象）。構造データ取得・転記は廃止（ADR 0039）。raw 必須・fail-fast（自前の存在チェックや取得誘導を持たない・raw 存在の担保は `author-static-data` skill の責務）。
 - **`scripts/generate.ts`（合成段・`generate:data`）** = specs / languages / per-reg YAML のみを変換・合成し `src/generated/` を出力。**raw 非依存**（決定論的・raw 不在でも動く・ADR 0027 の合成方針は不変）。
 
 ## 統一用語: skill-authored（定義 SoT）

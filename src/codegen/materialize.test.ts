@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { extractEnName, extractJaName, extractNames, planFields } from "./materialize.ts";
+import {
+  extractEnName,
+  extractJaName,
+  extractNames,
+  planFields,
+  pruneToKeep,
+  sortedUnion,
+} from "./materialize.ts";
 
 describe("extractJaName / extractEnName / extractNames", () => {
   const named = {
@@ -62,5 +69,40 @@ describe("planFields", () => {
     const plan = planFields({}, fresh);
     expect(plan.fill).toEqual(fresh);
     expect(plan.conflicts).toEqual([]);
+  });
+});
+
+describe("sortedUnion", () => {
+  it("dedupes across lists and sorts ascending", () => {
+    expect(
+      sortedUnion([["choice-scarf", "leftovers"], ["choice-scarf", "assault-vest"], ["life-orb"]]),
+    ).toEqual(["assault-vest", "choice-scarf", "leftovers", "life-orb"]);
+  });
+
+  it("returns an empty array for no items (fail-fast source for the caller)", () => {
+    expect(sortedUnion([])).toEqual([]);
+    expect(sortedUnion([[], []])).toEqual([]);
+  });
+});
+
+describe("pruneToKeep", () => {
+  it("partitions existing ids into kept (in whitelist) and removed (outside)", () => {
+    const { kept, removed } = pruneToKeep(
+      ["poke-ball", "leftovers", "potion", "choice-scarf"],
+      ["leftovers", "choice-scarf", "garchompite"],
+    );
+    expect(kept).toEqual(["leftovers", "choice-scarf"]);
+    expect(removed).toEqual(["poke-ball", "potion"]);
+  });
+
+  it("keeps everything when all existing ids are in the whitelist", () => {
+    expect(pruneToKeep(["a", "b"], ["a", "b", "c"])).toEqual({
+      kept: ["a", "b"],
+      removed: [],
+    });
+  });
+
+  it("removes everything when the whitelist is empty", () => {
+    expect(pruneToKeep(["a", "b"], [])).toEqual({ kept: [], removed: ["a", "b"] });
   });
 });
