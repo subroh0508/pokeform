@@ -33,16 +33,36 @@ const DEFAULT_TO_EXPLICIT: Record<string, string> = {
   meowstic: "meowstic-male",
   oinkologne: "oinkologne-male",
   zygarde: "zygarde-50",
+  // 開始フォルムが一意に定まらない種（`SUPPRESS_BASE_SPECIES`）の bare default を、showdown が bare で emit する
+  // 既定 variety の明示 id へ写す（hoopa / gimmighoul は `CANONICAL_ID_OVERRIDE`、deoxys / urshifu は上に既出）。
+  keldeo: "keldeo-ordinary",
+  basculin: "basculin-red",
+  pumpkaboo: "pumpkaboo-average",
+  gourgeist: "gourgeist-average",
+  squawkabilly: "squawkabilly-green",
+  maushold: "maushold-four",
+  dudunsparce: "dudunsparce-two",
+  lycanroc: "lycanroc-midday",
+  oricorio: "oricorio-baile",
+  wormadam: "wormadam-plant",
+  giratina: "giratina-altered",
+  shaymin: "shaymin-land",
+  thundurus: "thundurus-incarnate",
+  tornadus: "tornadus-incarnate",
+  landorus: "landorus-incarnate",
+  enamorus: "enamorus-incarnate",
 };
 
 /**
  * **bare base id を名前辞書（`languages/species.yaml`）から抑制する種**。bare base は PokeAPI `pokemon-species` list に
  * 載るが、実体（対戦で登録する形態）は明示 form であり base 名が冗長 / 曖昧になるため出さず、明示 form だけを列挙する
- * （転記段 `scripts/materialize.ts` が bare base を skip）。構造側は `DEFAULT_TO_EXPLICIT` で bare default を明示 id へ
- * 写し、name/structure の form 集合を一致させる。対象:
+ * （転記段 `scripts/materialize.ts` が bare base を skip）。構造側は `DEFAULT_TO_EXPLICIT` / `CANONICAL_ID_OVERRIDE` で
+ * bare default を明示 id へ写し、name/structure の form 集合を一致させる。対象:
  * - **性別二形**（genderless な base を持たずオス／メスのみ）: basculegion / indeedee / meowstic / oinkologne（→ `-male` / `-female`）。
- * - **戦闘開始フォルムが一意に定まらない in-battle 変化種**: zygarde（10%／50% を選んで持ち込むため bare は曖昧・→ `zygarde-10` / `zygarde-50` / `zygarde-complete`）。
- *   他の in-battle 変化種（aegislash / mimikyu / morpeko / eiscue / palafin 等）は開始フォルムが一意ゆえ bare base を残す。
+ * - **開始フォルムが一意に定まらない種**（複数フォルムのいずれも開始フォルムになりうるため bare base が曖昧）:
+ *   zygarde / deoxys / keldeo / hoopa / basculin / urshifu / pumpkaboo / gourgeist / squawkabilly / maushold /
+ *   dudunsparce / lycanroc / oricorio / wormadam / giratina / shaymin / thundurus / tornadus / landorus / enamorus / gimmighoul。
+ *   開始フォルムが一意な種（rotom / tauros / 各リージョンフォルム / aegislash / mimikyu / darmanitan 等）は bare base を残す。
  */
 export const SUPPRESS_BASE_SPECIES: ReadonlySet<string> = new Set([
   "basculegion",
@@ -50,6 +70,26 @@ export const SUPPRESS_BASE_SPECIES: ReadonlySet<string> = new Set([
   "meowstic",
   "oinkologne",
   "zygarde",
+  "deoxys",
+  "keldeo",
+  "hoopa",
+  "basculin",
+  "urshifu",
+  "pumpkaboo",
+  "gourgeist",
+  "squawkabilly",
+  "maushold",
+  "dudunsparce",
+  "lycanroc",
+  "oricorio",
+  "wormadam",
+  "giratina",
+  "shaymin",
+  "thundurus",
+  "tornadus",
+  "landorus",
+  "enamorus",
+  "gimmighoul",
 ]);
 
 /**

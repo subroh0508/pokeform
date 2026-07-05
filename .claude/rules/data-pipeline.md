@@ -78,12 +78,15 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
   `author-static-data` skill）。
 - **bare base 名を抑制する種**（`SUPPRESS_BASE_SPECIES`）: bare base id が冗長 / 曖昧になる種は
   `languages/species.yaml` に bare base を出さず**明示 form だけ**を列挙する（転記段 `scripts/materialize.ts` が bare base を
-  skip・構造側は `DEFAULT_TO_EXPLICIT` で bare default を明示 id へ写して name/structure の form 集合を一致させる）。対象は
-  **性別二形**（basculegion / indeedee / meowstic / oinkologne = genderless base を持たずオス／メスのみ → `-male` / `-female`）と、
-  **戦闘開始フォルムが一意に定まらない in-battle 変化種**（zygarde = 10%／50% を選んで持ち込むため bare は曖昧 →
-  `zygarde-10` / `-50` / `-complete`）。開始フォルムが一意な in-battle 変化種（aegislash / mimikyu / morpeko / eiscue /
-  palafin / castform / terapagos 等）は bare base を残す（ウッウ cramorant は「のみこみ／まるのみ」で技仕様が変わるため
-  base + うのみ / まるのみの 2 form を `FORM_INCLUDE` で列挙）。集合の SoT は `canonical-species-id.ts` の `SUPPRESS_BASE_SPECIES`。
+  skip・構造側は `DEFAULT_TO_EXPLICIT` / `CANONICAL_ID_OVERRIDE` で bare default を明示 id へ写して name/structure の form 集合を
+  一致させる）。対象は **性別二形**（basculegion / indeedee / meowstic / oinkologne = genderless base を持たずオス／メスのみ →
+  `-male` / `-female`）と、**開始フォルムが一意に定まらない種**（複数フォルムのいずれも開始フォルムになりうるため bare が曖昧 =
+  zygarde / deoxys / keldeo / hoopa / basculin / urshifu / pumpkaboo / gourgeist / squawkabilly / maushold / dudunsparce /
+  lycanroc / oricorio / wormadam / giratina / shaymin / thundurus / tornadus / landorus / enamorus / gimmighoul）。開始フォルムが
+  一意な種（rotom / tauros / 各リージョンフォルム / aegislash / mimikyu / darmanitan 等）は bare base を残す（ウッウ cramorant は
+  「のみこみ／まるのみ」で技仕様が変わるため base + うのみ / まるのみを `FORM_INCLUDE` で列挙）。集合の SoT は
+  `canonical-species-id.ts` の `SUPPRESS_BASE_SPECIES`。**base を残しつつ名前をデフォルト形態名に差し替える種**（オーガポン =
+  base `ogerpon` を「オーガポン（みどりのめん）」に）は `scripts/materialize.ts` の `BASE_NAME_OVERRIDE`。
 - **名前の取得元分担**（languages 各ファイルの ja/en をどこから埋めるか）:
 
   | languages ファイル | 取得元 | 担当 |

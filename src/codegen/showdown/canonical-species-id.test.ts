@@ -46,6 +46,10 @@ describe("canonicalSpeciesId", () => {
     expect(canonicalSpeciesId("Meowstic")).toBe("meowstic-male");
     expect(canonicalSpeciesId("Oinkologne")).toBe("oinkologne-male");
     expect(canonicalSpeciesId("Zygarde")).toBe("zygarde-50");
+    expect(canonicalSpeciesId("Landorus")).toBe("landorus-incarnate");
+    expect(canonicalSpeciesId("Giratina")).toBe("giratina-altered");
+    expect(canonicalSpeciesId("Keldeo")).toBe("keldeo-ordinary");
+    expect(canonicalSpeciesId("Basculin")).toBe("basculin-red");
   });
 
   it("rewrites a Class C vocabulary difference to the canonical spelling", () => {
@@ -78,12 +82,32 @@ describe("canonicalSpeciesId", () => {
 });
 
 describe("SUPPRESS_BASE_SPECIES", () => {
-  it("lists species whose bare base name is suppressed (gender-dimorphic + ambiguous-start zygarde)", () => {
+  it("lists species whose bare base name is suppressed (gender-dimorphic + ambiguous-start)", () => {
     expect([...SUPPRESS_BASE_SPECIES].sort()).toEqual([
       "basculegion",
+      "basculin",
+      "deoxys",
+      "dudunsparce",
+      "enamorus",
+      "gimmighoul",
+      "giratina",
+      "gourgeist",
+      "hoopa",
       "indeedee",
+      "keldeo",
+      "landorus",
+      "lycanroc",
+      "maushold",
       "meowstic",
       "oinkologne",
+      "oricorio",
+      "pumpkaboo",
+      "shaymin",
+      "squawkabilly",
+      "thundurus",
+      "tornadus",
+      "urshifu",
+      "wormadam",
       "zygarde",
     ]);
   });
