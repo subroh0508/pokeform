@@ -41,10 +41,11 @@ describe("canonicalSpeciesId", () => {
     expect(canonicalSpeciesId("Basculegion")).toBe("basculegion-male");
   });
 
-  it("maps a gender-dimorphic bare default to its -male canonical (base suppressed)", () => {
+  it("maps a base-suppressed bare default to its explicit canonical", () => {
     expect(canonicalSpeciesId("Indeedee")).toBe("indeedee-male");
     expect(canonicalSpeciesId("Meowstic")).toBe("meowstic-male");
     expect(canonicalSpeciesId("Oinkologne")).toBe("oinkologne-male");
+    expect(canonicalSpeciesId("Zygarde")).toBe("zygarde-50");
   });
 
   it("rewrites a Class C vocabulary difference to the canonical spelling", () => {
@@ -77,12 +78,13 @@ describe("canonicalSpeciesId", () => {
 });
 
 describe("SUPPRESS_BASE_SPECIES", () => {
-  it("lists the gender-dimorphic species whose bare base name is suppressed", () => {
+  it("lists species whose bare base name is suppressed (gender-dimorphic + ambiguous-start zygarde)", () => {
     expect([...SUPPRESS_BASE_SPECIES].sort()).toEqual([
       "basculegion",
       "indeedee",
       "meowstic",
       "oinkologne",
+      "zygarde",
     ]);
   });
 });

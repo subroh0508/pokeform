@@ -90,6 +90,9 @@ const FORM_INCLUDE = new Set<string>([
   "dudunsparce-three-segment",
   "basculin-blue-striped",
   "basculin-white-striped",
+  // ウッウ: うのみ／まるのみで「のみこみ／まるのみ」技の仕様が変わる（同型・同種族値だが別 form として列挙する）。
+  "cramorant-gulping",
+  "cramorant-gorging",
 ]);
 
 /**

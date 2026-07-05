@@ -21,8 +21,8 @@ import { kebabId } from "./ids.ts";
 /**
  * default→明示: showdown が bare id で持つデフォルトフォルムを **短い canonical** の明示 id へ。
  * 原種が無い対等フォルム（urshifu 一撃・deoxys ノーマル等）は bare だと曖昧になるため明示 id を振る。
- * **性別二形（`SUPPRESS_BASE_SPECIES`）は bare default（= オス）を `-male` 明示 id へ写す**（bare base 名を
- * 名前辞書から抑制するため・構造側 roster と名前側 form 集合を一致させる）。値は最終 canonical（既に短い形ゆえ
+ * **`SUPPRESS_BASE_SPECIES`（bare base を名前辞書から抑制する種）は bare default を明示 id へ写す**（性別二形は
+ * `-male`、zygarde は `-50`）— 構造側 roster と名前側 form 集合を一致させる。値は最終 canonical（既に短い形ゆえ
  * `canonicalFormId` を再適用しない）。
  */
 const DEFAULT_TO_EXPLICIT: Record<string, string> = {
@@ -32,20 +32,24 @@ const DEFAULT_TO_EXPLICIT: Record<string, string> = {
   indeedee: "indeedee-male",
   meowstic: "meowstic-male",
   oinkologne: "oinkologne-male",
+  zygarde: "zygarde-50",
 };
 
 /**
- * **性別二形の種**（genderless な base 形態を持たず、オス／メスの 2 形態のみで構成される種）。名前辞書
- * （`languages/species.yaml`）から **bare base id（`basculegion` 等）を抑制**し、`-male` / `-female` の 2 form だけを
- * 列挙するための集合（転記段 `scripts/materialize.ts` が参照）。bare base は PokeAPI `pokemon-species` list に
- * 抽象種として載るが、実体（対戦個体）はオス／メスの variety であり base 名は冗長になるため出さない。
- * 構造側は `DEFAULT_TO_EXPLICIT` で bare default（= オス）を `-male` へ写し、name/structure の form 集合を一致させる。
+ * **bare base id を名前辞書（`languages/species.yaml`）から抑制する種**。bare base は PokeAPI `pokemon-species` list に
+ * 載るが、実体（対戦で登録する形態）は明示 form であり base 名が冗長 / 曖昧になるため出さず、明示 form だけを列挙する
+ * （転記段 `scripts/materialize.ts` が bare base を skip）。構造側は `DEFAULT_TO_EXPLICIT` で bare default を明示 id へ
+ * 写し、name/structure の form 集合を一致させる。対象:
+ * - **性別二形**（genderless な base を持たずオス／メスのみ）: basculegion / indeedee / meowstic / oinkologne（→ `-male` / `-female`）。
+ * - **戦闘開始フォルムが一意に定まらない in-battle 変化種**: zygarde（10%／50% を選んで持ち込むため bare は曖昧・→ `zygarde-10` / `zygarde-50` / `zygarde-complete`）。
+ *   他の in-battle 変化種（aegislash / mimikyu / morpeko / eiscue / palafin 等）は開始フォルムが一意ゆえ bare base を残す。
  */
 export const SUPPRESS_BASE_SPECIES: ReadonlySet<string> = new Set([
   "basculegion",
   "indeedee",
   "meowstic",
   "oinkologne",
+  "zygarde",
 ]);
 
 /**

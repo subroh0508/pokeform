@@ -73,12 +73,14 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
   `MANUAL_NAME_OVERRIDE` / `CANONICAL_ID_OVERRIDE`）と除外パターン・`canonicalFormId` の SoT は `fetch-pokeapi.ts` +
   `canonical-species-id.ts`。決定記録（id / en / ja / decision / distinct 根拠）を manifest（`data/raw/distinct-forms.json`）へ
   残し `pokeapi-names.yml` が PR レビュー表へ整形する（手順 SoT は `author-static-data` skill）。
-- **性別二形の種は bare base 名を抑制する**（`SUPPRESS_BASE_SPECIES`＝basculegion / indeedee / meowstic / oinkologne）:
-  genderless な base 形態を持たずオス／メスの 2 形態のみで構成される種は、bare base id（`meowstic` 等）を
-  `languages/species.yaml` に出さず **`-male` / `-female` の 2 form だけ**を列挙する（bare base は PokeAPI list に抽象種として
-  載るが実体はオス／メスの variety で base 名が冗長になるため）。転記段 `scripts/materialize.ts` が bare base を skip し、
-  構造側は `DEFAULT_TO_EXPLICIT`（bare default = オス → `-male`）で name/structure の form 集合を一致させる。集合の SoT は
-  `canonical-species-id.ts` の `SUPPRESS_BASE_SPECIES`。
+- **bare base 名を抑制する種**（`SUPPRESS_BASE_SPECIES`）: bare base id が冗長 / 曖昧になる種は
+  `languages/species.yaml` に bare base を出さず**明示 form だけ**を列挙する（転記段 `scripts/materialize.ts` が bare base を
+  skip・構造側は `DEFAULT_TO_EXPLICIT` で bare default を明示 id へ写して name/structure の form 集合を一致させる）。対象は
+  **性別二形**（basculegion / indeedee / meowstic / oinkologne = genderless base を持たずオス／メスのみ → `-male` / `-female`）と、
+  **戦闘開始フォルムが一意に定まらない in-battle 変化種**（zygarde = 10%／50% を選んで持ち込むため bare は曖昧 →
+  `zygarde-10` / `-50` / `-complete`）。開始フォルムが一意な in-battle 変化種（aegislash / mimikyu / morpeko / eiscue /
+  palafin / castform / terapagos 等）は bare base を残す（ウッウ cramorant は「のみこみ／まるのみ」で技仕様が変わるため
+  base + うのみ / まるのみの 2 form を `FORM_INCLUDE` で列挙）。集合の SoT は `canonical-species-id.ts` の `SUPPRESS_BASE_SPECIES`。
 - **名前の取得元分担**（languages 各ファイルの ja/en をどこから埋めるか）:
 
   | languages ファイル | 取得元 | 担当 |
