@@ -149,15 +149,15 @@ const EXCLUDED_FORM = /-(mega(-[xyz])?|gmax|primal|starter)$|-totem(-|$)/;
 const MANUAL_NAME_OVERRIDE: Record<string, { ja?: string; en?: string }> = {
   "greninja-battle-bond": { ja: "ゲッコウガ（きずなへんげ）", en: "Greninja (Battle Bond)" },
   "tauros-paldea-combat": {
-    ja: "ケンタロス（パルデアのすがた・コンバットしゅ）",
+    ja: "ケンタロス（パルデアのすがた・コンバット種）",
     en: "Tauros (Paldean Form Combat Breed)",
   },
   "tauros-paldea-blaze": {
-    ja: "ケンタロス（パルデアのすがた・ブレイズしゅ）",
+    ja: "ケンタロス（パルデアのすがた・ブレイズ種）",
     en: "Tauros (Paldean Form Blaze Breed)",
   },
   "tauros-paldea-aqua": {
-    ja: "ケンタロス（パルデアのすがた・ウォーターしゅ）",
+    ja: "ケンタロス（パルデアのすがた・ウォーター種）",
     en: "Tauros (Paldean Form Aqua Breed)",
   },
   "pumpkaboo-small": { ja: "バケッチャ（こだましゅ）" },
