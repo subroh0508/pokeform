@@ -3,7 +3,6 @@ import {
   groupMegaByBase,
   type MegaInput,
   megaBaseSpeciesId,
-  megaEnName,
   megaId,
   megaStructuralFields,
 } from "./mega-fields.ts";
@@ -51,12 +50,6 @@ describe("megaStructuralFields", () => {
       ability: "tough-claws",
       baseSpecies: "charizard",
     });
-  });
-});
-
-describe("megaEnName", () => {
-  it("carries the showdown display name as en", () => {
-    expect(megaEnName(charizardMegaX)).toEqual({ en: "Charizard-Mega-X" });
   });
 });
 

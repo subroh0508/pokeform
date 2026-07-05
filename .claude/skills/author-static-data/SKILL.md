@@ -2,14 +2,15 @@
 name: author-static-data
 description: >-
   reg 非依存の**全件名辞書**（`data/languages/*.yaml`）を PokeAPI 由来の全件名（ja/en）で満たす手順 skill。
-  「全件名を languages へ入れて」「名前辞書を埋めて」「ja/en 名が欠けている種族 / 持ち物 / 技 / 特性 / タイプを
-  埋めて」「PokeAPI の names を全件取り込んで」「pokeapi-names workflow を回して languages を更新して」
-  「languages の空骨格を scaffold して」「メガの ja 名を手作業で足して」「author-static-data <id...>」と言われた
+  「全件名を languages へ入れて」「名前辞書を埋めて」「ja/en 名が欠けている種族 / 持ち物 / 技 / 特性 / タイプ / メガを
+  埋めて」「PokeAPI の names / form_names を全件取り込んで」「pokeapi-names workflow を回して languages を更新して」
+  「languages の空骨格を scaffold して」「メガ名を PokeAPI で埋めて」「author-static-data <id...>」と言われた
   とき、または showdown 経路で解禁データを入れた後に名前が空のエントリを補うときに使う。取得 + 整形 + 書き込み +
   PR は **GitHub Actions `pokeapi-names.yml`**（全件列挙）が行い、本 skill はその dispatch → 生成 PR のドライブ →
-  PokeAPI 非存在分（メガ ja 等）の手作業追加 commit → verify → merge をドライブする。構造データ（種族値 / タイプ /
+  PokeAPI 非存在分（メガストーン名等）の Serebii 差分チェック → verify → merge をドライブする。メガ名は PokeAPI
+  `pokemon-form` の form_names（is_mega 判別）から取る 6 種目（ADR 0043）。構造データ（種族値 / タイプ /
   特性 id / 図鑑番号 / category）の取得は pokemon-showdown 経路（`showdown:*`）、Champions 解禁データ（roster / 技 /
-  メガ）の取得は Serebii 速報 / showdown 経路の責務で、こちらは **reg 非依存の名前辞書**のみを担う。生成 / 検証は
+  メガ構造）の取得は Serebii 速報 / showdown 経路の責務で、こちらは **reg 非依存の名前辞書**のみを担う。生成 / 検証は
   `generate:data` / `verify` に委譲し機械ゲートは再実装しない。
 allowed-tools: Bash(pnpm *), Bash(node scripts/*), Bash(node src/cli/*), Bash(gh *), Read, Write, Edit
 ---
@@ -18,9 +19,10 @@ allowed-tools: Bash(pnpm *), Bash(node scripts/*), Bash(node src/cli/*), Bash(gh
 
 `data/languages/*.yaml`（名前 SoT・ゲーム非依存）を **PokeAPI 由来の全件名（ja/en）で満たす** skill。
 `author-regulation-data`（reg 依存の解禁データ）と対になり、こちらは **reg 非依存の「名前辞書」**を担当する。
-languages は未解禁を含む**全件名辞書**で（ADR 0041）、`species` / `moves` / `abilities` / `types` を
-PokeAPI から全件取得し、`mega` は PokeAPI 非対象ゆえ **en=showdown / ja=手作業**で補う。**`items` だけは list 全件でなく
-item-category whitelist の union で列挙し対戦持ち物 ~270 件に絞る**（ADR 0042・詳細は [[data-pipeline]]）。
+languages は未解禁を含む**全件名辞書**で（ADR 0041）、`species` / `moves` / `abilities` / `types` / `mega` を
+PokeAPI から全件取得する。**`mega` は `pokemon-form` の `form_names`（`is_mega` で判別）から ja/en を両取りする 6 種目**
+（従来の en=showdown / ja=手作業は撤回・ADR 0043）。**`items` だけは list 全件でなく item-category whitelist の
+union で列挙し対戦持ち物 ~270 件に絞る**（ADR 0042・詳細は [[data-pipeline]]）。
 
 > データ構造・SoT の正本は [[data-pipeline]]（specs / languages / 取得 → 転記 → 合成 / 名前の取得元分担表）。
 > languages を全件名辞書化し generate を superset 判定へ緩める「なぜ」は
@@ -32,20 +34,21 @@ item-category whitelist の union で列挙し対戦持ち物 ~270 件に絞る*
 ## なぜこの skill があるか
 
 名前は**取得元で分担**する（取得元・更新頻度・情報源が異なるため・[[data-pipeline]]）: `species` / `items` /
-`moves` / `abilities` / `types` の ja/en は **PokeAPI `names`** から全件取得（本 skill・reg 非依存）、`mega` の
-en は **showdown**（per-reg 取得 = `author-regulation-data`）・ja は**手作業**。全件名を人手で 1 件ずつ入れると
-漏れ・非決定になるため、取得 + 整形 + 書き込み + PR は **GitHub Actions `pokeapi-names.yml`**（全件列挙・
+`moves` / `abilities` / `types` の ja/en は **PokeAPI `names`** から、`mega` の ja/en は **PokeAPI `pokemon-form` の
+`form_names`**（`is_mega` で判別・ADR 0043）から全件取得する（すべて本 skill・reg 非依存）。全件名を人手で 1 件ずつ
+入れると漏れ・非決定になるため、取得 + 整形 + 書き込み + PR は **GitHub Actions `pokeapi-names.yml`**（全件列挙・
 `showdown-sync.yml` / `serebii-bulletin.yml` と同型）に機械化し、本 skill はその **dispatch と生成 PR のドライブ**
-（手作業 gap の補填含む）に専念する。
+（PokeAPI 非存在の手作業 gap = メガストーン等の差分チェック含む）に専念する。
 
 ## 入力 / 出力
 
 - **入力**: 全件名辞書を満たしたい / 名前が空のエントリを補いたい要求。多くは showdown / Serebii 経路で解禁
   データ（specs / per-reg / en）を入れた後に `languages/*.yaml` の名前が空で残ったエントリ、または全件投入。
 - **出力**:
-  - `data/languages/{species,items,moves,abilities,types}.yaml` への PokeAPI 由来**全件名（ja/en）**の
-    append/既存尊重転記（`pokeapi-names.yml` が実行）。
-  - `data/languages/mega.yaml` への**手作業**メガ名（ja・必要なら en）追加 commit（PokeAPI 非対象）。
+  - `data/languages/{species,items,moves,abilities,types,mega}.yaml` への PokeAPI 由来**全件名（ja/en）**の
+    append/既存尊重転記（`pokeapi-names.yml` が実行・`mega` は `pokemon-form` form_names 経路・ADR 0043）。
+  - PokeAPI 非存在の**手作業カバー箇所**（メガストーン item 名等）の Serebii Champions ページとの差分チェック
+    （`pokeapi-names.yml` の PR body に提示された 5 リンクで目視照合）。
   - `data/languages/*.yaml` の**空骨格 scaffold**（`data/` 完全削除からの復元時・`mega.yaml` 含む 6 ファイル）。
   - `pnpm generate:data` / `pnpm verify` が緑（生成段 tsc が spec の名前欠落・ja/en 欠けを弾く・余剰名は許容・ADR 0041）。
 
@@ -57,7 +60,8 @@ en は **showdown**（per-reg 取得 = `author-regulation-data`）・ja は**手
 PokeAPI list endpoint の全件列挙（**総数 `count` と受信 id 数の一致を fail-fast** し全件受信を保証する = 差分・
 冪等判定の前提。200 応答でも `limit` cap で `results` が不足しうるため件数照合を初版から入れる。**ただし `items` は
 list 全件でなく item-category whitelist の union で列挙し、category endpoint は count/limit ページングを持たないため
-件数照合でなく各 cat 404 でない + union 空でないを fail-fast にする**・ADR 0042）→
+件数照合でなく各 cat 404 でない + union 空でないを fail-fast にする**。**`mega` は `pokemon-form` list を全件列挙して
+`is_mega` 候補 slug に絞り、各 form の `form_names` から ja/en を取る 6 種目**・ADR 0043）→
 `fetch:ja-names`（未記録 / 欠落 id のみ best-effort 取得・差分・冪等）→
 `sync:ja-names`（raw → languages へ ja/en を append/既存尊重転記）→ `check:yaml-style` / `generate:data` /
 `pnpm verify` → `data:names` ラベルの languages 更新 PR 作成、までを CI 上で回す。以降の再実行は**差分**（未記録
@@ -69,28 +73,28 @@ id）だけを追加する。ローカルで確認するなら `pnpm fetch:ja-na
 する。生成データの妥当性（名前の正しさ）は `pokemon-data-reviewer` agent に委ねる（本 skill は機械ゲートを再実装
 しない・[[skill-authoring]]）。
 
-### 3. PokeAPI 非存在分を手作業で追加 commit する（gap 補填）
+### 3. PokeAPI 非存在の手作業カバー箇所を Serebii で差分チェックする（gap 照合）
 
-**メガ名 ja**（および PokeAPI に無い名前）は全件取得の対象外なので、生成 PR のブランチへ**手作業で追加
-commit**する。`data/languages/mega.yaml` の該当 id に **block スタイル**（`check:yaml-style` 通過・flow 禁止・
-[[data-pipeline]]）で `ja:`（必要なら `en:`）を書き足す:
+メガ名（ja/en）は **PokeAPI `pokemon-form` の form_names** から全件埋まる（手順 1・手作業不要・ADR 0043）。一方
+**メガストーン item 名など PokeAPI に無い Champions 固有の名前**は全件取得の対象外で、抜けや誤りを目視で照合する
+導線が要る。`pokeapi-names.yml` の生成 PR body には照合先の **Serebii Champions ページ 5 本**が提示される:
 
-```yaml
-mega:
-  garchomp-mega:
-    ja: メガガブリアス
-    en: Mega Garchomp
-```
+- https://www.serebii.net/pokemonchampions/items.shtml（持ち物・メガストーン）
+- https://www.serebii.net/pokemonchampions/moves.shtml（技）
+- https://www.serebii.net/pokemonchampions/pokemon.shtml（種族・メガ）
+- https://www.serebii.net/pokemonchampions/megaabilities.shtml（メガ特性）
+- https://www.serebii.net/pokemonchampions/newabilities.shtml（新特性）
 
-メガ en は showdown（`author-regulation-data` の per-reg 取得）が正だが、手元で先に補うなら Serebii 表示名の
-kebab（`Mega Garchomp` → `garchomp-mega`・[[data-pipeline]] のメガ id 正規化）に整合させる。追加後 `pnpm generate:data`
-→ `pnpm verify` で緑を確認して commit する（既存値は上書きしない＝ append/既存尊重を手作業でも守る）。
+PokeAPI 由来で埋まらなかった手作業カバー箇所（メガストーン名等）を上記で照合し、必要なら該当 languages ファイルへ
+**block スタイル**（`check:yaml-style` 通過・flow 禁止・[[data-pipeline]]）で ja/en を書き足して commit する（既存値は
+上書きしない＝ append/既存尊重を手作業でも守る）。追加後 `pnpm generate:data` → `pnpm verify` で緑を確認する。
 
 ### 4. scaffold（`data/` 完全削除からの復元時のみ）
 
 `data/languages/` が無い状態から起こすときは、6 ファイル（`species` / `items` / `moves` / `abilities` / `types` /
 `mega`）の**空骨格**を block スタイルで scaffold する（各ファイルは先頭コメント + `<mapKey>:` の空マップ）。以降は
-手順 1 の workflow が `species` 〜 `types` を全件で満たし、`mega` は手順 3 で手入力する。`rules.yaml` /
+手順 1 の workflow が `species` 〜 `types` に加え `mega`（`pokemon-form` form_names 経路・ADR 0043）まで全件で
+満たす。`rules.yaml` /
 `type-specs.yaml`（`data/champions`）は本 skill の対象外の静的コミットで、削除時は別途手作業復元する（[[data-pipeline]]）。
 
 ### 5. generate:data / verify で緑を確認する（委譲）
@@ -103,12 +107,15 @@ kebab（`Mega Garchomp` → `garchomp-mega`・[[data-pipeline]] のメガ id 正
 
 - **責務は reg 非依存の名前辞書のみ**: 本 skill は名前 SoT（languages）の全件名（ja/en）だけを担う。構造データ
   （種族値 / タイプ / 特性 id / 図鑑番号 / category）と en の正は **pokemon-showdown 経路**（`showdown:*`）、
-  Champions 解禁（roster / 技 / メガ）は Serebii 速報 / showdown 経路の責務（[[data-pipeline]]）。
+  Champions 解禁（roster / 技 / メガ**構造 + linking**）は Serebii 速報 / showdown 経路の責務（[[data-pipeline]]）。
+  **mega の名前だけは本 skill（PokeAPI form_names・ADR 0043）**が担う。
 - **append/既存尊重を壊さない**: `sync:ja-names` は未設定フィールドのみ埋め、既存の en（showdown 正）/ 著述値を
   上書きしない。conflict が出たら値の出自を確認して解消する（生成物を直さず languages を直す）。手作業 gap 補填も
   既存値を上書きしない。
-- **mega は PokeAPI 対象外**: `languages/mega.yaml` の名前は workflow では埋まらない（en=showdown / ja=手作業）。
-  本 skill が scaffold と手作業 gap commit を担う。
+- **mega も PokeAPI 対象（6 種目）**: `languages/mega.yaml` の ja/en は workflow が `pokemon-form` の form_names
+  （`is_mega` で判別）から全件埋める（従来の en=showdown / ja=手作業は撤回・ADR 0043）。PokeAPI slug は pokeform の
+  mega id 規約と一致するため id 正規化は不要。`*-mega-z` 等の未実装 form は orphan 名として入るが superset で無害
+  （生成データレビューで確認）。手作業が残るのは**メガストーン item 名など PokeAPI 非存在の名前のみ**（手順 3）。
 - **PokeAPI が ja を持たない id は捏造せず skip**: list に含まれても ja 未収録の id（GO 専用特性
   `is_main_series:false` / Legends Arceus 未ローカライズ球 `la*-ball` / 未ローカライズ新特性 等）は `NameEntry` の
   ja/en 必須と衝突するため **append せず skip**（推測 ja を発明しない = data 信頼性を守る・`sync:ja-names` は
@@ -132,7 +139,9 @@ kebab（`Mega Garchomp` → `garchomp-mega`・[[data-pipeline]] のメガ id 正
 
 - データ構造・SoT 正本: [[data-pipeline]]（名前の取得元分担表・全件名辞書 / generate superset）。
 - 決定の「なぜ」: [ADR 0041](../../../docs/adr/0041-languages-full-name-dictionary.md)（languages 全件名辞書・
-  generate superset・PokeAPI 名前取得 workflow）/ [ADR 0035](../../../docs/adr/0035-specs-languages-layout-redesign.md)
+  generate superset・PokeAPI 名前取得 workflow）/ [ADR 0043](../../../docs/adr/0043-mega-names-from-pokeapi-form-names.md)
+  （mega 名を PokeAPI pokemon-form form_names へ一本化・6 種目）/
+  [ADR 0035](../../../docs/adr/0035-specs-languages-layout-redesign.md)
   （構造 = specs / 名前 = languages の 3 軸直交）/
   [ADR 0032](../../../docs/adr/archive/0032-japanese-name-source-pokeapi-names.md)（日本語名 ja は PokeAPI names）。
 - 名前取得 workflow: [`.github/workflows/pokeapi-names.yml`](../../../.github/workflows/pokeapi-names.yml)。

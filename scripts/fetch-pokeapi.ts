@@ -11,8 +11,8 @@
  * **全件列挙 + 差分**（ADR 0041）: 各 category の **list endpoint で全 id を列挙**し（種族 = `pokemon-species` /
  * 持ち物 = `item` / 技 = `move` / 特性 = `ability` / タイプ = `type`）、`languages/*.yaml` に **ja/en が揃って
  * 記録済みの id はスキップ**、未記録 / 欠落 id のみ `names` を **best-effort 取得**（404 等は skip）する（差分・
- * 冪等）。`materialize`（= `sync:ja-names`）が raw `names` から ja/en を転記する。メガ形態の ja は PokeAPI に
- * 無いため対象外（en=showdown / ja=手作業・[[data-pipeline]]）。
+ * 冪等）。`materialize`（= `sync:ja-names`）が raw `names` から ja/en を転記する。**メガ名も PokeAPI 6 種目**として
+ * `pokemon-form` 経路で取得する（`is_mega` の form の `form_names` に ja/en が載る・ADR 0043・[[data-pipeline]]）。
  *
  * 実行: `pnpm fetch:ja-names`（ネットワーク必須）。取得後は raw キャッシュ固定で `sync:ja-names` が決定論的に転記する。
  */
@@ -20,7 +20,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
-import { sortedUnion } from "../src/codegen/materialize.ts";
+import { megaFormCandidates, sortedUnion } from "../src/codegen/materialize.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const RAW = join(ROOT, "data", "raw");
@@ -146,9 +146,10 @@ async function fetchNamesInto(category: string, name: string): Promise<void> {
 const needsJaEn = (v: { ja?: string; en?: string }): boolean => !v.ja || !v.en;
 
 /**
- * 名前 SoT（`languages/*.yaml`）のうち PokeAPI `names`（ja/en）から取れる 5 種と、取得元 category（詳細）+
- * list category（全件列挙）の対応。メガ名は PokeAPI のカテゴリに無いため対象外（en=showdown / ja=手作業・
- * [[data-pipeline]]）。list と category は PokeAPI では同名だが、意味（列挙 endpoint / 詳細 endpoint）を分けて明示する。
+ * 名前 SoT（`languages/*.yaml`）を PokeAPI から埋める 6 種と、取得元 category（詳細）+ list category（全件列挙）の
+ * 対応。5 種（species / items / moves / abilities / types）は `names` から、**mega は `pokemon-form` 経路**から取る
+ * （list=`pokemon-form` を全件列挙 → `filterIds` で mega 候補 slug に絞り → 各 form 詳細の `form_names` / `is_mega` を
+ * 取得・ADR 0043）。list と category は PokeAPI では同名だが、意味（列挙 endpoint / 詳細 endpoint）を分けて明示する。
  */
 const DATASETS: {
   file: string;
@@ -157,6 +158,8 @@ const DATASETS: {
   category: string;
   /** items だけ設定。list endpoint 全件でなく item-category whitelist の union で列挙する（issue #213）。 */
   listCategories?: readonly string[];
+  /** mega だけ設定。list 全 slug から取得対象を絞る（mega 候補 slug だけ fetch する・ADR 0043）。 */
+  filterIds?: (ids: string[]) => string[];
 }[] = [
   { file: "species.yaml", mapKey: "species", list: "pokemon-species", category: "pokemon-species" },
   {
@@ -169,6 +172,13 @@ const DATASETS: {
   { file: "moves.yaml", mapKey: "moves", list: "move", category: "move" },
   { file: "abilities.yaml", mapKey: "abilities", list: "ability", category: "ability" },
   { file: "types.yaml", mapKey: "types", list: "type", category: "type" },
+  {
+    file: "mega.yaml",
+    mapKey: "mega",
+    list: "pokemon-form",
+    category: "pokemon-form",
+    filterIds: megaFormCandidates,
+  },
 ];
 
 async function main(): Promise<void> {
@@ -177,9 +187,11 @@ async function main(): Promise<void> {
     // items は item-category whitelist の union で列挙し union manifest を残す（sync:ja-names が剪定に使う・issue #213）。
     // 他 4 種は list endpoint で全 id を列挙する（全件辞書・count 照合の fail-fast は listAllIds 側で維持）。
     // いずれも既存 languages と差分突き合わせ（ja/en 完備の id はスキップ・未記録 / 欠落 id のみ best-effort 取得・ADR 0041）。
-    const ids = ds.listCategories
+    const listed = ds.listCategories
       ? await listCategoryUnion(ds.listCategories)
       : await listAllIds(ds.list);
+    // mega は全 form slug（count fail-fast は listAllIds で維持）を mega 候補へ絞ってから取得する（ADR 0043）。
+    const ids = ds.filterIds ? ds.filterIds(listed) : listed;
     if (ds.listCategories) writeItemUnionManifest(ids);
     for (const id of ids) {
       if (needsJaEn(map[id] ?? {})) await fetchNamesInto(ds.category, id);

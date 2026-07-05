@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 import {
   extractEnName,
   extractJaName,
+  extractMegaNames,
   extractNames,
+  megaFormCandidates,
   planFields,
   pruneToKeep,
   sortedUnion,
@@ -43,6 +45,75 @@ describe("extractJaName / extractEnName / extractNames", () => {
       ja: "さめはだ",
     });
     expect(extractNames({})).toEqual({});
+  });
+});
+
+describe("extractMegaNames", () => {
+  const charizardMegaX = {
+    is_mega: true,
+    form_names: [
+      { name: "メガリザードンＸ", language: { name: "ja-hrkt" } },
+      { name: "メガリザードンＸ", language: { name: "ja" } },
+      { name: "Mega Charizard X", language: { name: "en" } },
+    ],
+  };
+
+  it("reads ja (ja-Hrkt 優先) and en from form_names when is_mega", () => {
+    expect(extractMegaNames(charizardMegaX)).toEqual({
+      ja: "メガリザードンＸ",
+      en: "Mega Charizard X",
+    });
+  });
+
+  it("falls back to ja when ja-Hrkt is absent (staraptor-mega 形)", () => {
+    expect(
+      extractMegaNames({
+        is_mega: true,
+        form_names: [
+          { name: "メガムクホーク", language: { name: "ja" } },
+          { name: "Mega Staraptor", language: { name: "en" } },
+        ],
+      }),
+    ).toEqual({ ja: "メガムクホーク", en: "Mega Staraptor" });
+  });
+
+  it("returns an empty object for non-mega forms (is_mega false / undefined)", () => {
+    expect(extractMegaNames({ is_mega: false, form_names: charizardMegaX.form_names })).toEqual({});
+    expect(extractMegaNames({})).toEqual({});
+  });
+
+  it("returns an empty object when is_mega but form_names is absent", () => {
+    expect(extractMegaNames({ is_mega: true })).toEqual({});
+  });
+
+  it("includes only the resolved fields when a language is missing", () => {
+    expect(
+      extractMegaNames({
+        is_mega: true,
+        form_names: [{ name: "メガフシギバナ", language: { name: "ja-hrkt" } }],
+      }),
+    ).toEqual({ ja: "メガフシギバナ" });
+  });
+});
+
+describe("megaFormCandidates", () => {
+  it("keeps -mega / -mega-x / -mega-y / -mega-z slugs and drops non-mega forms", () => {
+    expect(
+      megaFormCandidates([
+        "venusaur-mega",
+        "charizard-mega-x",
+        "charizard-mega-y",
+        "absol-mega-z",
+        "meganium",
+        "yanmega",
+        "kyogre-primal",
+        "tatsugiri-curly",
+      ]),
+    ).toEqual(["venusaur-mega", "charizard-mega-x", "charizard-mega-y", "absol-mega-z"]);
+  });
+
+  it("returns an empty array when no mega slugs are present", () => {
+    expect(megaFormCandidates(["pikachu", "eevee"])).toEqual([]);
   });
 });
 
