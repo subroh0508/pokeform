@@ -1,6 +1,6 @@
-# Phase 9 — M-A・M-B 全データセット本投入（author-regulation-data skill 実行）
+# Phase 3 — M-A・M-B 全データセット本投入（author-regulation-data skill 実行・全件投入）
 
-> **plan 09 Phase 4（全データセット本投入）の cross-plan move 先**。旧フェーズは `survey-regulation` skill + `fetch:data`/`materialize` + Serebii 第一優先で全量投入する設計だったが、本計画群（10）の取得元転換に伴い **`author-regulation-data` skill（Phase 8）で全量投入し `verify-showdown-pr` で Serebii 照合する**新パイプライン版へ改訂した。移動・参照追従は [[planning]] の cross-plan move チェックリストに従う。
+> **plan 10 Phase 9 の cross-plan move 先**（元は plan 09 Phase 4 → plan 10 Phase 9 と移ってきた本投入 phase）。plan 10（showdown-first-data）の取得元転換で確定した新パイプライン（`author-regulation-data` skill で全量投入 + `verify-showdown-pr` で Serebii 照合）を**実運用で回して M-A・M-B を完成させる**。plan 10 は他 phase が全完了ゆえ `completed/` へ集約し、本投入は本計画群（11）の最終フェーズとして実施する。移動・参照追従は [[planning]] の cross-plan move チェックリストに従う。
 
 ## 目的 / スコープ
 
@@ -11,9 +11,10 @@ Phase 1-8 で揃った新パイプライン（showdown 抽出 + 転記 + 全件�
 
 ## 前提（依存）
 
-- **Phase 1-5 完了**: showdown 抽出 + 転記（1）/ PokeAPI ja 専任（2）/ `showdown-sync.yml`（3）/ Serebii 速報 + 新スクレイパー（4）/ `verify-showdown-pr` skill + rules 改訂（5）がすべて揃っている。
-- **Phase 6-7 完了**: 全件名辞書の基盤（Phase 6）+ 全件投入（Phase 7）で `languages/*.yaml` が全件揃う（[phase-06](./phase-06-author-static-data.md) / [phase-07](./phase-07-languages-populate.md)）。名前が事前に全件揃うため投入時の ja gap が原則出ない。
-- **Phase 8 完了**: `author-regulation-data` skill（reg ごとの取得オーケストレーション = reset → `showdown-sync.yml` dispatch → 照合 → per-reg 著述・[phase-08](./phase-08-author-regulation-data-skill.md)）が新設されている。
+- **plan 10（showdown-first-data）完了**: showdown 抽出 + 転記 / PokeAPI ja 専任 / `showdown-sync.yml` / Serebii 速報 + 新スクレイパー / `verify-showdown-pr` skill + rules 改訂がすべて揃っている（[completed/10-showdown-first-data](../completed/10-showdown-first-data/README.md)）。
+- **全件名辞書が揃う**: `author-static-data`（`pokeapi-names.yml`）で `languages/*.yaml` が全件揃う（[completed/10-showdown-first-data/phase-06](../completed/10-showdown-first-data/phase-06-author-static-data.md) / [phase-07](../completed/10-showdown-first-data/phase-07-languages-populate.md)）。名前が事前に全件揃うため投入時の ja gap が原則出ない。
+- **`author-regulation-data` skill**: reg ごとの取得オーケストレーション（reset → `showdown-sync.yml` dispatch → 照合 → per-reg 著述・[completed/10-showdown-first-data/phase-08](../completed/10-showdown-first-data/phase-08-author-regulation-data-skill.md)）が新設済み。
+- **本計画群 Phase 1-2 完了**: 復元機構の堅牢化（P1-3）+ languages 復元で main が緑・PR 作成が非 third-party 化済み。
 - `rules.yaml` / `type-specs.yaml` がコミット済みで存在（静的コミット・自動化対象外）。
 - 確定済み rule: [[data-pipeline]] / [[cli-and-io]] / [[type-conventions]] / [[testing]]。ADR 0039 / 0040。
 
@@ -47,7 +48,7 @@ Phase 1-8 で揃った新パイプライン（showdown 抽出 + 転記 + 全件�
 
 ## リスク・備考
 
-- **データ投入 PR（>1000 行）を 1 PR 許容**: 全種・全 movepool 規模で意味ある粒度分割が困難なため各レギュ 1 PR とする（[[planning]] 6 基準⑤ の例外・OVERVIEW に根拠）。skill 手順（harness 資産）は Phase 6/7/8 で分離済みゆえ、本 phase の PR はデータのみ（harness 資産を混ぜない）。レビュー容易性のため specs / per-reg YAML の差分と生成物差分を分けて説明する。
+- **データ投入 PR（>1000 行）を 1 PR 許容**: 全種・全 movepool 規模で意味ある粒度分割が困難なため各レギュ 1 PR とする（[[planning]] 6 基準⑤ の例外・OVERVIEW に根拠）。skill 手順（harness 資産）は plan 10 と本計画群 Phase 1-2 で分離済みゆえ、本 phase の PR はデータのみ（harness 資産を混ぜない）。レビュー容易性のため specs / per-reg YAML の差分と生成物差分を分けて説明する。
 - 大量投入の取りこぼし・名称ゆれ・フォルム扱いは showdown 抽出の決定論性 + `verify-showdown-pr` の Serebii 照合 + `pokemon-data-reviewer` レビューで吸収する。
 - メガの多重表現（`species-specs.megaEvolvesTo` / 持ち物 `megaSpecies` / per-reg `mega.yaml`）の整合は `check:regulation` で担保。
-- 本 phase 完了で 10 計画群が完了。`finish-phase` で `completed/10-showdown-first-data` への集約を促す。
+- 本 phase 完了で **11 計画群が完了**。`finish-phase` で `completed/11-static-restore-hardening` への集約を促す。

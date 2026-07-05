@@ -16,7 +16,7 @@ PokeAPI から**全件名**（未解禁含む全ポケモン・持ち物・技�
 - スコープ外:
   - **全件データの実投入**（Phase 7 が本 workflow を実行）。
   - **`languages/mega.yaml` の名前投入**: （当時）mega は PokeAPI のカテゴリに無く全件取得の対象外とし、mega en は showdown（per-reg 取得 = Phase 8）・mega ja は手作業とした。本 phase は mega.yaml の空骨格 scaffold のみ担い、名前は埋めない。
-    - **> supersede 追補（issue #215 / ADR 0043）**: mega 名は PokeAPI `pokemon-form` の `form_names`（ja/en）から取得する経路へ一本化され、showdown の mega 名取得ルート（`sync-showdown` の en 書き込み）は削除された。現行 SoT は [[data-pipeline]] の名前取得元分担表（mega = PokeAPI）と [author-static-data](../../../.claude/skills/author-static-data/SKILL.md)（mega 名も担当）。
+    - **> supersede 追補（issue #215 / ADR 0043）**: mega 名は PokeAPI `pokemon-form` の `form_names`（ja/en）から取得する経路へ一本化され、showdown の mega 名取得ルート（`sync-showdown` の en 書き込み）は削除された。現行 SoT は [[data-pipeline]] の名前取得元分担表（mega = PokeAPI）と [author-static-data](../../../../.claude/skills/author-static-data/SKILL.md)（mega 名も担当）。
   - **`rules.yaml` / `type-specs.yaml`**（能力ポイント定数・タイプ相性表）: 変更頻度が極小の静的コミットファイルとし、いずれの skill/workflow も自動更新しない（必要時のみ手編集）。`generate` の前提としてコミット済みで存在する。
   - per-reg 解禁データ取得（Phase 8）。`languages/regulations.yaml`（per-reg 名・Phase 8）。`showdown:types` 抽出の新設（OVERVIEW スコープ外の維持）。
 
