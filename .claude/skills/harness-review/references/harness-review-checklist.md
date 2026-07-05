@@ -83,6 +83,11 @@ auto-merge ゲート（発火条件）は [`code-review.md` の「auto-merge ゲ
   **`.workflow` / `.ts`** まで（`git grep` ワンライナで一括）。**凍結対象の判断**: クリッカブルリンクが 404 化するものは
   張り替え、**歴史記録（archive ADR 本文・完了 phase doc の forward 参照・learnings）は凍結可**（番号が指すテーマが
   不変な場合）。archive ADR 本文の可変 plan 参照が改名で 404 化する場合は [[adr]] の例外#1（脱リンク）が既定。
+- **skill rename / 用途変更 PR の受け入れ基準 wording と coverage 除外死角**（learning #191/#206）: rename phase の
+  受け入れ基準が「`git grep <old> = 0`」型でないか（learnings / completed / archive の歴史言及で達成不能・基準は
+  「**live dangling ゼロ + 履歴凍結**」で書く・[[planning]] insert/renumber チェックリスト）。あわせて責務が変わる skill の
+  紐づく **coverage 対象外コード（`src/codegen/*.ts` 等）のヘッダ / 説明コメントが実態に追従しているか**を点検する
+  （テストが縛らず機械ゲートで捕れない除外死角・[`code-review`](../../code-review/references/code-review-checklist.md) と対）。
 
 ## 5. paths × 重点観点
 

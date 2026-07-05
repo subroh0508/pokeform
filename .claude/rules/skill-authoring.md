@@ -41,6 +41,7 @@ skill が **Claude 固有の Workflow**（多段オーケストレーション�
 
 - skill には**手順とトリガ**を書く。仕様の細部（数値・型パターン）は正本（各 rule / `src/`）に置き、skill からは**参照**する。
 - **機械ゲート（型 / テスト / lint）やレビュー観点を skill 内で再実装しない**。既存の `pnpm verify` / Git hooks / レビュー skill を**再利用**する。
+- **rule から skill 手順を指すときは「全量インライン再記述」でなく「ポインタ + 責務 1 行」に留める**。手順詳細の SoT は skill 本文に一本化し、rule は skill の存在と責務境界だけを述べる。rule に手順を全量列挙すると、将来 skill 手順が変わったとき rule 側の再記述が追従漏れになる（#210 nit）。
 - 決定論的・小規模な手順 skill では eval 駆動の重い反復は簡素化してよい（`skill-creator` の重い検証は任意）。
 
 ## 圧縮（文体シンプル化）PR の規約
@@ -63,3 +64,4 @@ rule / skill の**意味・trigger 精度・安全性記述を保ったまま冗
 - **ファイル参照は markdown リンク**: skill 内のファイル参照は `[表示名](./path)` で書く。`[[...]]` は rule / memory 名の wikilink 専用で、ファイルパスに使わない（記法の混同を避ける）。
 - **`description` は文字数で ≤1024**: 日本語は 3 バイト/字で `wc -c`（バイト数）が誤判定する。**文字数**（rendered）で 1024 以内を確認する。
 - **cross-agent パリティ**: canonical（`.claude/skills/<name>`）と `.agents/skills/<name>` symlink（または copy）が一致し、`references/` も symlink 経由で参照できるか（[[cross-agent]]）。
+- **`allowed-tools` は最小権限に絞る**: 新設 skill の `allowed-tools` は**踏襲元 skill をそのままコピーしない**。本文で実際に呼ぶツール（委譲コマンドの `pnpm *` / `gh *` 等）に対応するエントリだけ残し、本文に現れない直呼び（`Bash(node scripts/*)` 等）は削る。過剰権限は事故・誤用の面積を広げる（#210 harness-review nit）。
