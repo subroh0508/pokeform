@@ -20,7 +20,7 @@ on:
           - m-a
           - m-b
 
-# create-pull-request が branch push + PR open するため最小権限を明示付与する（[[redaction]]）。
+# gh pr create が branch push + PR open するため最小権限を明示付与する（[[redaction]]）。
 permissions:
   contents: write
   pull-requests: write
@@ -97,23 +97,39 @@ jobs:
           pnpm generate:data
           pnpm verify
 
-      # 差分があれば data:authoritative ラベルの PR を自動作成する。
-      # 本文の commit SHA / mod / 件数は redaction 不要の公開メタ（showdown public repo・[[redaction]]）。
+      # 差分があれば data:authoritative ラベルの PR を gh CLI（非 third-party・GITHUB_TOKEN）で自動作成する。
+      # third-party action（peter-evans/create-pull-request）を使わない（plan 11 P4）。本文の commit SHA / mod /
+      # 件数は redaction 不要の公開メタ（showdown public repo・[[redaction]]）。
+      # 注: GITHUB_TOKEN で作られた PR は on:pull_request の CI を自動トリガしない（GH 仕様・cpr でも同じ）。
+      # 本 step の手前で workflow 内 verify を通しているのが事前ゲートで、PR 側 CI は merge 後の push:main で回る。
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          branch: data/showdown-${{ github.event.inputs.regulation }}-${{ github.run_id }}
-          base: main
-          labels: data:authoritative
-          commit-message: "data(showdown): ${{ github.event.inputs.regulation }} 解禁データを pokemon-showdown から同期"
-          title: "data(showdown): ${{ github.event.inputs.regulation }} 解禁データ同期（authoritative）"
-          body: |
-            pokemon-showdown を第一の正（authoritative）として解禁データを自動同期した PR です（ADR 0039）。
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          BRANCH="data/showdown-${{ github.event.inputs.regulation }}-${{ github.run_id }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$BRANCH"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "差分なし: PR を作成しない"; exit 0
+          fi
+          git commit -m "data(showdown): ${{ github.event.inputs.regulation }} 解禁データを pokemon-showdown から同期"
+          git push --no-verify -u origin "$BRANCH"
+          gh label create data:authoritative --color 0E8A16 --description "pokemon-showdown 解禁データ同期 PR" --force
+          cat > "$RUNNER_TEMP/pr-body.md" <<'BODY'
+          pokemon-showdown を第一の正（authoritative）として解禁データを自動同期した PR です（ADR 0039）。
 
-            - **regulation**: `${{ github.event.inputs.regulation }}`
-            - **showdown ref**: `master`（shallow `fetch-depth: 1`）
-            - **dataset**: species / moves / items / abilities / mega + ja 名 backfill（PokeAPI）
-            - **検証**: `check:regulation` → `generate:data` → `pnpm verify` を通過
-            - **workflow run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          - **regulation**: `${{ github.event.inputs.regulation }}`
+          - **showdown ref**: `master`（shallow `fetch-depth: 1`）
+          - **dataset**: species / moves / items / abilities / mega + ja 名 backfill（PokeAPI）
+          - **検証**: `check:regulation` → `generate:data` → `pnpm verify` を通過
+          - **workflow run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-            > 出典は Smogon コミュニティの再現データ。正確性は `verify-showdown-pr` の Serebii 照合で裏取りする。
+          > 出典は Smogon コミュニティの再現データ。正確性は `verify-showdown-pr` の Serebii 照合で裏取りする。
+          BODY
+          gh pr create --base main --head "$BRANCH" \
+            --title "data(showdown): ${{ github.event.inputs.regulation }} 解禁データ同期（authoritative）" \
+            --label data:authoritative \
+            --body-file "$RUNNER_TEMP/pr-body.md"

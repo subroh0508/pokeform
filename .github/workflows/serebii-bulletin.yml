@@ -20,7 +20,7 @@ on:
           - m-a
           - m-b
 
-# create-pull-request が branch push + PR open するため最小権限を明示付与する（[[redaction]]）。
+# gh pr create が branch push + PR open するため最小権限を明示付与する（[[redaction]]）。
 permissions:
   contents: write
   pull-requests: write
@@ -66,30 +66,46 @@ jobs:
           pnpm generate:data
           pnpm verify
 
-      # 差分があれば data:provisional ラベルの速報 PR を自動作成する。
-      # 出典 URL は Serebii public ページで redaction 不要の公開メタ（[[redaction]]）。
+      # 差分があれば data:provisional ラベルの速報 PR を gh CLI（非 third-party・GITHUB_TOKEN）で自動作成する。
+      # third-party action（peter-evans/create-pull-request）を使わない（plan 11 P4）。出典 URL は Serebii public
+      # ページで redaction 不要の公開メタ（[[redaction]]）。
+      # 注: GITHUB_TOKEN で作られた PR は on:pull_request の CI を自動トリガしない（GH 仕様・cpr でも同じ）。
+      # 本 step の手前で workflow 内 verify を通しているのが事前ゲートで、PR 側 CI は merge 後の push:main で回る。
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          branch: data/serebii-bulletin-${{ github.event.inputs.regulation }}-${{ github.run_id }}
-          base: main
-          labels: data:provisional
-          commit-message: "data(serebii): ${{ github.event.inputs.regulation }} 解禁データを Serebii から速報取得"
-          title: "data(serebii): ${{ github.event.inputs.regulation }} 解禁データ速報（provisional）"
-          body: |
-            Serebii を速報（provisional）経路としてスクレイプした解禁データの **速報 PR** です（ADR 0040）。
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          BRANCH="data/serebii-bulletin-${{ github.event.inputs.regulation }}-${{ github.run_id }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$BRANCH"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "差分なし: PR を作成しない"; exit 0
+          fi
+          git commit -m "data(serebii): ${{ github.event.inputs.regulation }} 解禁データを Serebii から速報取得"
+          git push --no-verify -u origin "$BRANCH"
+          gh label create data:provisional --color FBCA04 --description "Serebii 速報解禁データ PR" --force
+          cat > "$RUNNER_TEMP/pr-body.md" <<'BODY'
+          Serebii を速報（provisional）経路としてスクレイプした解禁データの **速報 PR** です（ADR 0040）。
 
-            > ⚠️ **速報・暫定値です。showdown-sync（authoritative）が追いついたら上書きされます。**
+          > ⚠️ **速報・暫定値です。showdown-sync（authoritative）が追いついたら上書きされます。**
 
-            - **regulation**: `${{ github.event.inputs.regulation }}`
-            - **dataset**: species / mega / items / moves / abilities（ja: 種族・メガ=カタカナ / 特性・持ち物・技=ひらがな）
-            - **検証**: `check:regulation` → `generate:data` → `pnpm verify` を通過
-            - **検証日**: ${{ github.event.repository.updated_at }}（workflow run 時点）
-            - **workflow run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          - **regulation**: `${{ github.event.inputs.regulation }}`
+          - **dataset**: species / mega / items / moves / abilities（ja: 種族・メガ=カタカナ / 特性・持ち物・技=ひらがな）
+          - **検証**: `check:regulation` → `generate:data` → `pnpm verify` を通過
+          - **検証日**: ${{ github.event.repository.updated_at }}（workflow run 時点）
+          - **workflow run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-            出典（Serebii Champions ページ群）:
-            - 解禁種族: https://www.serebii.net/pokemonchampions/pokemon.shtml
-            - 種族別（構造 / 技 / メガ / ja）: https://www.serebii.net/pokedex-champions/
-            - 技別: https://www.serebii.net/attackdex-champions/
-            - 持ち物: https://www.serebii.net/pokemonchampions/items.shtml ・ https://www.serebii.net/itemdex/
-            - 特性: https://www.serebii.net/abilitydex/
+          出典（Serebii Champions ページ群）:
+          - 解禁種族: https://www.serebii.net/pokemonchampions/pokemon.shtml
+          - 種族別（構造 / 技 / メガ / ja）: https://www.serebii.net/pokedex-champions/
+          - 技別: https://www.serebii.net/attackdex-champions/
+          - 持ち物: https://www.serebii.net/pokemonchampions/items.shtml ・ https://www.serebii.net/itemdex/
+          - 特性: https://www.serebii.net/abilitydex/
+          BODY
+          gh pr create --base main --head "$BRANCH" \
+            --title "data(serebii): ${{ github.event.inputs.regulation }} 解禁データ速報（provisional）" \
+            --label data:provisional \
+            --body-file "$RUNNER_TEMP/pr-body.md"

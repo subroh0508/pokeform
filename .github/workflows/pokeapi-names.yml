@@ -13,7 +13,7 @@ name: pokeapi-names
 on:
   workflow_dispatch: {}
 
-# create-pull-request が branch push + PR open するため最小権限を明示付与する（[[redaction]]）。
+# gh pr create が branch push + PR open するため最小権限を明示付与する（[[redaction]]）。
 permissions:
   contents: write
   pull-requests: write
@@ -58,35 +58,52 @@ jobs:
           pnpm check:yaml-style
           pnpm verify
 
-      # 差分があれば data:names ラベルの languages 更新 PR を自動作成する。
-      # 本文の件数 / workflow run は redaction 不要の公開メタ（PokeAPI public data・[[redaction]]）。
+      # 差分があれば data:names ラベルの languages 更新 PR を gh CLI（非 third-party・GITHUB_TOKEN）で自動作成する。
+      # third-party action（peter-evans/create-pull-request）を使わない（plan 11 P4）。cherry-pick を介さないため
+      # 撤去 main への divergent branch でも衝突しない。本文の件数 / workflow run は redaction 不要の公開メタ
+      # （PokeAPI public data・[[redaction]]）。
+      # 注: GITHUB_TOKEN で作られた PR は on:pull_request の CI を自動トリガしない（GH 仕様・cpr でも同じ）。
+      # 本 step の手前で workflow 内 verify を通しているのが事前ゲートで、PR 側 CI は merge 後の push:main で回る。
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          branch: data/pokeapi-names-${{ github.run_id }}
-          base: main
-          labels: data:names
-          commit-message: "data(languages): PokeAPI 全件名（ja/en）を languages へ同期"
-          title: "data(languages): PokeAPI 全件名同期（names）"
-          body: |
-            PokeAPI の全件名（ja/en）を名前 SoT `data/languages/*.yaml`（mega 含む 6 種）へ同期した PR です（ADR 0041 / 0043）。
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          BRANCH="data/pokeapi-names-${{ github.run_id }}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$BRANCH"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "差分なし: PR を作成しない"; exit 0
+          fi
+          git commit -m "data(languages): PokeAPI 全件名（ja/en）を languages へ同期"
+          git push --no-verify -u origin "$BRANCH"
+          gh label create data:names --color BFD4F2 --description "PokeAPI 全件名同期 PR" --force
+          cat > "$RUNNER_TEMP/pr-body.md" <<'BODY'
+          PokeAPI の全件名（ja/en）を名前 SoT `data/languages/*.yaml`（mega 含む 6 種）へ同期した PR です（ADR 0041 / 0043）。
 
-            - **dataset**: species / items / moves / abilities / types / **mega**（全件列挙・reg 非依存の全件名辞書）
-            - **取得元**: PokeAPI `names`（ja = ja-Hrkt 優先 / en）。**mega は `pokemon-form` の `form_names`**（`is_mega`
-              で判別・ADR 0043）。append/既存尊重で既存の en（showdown 正 / Serebii 速報）は上書きしない。
-            - **検証**: `generate:data` → `check:yaml-style` → `pnpm verify` を通過
-            - **workflow run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          - **dataset**: species / items / moves / abilities / types / **mega**（全件列挙・reg 非依存の全件名辞書）
+          - **取得元**: PokeAPI `names`（ja = ja-Hrkt 優先 / en）。**mega は `pokemon-form` の `form_names`**（`is_mega`
+            で判別・ADR 0043）。append/既存尊重で既存の en（showdown 正 / Serebii 速報）は上書きしない。
+          - **検証**: `generate:data` → `check:yaml-style` → `pnpm verify` を通過
+          - **workflow run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-            ### 手作業カバー箇所の差分チェック（Serebii Champions）
+          ### 手作業カバー箇所の差分チェック（Serebii Champions）
 
-            PokeAPI に無い Champions 固有の名前（**メガストーン item 名**等）は本 PR で埋まりません。下記 Serebii
-            ページで目視照合し、抜け / 誤りがあれば該当 languages ファイルへ手作業で追加してください（author-static-data
-            skill 手順 3）:
+          PokeAPI に無い Champions 固有の名前（**メガストーン item 名**等）は本 PR で埋まりません。下記 Serebii
+          ページで目視照合し、抜け / 誤りがあれば該当 languages ファイルへ手作業で追加してください（author-static-data
+          skill 手順 3）:
 
-            - 持ち物・メガストーン: https://www.serebii.net/pokemonchampions/items.shtml
-            - 技: https://www.serebii.net/pokemonchampions/moves.shtml
-            - 種族・メガ: https://www.serebii.net/pokemonchampions/pokemon.shtml
-            - メガ特性: https://www.serebii.net/pokemonchampions/megaabilities.shtml
-            - 新特性: https://www.serebii.net/pokemonchampions/newabilities.shtml
+          - 持ち物・メガストーン: https://www.serebii.net/pokemonchampions/items.shtml
+          - 技: https://www.serebii.net/pokemonchampions/moves.shtml
+          - 種族・メガ: https://www.serebii.net/pokemonchampions/pokemon.shtml
+          - メガ特性: https://www.serebii.net/pokemonchampions/megaabilities.shtml
+          - 新特性: https://www.serebii.net/pokemonchampions/newabilities.shtml
 
-            > 名前の取得元分担は [[data-pipeline]] を参照。全件データ投入は author-static-data skill がドライブする。
+          > 名前の取得元分担は [[data-pipeline]] を参照。全件データ投入は author-static-data skill がドライブする。
+          BODY
+          gh pr create --base main --head "$BRANCH" \
+            --title "data(languages): PokeAPI 全件名同期（names）" \
+            --label data:names \
+            --body-file "$RUNNER_TEMP/pr-body.md"
