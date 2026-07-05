@@ -1,0 +1,3522 @@
+# data/languages/species.yaml — base 種族の日英名（id→{ja,en}・名前 SoT・ADR 0035）。
+
+species:
+  abomasnow:
+    ja: ユキノオー
+    en: Abomasnow
+  abra:
+    ja: ケーシィ
+    en: Abra
+  absol:
+    ja: アブソル
+    en: Absol
+  accelgor:
+    ja: アギルダー
+    en: Accelgor
+  aegislash:
+    ja: ギルガルド
+    en: Aegislash
+  aegislash-blade:
+    ja: ギルガルド（ブレードフォルム）
+    en: Aegislash (Blade Forme)
+  aegislash-shield:
+    ja: ギルガルド（シールドフォルム）
+    en: Aegislash (Shield Forme)
+  aerodactyl:
+    ja: プテラ
+    en: Aerodactyl
+  aggron:
+    ja: ボスゴドラ
+    en: Aggron
+  aipom:
+    ja: エイパム
+    en: Aipom
+  alakazam:
+    ja: フーディン
+    en: Alakazam
+  alcremie:
+    ja: マホイップ
+    en: Alcremie
+  alomomola:
+    ja: ママンボウ
+    en: Alomomola
+  altaria:
+    ja: チルタリス
+    en: Altaria
+  amaura:
+    ja: アマルス
+    en: Amaura
+  ambipom:
+    ja: エテボース
+    en: Ambipom
+  amoonguss:
+    ja: モロバレル
+    en: Amoonguss
+  ampharos:
+    ja: デンリュウ
+    en: Ampharos
+  annihilape:
+    ja: コノヨザル
+    en: Annihilape
+  anorith:
+    ja: アノプス
+    en: Anorith
+  appletun:
+    ja: タルップル
+    en: Appletun
+  applin:
+    ja: カジッチュ
+    en: Applin
+  araquanid:
+    ja: オニシズクモ
+    en: Araquanid
+  arbok:
+    ja: アーボック
+    en: Arbok
+  arboliva:
+    ja: オリーヴァ
+    en: Arboliva
+  arcanine:
+    ja: ウインディ
+    en: Arcanine
+  arcanine-hisui:
+    ja: ウインディ（ヒスイのすがた）
+    en: Arcanine (Hisuian Form)
+  arceus:
+    ja: アルセウス
+    en: Arceus
+  archaludon:
+    ja: ブリジュラス
+    en: Archaludon
+  archen:
+    ja: アーケン
+    en: Archen
+  archeops:
+    ja: アーケオス
+    en: Archeops
+  arctibax:
+    ja: セゴール
+    en: Arctibax
+  arctovish:
+    ja: ウオチルドン
+    en: Arctovish
+  arctozolt:
+    ja: パッチルドン
+    en: Arctozolt
+  ariados:
+    ja: アリアドス
+    en: Ariados
+  armaldo:
+    ja: アーマルド
+    en: Armaldo
+  armarouge:
+    ja: グレンアルマ
+    en: Armarouge
+  aromatisse:
+    ja: フレフワン
+    en: Aromatisse
+  aron:
+    ja: ココドラ
+    en: Aron
+  arrokuda:
+    ja: サシカマス
+    en: Arrokuda
+  articuno:
+    ja: フリーザー
+    en: Articuno
+  articuno-galar:
+    ja: フリーザー（ガラルのすがた）
+    en: Articuno (Galarian Form)
+  audino:
+    ja: タブンネ
+    en: Audino
+  aurorus:
+    ja: アマルルガ
+    en: Aurorus
+  avalugg:
+    ja: クレベース
+    en: Avalugg
+  avalugg-hisui:
+    ja: クレベース（ヒスイのすがた）
+    en: Avalugg (Hisuian Form)
+  axew:
+    ja: キバゴ
+    en: Axew
+  azelf:
+    ja: アグノム
+    en: Azelf
+  azumarill:
+    ja: マリルリ
+    en: Azumarill
+  azurill:
+    ja: ルリリ
+    en: Azurill
+  bagon:
+    ja: タツベイ
+    en: Bagon
+  baltoy:
+    ja: ヤジロン
+    en: Baltoy
+  banette:
+    ja: ジュペッタ
+    en: Banette
+  barbaracle:
+    ja: ガメノデス
+    en: Barbaracle
+  barboach:
+    ja: ドジョッチ
+    en: Barboach
+  barraskewda:
+    ja: カマスジョー
+    en: Barraskewda
+  basculegion-female:
+    ja: イダイトウ（メスのすがた）
+    en: Basculegion (Female)
+  basculegion-male:
+    ja: イダイトウ（オスのすがた）
+    en: Basculegion (Male)
+  basculin-blue:
+    ja: バスラオ（あおすじのすがた）
+    en: Basculin (Blue-Striped Form)
+  basculin-red:
+    ja: バスラオ（あかすじのすがた）
+    en: Basculin (Red-Striped Form)
+  basculin-white:
+    ja: バスラオ（しろすじのすがた）
+    en: Basculin (White-Striped Form)
+  bastiodon:
+    ja: トリデプス
+    en: Bastiodon
+  baxcalibur:
+    ja: セグレイブ
+    en: Baxcalibur
+  bayleef:
+    ja: ベイリーフ
+    en: Bayleef
+  beartic:
+    ja: ツンベアー
+    en: Beartic
+  beautifly:
+    ja: アゲハント
+    en: Beautifly
+  beedrill:
+    ja: スピアー
+    en: Beedrill
+  beheeyem:
+    ja: オーベム
+    en: Beheeyem
+  beldum:
+    ja: ダンバル
+    en: Beldum
+  bellibolt:
+    ja: ハラバリー
+    en: Bellibolt
+  bellossom:
+    ja: キレイハナ
+    en: Bellossom
+  bellsprout:
+    ja: マダツボミ
+    en: Bellsprout
+  bergmite:
+    ja: カチコール
+    en: Bergmite
+  bewear:
+    ja: キテルグマ
+    en: Bewear
+  bibarel:
+    ja: ビーダル
+    en: Bibarel
+  bidoof:
+    ja: ビッパ
+    en: Bidoof
+  binacle:
+    ja: カメテテ
+    en: Binacle
+  bisharp:
+    ja: キリキザン
+    en: Bisharp
+  blacephalon:
+    ja: ズガドーン
+    en: Blacephalon
+  blastoise:
+    ja: カメックス
+    en: Blastoise
+  blaziken:
+    ja: バシャーモ
+    en: Blaziken
+  blipbug:
+    ja: サッチムシ
+    en: Blipbug
+  blissey:
+    ja: ハピナス
+    en: Blissey
+  blitzle:
+    ja: シママ
+    en: Blitzle
+  boldore:
+    ja: ガントル
+    en: Boldore
+  boltund:
+    ja: パルスワン
+    en: Boltund
+  bombirdier:
+    ja: オトシドリ
+    en: Bombirdier
+  bonsly:
+    ja: ウソハチ
+    en: Bonsly
+  bouffalant:
+    ja: バッフロン
+    en: Bouffalant
+  bounsweet:
+    ja: アマカジ
+    en: Bounsweet
+  braixen:
+    ja: テールナー
+    en: Braixen
+  brambleghast:
+    ja: アノホラグサ
+    en: Brambleghast
+  bramblin:
+    ja: アノクサ
+    en: Bramblin
+  braviary:
+    ja: ウォーグル
+    en: Braviary
+  braviary-hisui:
+    ja: ウォーグル（ヒスイのすがた）
+    en: Braviary (Hisuian Form)
+  breloom:
+    ja: キノガッサ
+    en: Breloom
+  brionne:
+    ja: オシャマリ
+    en: Brionne
+  bronzong:
+    ja: ドータクン
+    en: Bronzong
+  bronzor:
+    ja: ドーミラー
+    en: Bronzor
+  brute-bonnet:
+    ja: アラブルタケ
+    en: Brute Bonnet
+  bruxish:
+    ja: ハギギシリ
+    en: Bruxish
+  budew:
+    ja: スボミー
+    en: Budew
+  buizel:
+    ja: ブイゼル
+    en: Buizel
+  bulbasaur:
+    ja: フシギダネ
+    en: Bulbasaur
+  buneary:
+    ja: ミミロル
+    en: Buneary
+  bunnelby:
+    ja: ホルビー
+    en: Bunnelby
+  burmy:
+    ja: ミノムッチ
+    en: Burmy
+  butterfree:
+    ja: バタフリー
+    en: Butterfree
+  buzzwole:
+    ja: マッシブーン
+    en: Buzzwole
+  cacnea:
+    ja: サボネア
+    en: Cacnea
+  cacturne:
+    ja: ノクタス
+    en: Cacturne
+  calyrex:
+    ja: バドレックス
+    en: Calyrex
+  calyrex-ice:
+    ja: バドレックス（はくばじょうのすがた）
+    en: Calyrex (Ice Rider)
+  calyrex-shadow:
+    ja: バドレックス（こくばじょうのすがた）
+    en: Calyrex (Shadow Rider)
+  camerupt:
+    ja: バクーダ
+    en: Camerupt
+  capsakid:
+    ja: カプサイジ
+    en: Capsakid
+  carbink:
+    ja: メレシー
+    en: Carbink
+  carkol:
+    ja: トロッゴン
+    en: Carkol
+  carnivine:
+    ja: マスキッパ
+    en: Carnivine
+  carracosta:
+    ja: アバゴーラ
+    en: Carracosta
+  carvanha:
+    ja: キバニア
+    en: Carvanha
+  cascoon:
+    ja: マユルド
+    en: Cascoon
+  castform:
+    ja: ポワルン
+    en: Castform
+  castform-normal:
+    ja: ポワルン（ポワルンのすがた）
+    en: Castform (Normal)
+  castform-rainy:
+    ja: ポワルン（あまみずのすがた）
+    en: Castform (Rainy Form)
+  castform-snowy:
+    ja: ポワルン（ゆきぐものすがた）
+    en: Castform (Snowy Form)
+  castform-sunny:
+    ja: ポワルン（たいようのすがた）
+    en: Castform (Sunny Form)
+  caterpie:
+    ja: キャタピー
+    en: Caterpie
+  celebi:
+    ja: セレビィ
+    en: Celebi
+  celesteela:
+    ja: テッカグヤ
+    en: Celesteela
+  centiskorch:
+    ja: マルヤクデ
+    en: Centiskorch
+  ceruledge:
+    ja: ソウブレイズ
+    en: Ceruledge
+  cetitan:
+    ja: ハルクジラ
+    en: Cetitan
+  cetoddle:
+    ja: アルクジラ
+    en: Cetoddle
+  chandelure:
+    ja: シャンデラ
+    en: Chandelure
+  chansey:
+    ja: ラッキー
+    en: Chansey
+  charcadet:
+    ja: カルボウ
+    en: Charcadet
+  charizard:
+    ja: リザードン
+    en: Charizard
+  charjabug:
+    ja: デンヂムシ
+    en: Charjabug
+  charmander:
+    ja: ヒトカゲ
+    en: Charmander
+  charmeleon:
+    ja: リザード
+    en: Charmeleon
+  chatot:
+    ja: ペラップ
+    en: Chatot
+  cherrim:
+    ja: チェリム
+    en: Cherrim
+  cherubi:
+    ja: チェリンボ
+    en: Cherubi
+  chesnaught:
+    ja: ブリガロン
+    en: Chesnaught
+  chespin:
+    ja: ハリマロン
+    en: Chespin
+  chewtle:
+    ja: カムカメ
+    en: Chewtle
+  chi-yu:
+    ja: イーユイ
+    en: Chi-Yu
+  chien-pao:
+    ja: パオジアン
+    en: Chien-Pao
+  chikorita:
+    ja: チコリータ
+    en: Chikorita
+  chimchar:
+    ja: ヒコザル
+    en: Chimchar
+  chimecho:
+    ja: チリーン
+    en: Chimecho
+  chinchou:
+    ja: チョンチー
+    en: Chinchou
+  chingling:
+    ja: リーシャン
+    en: Chingling
+  cinccino:
+    ja: チラチーノ
+    en: Cinccino
+  cinderace:
+    ja: エースバーン
+    en: Cinderace
+  clamperl:
+    ja: パールル
+    en: Clamperl
+  clauncher:
+    ja: ウデッポウ
+    en: Clauncher
+  clawitzer:
+    ja: ブロスター
+    en: Clawitzer
+  claydol:
+    ja: ネンドール
+    en: Claydol
+  clefable:
+    ja: ピクシー
+    en: Clefable
+  clefairy:
+    ja: ピッピ
+    en: Clefairy
+  cleffa:
+    ja: ピィ
+    en: Cleffa
+  clobbopus:
+    ja: タタッコ
+    en: Clobbopus
+  clodsire:
+    ja: ドオー
+    en: Clodsire
+  cloyster:
+    ja: パルシェン
+    en: Cloyster
+  coalossal:
+    ja: セキタンザン
+    en: Coalossal
+  cobalion:
+    ja: コバルオン
+    en: Cobalion
+  cofagrigus:
+    ja: デスカーン
+    en: Cofagrigus
+  combee:
+    ja: ミツハニー
+    en: Combee
+  combusken:
+    ja: ワカシャモ
+    en: Combusken
+  comfey:
+    ja: キュワワー
+    en: Comfey
+  conkeldurr:
+    ja: ローブシン
+    en: Conkeldurr
+  copperajah:
+    ja: ダイオウドウ
+    en: Copperajah
+  corphish:
+    ja: ヘイガニ
+    en: Corphish
+  corsola:
+    ja: サニーゴ
+    en: Corsola
+  corsola-galar:
+    ja: サニーゴ（ガラルのすがた）
+    en: Corsola (Galarian Form)
+  corviknight:
+    ja: アーマーガア
+    en: Corviknight
+  corvisquire:
+    ja: アオガラス
+    en: Corvisquire
+  cosmoem:
+    ja: コスモウム
+    en: Cosmoem
+  cosmog:
+    ja: コスモッグ
+    en: Cosmog
+  cottonee:
+    ja: モンメン
+    en: Cottonee
+  crabominable:
+    ja: ケケンカニ
+    en: Crabominable
+  crabrawler:
+    ja: マケンカニ
+    en: Crabrawler
+  cradily:
+    ja: ユレイドル
+    en: Cradily
+  cramorant:
+    ja: ウッウ
+    en: Cramorant
+  cramorant-gorging:
+    ja: ウッウ（まるのみのすがた）
+    en: Cramorant (Gorging Form)
+  cramorant-gulping:
+    ja: ウッウ（うのみのすがた）
+    en: Cramorant (Gulping Form)
+  cranidos:
+    ja: ズガイドス
+    en: Cranidos
+  crawdaunt:
+    ja: シザリガー
+    en: Crawdaunt
+  cresselia:
+    ja: クレセリア
+    en: Cresselia
+  croagunk:
+    ja: グレッグル
+    en: Croagunk
+  crobat:
+    ja: クロバット
+    en: Crobat
+  crocalor:
+    ja: アチゲータ
+    en: Crocalor
+  croconaw:
+    ja: アリゲイツ
+    en: Croconaw
+  crustle:
+    ja: イワパレス
+    en: Crustle
+  cryogonal:
+    ja: フリージオ
+    en: Cryogonal
+  cubchoo:
+    ja: クマシュン
+    en: Cubchoo
+  cubone:
+    ja: カラカラ
+    en: Cubone
+  cufant:
+    ja: ゾウドウ
+    en: Cufant
+  cursola:
+    ja: サニゴーン
+    en: Cursola
+  cutiefly:
+    ja: アブリー
+    en: Cutiefly
+  cyclizar:
+    ja: モトトカゲ
+    en: Cyclizar
+  cyndaquil:
+    ja: ヒノアラシ
+    en: Cyndaquil
+  dachsbun:
+    ja: バウッツェル
+    en: Dachsbun
+  darkrai:
+    ja: ダークライ
+    en: Darkrai
+  darmanitan:
+    ja: ヒヒダルマ
+    en: Darmanitan
+  darmanitan-galar:
+    ja: ヒヒダルマ（ガラルのすがた）
+    en: Darmanitan (Galarian Form)
+  darmanitan-galar-standard:
+    ja: ヒヒダルマ（ガラルのすがた・ノーマルモード）
+    en: Darmanitan (Galarian Form Standard Mode)
+  darmanitan-galar-zen:
+    ja: ヒヒダルマ（ガラルのすがた・ダルマモード）
+    en: Darmanitan (Galarian Form Zen Mode)
+  darmanitan-standard:
+    ja: ヒヒダルマ（ノーマルモード）
+    en: Darmanitan (Standard Mode)
+  darmanitan-zen:
+    ja: ヒヒダルマ（ダルマモード）
+    en: Darmanitan (Zen Mode)
+  dartrix:
+    ja: フクスロー
+    en: Dartrix
+  darumaka:
+    ja: ダルマッカ
+    en: Darumaka
+  darumaka-galar:
+    ja: ダルマッカ（ガラルのすがた）
+    en: Darumaka (Galarian Form)
+  decidueye:
+    ja: ジュナイパー
+    en: Decidueye
+  decidueye-hisui:
+    ja: ジュナイパー（ヒスイのすがた）
+    en: Decidueye (Hisuian Form)
+  dedenne:
+    ja: デデンネ
+    en: Dedenne
+  deerling:
+    ja: シキジカ
+    en: Deerling
+  deino:
+    ja: モノズ
+    en: Deino
+  delcatty:
+    ja: エネコロロ
+    en: Delcatty
+  delibird:
+    ja: デリバード
+    en: Delibird
+  delphox:
+    ja: マフォクシー
+    en: Delphox
+  deoxys-attack:
+    ja: デオキシス（アタックフォルム）
+    en: Deoxys (Attack Forme)
+  deoxys-defense:
+    ja: デオキシス（ディフェンスフォルム）
+    en: Deoxys (Defense Forme)
+  deoxys-normal:
+    ja: デオキシス（ノーマルフォルム）
+    en: Deoxys (Normal Forme)
+  deoxys-speed:
+    ja: デオキシス（スピードフォルム）
+    en: Deoxys (Speed Forme)
+  dewgong:
+    ja: ジュゴン
+    en: Dewgong
+  dewott:
+    ja: フタチマル
+    en: Dewott
+  dewpider:
+    ja: シズクモ
+    en: Dewpider
+  dhelmise:
+    ja: ダダリン
+    en: Dhelmise
+  dialga:
+    ja: ディアルガ
+    en: Dialga
+  dialga-origin:
+    ja: ディアルガ（オリジンフォルム）
+    en: Dialga (Origin Forme)
+  diancie:
+    ja: ディアンシー
+    en: Diancie
+  diggersby:
+    ja: ホルード
+    en: Diggersby
+  diglett:
+    ja: ディグダ
+    en: Diglett
+  diglett-alola:
+    ja: ディグダ（アローラのすがた）
+    en: Diglett (Alolan Form)
+  dipplin:
+    ja: カミッチュ
+    en: Dipplin
+  ditto:
+    ja: メタモン
+    en: Ditto
+  dodrio:
+    ja: ドードリオ
+    en: Dodrio
+  doduo:
+    ja: ドードー
+    en: Doduo
+  dolliv:
+    ja: オリーニョ
+    en: Dolliv
+  dondozo:
+    ja: ヘイラッシャ
+    en: Dondozo
+  donphan:
+    ja: ドンファン
+    en: Donphan
+  dottler:
+    ja: レドームシ
+    en: Dottler
+  doublade:
+    ja: ニダンギル
+    en: Doublade
+  dracovish:
+    ja: ウオノラゴン
+    en: Dracovish
+  dracozolt:
+    ja: パッチラゴン
+    en: Dracozolt
+  dragalge:
+    ja: ドラミドロ
+    en: Dragalge
+  dragapult:
+    ja: ドラパルト
+    en: Dragapult
+  dragonair:
+    ja: ハクリュー
+    en: Dragonair
+  dragonite:
+    ja: カイリュー
+    en: Dragonite
+  drakloak:
+    ja: ドロンチ
+    en: Drakloak
+  drampa:
+    ja: ジジーロン
+    en: Drampa
+  drapion:
+    ja: ドラピオン
+    en: Drapion
+  dratini:
+    ja: ミニリュウ
+    en: Dratini
+  drednaw:
+    ja: カジリガメ
+    en: Drednaw
+  dreepy:
+    ja: ドラメシヤ
+    en: Dreepy
+  drifblim:
+    ja: フワライド
+    en: Drifblim
+  drifloon:
+    ja: フワンテ
+    en: Drifloon
+  drilbur:
+    ja: モグリュー
+    en: Drilbur
+  drizzile:
+    ja: ジメレオン
+    en: Drizzile
+  drowzee:
+    ja: スリープ
+    en: Drowzee
+  druddigon:
+    ja: クリムガン
+    en: Druddigon
+  dubwool:
+    ja: バイウールー
+    en: Dubwool
+  ducklett:
+    ja: コアルヒー
+    en: Ducklett
+  dudunsparce-three:
+    ja: ノココッチ（みつふしフォルム）
+    en: Dudunsparce (Three-Segment Form)
+  dudunsparce-two:
+    ja: ノココッチ（ふたふしフォルム）
+    en: Dudunsparce (Two-Segment Form)
+  dugtrio:
+    ja: ダグトリオ
+    en: Dugtrio
+  dugtrio-alola:
+    ja: ダグトリオ（アローラのすがた）
+    en: Dugtrio (Alolan Form)
+  dunsparce:
+    ja: ノコッチ
+    en: Dunsparce
+  duosion:
+    ja: ダブラン
+    en: Duosion
+  duraludon:
+    ja: ジュラルドン
+    en: Duraludon
+  durant:
+    ja: アイアント
+    en: Durant
+  dusclops:
+    ja: サマヨール
+    en: Dusclops
+  dusknoir:
+    ja: ヨノワール
+    en: Dusknoir
+  duskull:
+    ja: ヨマワル
+    en: Duskull
+  dustox:
+    ja: ドクケイル
+    en: Dustox
+  dwebble:
+    ja: イシズマイ
+    en: Dwebble
+  eelektrik:
+    ja: シビビール
+    en: Eelektrik
+  eelektross:
+    ja: シビルドン
+    en: Eelektross
+  eevee:
+    ja: イーブイ
+    en: Eevee
+  eiscue:
+    ja: コオリッポ
+    en: Eiscue
+  eiscue-ice:
+    ja: コオリッポ（アイスフェイス）
+    en: Eiscue (Ice Face)
+  eiscue-noice:
+    ja: コオリッポ（ナイスフェイス）
+    en: Eiscue (Noice Face)
+  ekans:
+    ja: アーボ
+    en: Ekans
+  eldegoss:
+    ja: ワタシラガ
+    en: Eldegoss
+  electabuzz:
+    ja: エレブー
+    en: Electabuzz
+  electivire:
+    ja: エレキブル
+    en: Electivire
+  electrike:
+    ja: ラクライ
+    en: Electrike
+  electrode:
+    ja: マルマイン
+    en: Electrode
+  electrode-hisui:
+    ja: マルマイン（ヒスイのすがた）
+    en: Electrode (Hisuian Form)
+  elekid:
+    ja: エレキッド
+    en: Elekid
+  elgyem:
+    ja: リグレー
+    en: Elgyem
+  emboar:
+    ja: エンブオー
+    en: Emboar
+  emolga:
+    ja: エモンガ
+    en: Emolga
+  empoleon:
+    ja: エンペルト
+    en: Empoleon
+  enamorus-incarnate:
+    ja: ラブトロス（けしんフォルム）
+    en: Enamorus (Incarnate Forme)
+  enamorus-therian:
+    ja: ラブトロス（れいじゅうフォルム）
+    en: Enamorus (Therian Forme)
+  entei:
+    ja: エンテイ
+    en: Entei
+  escavalier:
+    ja: シュバルゴ
+    en: Escavalier
+  espathra:
+    ja: クエスパトラ
+    en: Espathra
+  espeon:
+    ja: エーフィ
+    en: Espeon
+  espurr:
+    ja: ニャスパー
+    en: Espurr
+  eternatus:
+    ja: ムゲンダイナ
+    en: Eternatus
+  eternatus-eternamax:
+    ja: ムゲンダイナ（ムゲンダイマックス）
+    en: Eternatus (Eternamax)
+  excadrill:
+    ja: ドリュウズ
+    en: Excadrill
+  exeggcute:
+    ja: タマタマ
+    en: Exeggcute
+  exeggutor:
+    ja: ナッシー
+    en: Exeggutor
+  exeggutor-alola:
+    ja: ナッシー（アローラのすがた）
+    en: Exeggutor (Alolan Form)
+  exploud:
+    ja: バクオング
+    en: Exploud
+  falinks:
+    ja: タイレーツ
+    en: Falinks
+  farfetchd:
+    ja: カモネギ
+    en: Farfetch’d
+  farfetchd-galar:
+    ja: カモネギ（ガラルのすがた）
+    en: Farfetch’d (Galarian Form)
+  farigiraf:
+    ja: リキキリン
+    en: Farigiraf
+  fearow:
+    ja: オニドリル
+    en: Fearow
+  feebas:
+    ja: ヒンバス
+    en: Feebas
+  fennekin:
+    ja: フォッコ
+    en: Fennekin
+  feraligatr:
+    ja: オーダイル
+    en: Feraligatr
+  ferroseed:
+    ja: テッシード
+    en: Ferroseed
+  ferrothorn:
+    ja: ナットレイ
+    en: Ferrothorn
+  fezandipiti:
+    ja: キチキギス
+    en: Fezandipiti
+  fidough:
+    ja: パピモッチ
+    en: Fidough
+  finizen:
+    ja: ナミイルカ
+    en: Finizen
+  finneon:
+    ja: ケイコウオ
+    en: Finneon
+  flaaffy:
+    ja: モココ
+    en: Flaaffy
+  flabebe:
+    ja: フラベベ
+    en: Flabébé
+  flamigo:
+    ja: カラミンゴ
+    en: Flamigo
+  flapple:
+    ja: アップリュー
+    en: Flapple
+  flareon:
+    ja: ブースター
+    en: Flareon
+  fletchinder:
+    ja: ヒノヤコマ
+    en: Fletchinder
+  fletchling:
+    ja: ヤヤコマ
+    en: Fletchling
+  flittle:
+    ja: ヒラヒナ
+    en: Flittle
+  floatzel:
+    ja: フローゼル
+    en: Floatzel
+  floette:
+    ja: フラエッテ
+    en: Floette
+  floette-eternal:
+    ja: フラエッテ（えいえんのはな）
+    en: Floette (Eternal Flower)
+  floragato:
+    ja: ニャローテ
+    en: Floragato
+  florges:
+    ja: フラージェス
+    en: Florges
+  flutter-mane:
+    ja: ハバタクカミ
+    en: Flutter Mane
+  flygon:
+    ja: フライゴン
+    en: Flygon
+  fomantis:
+    ja: カリキリ
+    en: Fomantis
+  foongus:
+    ja: タマゲタケ
+    en: Foongus
+  forretress:
+    ja: フォレトス
+    en: Forretress
+  fraxure:
+    ja: オノンド
+    en: Fraxure
+  frigibax:
+    ja: セビエ
+    en: Frigibax
+  frillish:
+    ja: プルリル
+    en: Frillish
+  froakie:
+    ja: ケロマツ
+    en: Froakie
+  frogadier:
+    ja: ゲコガシラ
+    en: Frogadier
+  froslass:
+    ja: ユキメノコ
+    en: Froslass
+  frosmoth:
+    ja: モスノウ
+    en: Frosmoth
+  fuecoco:
+    ja: ホゲータ
+    en: Fuecoco
+  furfrou:
+    ja: トリミアン
+    en: Furfrou
+  furret:
+    ja: オオタチ
+    en: Furret
+  gabite:
+    ja: ガバイト
+    en: Gabite
+  gallade:
+    ja: エルレイド
+    en: Gallade
+  galvantula:
+    ja: デンチュラ
+    en: Galvantula
+  garbodor:
+    ja: ダストダス
+    en: Garbodor
+  garchomp:
+    ja: ガブリアス
+    en: Garchomp
+  gardevoir:
+    ja: サーナイト
+    en: Gardevoir
+  garganacl:
+    ja: キョジオーン
+    en: Garganacl
+  gastly:
+    ja: ゴース
+    en: Gastly
+  gastrodon:
+    ja: トリトドン
+    en: Gastrodon
+  genesect:
+    ja: ゲノセクト
+    en: Genesect
+  gengar:
+    ja: ゲンガー
+    en: Gengar
+  geodude:
+    ja: イシツブテ
+    en: Geodude
+  geodude-alola:
+    ja: イシツブテ（アローラのすがた）
+    en: Geodude (Alolan Form)
+  gholdengo:
+    ja: サーフゴー
+    en: Gholdengo
+  gible:
+    ja: フカマル
+    en: Gible
+  gigalith:
+    ja: ギガイアス
+    en: Gigalith
+  gimmighoul-chest:
+    ja: コレクレー（はこフォルム）
+    en: Gimmighoul (Chest Form)
+  gimmighoul-roaming:
+    ja: コレクレー（とほフォルム）
+    en: Gimmighoul (Roaming Form)
+  girafarig:
+    ja: キリンリキ
+    en: Girafarig
+  giratina-altered:
+    ja: ギラティナ（アナザーフォルム）
+    en: Giratina (Altered Forme)
+  giratina-origin:
+    ja: ギラティナ（オリジンフォルム）
+    en: Giratina (Origin Forme)
+  glaceon:
+    ja: グレイシア
+    en: Glaceon
+  glalie:
+    ja: オニゴーリ
+    en: Glalie
+  glameow:
+    ja: ニャルマー
+    en: Glameow
+  glastrier:
+    ja: ブリザポス
+    en: Glastrier
+  gligar:
+    ja: グライガー
+    en: Gligar
+  glimmet:
+    ja: キラーメ
+    en: Glimmet
+  glimmora:
+    ja: キラフロル
+    en: Glimmora
+  gliscor:
+    ja: グライオン
+    en: Gliscor
+  gloom:
+    ja: クサイハナ
+    en: Gloom
+  gogoat:
+    ja: ゴーゴート
+    en: Gogoat
+  golbat:
+    ja: ゴルバット
+    en: Golbat
+  goldeen:
+    ja: トサキント
+    en: Goldeen
+  golduck:
+    ja: ゴルダック
+    en: Golduck
+  golem:
+    ja: ゴローニャ
+    en: Golem
+  golem-alola:
+    ja: ゴローニャ（アローラのすがた）
+    en: Golem (Alolan Form)
+  golett:
+    ja: ゴビット
+    en: Golett
+  golisopod:
+    ja: グソクムシャ
+    en: Golisopod
+  golurk:
+    ja: ゴルーグ
+    en: Golurk
+  goodra:
+    ja: ヌメルゴン
+    en: Goodra
+  goodra-hisui:
+    ja: ヌメルゴン（ヒスイのすがた）
+    en: Goodra (Hisuian Form)
+  goomy:
+    ja: ヌメラ
+    en: Goomy
+  gorebyss:
+    ja: サクラビス
+    en: Gorebyss
+  gossifleur:
+    ja: ヒメンカ
+    en: Gossifleur
+  gothita:
+    ja: ゴチム
+    en: Gothita
+  gothitelle:
+    ja: ゴチルゼル
+    en: Gothitelle
+  gothorita:
+    ja: ゴチミル
+    en: Gothorita
+  gouging-fire:
+    ja: ウガツホムラ
+    en: Gouging Fire
+  gourgeist-average:
+    ja: パンプジン（ちゅうだましゅ）
+    en: Gourgeist (Average Size)
+  gourgeist-large:
+    ja: パンプジン（おおだましゅ）
+    en: Gourgeist (Large Size)
+  gourgeist-small:
+    ja: パンプジン（こだましゅ）
+    en: Gourgeist (Small Size)
+  gourgeist-super:
+    ja: パンプジン（ギガだましゅ）
+    en: Gourgeist (Super Size)
+  grafaiai:
+    ja: タギングル
+    en: Grafaiai
+  granbull:
+    ja: グランブル
+    en: Granbull
+  grapploct:
+    ja: オトスパス
+    en: Grapploct
+  graveler:
+    ja: ゴローン
+    en: Graveler
+  graveler-alola:
+    ja: ゴローン（アローラのすがた）
+    en: Graveler (Alolan Form)
+  great-tusk:
+    ja: イダイナキバ
+    en: Great Tusk
+  greavard:
+    ja: ボチ
+    en: Greavard
+  greedent:
+    ja: ヨクバリス
+    en: Greedent
+  greninja:
+    ja: ゲッコウガ
+    en: Greninja
+  greninja-ash:
+    ja: サトシゲッコウガ
+    en: Ash-Greninja
+  greninja-battle-bond:
+    ja: ゲッコウガ（きずなへんげ）
+    en: Greninja (Battle Bond)
+  grimer:
+    ja: ベトベター
+    en: Grimer
+  grimer-alola:
+    ja: ベトベター（アローラのすがた）
+    en: Grimer (Alolan Form)
+  grimmsnarl:
+    ja: オーロンゲ
+    en: Grimmsnarl
+  grookey:
+    ja: サルノリ
+    en: Grookey
+  grotle:
+    ja: ハヤシガメ
+    en: Grotle
+  groudon:
+    ja: グラードン
+    en: Groudon
+  grovyle:
+    ja: ジュプトル
+    en: Grovyle
+  growlithe:
+    ja: ガーディ
+    en: Growlithe
+  growlithe-hisui:
+    ja: ガーディ（ヒスイのすがた）
+    en: Growlithe (Hisuian Form)
+  grubbin:
+    ja: アゴジムシ
+    en: Grubbin
+  grumpig:
+    ja: ブーピッグ
+    en: Grumpig
+  gulpin:
+    ja: ゴクリン
+    en: Gulpin
+  gumshoos:
+    ja: デカグース
+    en: Gumshoos
+  gurdurr:
+    ja: ドテッコツ
+    en: Gurdurr
+  guzzlord:
+    ja: アクジキング
+    en: Guzzlord
+  gyarados:
+    ja: ギャラドス
+    en: Gyarados
+  hakamo-o:
+    ja: ジャランゴ
+    en: Hakamo-o
+  happiny:
+    ja: ピンプク
+    en: Happiny
+  hariyama:
+    ja: ハリテヤマ
+    en: Hariyama
+  hatenna:
+    ja: ミブリム
+    en: Hatenna
+  hatterene:
+    ja: ブリムオン
+    en: Hatterene
+  hattrem:
+    ja: テブリム
+    en: Hattrem
+  haunter:
+    ja: ゴースト
+    en: Haunter
+  hawlucha:
+    ja: ルチャブル
+    en: Hawlucha
+  haxorus:
+    ja: オノノクス
+    en: Haxorus
+  heatmor:
+    ja: クイタラン
+    en: Heatmor
+  heatran:
+    ja: ヒードラン
+    en: Heatran
+  heliolisk:
+    ja: エレザード
+    en: Heliolisk
+  helioptile:
+    ja: エリキテル
+    en: Helioptile
+  heracross:
+    ja: ヘラクロス
+    en: Heracross
+  herdier:
+    ja: ハーデリア
+    en: Herdier
+  hippopotas:
+    ja: ヒポポタス
+    en: Hippopotas
+  hippowdon:
+    ja: カバルドン
+    en: Hippowdon
+  hitmonchan:
+    ja: エビワラー
+    en: Hitmonchan
+  hitmonlee:
+    ja: サワムラー
+    en: Hitmonlee
+  hitmontop:
+    ja: カポエラー
+    en: Hitmontop
+  ho-oh:
+    ja: ホウオウ
+    en: Ho-Oh
+  honchkrow:
+    ja: ドンカラス
+    en: Honchkrow
+  honedge:
+    ja: ヒトツキ
+    en: Honedge
+  hoopa-confined:
+    ja: いましめられしフーパ
+    en: Hoopa Confined
+  hoopa-unbound:
+    ja: ときはなたれしフーパ
+    en: Hoopa Unbound
+  hoothoot:
+    ja: ホーホー
+    en: Hoothoot
+  hoppip:
+    ja: ハネッコ
+    en: Hoppip
+  horsea:
+    ja: タッツー
+    en: Horsea
+  houndoom:
+    ja: ヘルガー
+    en: Houndoom
+  houndour:
+    ja: デルビル
+    en: Houndour
+  houndstone:
+    ja: ハカドッグ
+    en: Houndstone
+  huntail:
+    ja: ハンテール
+    en: Huntail
+  hydrapple:
+    ja: カミツオロチ
+    en: Hydrapple
+  hydreigon:
+    ja: サザンドラ
+    en: Hydreigon
+  hypno:
+    ja: スリーパー
+    en: Hypno
+  igglybuff:
+    ja: ププリン
+    en: Igglybuff
+  illumise:
+    ja: イルミーゼ
+    en: Illumise
+  impidimp:
+    ja: ベロバー
+    en: Impidimp
+  incineroar:
+    ja: ガオガエン
+    en: Incineroar
+  indeedee-female:
+    ja: イエッサン（メスのすがた）
+    en: Indeedee (Female)
+  indeedee-male:
+    ja: イエッサン（オスのすがた）
+    en: Indeedee (Male)
+  infernape:
+    ja: ゴウカザル
+    en: Infernape
+  inkay:
+    ja: マーイーカ
+    en: Inkay
+  inteleon:
+    ja: インテレオン
+    en: Inteleon
+  iron-boulder:
+    ja: テツノイワオ
+    en: Iron Boulder
+  iron-bundle:
+    ja: テツノツツミ
+    en: Iron Bundle
+  iron-crown:
+    ja: テツノカシラ
+    en: Iron Crown
+  iron-hands:
+    ja: テツノカイナ
+    en: Iron Hands
+  iron-jugulis:
+    ja: テツノコウベ
+    en: Iron Jugulis
+  iron-leaves:
+    ja: テツノイサハ
+    en: Iron Leaves
+  iron-moth:
+    ja: テツノドクガ
+    en: Iron Moth
+  iron-thorns:
+    ja: テツノイバラ
+    en: Iron Thorns
+  iron-treads:
+    ja: テツノワダチ
+    en: Iron Treads
+  iron-valiant:
+    ja: テツノブジン
+    en: Iron Valiant
+  ivysaur:
+    ja: フシギソウ
+    en: Ivysaur
+  jangmo-o:
+    ja: ジャラコ
+    en: Jangmo-o
+  jellicent:
+    ja: ブルンゲル
+    en: Jellicent
+  jigglypuff:
+    ja: プリン
+    en: Jigglypuff
+  jirachi:
+    ja: ジラーチ
+    en: Jirachi
+  jolteon:
+    ja: サンダース
+    en: Jolteon
+  joltik:
+    ja: バチュル
+    en: Joltik
+  jumpluff:
+    ja: ワタッコ
+    en: Jumpluff
+  jynx:
+    ja: ルージュラ
+    en: Jynx
+  kabuto:
+    ja: カブト
+    en: Kabuto
+  kabutops:
+    ja: カブトプス
+    en: Kabutops
+  kadabra:
+    ja: ユンゲラー
+    en: Kadabra
+  kakuna:
+    ja: コクーン
+    en: Kakuna
+  kangaskhan:
+    ja: ガルーラ
+    en: Kangaskhan
+  karrablast:
+    ja: カブルモ
+    en: Karrablast
+  kartana:
+    ja: カミツルギ
+    en: Kartana
+  kecleon:
+    ja: カクレオン
+    en: Kecleon
+  keldeo-ordinary:
+    ja: ケルディオ（いつものすがた）
+    en: Keldeo (Ordinary Form)
+  keldeo-resolute:
+    ja: ケルディオ（かくごのすがた）
+    en: Keldeo (Resolute Form)
+  kilowattrel:
+    ja: タイカイデン
+    en: Kilowattrel
+  kingambit:
+    ja: ドドゲザン
+    en: Kingambit
+  kingdra:
+    ja: キングドラ
+    en: Kingdra
+  kingler:
+    ja: キングラー
+    en: Kingler
+  kirlia:
+    ja: キルリア
+    en: Kirlia
+  klang:
+    ja: ギギアル
+    en: Klang
+  klawf:
+    ja: ガケガニ
+    en: Klawf
+  kleavor:
+    ja: バサギリ
+    en: Kleavor
+  klefki:
+    ja: クレッフィ
+    en: Klefki
+  klink:
+    ja: ギアル
+    en: Klink
+  klinklang:
+    ja: ギギギアル
+    en: Klinklang
+  koffing:
+    ja: ドガース
+    en: Koffing
+  komala:
+    ja: ネッコアラ
+    en: Komala
+  kommo-o:
+    ja: ジャラランガ
+    en: Kommo-o
+  koraidon:
+    ja: コライドン
+    en: Koraidon
+  krabby:
+    ja: クラブ
+    en: Krabby
+  kricketot:
+    ja: コロボーシ
+    en: Kricketot
+  kricketune:
+    ja: コロトック
+    en: Kricketune
+  krokorok:
+    ja: ワルビル
+    en: Krokorok
+  krookodile:
+    ja: ワルビアル
+    en: Krookodile
+  kubfu:
+    ja: ダクマ
+    en: Kubfu
+  kyogre:
+    ja: カイオーガ
+    en: Kyogre
+  kyurem:
+    ja: キュレム
+    en: Kyurem
+  kyurem-black:
+    ja: ブラックキュレム
+    en: Black Kyurem
+  kyurem-white:
+    ja: ホワイトキュレム
+    en: White Kyurem
+  lairon:
+    ja: コドラ
+    en: Lairon
+  lampent:
+    ja: ランプラー
+    en: Lampent
+  landorus-incarnate:
+    ja: ランドロス（けしんフォルム）
+    en: Landorus (Incarnate Forme)
+  landorus-therian:
+    ja: ランドロス（れいじゅうフォルム）
+    en: Landorus (Therian Forme)
+  lanturn:
+    ja: ランターン
+    en: Lanturn
+  lapras:
+    ja: ラプラス
+    en: Lapras
+  larvesta:
+    ja: メラルバ
+    en: Larvesta
+  larvitar:
+    ja: ヨーギラス
+    en: Larvitar
+  latias:
+    ja: ラティアス
+    en: Latias
+  latios:
+    ja: ラティオス
+    en: Latios
+  leafeon:
+    ja: リーフィア
+    en: Leafeon
+  leavanny:
+    ja: ハハコモリ
+    en: Leavanny
+  lechonk:
+    ja: グルトン
+    en: Lechonk
+  ledian:
+    ja: レディアン
+    en: Ledian
+  ledyba:
+    ja: レディバ
+    en: Ledyba
+  lickilicky:
+    ja: ベロベルト
+    en: Lickilicky
+  lickitung:
+    ja: ベロリンガ
+    en: Lickitung
+  liepard:
+    ja: レパルダス
+    en: Liepard
+  lileep:
+    ja: リリーラ
+    en: Lileep
+  lilligant:
+    ja: ドレディア
+    en: Lilligant
+  lilligant-hisui:
+    ja: ドレディア（ヒスイのすがた）
+    en: Lilligant (Hisuian Form)
+  lillipup:
+    ja: ヨーテリー
+    en: Lillipup
+  linoone:
+    ja: マッスグマ
+    en: Linoone
+  linoone-galar:
+    ja: マッスグマ（ガラルのすがた）
+    en: Linoone (Galarian Form)
+  litleo:
+    ja: シシコ
+    en: Litleo
+  litten:
+    ja: ニャビー
+    en: Litten
+  litwick:
+    ja: ヒトモシ
+    en: Litwick
+  lokix:
+    ja: エクスレッグ
+    en: Lokix
+  lombre:
+    ja: ハスブレロ
+    en: Lombre
+  lopunny:
+    ja: ミミロップ
+    en: Lopunny
+  lotad:
+    ja: ハスボー
+    en: Lotad
+  loudred:
+    ja: ドゴーム
+    en: Loudred
+  lucario:
+    ja: ルカリオ
+    en: Lucario
+  ludicolo:
+    ja: ルンパッパ
+    en: Ludicolo
+  lugia:
+    ja: ルギア
+    en: Lugia
+  lumineon:
+    ja: ネオラント
+    en: Lumineon
+  lunala:
+    ja: ルナアーラ
+    en: Lunala
+  lunatone:
+    ja: ルナトーン
+    en: Lunatone
+  lurantis:
+    ja: ラランテス
+    en: Lurantis
+  luvdisc:
+    ja: ラブカス
+    en: Luvdisc
+  luxio:
+    ja: ルクシオ
+    en: Luxio
+  luxray:
+    ja: レントラー
+    en: Luxray
+  lycanroc-dusk:
+    ja: ルガルガン（たそがれのすがた）
+    en: Lycanroc (Dusk Form)
+  lycanroc-midday:
+    ja: ルガルガン（まひるのすがた）
+    en: Lycanroc (Midday Form)
+  lycanroc-midnight:
+    ja: ルガルガン（まよなかのすがた）
+    en: Lycanroc (Midnight Form)
+  mabosstiff:
+    ja: マフィティフ
+    en: Mabosstiff
+  machamp:
+    ja: カイリキー
+    en: Machamp
+  machoke:
+    ja: ゴーリキー
+    en: Machoke
+  machop:
+    ja: ワンリキー
+    en: Machop
+  magby:
+    ja: ブビィ
+    en: Magby
+  magcargo:
+    ja: マグカルゴ
+    en: Magcargo
+  magearna:
+    ja: マギアナ
+    en: Magearna
+  magikarp:
+    ja: コイキング
+    en: Magikarp
+  magmar:
+    ja: ブーバー
+    en: Magmar
+  magmortar:
+    ja: ブーバーン
+    en: Magmortar
+  magnemite:
+    ja: コイル
+    en: Magnemite
+  magneton:
+    ja: レアコイル
+    en: Magneton
+  magnezone:
+    ja: ジバコイル
+    en: Magnezone
+  makuhita:
+    ja: マクノシタ
+    en: Makuhita
+  malamar:
+    ja: カラマネロ
+    en: Malamar
+  mamoswine:
+    ja: マンムー
+    en: Mamoswine
+  manaphy:
+    ja: マナフィ
+    en: Manaphy
+  mandibuzz:
+    ja: バルジーナ
+    en: Mandibuzz
+  manectric:
+    ja: ライボルト
+    en: Manectric
+  mankey:
+    ja: マンキー
+    en: Mankey
+  mantine:
+    ja: マンタイン
+    en: Mantine
+  mantyke:
+    ja: タマンタ
+    en: Mantyke
+  maractus:
+    ja: マラカッチ
+    en: Maractus
+  mareanie:
+    ja: ヒドイデ
+    en: Mareanie
+  mareep:
+    ja: メリープ
+    en: Mareep
+  marill:
+    ja: マリル
+    en: Marill
+  marowak:
+    ja: ガラガラ
+    en: Marowak
+  marowak-alola:
+    ja: ガラガラ（アローラのすがた）
+    en: Marowak (Alolan Form)
+  marshadow:
+    ja: マーシャドー
+    en: Marshadow
+  marshtomp:
+    ja: ヌマクロー
+    en: Marshtomp
+  maschiff:
+    ja: オラチフ
+    en: Maschiff
+  masquerain:
+    ja: アメモース
+    en: Masquerain
+  maushold-four:
+    ja: イッカネズミ（４ひきかぞく）
+    en: Maushold (Family of Four)
+  maushold-three:
+    ja: イッカネズミ（３びきかぞく）
+    en: Maushold (Family of Three)
+  mawile:
+    ja: クチート
+    en: Mawile
+  medicham:
+    ja: チャーレム
+    en: Medicham
+  meditite:
+    ja: アサナン
+    en: Meditite
+  meganium:
+    ja: メガニウム
+    en: Meganium
+  melmetal:
+    ja: メルメタル
+    en: Melmetal
+  meloetta:
+    ja: メロエッタ
+    en: Meloetta
+  meloetta-aria:
+    ja: メロエッタ（ボイスフォルム）
+    en: Meloetta (Aria Forme)
+  meloetta-pirouette:
+    ja: メロエッタ（ステップフォルム）
+    en: Meloetta (Pirouette Forme)
+  meltan:
+    ja: メルタン
+    en: Meltan
+  meowscarada:
+    ja: マスカーニャ
+    en: Meowscarada
+  meowstic-female:
+    ja: ニャオニクス（メスのすがた）
+    en: Meowstic (Female)
+  meowstic-male:
+    ja: ニャオニクス（オスのすがた）
+    en: Meowstic (Male)
+  meowth:
+    ja: ニャース
+    en: Meowth
+  meowth-alola:
+    ja: ニャース（アローラのすがた）
+    en: Meowth (Alolan Form)
+  meowth-galar:
+    ja: ニャース（ガラルのすがた）
+    en: Meowth (Galarian Form)
+  mesprit:
+    ja: エムリット
+    en: Mesprit
+  metagross:
+    ja: メタグロス
+    en: Metagross
+  metang:
+    ja: メタング
+    en: Metang
+  metapod:
+    ja: トランセル
+    en: Metapod
+  mew:
+    ja: ミュウ
+    en: Mew
+  mewtwo:
+    ja: ミュウツー
+    en: Mewtwo
+  mienfoo:
+    ja: コジョフー
+    en: Mienfoo
+  mienshao:
+    ja: コジョンド
+    en: Mienshao
+  mightyena:
+    ja: グラエナ
+    en: Mightyena
+  milcery:
+    ja: マホミル
+    en: Milcery
+  milotic:
+    ja: ミロカロス
+    en: Milotic
+  miltank:
+    ja: ミルタンク
+    en: Miltank
+  mime-jr:
+    ja: マネネ
+    en: Mime Jr.
+  mimikyu:
+    ja: ミミッキュ
+    en: Mimikyu
+  mimikyu-busted:
+    ja: ミミッキュ（ばれたすがた）
+    en: Mimikyu (Busted Form)
+  mimikyu-disguised:
+    ja: ミミッキュ（ばけたすがた）
+    en: Mimikyu (Disguised Form)
+  minccino:
+    ja: チラーミィ
+    en: Minccino
+  minior:
+    ja: メテノ
+    en: Minior
+  minior-meteor:
+    ja: メテノ（りゅうせいのすがた）
+    en: Minior (Meteor Form)
+  minun:
+    ja: マイナン
+    en: Minun
+  miraidon:
+    ja: ミライドン
+    en: Miraidon
+  misdreavus:
+    ja: ムウマ
+    en: Misdreavus
+  mismagius:
+    ja: ムウマージ
+    en: Mismagius
+  moltres:
+    ja: ファイヤー
+    en: Moltres
+  moltres-galar:
+    ja: ファイヤー（ガラルのすがた）
+    en: Moltres (Galarian Form)
+  monferno:
+    ja: モウカザル
+    en: Monferno
+  morelull:
+    ja: ネマシュ
+    en: Morelull
+  morgrem:
+    ja: ギモー
+    en: Morgrem
+  morpeko:
+    ja: モルペコ
+    en: Morpeko
+  morpeko-full-belly:
+    ja: モルペコ（まんぷくもよう）
+    en: Morpeko (Full Belly Mode)
+  morpeko-hangry:
+    ja: モルペコ（はらぺこもよう）
+    en: Morpeko (Hangry Mode)
+  mothim:
+    ja: ガーメイル
+    en: Mothim
+  mr-mime:
+    ja: バリヤード
+    en: Mr. Mime
+  mr-mime-galar:
+    ja: バリヤード（ガラルのすがた）
+    en: Mr. Mime (Galarian Form)
+  mr-rime:
+    ja: バリコオル
+    en: Mr. Rime
+  mudbray:
+    ja: ドロバンコ
+    en: Mudbray
+  mudkip:
+    ja: ミズゴロウ
+    en: Mudkip
+  mudsdale:
+    ja: バンバドロ
+    en: Mudsdale
+  muk:
+    ja: ベトベトン
+    en: Muk
+  muk-alola:
+    ja: ベトベトン（アローラのすがた）
+    en: Muk (Alolan Form)
+  munchlax:
+    ja: ゴンベ
+    en: Munchlax
+  munkidori:
+    ja: マシマシラ
+    en: Munkidori
+  munna:
+    ja: ムンナ
+    en: Munna
+  murkrow:
+    ja: ヤミカラス
+    en: Murkrow
+  musharna:
+    ja: ムシャーナ
+    en: Musharna
+  nacli:
+    ja: コジオ
+    en: Nacli
+  naclstack:
+    ja: ジオヅム
+    en: Naclstack
+  naganadel:
+    ja: アーゴヨン
+    en: Naganadel
+  natu:
+    ja: ネイティ
+    en: Natu
+  necrozma:
+    ja: ネクロズマ
+    en: Necrozma
+  necrozma-dawn:
+    ja: ネクロズマ（あかつきのつばさ）
+    en: Necrozma (Dawn Wings)
+  necrozma-dusk:
+    ja: ネクロズマ（たそがれのたてがみ）
+    en: Necrozma (Dusk Mane)
+  necrozma-ultra:
+    ja: ウルトラネクロズマ
+    en: Ultra Necrozma
+  nickit:
+    ja: クスネ
+    en: Nickit
+  nidoking:
+    ja: ニドキング
+    en: Nidoking
+  nidoqueen:
+    ja: ニドクイン
+    en: Nidoqueen
+  nidoran-f:
+    ja: ニドラン♀
+    en: Nidoran♀
+  nidoran-m:
+    ja: ニドラン♂
+    en: Nidoran♂
+  nidorina:
+    ja: ニドリーナ
+    en: Nidorina
+  nidorino:
+    ja: ニドリーノ
+    en: Nidorino
+  nihilego:
+    ja: ウツロイド
+    en: Nihilego
+  nincada:
+    ja: ツチニン
+    en: Nincada
+  ninetales:
+    ja: キュウコン
+    en: Ninetales
+  ninetales-alola:
+    ja: キュウコン（アローラのすがた）
+    en: Ninetales (Alolan Form)
+  ninjask:
+    ja: テッカニン
+    en: Ninjask
+  noctowl:
+    ja: ヨルノズク
+    en: Noctowl
+  noibat:
+    ja: オンバット
+    en: Noibat
+  noivern:
+    ja: オンバーン
+    en: Noivern
+  nosepass:
+    ja: ノズパス
+    en: Nosepass
+  numel:
+    ja: ドンメル
+    en: Numel
+  nuzleaf:
+    ja: コノハナ
+    en: Nuzleaf
+  nymble:
+    ja: マメバッタ
+    en: Nymble
+  obstagoon:
+    ja: タチフサグマ
+    en: Obstagoon
+  octillery:
+    ja: オクタン
+    en: Octillery
+  oddish:
+    ja: ナゾノクサ
+    en: Oddish
+  ogerpon-cornerstone:
+    ja: オーガポン（いしずえのめん）
+    en: Ogerpon (Cornerstone Mask)
+  ogerpon-hearthflame:
+    ja: オーガポン（かまどのめん）
+    en: Ogerpon (Hearthflame Mask)
+  ogerpon-teal:
+    ja: オーガポン（みどりのめん）
+    en: Ogerpon (Teal Mask)
+  ogerpon-wellspring:
+    ja: オーガポン（いどのめん）
+    en: Ogerpon (Wellspring Mask)
+  oinkologne-female:
+    ja: パフュートン（メスのすがた）
+    en: Oinkologne (Female)
+  oinkologne-male:
+    ja: パフュートン（オスのすがた）
+    en: Oinkologne (Male)
+  okidogi:
+    ja: イイネイヌ
+    en: Okidogi
+  omanyte:
+    ja: オムナイト
+    en: Omanyte
+  omastar:
+    ja: オムスター
+    en: Omastar
+  onix:
+    ja: イワーク
+    en: Onix
+  oranguru:
+    ja: ヤレユータン
+    en: Oranguru
+  orbeetle:
+    ja: イオルブ
+    en: Orbeetle
+  oricorio-baile:
+    ja: オドリドリ（めらめらスタイル）
+    en: Oricorio (Baile Style)
+  oricorio-pau:
+    ja: オドリドリ（ふらふらスタイル）
+    en: Oricorio (Pa’u Style)
+  oricorio-pom-pom:
+    ja: オドリドリ（ぱちぱちスタイル）
+    en: Oricorio (Pom-Pom Style)
+  oricorio-sensu:
+    ja: オドリドリ（まいまいスタイル）
+    en: Oricorio (Sensu Style)
+  orthworm:
+    ja: ミミズズ
+    en: Orthworm
+  oshawott:
+    ja: ミジュマル
+    en: Oshawott
+  overqwil:
+    ja: ハリーマン
+    en: Overqwil
+  pachirisu:
+    ja: パチリス
+    en: Pachirisu
+  palafin:
+    ja: イルカマン
+    en: Palafin
+  palafin-hero:
+    ja: イルカマン（マイティフォルム）
+    en: Palafin (Hero Form)
+  palafin-zero:
+    ja: イルカマン（ナイーブフォルム）
+    en: Palafin (Zero Form)
+  palkia:
+    ja: パルキア
+    en: Palkia
+  palkia-origin:
+    ja: パルキア（オリジンフォルム）
+    en: Palkia (Origin Forme)
+  palossand:
+    ja: シロデスナ
+    en: Palossand
+  palpitoad:
+    ja: ガマガル
+    en: Palpitoad
+  pancham:
+    ja: ヤンチャム
+    en: Pancham
+  pangoro:
+    ja: ゴロンダ
+    en: Pangoro
+  panpour:
+    ja: ヒヤップ
+    en: Panpour
+  pansage:
+    ja: ヤナップ
+    en: Pansage
+  pansear:
+    ja: バオップ
+    en: Pansear
+  paras:
+    ja: パラス
+    en: Paras
+  parasect:
+    ja: パラセクト
+    en: Parasect
+  passimian:
+    ja: ナゲツケサル
+    en: Passimian
+  patrat:
+    ja: ミネズミ
+    en: Patrat
+  pawmi:
+    ja: パモ
+    en: Pawmi
+  pawmo:
+    ja: パモット
+    en: Pawmo
+  pawmot:
+    ja: パーモット
+    en: Pawmot
+  pawniard:
+    ja: コマタナ
+    en: Pawniard
+  pecharunt:
+    ja: モモワロウ
+    en: Pecharunt
+  pelipper:
+    ja: ペリッパー
+    en: Pelipper
+  perrserker:
+    ja: ニャイキング
+    en: Perrserker
+  persian:
+    ja: ペルシアン
+    en: Persian
+  persian-alola:
+    ja: ペルシアン（アローラのすがた）
+    en: Persian (Alolan Form)
+  petilil:
+    ja: チュリネ
+    en: Petilil
+  phanpy:
+    ja: ゴマゾウ
+    en: Phanpy
+  phantump:
+    ja: ボクレー
+    en: Phantump
+  pheromosa:
+    ja: フェローチェ
+    en: Pheromosa
+  phione:
+    ja: フィオネ
+    en: Phione
+  pichu:
+    ja: ピチュー
+    en: Pichu
+  pidgeot:
+    ja: ピジョット
+    en: Pidgeot
+  pidgeotto:
+    ja: ピジョン
+    en: Pidgeotto
+  pidgey:
+    ja: ポッポ
+    en: Pidgey
+  pidove:
+    ja: マメパト
+    en: Pidove
+  pignite:
+    ja: チャオブー
+    en: Pignite
+  pikachu:
+    ja: ピカチュウ
+    en: Pikachu
+  pikipek:
+    ja: ツツケラ
+    en: Pikipek
+  piloswine:
+    ja: イノムー
+    en: Piloswine
+  pincurchin:
+    ja: バチンウニ
+    en: Pincurchin
+  pineco:
+    ja: クヌギダマ
+    en: Pineco
+  pinsir:
+    ja: カイロス
+    en: Pinsir
+  piplup:
+    ja: ポッチャマ
+    en: Piplup
+  plusle:
+    ja: プラスル
+    en: Plusle
+  poipole:
+    ja: ベベノム
+    en: Poipole
+  politoed:
+    ja: ニョロトノ
+    en: Politoed
+  poliwag:
+    ja: ニョロモ
+    en: Poliwag
+  poliwhirl:
+    ja: ニョロゾ
+    en: Poliwhirl
+  poliwrath:
+    ja: ニョロボン
+    en: Poliwrath
+  poltchageist:
+    ja: チャデス
+    en: Poltchageist
+  polteageist:
+    ja: ポットデス
+    en: Polteageist
+  ponyta:
+    ja: ポニータ
+    en: Ponyta
+  ponyta-galar:
+    ja: ポニータ（ガラルのすがた）
+    en: Ponyta (Galarian Form)
+  poochyena:
+    ja: ポチエナ
+    en: Poochyena
+  popplio:
+    ja: アシマリ
+    en: Popplio
+  porygon:
+    ja: ポリゴン
+    en: Porygon
+  porygon-z:
+    ja: ポリゴンＺ
+    en: Porygon-Z
+  porygon2:
+    ja: ポリゴン２
+    en: Porygon2
+  primarina:
+    ja: アシレーヌ
+    en: Primarina
+  primeape:
+    ja: オコリザル
+    en: Primeape
+  prinplup:
+    ja: ポッタイシ
+    en: Prinplup
+  probopass:
+    ja: ダイノーズ
+    en: Probopass
+  psyduck:
+    ja: コダック
+    en: Psyduck
+  pumpkaboo-average:
+    ja: バケッチャ（ちゅうだましゅ）
+    en: Pumpkaboo (Average Size)
+  pumpkaboo-large:
+    ja: バケッチャ（おおだましゅ）
+    en: Pumpkaboo (Large Size)
+  pumpkaboo-small:
+    ja: バケッチャ（こだましゅ）
+    en: Pumpkaboo (Small Size)
+  pumpkaboo-super:
+    ja: バケッチャ（ギガだましゅ）
+    en: Pumpkaboo (Super Size)
+  pupitar:
+    ja: サナギラス
+    en: Pupitar
+  purrloin:
+    ja: チョロネコ
+    en: Purrloin
+  purugly:
+    ja: ブニャット
+    en: Purugly
+  pyroar:
+    ja: カエンジシ
+    en: Pyroar
+  pyukumuku:
+    ja: ナマコブシ
+    en: Pyukumuku
+  quagsire:
+    ja: ヌオー
+    en: Quagsire
+  quaquaval:
+    ja: ウェーニバル
+    en: Quaquaval
+  quaxly:
+    ja: クワッス
+    en: Quaxly
+  quaxwell:
+    ja: ウェルカモ
+    en: Quaxwell
+  quilava:
+    ja: マグマラシ
+    en: Quilava
+  quilladin:
+    ja: ハリボーグ
+    en: Quilladin
+  qwilfish:
+    ja: ハリーセン
+    en: Qwilfish
+  qwilfish-hisui:
+    ja: ハリーセン（ヒスイのすがた）
+    en: Qwilfish (Hisuian Form)
+  raboot:
+    ja: ラビフット
+    en: Raboot
+  rabsca:
+    ja: ベラカス
+    en: Rabsca
+  raging-bolt:
+    ja: タケルライコ
+    en: Raging Bolt
+  raichu:
+    ja: ライチュウ
+    en: Raichu
+  raichu-alola:
+    ja: ライチュウ（アローラのすがた）
+    en: Raichu (Alolan Form)
+  raikou:
+    ja: ライコウ
+    en: Raikou
+  ralts:
+    ja: ラルトス
+    en: Ralts
+  rampardos:
+    ja: ラムパルド
+    en: Rampardos
+  rapidash:
+    ja: ギャロップ
+    en: Rapidash
+  rapidash-galar:
+    ja: ギャロップ（ガラルのすがた）
+    en: Rapidash (Galarian Form)
+  raticate:
+    ja: ラッタ
+    en: Raticate
+  raticate-alola:
+    ja: ラッタ（アローラのすがた）
+    en: Raticate (Alolan Form)
+  rattata:
+    ja: コラッタ
+    en: Rattata
+  rattata-alola:
+    ja: コラッタ（アローラのすがた）
+    en: Rattata (Alolan Form)
+  rayquaza:
+    ja: レックウザ
+    en: Rayquaza
+  regice:
+    ja: レジアイス
+    en: Regice
+  regidrago:
+    ja: レジドラゴ
+    en: Regidrago
+  regieleki:
+    ja: レジエレキ
+    en: Regieleki
+  regigigas:
+    ja: レジギガス
+    en: Regigigas
+  regirock:
+    ja: レジロック
+    en: Regirock
+  registeel:
+    ja: レジスチル
+    en: Registeel
+  relicanth:
+    ja: ジーランス
+    en: Relicanth
+  rellor:
+    ja: シガロコ
+    en: Rellor
+  remoraid:
+    ja: テッポウオ
+    en: Remoraid
+  reshiram:
+    ja: レシラム
+    en: Reshiram
+  reuniclus:
+    ja: ランクルス
+    en: Reuniclus
+  revavroom:
+    ja: ブロロローム
+    en: Revavroom
+  rhydon:
+    ja: サイドン
+    en: Rhydon
+  rhyhorn:
+    ja: サイホーン
+    en: Rhyhorn
+  rhyperior:
+    ja: ドサイドン
+    en: Rhyperior
+  ribombee:
+    ja: アブリボン
+    en: Ribombee
+  rillaboom:
+    ja: ゴリランダー
+    en: Rillaboom
+  riolu:
+    ja: リオル
+    en: Riolu
+  roaring-moon:
+    ja: トドロクツキ
+    en: Roaring Moon
+  rockruff:
+    ja: イワンコ
+    en: Rockruff
+  roggenrola:
+    ja: ダンゴロ
+    en: Roggenrola
+  rolycoly:
+    ja: タンドン
+    en: Rolycoly
+  rookidee:
+    ja: ココガラ
+    en: Rookidee
+  roselia:
+    ja: ロゼリア
+    en: Roselia
+  roserade:
+    ja: ロズレイド
+    en: Roserade
+  rotom:
+    ja: ロトム
+    en: Rotom
+  rotom-fan:
+    ja: スピンロトム
+    en: Fan Rotom
+  rotom-frost:
+    ja: フロストロトム
+    en: Frost Rotom
+  rotom-heat:
+    ja: ヒートロトム
+    en: Heat Rotom
+  rotom-mow:
+    ja: カットロトム
+    en: Mow Rotom
+  rotom-wash:
+    ja: ウォッシュロトム
+    en: Wash Rotom
+  rowlet:
+    ja: モクロー
+    en: Rowlet
+  rufflet:
+    ja: ワシボン
+    en: Rufflet
+  runerigus:
+    ja: デスバーン
+    en: Runerigus
+  sableye:
+    ja: ヤミラミ
+    en: Sableye
+  salamence:
+    ja: ボーマンダ
+    en: Salamence
+  salandit:
+    ja: ヤトウモリ
+    en: Salandit
+  salazzle:
+    ja: エンニュート
+    en: Salazzle
+  samurott:
+    ja: ダイケンキ
+    en: Samurott
+  samurott-hisui:
+    ja: ダイケンキ（ヒスイのすがた）
+    en: Samurott (Hisuian Form)
+  sandaconda:
+    ja: サダイジャ
+    en: Sandaconda
+  sandile:
+    ja: メグロコ
+    en: Sandile
+  sandshrew:
+    ja: サンド
+    en: Sandshrew
+  sandshrew-alola:
+    ja: サンド（アローラのすがた）
+    en: Sandshrew (Alolan Form)
+  sandslash:
+    ja: サンドパン
+    en: Sandslash
+  sandslash-alola:
+    ja: サンドパン（アローラのすがた）
+    en: Sandslash (Alolan Form)
+  sandy-shocks:
+    ja: スナノケガワ
+    en: Sandy Shocks
+  sandygast:
+    ja: スナバァ
+    en: Sandygast
+  sawk:
+    ja: ダゲキ
+    en: Sawk
+  sawsbuck:
+    ja: メブキジカ
+    en: Sawsbuck
+  scatterbug:
+    ja: コフキムシ
+    en: Scatterbug
+  sceptile:
+    ja: ジュカイン
+    en: Sceptile
+  scizor:
+    ja: ハッサム
+    en: Scizor
+  scolipede:
+    ja: ペンドラー
+    en: Scolipede
+  scorbunny:
+    ja: ヒバニー
+    en: Scorbunny
+  scovillain:
+    ja: スコヴィラン
+    en: Scovillain
+  scrafty:
+    ja: ズルズキン
+    en: Scrafty
+  scraggy:
+    ja: ズルッグ
+    en: Scraggy
+  scream-tail:
+    ja: サケブシッポ
+    en: Scream Tail
+  scyther:
+    ja: ストライク
+    en: Scyther
+  seadra:
+    ja: シードラ
+    en: Seadra
+  seaking:
+    ja: アズマオウ
+    en: Seaking
+  sealeo:
+    ja: トドグラー
+    en: Sealeo
+  seedot:
+    ja: タネボー
+    en: Seedot
+  seel:
+    ja: パウワウ
+    en: Seel
+  seismitoad:
+    ja: ガマゲロゲ
+    en: Seismitoad
+  sentret:
+    ja: オタチ
+    en: Sentret
+  serperior:
+    ja: ジャローダ
+    en: Serperior
+  servine:
+    ja: ジャノビー
+    en: Servine
+  seviper:
+    ja: ハブネーク
+    en: Seviper
+  sewaddle:
+    ja: クルミル
+    en: Sewaddle
+  sharpedo:
+    ja: サメハダー
+    en: Sharpedo
+  shaymin-land:
+    ja: シェイミ（ランドフォルム）
+    en: Shaymin (Land Forme)
+  shaymin-sky:
+    ja: シェイミ（スカイフォルム）
+    en: Shaymin (Sky Forme)
+  shedinja:
+    ja: ヌケニン
+    en: Shedinja
+  shelgon:
+    ja: コモルー
+    en: Shelgon
+  shellder:
+    ja: シェルダー
+    en: Shellder
+  shellos:
+    ja: カラナクシ
+    en: Shellos
+  shelmet:
+    ja: チョボマキ
+    en: Shelmet
+  shieldon:
+    ja: タテトプス
+    en: Shieldon
+  shiftry:
+    ja: ダーテング
+    en: Shiftry
+  shiinotic:
+    ja: マシェード
+    en: Shiinotic
+  shinx:
+    ja: コリンク
+    en: Shinx
+  shroodle:
+    ja: シルシュルー
+    en: Shroodle
+  shroomish:
+    ja: キノココ
+    en: Shroomish
+  shuckle:
+    ja: ツボツボ
+    en: Shuckle
+  shuppet:
+    ja: カゲボウズ
+    en: Shuppet
+  sigilyph:
+    ja: シンボラー
+    en: Sigilyph
+  silcoon:
+    ja: カラサリス
+    en: Silcoon
+  silicobra:
+    ja: スナヘビ
+    en: Silicobra
+  silvally:
+    ja: シルヴァディ
+    en: Silvally
+  simipour:
+    ja: ヒヤッキー
+    en: Simipour
+  simisage:
+    ja: ヤナッキー
+    en: Simisage
+  simisear:
+    ja: バオッキー
+    en: Simisear
+  sinistcha:
+    ja: ヤバソチャ
+    en: Sinistcha
+  sinistea:
+    ja: ヤバチャ
+    en: Sinistea
+  sirfetchd:
+    ja: ネギガナイト
+    en: Sirfetch’d
+  sizzlipede:
+    ja: ヤクデ
+    en: Sizzlipede
+  skarmory:
+    ja: エアームド
+    en: Skarmory
+  skeledirge:
+    ja: ラウドボーン
+    en: Skeledirge
+  skiddo:
+    ja: メェークル
+    en: Skiddo
+  skiploom:
+    ja: ポポッコ
+    en: Skiploom
+  skitty:
+    ja: エネコ
+    en: Skitty
+  skorupi:
+    ja: スコルピ
+    en: Skorupi
+  skrelp:
+    ja: クズモー
+    en: Skrelp
+  skuntank:
+    ja: スカタンク
+    en: Skuntank
+  skwovet:
+    ja: ホシガリス
+    en: Skwovet
+  slaking:
+    ja: ケッキング
+    en: Slaking
+  slakoth:
+    ja: ナマケロ
+    en: Slakoth
+  sliggoo:
+    ja: ヌメイル
+    en: Sliggoo
+  sliggoo-hisui:
+    ja: ヌメイル（ヒスイのすがた）
+    en: Sliggoo (Hisuian Form)
+  slither-wing:
+    ja: チヲハウハネ
+    en: Slither Wing
+  slowbro:
+    ja: ヤドラン
+    en: Slowbro
+  slowbro-galar:
+    ja: ヤドラン（ガラルのすがた）
+    en: Slowbro (Galarian Form)
+  slowking:
+    ja: ヤドキング
+    en: Slowking
+  slowking-galar:
+    ja: ヤドキング（ガラルのすがた）
+    en: Slowking (Galarian Form)
+  slowpoke:
+    ja: ヤドン
+    en: Slowpoke
+  slowpoke-galar:
+    ja: ヤドン（ガラルのすがた）
+    en: Slowpoke (Galarian Form)
+  slugma:
+    ja: マグマッグ
+    en: Slugma
+  slurpuff:
+    ja: ペロリーム
+    en: Slurpuff
+  smeargle:
+    ja: ドーブル
+    en: Smeargle
+  smoliv:
+    ja: ミニーブ
+    en: Smoliv
+  smoochum:
+    ja: ムチュール
+    en: Smoochum
+  sneasel:
+    ja: ニューラ
+    en: Sneasel
+  sneasel-hisui:
+    ja: ニューラ（ヒスイのすがた）
+    en: Sneasel (Hisuian Form)
+  sneasler:
+    ja: オオニューラ
+    en: Sneasler
+  snivy:
+    ja: ツタージャ
+    en: Snivy
+  snom:
+    ja: ユキハミ
+    en: Snom
+  snorlax:
+    ja: カビゴン
+    en: Snorlax
+  snorunt:
+    ja: ユキワラシ
+    en: Snorunt
+  snover:
+    ja: ユキカブリ
+    en: Snover
+  snubbull:
+    ja: ブルー
+    en: Snubbull
+  sobble:
+    ja: メッソン
+    en: Sobble
+  solgaleo:
+    ja: ソルガレオ
+    en: Solgaleo
+  solosis:
+    ja: ユニラン
+    en: Solosis
+  solrock:
+    ja: ソルロック
+    en: Solrock
+  spearow:
+    ja: オニスズメ
+    en: Spearow
+  spectrier:
+    ja: レイスポス
+    en: Spectrier
+  spewpa:
+    ja: コフーライ
+    en: Spewpa
+  spheal:
+    ja: タマザラシ
+    en: Spheal
+  spidops:
+    ja: ワナイダー
+    en: Spidops
+  spinarak:
+    ja: イトマル
+    en: Spinarak
+  spinda:
+    ja: パッチール
+    en: Spinda
+  spiritomb:
+    ja: ミカルゲ
+    en: Spiritomb
+  spoink:
+    ja: バネブー
+    en: Spoink
+  sprigatito:
+    ja: ニャオハ
+    en: Sprigatito
+  spritzee:
+    ja: シュシュプ
+    en: Spritzee
+  squawkabilly-blue:
+    ja: イキリンコ（ブルーフェザー）
+    en: Squawkabilly (Blue Plumage)
+  squawkabilly-green:
+    ja: イキリンコ（グリーンフェザー）
+    en: Squawkabilly (Green Plumage)
+  squawkabilly-white:
+    ja: イキリンコ（ホワイトフェザー）
+    en: Squawkabilly (White Plumage)
+  squawkabilly-yellow:
+    ja: イキリンコ（イエローフェザー）
+    en: Squawkabilly (Yellow Plumage)
+  squirtle:
+    ja: ゼニガメ
+    en: Squirtle
+  stakataka:
+    ja: ツンデツンデ
+    en: Stakataka
+  stantler:
+    ja: オドシシ
+    en: Stantler
+  staraptor:
+    ja: ムクホーク
+    en: Staraptor
+  staravia:
+    ja: ムクバード
+    en: Staravia
+  starly:
+    ja: ムックル
+    en: Starly
+  starmie:
+    ja: スターミー
+    en: Starmie
+  staryu:
+    ja: ヒトデマン
+    en: Staryu
+  steelix:
+    ja: ハガネール
+    en: Steelix
+  steenee:
+    ja: アママイコ
+    en: Steenee
+  stonjourner:
+    ja: イシヘンジン
+    en: Stonjourner
+  stoutland:
+    ja: ムーランド
+    en: Stoutland
+  stufful:
+    ja: ヌイコグマ
+    en: Stufful
+  stunfisk:
+    ja: マッギョ
+    en: Stunfisk
+  stunfisk-galar:
+    ja: マッギョ（ガラルのすがた）
+    en: Stunfisk (Galarian Form)
+  stunky:
+    ja: スカンプー
+    en: Stunky
+  sudowoodo:
+    ja: ウソッキー
+    en: Sudowoodo
+  suicune:
+    ja: スイクン
+    en: Suicune
+  sunflora:
+    ja: キマワリ
+    en: Sunflora
+  sunkern:
+    ja: ヒマナッツ
+    en: Sunkern
+  surskit:
+    ja: アメタマ
+    en: Surskit
+  swablu:
+    ja: チルット
+    en: Swablu
+  swadloon:
+    ja: クルマユ
+    en: Swadloon
+  swalot:
+    ja: マルノーム
+    en: Swalot
+  swampert:
+    ja: ラグラージ
+    en: Swampert
+  swanna:
+    ja: スワンナ
+    en: Swanna
+  swellow:
+    ja: オオスバメ
+    en: Swellow
+  swinub:
+    ja: ウリムー
+    en: Swinub
+  swirlix:
+    ja: ペロッパフ
+    en: Swirlix
+  swoobat:
+    ja: ココロモリ
+    en: Swoobat
+  sylveon:
+    ja: ニンフィア
+    en: Sylveon
+  tadbulb:
+    ja: ズピカ
+    en: Tadbulb
+  taillow:
+    ja: スバメ
+    en: Taillow
+  talonflame:
+    ja: ファイアロー
+    en: Talonflame
+  tandemaus:
+    ja: ワッカネズミ
+    en: Tandemaus
+  tangela:
+    ja: モンジャラ
+    en: Tangela
+  tangrowth:
+    ja: モジャンボ
+    en: Tangrowth
+  tapu-bulu:
+    ja: カプ・ブルル
+    en: Tapu Bulu
+  tapu-fini:
+    ja: カプ・レヒレ
+    en: Tapu Fini
+  tapu-koko:
+    ja: カプ・コケコ
+    en: Tapu Koko
+  tapu-lele:
+    ja: カプ・テテフ
+    en: Tapu Lele
+  tarountula:
+    ja: タマンチュラ
+    en: Tarountula
+  tatsugiri:
+    ja: シャリタツ
+    en: Tatsugiri
+  tauros:
+    ja: ケンタロス
+    en: Tauros
+  tauros-paldea-aqua:
+    ja: ケンタロス（パルデアのすがた・ウォーターしゅ）
+    en: Tauros (Paldean Form Aqua Breed)
+  tauros-paldea-blaze:
+    ja: ケンタロス（パルデアのすがた・ブレイズしゅ）
+    en: Tauros (Paldean Form Blaze Breed)
+  tauros-paldea-combat:
+    ja: ケンタロス（パルデアのすがた・コンバットしゅ）
+    en: Tauros (Paldean Form Combat Breed)
+  teddiursa:
+    ja: ヒメグマ
+    en: Teddiursa
+  tentacool:
+    ja: メノクラゲ
+    en: Tentacool
+  tentacruel:
+    ja: ドククラゲ
+    en: Tentacruel
+  tepig:
+    ja: ポカブ
+    en: Tepig
+  terapagos:
+    ja: テラパゴス
+    en: Terapagos
+  terapagos-stellar:
+    ja: テラパゴス（ステラフォルム）
+    en: Terapagos (Stellar Form)
+  terapagos-terastal:
+    ja: テラパゴス（テラスタルフォルム）
+    en: Terapagos (Terastal Form)
+  terrakion:
+    ja: テラキオン
+    en: Terrakion
+  thievul:
+    ja: フォクスライ
+    en: Thievul
+  throh:
+    ja: ナゲキ
+    en: Throh
+  thundurus-incarnate:
+    ja: ボルトロス（けしんフォルム）
+    en: Thundurus (Incarnate Forme)
+  thundurus-therian:
+    ja: ボルトロス（れいじゅうフォルム）
+    en: Thundurus (Therian Forme)
+  thwackey:
+    ja: バチンキー
+    en: Thwackey
+  timburr:
+    ja: ドッコラー
+    en: Timburr
+  ting-lu:
+    ja: ディンルー
+    en: Ting-Lu
+  tinkatink:
+    ja: カヌチャン
+    en: Tinkatink
+  tinkaton:
+    ja: デカヌチャン
+    en: Tinkaton
+  tinkatuff:
+    ja: ナカヌチャン
+    en: Tinkatuff
+  tirtouga:
+    ja: プロトーガ
+    en: Tirtouga
+  toedscool:
+    ja: ノノクラゲ
+    en: Toedscool
+  toedscruel:
+    ja: リククラゲ
+    en: Toedscruel
+  togedemaru:
+    ja: トゲデマル
+    en: Togedemaru
+  togekiss:
+    ja: トゲキッス
+    en: Togekiss
+  togepi:
+    ja: トゲピー
+    en: Togepi
+  togetic:
+    ja: トゲチック
+    en: Togetic
+  torchic:
+    ja: アチャモ
+    en: Torchic
+  torkoal:
+    ja: コータス
+    en: Torkoal
+  tornadus-incarnate:
+    ja: トルネロス（けしんフォルム）
+    en: Tornadus (Incarnate Forme)
+  tornadus-therian:
+    ja: トルネロス（れいじゅうフォルム）
+    en: Tornadus (Therian Forme)
+  torracat:
+    ja: ニャヒート
+    en: Torracat
+  torterra:
+    ja: ドダイトス
+    en: Torterra
+  totodile:
+    ja: ワニノコ
+    en: Totodile
+  toucannon:
+    ja: ドデカバシ
+    en: Toucannon
+  toxapex:
+    ja: ドヒドイデ
+    en: Toxapex
+  toxel:
+    ja: エレズン
+    en: Toxel
+  toxicroak:
+    ja: ドクロッグ
+    en: Toxicroak
+  toxtricity:
+    ja: ストリンダー
+    en: Toxtricity
+  toxtricity-amped:
+    ja: ストリンダー（ハイなすがた）
+    en: Toxtricity (Amped Form)
+  tranquill:
+    ja: ハトーボー
+    en: Tranquill
+  trapinch:
+    ja: ナックラー
+    en: Trapinch
+  treecko:
+    ja: キモリ
+    en: Treecko
+  trevenant:
+    ja: オーロット
+    en: Trevenant
+  tropius:
+    ja: トロピウス
+    en: Tropius
+  trubbish:
+    ja: ヤブクロン
+    en: Trubbish
+  trumbeak:
+    ja: ケララッパ
+    en: Trumbeak
+  tsareena:
+    ja: アマージョ
+    en: Tsareena
+  turtonator:
+    ja: バクガメス
+    en: Turtonator
+  turtwig:
+    ja: ナエトル
+    en: Turtwig
+  tympole:
+    ja: オタマロ
+    en: Tympole
+  tynamo:
+    ja: シビシラス
+    en: Tynamo
+  type-null:
+    ja: タイプ：ヌル
+    en: "Type: Null"
+  typhlosion:
+    ja: バクフーン
+    en: Typhlosion
+  typhlosion-hisui:
+    ja: バクフーン（ヒスイのすがた）
+    en: Typhlosion (Hisuian Form)
+  tyranitar:
+    ja: バンギラス
+    en: Tyranitar
+  tyrantrum:
+    ja: ガチゴラス
+    en: Tyrantrum
+  tyrogue:
+    ja: バルキー
+    en: Tyrogue
+  tyrunt:
+    ja: チゴラス
+    en: Tyrunt
+  umbreon:
+    ja: ブラッキー
+    en: Umbreon
+  unfezant:
+    ja: ケンホロウ
+    en: Unfezant
+  unown:
+    ja: アンノーン
+    en: Unown
+  ursaluna:
+    ja: ガチグマ
+    en: Ursaluna
+  ursaluna-bloodmoon:
+    ja: ガチグマ（アカツキ）
+    en: Ursaluna (Bloodmoon)
+  ursaring:
+    ja: リングマ
+    en: Ursaring
+  urshifu-rapid:
+    ja: ウーラオス（れんげきのかた）
+    en: Urshifu (Rapid Strike Style)
+  urshifu-single:
+    ja: ウーラオス（いちげきのかた）
+    en: Urshifu (Single Strike Style)
+  uxie:
+    ja: ユクシー
+    en: Uxie
+  vanillish:
+    ja: バニリッチ
+    en: Vanillish
+  vanillite:
+    ja: バニプッチ
+    en: Vanillite
+  vanilluxe:
+    ja: バイバニラ
+    en: Vanilluxe
+  vaporeon:
+    ja: シャワーズ
+    en: Vaporeon
+  varoom:
+    ja: ブロロン
+    en: Varoom
+  veluza:
+    ja: ミガルーサ
+    en: Veluza
+  venipede:
+    ja: フシデ
+    en: Venipede
+  venomoth:
+    ja: モルフォン
+    en: Venomoth
+  venonat:
+    ja: コンパン
+    en: Venonat
+  venusaur:
+    ja: フシギバナ
+    en: Venusaur
+  vespiquen:
+    ja: ビークイン
+    en: Vespiquen
+  vibrava:
+    ja: ビブラーバ
+    en: Vibrava
+  victini:
+    ja: ビクティニ
+    en: Victini
+  victreebel:
+    ja: ウツボット
+    en: Victreebel
+  vigoroth:
+    ja: ヤルキモノ
+    en: Vigoroth
+  vikavolt:
+    ja: クワガノン
+    en: Vikavolt
+  vileplume:
+    ja: ラフレシア
+    en: Vileplume
+  virizion:
+    ja: ビリジオン
+    en: Virizion
+  vivillon:
+    ja: ビビヨン
+    en: Vivillon
+  volbeat:
+    ja: バルビート
+    en: Volbeat
+  volcanion:
+    ja: ボルケニオン
+    en: Volcanion
+  volcarona:
+    ja: ウルガモス
+    en: Volcarona
+  voltorb:
+    ja: ビリリダマ
+    en: Voltorb
+  voltorb-hisui:
+    ja: ビリリダマ（ヒスイのすがた）
+    en: Voltorb (Hisuian Form)
+  vullaby:
+    ja: バルチャイ
+    en: Vullaby
+  vulpix:
+    ja: ロコン
+    en: Vulpix
+  vulpix-alola:
+    ja: ロコン（アローラのすがた）
+    en: Vulpix (Alolan Form)
+  wailmer:
+    ja: ホエルコ
+    en: Wailmer
+  wailord:
+    ja: ホエルオー
+    en: Wailord
+  walking-wake:
+    ja: ウネルミナモ
+    en: Walking Wake
+  walrein:
+    ja: トドゼルガ
+    en: Walrein
+  wartortle:
+    ja: カメール
+    en: Wartortle
+  watchog:
+    ja: ミルホッグ
+    en: Watchog
+  wattrel:
+    ja: カイデン
+    en: Wattrel
+  weavile:
+    ja: マニューラ
+    en: Weavile
+  weedle:
+    ja: ビードル
+    en: Weedle
+  weepinbell:
+    ja: ウツドン
+    en: Weepinbell
+  weezing:
+    ja: マタドガス
+    en: Weezing
+  weezing-galar:
+    ja: マタドガス（ガラルのすがた）
+    en: Weezing (Galarian Form)
+  whimsicott:
+    ja: エルフーン
+    en: Whimsicott
+  whirlipede:
+    ja: ホイーガ
+    en: Whirlipede
+  whiscash:
+    ja: ナマズン
+    en: Whiscash
+  whismur:
+    ja: ゴニョニョ
+    en: Whismur
+  wigglytuff:
+    ja: プクリン
+    en: Wigglytuff
+  wiglett:
+    ja: ウミディグダ
+    en: Wiglett
+  wimpod:
+    ja: コソクムシ
+    en: Wimpod
+  wingull:
+    ja: キャモメ
+    en: Wingull
+  wishiwashi:
+    ja: ヨワシ
+    en: Wishiwashi
+  wishiwashi-school:
+    ja: ヨワシ（むれたすがた）
+    en: Wishiwashi (School Form)
+  wishiwashi-solo:
+    ja: ヨワシ（たんどくのすがた）
+    en: Wishiwashi (Solo Form)
+  wo-chien:
+    ja: チオンジェン
+    en: Wo-Chien
+  wobbuffet:
+    ja: ソーナンス
+    en: Wobbuffet
+  woobat:
+    ja: コロモリ
+    en: Woobat
+  wooloo:
+    ja: ウールー
+    en: Wooloo
+  wooper:
+    ja: ウパー
+    en: Wooper
+  wooper-paldea:
+    ja: ウパー（パルデアのすがた）
+    en: Wooper (Paldean Form)
+  wormadam-plant:
+    ja: ミノマダム（くさきのミノ）
+    en: Wormadam (Plant Cloak)
+  wormadam-sandy:
+    ja: ミノマダム（すなちのミノ）
+    en: Wormadam (Sandy Cloak)
+  wormadam-trash:
+    ja: ミノマダム（ゴミのミノ）
+    en: Wormadam (Trash Cloak)
+  wugtrio:
+    ja: ウミトリオ
+    en: Wugtrio
+  wurmple:
+    ja: ケムッソ
+    en: Wurmple
+  wynaut:
+    ja: ソーナノ
+    en: Wynaut
+  wyrdeer:
+    ja: アヤシシ
+    en: Wyrdeer
+  xatu:
+    ja: ネイティオ
+    en: Xatu
+  xerneas:
+    ja: ゼルネアス
+    en: Xerneas
+  xurkitree:
+    ja: デンジュモク
+    en: Xurkitree
+  yamask:
+    ja: デスマス
+    en: Yamask
+  yamask-galar:
+    ja: デスマス（ガラルのすがた）
+    en: Yamask (Galarian Form)
+  yamper:
+    ja: ワンパチ
+    en: Yamper
+  yanma:
+    ja: ヤンヤンマ
+    en: Yanma
+  yanmega:
+    ja: メガヤンマ
+    en: Yanmega
+  yungoos:
+    ja: ヤングース
+    en: Yungoos
+  yveltal:
+    ja: イベルタル
+    en: Yveltal
+  zacian:
+    ja: ザシアン
+    en: Zacian
+  zacian-crowned:
+    ja: ザシアン（けんのおう）
+    en: Zacian (Crowned Sword)
+  zamazenta:
+    ja: ザマゼンタ
+    en: Zamazenta
+  zamazenta-crowned:
+    ja: ザマゼンタ（たてのおう）
+    en: Zamazenta (Crowned Shield)
+  zangoose:
+    ja: ザングース
+    en: Zangoose
+  zapdos:
+    ja: サンダー
+    en: Zapdos
+  zapdos-galar:
+    ja: サンダー（ガラルのすがた）
+    en: Zapdos (Galarian Form)
+  zarude:
+    ja: ザルード
+    en: Zarude
+  zebstrika:
+    ja: ゼブライカ
+    en: Zebstrika
+  zekrom:
+    ja: ゼクロム
+    en: Zekrom
+  zeraora:
+    ja: ゼラオラ
+    en: Zeraora
+  zigzagoon:
+    ja: ジグザグマ
+    en: Zigzagoon
+  zigzagoon-galar:
+    ja: ジグザグマ（ガラルのすがた）
+    en: Zigzagoon (Galarian Form)
+  zoroark:
+    ja: ゾロアーク
+    en: Zoroark
+  zoroark-hisui:
+    ja: ゾロアーク（ヒスイのすがた）
+    en: Zoroark (Hisuian Form)
+  zorua:
+    ja: ゾロア
+    en: Zorua
+  zorua-hisui:
+    ja: ゾロア（ヒスイのすがた）
+    en: Zorua (Hisuian Form)
+  zubat:
+    ja: ズバット
+    en: Zubat
+  zweilous:
+    ja: ジヘッド
+    en: Zweilous
+  zygarde-10:
+    ja: ジガルデ（１０％フォルム）
+    en: Zygarde (10% Forme)
+  zygarde-50:
+    ja: ジガルデ（５０％フォルム）
+    en: Zygarde (50% Forme)
+  zygarde-complete:
+    ja: ジガルデ（パーフェクトフォルム）
+    en: Zygarde (Complete Forme)
