@@ -4,9 +4,9 @@
  *
  * **名前専任**（plan 10）: 構造データ（図鑑番号 / タイプ / 種族値 / 特性 id / 持ち物 category）の転記は
  * pokemon-showdown 経路（`scripts/sync-showdown.ts` + `src/codegen/showdown/*`）へ移管した。本スクリプトは
- * `languages/{species,items,moves,abilities,types}.yaml` の名前（ja/en）補完だけを担う。languages は reg 非依存の
- * **全件名辞書**（ADR 0041）で、PokeAPI から ja/en を両取りして満たす。メガ名は PokeAPI のカテゴリに無いため
- * 対象外（en=showdown / ja=手作業・[[data-pipeline]]）。
+ * `languages/{species,items,moves,abilities,types,mega}.yaml` の名前（ja/en）補完だけを担う。languages は reg 非依存の
+ * **全件名辞書**（ADR 0041）で、PokeAPI から ja/en を両取りして満たす。**メガ名も PokeAPI 対象**（`pokemon-form` の
+ * `form_names`・`is_mega` で判別する 6 種目・ADR 0043・[[data-pipeline]]）。
  *
  * **raw 起点の append/backfill**（ADR 0041 の「append/既存尊重転記」）: `fetch:ja-names` が全件列挙で未記録 /
  * ja・en 欠落の id のみ raw を書くため、`data/raw/<category>/*.json` を決定論順（sort）で走査し —
