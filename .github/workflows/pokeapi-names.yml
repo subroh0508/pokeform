@@ -49,11 +49,13 @@ jobs:
           pnpm fetch:ja-names
           pnpm sync:ja-names
 
-      # スタイル lint（flow 禁止）→ 生成（generate:data・raw 非依存・superset 許容）→ 緑ゲート（verify）。
-      - name: Style, generate, verify
+      # 生成（generate:data・raw 非依存・superset 許容）→ スタイル lint（flow 禁止）→ 緑ゲート（verify）。
+      # generate:data を先に走らせ src/generated/languages/*.ts を作る（plan 11 P1）。check:yaml-style は CLI 経由で
+      # 生成物を import するため、from-scratch 復元（生成 ts 撤去状態）では generate を先にしないと CLI 起動不可。
+      - name: Generate, style, verify
         run: |
-          pnpm check:yaml-style
           pnpm generate:data
+          pnpm check:yaml-style
           pnpm verify
 
       # 差分があれば data:names ラベルの languages 更新 PR を自動作成する。
@@ -72,7 +74,7 @@ jobs:
             - **dataset**: species / items / moves / abilities / types / **mega**（全件列挙・reg 非依存の全件名辞書）
             - **取得元**: PokeAPI `names`（ja = ja-Hrkt 優先 / en）。**mega は `pokemon-form` の `form_names`**（`is_mega`
               で判別・ADR 0043）。append/既存尊重で既存の en（showdown 正 / Serebii 速報）は上書きしない。
-            - **検証**: `check:yaml-style` → `generate:data` → `pnpm verify` を通過
+            - **検証**: `generate:data` → `check:yaml-style` → `pnpm verify` を通過
             - **workflow run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
             ### 手作業カバー箇所の差分チェック（Serebii Champions）

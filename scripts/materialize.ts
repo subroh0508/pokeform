@@ -27,6 +27,7 @@ import {
   extractMegaNames,
   extractNames,
   type FieldPlan,
+  getOrCreateBlockMap,
   planFields,
   pruneToKeep,
 } from "../src/codegen/materialize.ts";
@@ -34,6 +35,16 @@ import {
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const RAW = join(ROOT, "data", "raw");
 const LANG = join(ROOT, "data", "languages");
+
+/** 欠損 languages ファイルを from-scratch 復元するときの先頭コメント（`data/` 完全削除時のみ使用・plan 11 P2）。 */
+const HEADERS: Record<string, string> = {
+  species: "# data/languages/species.yaml — base 種族の日英名（id→{ja,en}・名前 SoT・ADR 0035）。",
+  items: "# data/languages/items.yaml — 持ち物の日英名（id→{ja,en}）。",
+  moves: "# data/languages/moves.yaml — 技の日英名（id→{ja,en}・ゲーム非依存）。",
+  abilities: "# data/languages/abilities.yaml — 特性の日英名（id→{ja,en}）。",
+  types: "# data/languages/types.yaml — タイプの日英名（id→{ja,en}）。",
+  mega: "# data/languages/mega.yaml — メガ形態の日英名（id→{ja,en}）。",
+};
 
 /** raw JSON の名前欄。5 種は `names`、mega は `pokemon-form` の `form_names` / `is_mega`（ADR 0043）。 */
 type RawNamed = {
@@ -94,8 +105,13 @@ const backfillNames = (
   extract: (r: RawNamed) => { ja?: string; en?: string },
   needs: (e: { ja?: string; en?: string }) => boolean,
 ): number => {
-  const doc = parseDocument(readFileSync(join(LANG, file), "utf8"));
-  const map = doc.get(mapKey) as YAMLMap;
+  // from-scratch 復元（`data/languages/*` 完全削除）でも scaffold / seed 無しで動くよう、欠損ファイルは先頭
+  // コメントだけの doc を起こし、map ノードは block スタイルで get-or-create する（純関数側・plan 11 P2）。
+  const path = join(LANG, file);
+  const doc = existsSync(path)
+    ? parseDocument(readFileSync(path, "utf8"))
+    : parseDocument(`${HEADERS[mapKey] ?? `# data/languages/${file}`}\n`);
+  const map = getOrCreateBlockMap(doc, mapKey);
   let filled = 0;
   for (const id of listRawIds(category)) {
     const json = rawOpt(category, id);
@@ -135,10 +151,12 @@ const backfillNames = (
  */
 const pruneItemsToUnion = (): number => {
   const manifest = join(RAW, "item-union.json");
-  if (!existsSync(manifest)) return 0;
+  const itemsPath = join(LANG, "items.yaml");
+  // manifest 不在（items 未取得）/ items.yaml 不在（from-scratch で items backfill が 0 件）なら剪定しない。
+  if (!existsSync(manifest) || !existsSync(itemsPath)) return 0;
   const keep = JSON.parse(readFileSync(manifest, "utf8")) as string[];
-  const doc = parseDocument(readFileSync(join(LANG, "items.yaml"), "utf8"));
-  const map = doc.get("items") as YAMLMap;
+  const doc = parseDocument(readFileSync(itemsPath, "utf8"));
+  const map = getOrCreateBlockMap(doc, "items");
   const existing = Object.keys(map.toJS(doc) as Record<string, unknown>);
   const { removed } = pruneToKeep(existing, keep);
   for (const id of removed) map.delete(id);

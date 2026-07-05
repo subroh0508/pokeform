@@ -89,12 +89,14 @@ PokeAPI 由来で埋まらなかった手作業カバー箇所（メガストー
 **block スタイル**（`check:yaml-style` 通過・flow 禁止・[[data-pipeline]]）で ja/en を書き足して commit する（既存値は
 上書きしない＝ append/既存尊重を手作業でも守る）。追加後 `pnpm generate:data` → `pnpm verify` で緑を確認する。
 
-### 4. scaffold（`data/` 完全削除からの復元時のみ）
+### 4. `data/` 完全削除からの復元（scaffold 不要・plan 11 P2/P3）
 
-`data/languages/` が無い状態から起こすときは、6 ファイル（`species` / `items` / `moves` / `abilities` / `types` /
-`mega`）の**空骨格**を block スタイルで scaffold する（各ファイルは先頭コメント + `<mapKey>:` の空マップ）。以降は
-手順 1 の workflow が `species` 〜 `types` に加え `mega`（`pokemon-form` form_names 経路・ADR 0043）まで全件で
-満たす。`rules.yaml` /
+`data/languages/` が無い状態からでも **scaffold / seed は不要**。`sync:ja-names`（`materialize.ts`）が欠損ファイル /
+null map を block `YAMLMap` 新規作成で埋め（純関数 `getOrCreateBlockMap`）、`fetch:ja-names` の `readLangMap` も
+欠損を空マップ扱いで吸収する。よって手順 1 の workflow（または ローカル `fetch:ja-names` → `sync:ja-names`）を
+**そのまま回すだけ**で 6 ファイル（`species` 〜 `types` + `mega`・`pokemon-form` form_names 経路・ADR 0043）が全件で
+埋まる。pokeform 固有フォーム（`rotom-wash` 等・`pokemon-species` 外）は `fetch-pokeapi.ts` の `SPECIES_FORMS`
+whitelist が `pokemon-form` から取得して species raw へ合成する（P3・[[data-pipeline]]）。`rules.yaml` /
 `type-specs.yaml`（`data/champions`）は本 skill の対象外の静的コミットで、削除時は別途手作業復元する（[[data-pipeline]]）。
 
 ### 5. generate:data / verify で緑を確認する（委譲）
@@ -105,6 +107,11 @@ PokeAPI 由来で埋まらなかった手作業カバー箇所（メガストー
 
 ## Gotchas
 
+- **from-scratch 復元は scaffold/seed 不要・generate を先に**（plan 11 P1/P2/P3）: `data/languages/*` を完全削除
+  しても `sync:ja-names` が欠損ファイルから block map を新規作成し（`getOrCreateBlockMap`）、固有フォーム
+  （`rotom-wash` 等）は `SPECIES_FORMS` whitelist が `pokemon-form` から取得する。workflow は **`generate:data` を
+  `check:yaml-style` の前**に走らせる（`check:yaml-style` は CLI 経由で `src/generated/languages/*.ts` を import
+  するため、生成 ts 撤去状態では generate を先にしないと起動不可）。詳細は [[data-pipeline]]。
 - **責務は reg 非依存の名前辞書のみ**: 本 skill は名前 SoT（languages）の全件名（ja/en）だけを担う。構造データ
   （種族値 / タイプ / 特性 id / 図鑑番号 / category）と en の正は **pokemon-showdown 経路**（`showdown:*`）、
   Champions 解禁（roster / 技 / メガ**構造 + linking**）は Serebii 速報 / showdown 経路の責務（[[data-pipeline]]）。

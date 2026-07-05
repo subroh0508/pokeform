@@ -56,12 +56,25 @@ const ITEM_CATEGORIES = [
   "other",
 ] as const;
 
-/** data/languages/<file> の名前マップ（`{ <mapKey>: { id → { ja?, en? } } }`）を読む。 */
+/**
+ * pokeform 固有フォーム（PokeAPI `pokemon-species` list 外の species id）の curated whitelist（plan 11 P3）。
+ * これらは `pokemon-species` 列挙で拾えず species.yaml の名前が埋まらないため（`generate` が `no name entry` で fail）、
+ * `pokemon-form/{id}` の `form_names`（ja-Hrkt / en）から取得して species raw へ合成する。`ITEM_CATEGORIES` と同型の
+ * 差分運用（spec が参照する固有フォーム id が出るたび追加・先回りで全フォーム列挙しない・[[data-pipeline]]）。
+ * 例: `rotom-wash`（ウォッシュロトム / Wash Rotom）は `pokemon-form/rotom-wash` の form_names に ja/en を持つ。
+ */
+const SPECIES_FORMS = ["rotom-wash"] as const;
+
+/** data/languages/<file> の名前マップ（`{ <mapKey>: { id → { ja?, en? } } }`）を読む。from-scratch 復元
+ * （`data/languages/*` 完全削除）ではファイル不在ゆえ空マップを返す（全 id を未記録として fetch 対象にする・
+ * plan 11 P2）。空マップ（`mapKey:` = null）も `?? {}` で吸収する。 */
 const readLangMap = (
   file: string,
   mapKey: string,
 ): Record<string, { ja?: string; en?: string }> => {
-  const doc = parseYaml(readFileSync(join(ROOT, "data", "languages", file), "utf8")) as Record<
+  const path = join(ROOT, "data", "languages", file);
+  if (!existsSync(path)) return {};
+  const doc = parseYaml(readFileSync(path, "utf8")) as Record<
     string,
     Record<string, { ja?: string; en?: string }>
   >;
@@ -142,6 +155,35 @@ async function fetchNamesInto(category: string, name: string): Promise<void> {
   console.log(`[fetch] ${category}/${name} (names)`);
 }
 
+/**
+ * pokeform 固有フォーム（`SPECIES_FORMS`）を `pokemon-form/{id}` から取得し、**`form_names` を `names` として合成**して
+ * species raw（`raw/pokemon-species/{id}.json`）へ書く（plan 11 P3）。こうすると `materialize` の species 経路
+ * （`extractNames` = `names` から ja/en）が改修なしで透過的に拾える。best-effort（404 / 失敗は警告して skip）。
+ */
+async function fetchSpeciesFormInto(id: string): Promise<void> {
+  const file = join(RAW, "pokemon-species", `${id}.json`);
+  if (existsSync(file)) return;
+  const url = `${API}/pokemon-form/${id}`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    console.warn(`[fetch] skip pokemon-form/${id} (species form, ${res.status})`);
+    return;
+  }
+  const form = (await res.json()) as { form_names?: unknown };
+  const names = Array.isArray(form.form_names) ? form.form_names : [];
+  // form_names が空なら raw を書かない（existsSync ガードで空キャッシュが固定化し再取得不能になるのを避ける・
+  // 将来 SPECIES_FORMS に form_names 欠落フォームを足したとき retry 可能に保つ）。
+  if (names.length === 0) {
+    console.warn(`[fetch] skip pokemon-form/${id} (no form_names)`);
+    return;
+  }
+  mkdirSync(dirname(file), { recursive: true });
+  // form_names を names 欄として合成（materialize の species 経路が extractNames で拾う）。
+  writeFileSync(file, `${JSON.stringify({ names }, null, 2)}\n`);
+  await sleep(50);
+  console.log(`[fetch] pokemon-species/${id} (form_names as names)`);
+}
+
 /** ja / en の少なくとも一方を欠くか（全 5 種とも languages を ja/en 完備の全件辞書にするため PokeAPI から両取り）。 */
 const needsJaEn = (v: { ja?: string; en?: string }): boolean => !v.ja || !v.en;
 
@@ -196,6 +238,11 @@ async function main(): Promise<void> {
     for (const id of ids) {
       if (needsJaEn(map[id] ?? {})) await fetchNamesInto(ds.category, id);
     }
+  }
+  // pokeform 固有フォーム（pokemon-species list 外）は pokemon-form の form_names から species raw へ合成する（P3）。
+  const speciesMap = readLangMap("species.yaml", "species");
+  for (const id of SPECIES_FORMS) {
+    if (needsJaEn(speciesMap[id] ?? {})) await fetchSpeciesFormInto(id);
   }
   console.log("[fetch] done (names)");
 }
