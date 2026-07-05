@@ -115,10 +115,17 @@ const FORM_EXCLUDE = new Set<string>([
   "minior-violet",
   "pyroar-male",
   "tatsugiri-curly",
-  // ガラルヒヒダルマは galar-standard を base `darmanitan-galar` へリネームする（FORM_SLUG_RENAME）。Unovan の
-  // standard は base `darmanitan`（species list）と冗長ゆえ除外し、各系統 base + ダルマモード（zen）の対称にする。
-  "darmanitan-standard",
 ]);
+
+/**
+ * PokeAPI に variety が無い「地方フォルムの base」を合成注入する（`{ id → { ja, en } }`）。distinct 列挙は
+ * variety をキーにするため、standard / zen サブフォルムを持つ地方フォルムの base id（Unovan `darmanitan` と対称な
+ * `darmanitan-galar`）は変種として現れず生成されない。ここで base 名を直接 raw 化して補い、`-standard` / `-zen` の
+ * サブフォルムと並べて列挙する（bare base + standard + zen の対称構造・[[data-pipeline]]）。
+ */
+const SYNTHETIC_BASE_FORMS: Record<string, { ja: string; en: string }> = {
+  "darmanitan-galar": { ja: "ヒヒダルマ（ガラルのすがた）", en: "Darmanitan (Galarian Form)" },
+};
 
 /**
  * distinct-forms 列挙から除外する form サフィックス / セグメント。`-mega[-x|-y|-z]` は mega.yaml 経路（ADR 0043）、
@@ -136,8 +143,8 @@ const EXCLUDED_FORM = /-(mega(-[xyz])?|gmax|primal|starter)$|-totem(-|$)/;
  * - `tauros-paldea-*`: form_names.ja が 3 種とも「パルデアのすがた」で衝突 → breed 別 ja + en（`(Paldean Form XXX
  *   Breed)`）を著述。en も 3 種同綴りゆえ手動で区別する。
  * - `pumpkaboo-*` / `gourgeist-*`: サイズ ja を独自呼称（小さい順 こだま/ちゅうだま/おおだま/ギガだま）で著述（en は合成）。
- * - `darmanitan-galar-zen`: form_names.ja が「ダルマモード」のみ（ガラル文脈欠落）→ ガラル + モードを著述。
- *   galar-standard は base `darmanitan-galar` へリネーム（FORM_SLUG_RENAME）され ヒヒダルマ（ガラルのすがた）に合成されるため override 不要。
+ * - `darmanitan-galar-*`: form_names.ja がモード名のみ（ガラル文脈欠落）→ ガラル + モードを著述。base
+ *   `darmanitan-galar`（ヒヒダルマ（ガラルのすがた））は `SYNTHETIC_BASE_FORMS` で別途注入する。
  */
 const MANUAL_NAME_OVERRIDE: Record<string, { ja?: string; en?: string }> = {
   "greninja-battle-bond": { ja: "ゲッコウガ（きずなへんげ）", en: "Greninja (Battle Bond)" },
@@ -161,6 +168,10 @@ const MANUAL_NAME_OVERRIDE: Record<string, { ja?: string; en?: string }> = {
   "gourgeist-average": { ja: "パンプジン（ちゅうだましゅ）" },
   "gourgeist-large": { ja: "パンプジン（おおだましゅ）" },
   "gourgeist-super": { ja: "パンプジン（ギガだましゅ）" },
+  "darmanitan-galar-standard": {
+    ja: "ヒヒダルマ（ガラルのすがた・ノーマルモード）",
+    en: "Darmanitan (Galarian Form Standard Mode)",
+  },
   "darmanitan-galar-zen": {
     ja: "ヒヒダルマ（ガラルのすがた・ダルマモード）",
     en: "Darmanitan (Galarian Form Zen Mode)",
@@ -494,6 +505,13 @@ async function main(): Promise<void> {
   // 含有合成した ja/en を species raw へ書く（`SPECIES_FORMS` whitelist を廃止・plan 11 P4）。
   const speciesMap = readLangMap("species.yaml", "species");
   await fetchDistinctForms(speciesIds, speciesMap);
+  // PokeAPI に variety が無い地方フォルムの base（darmanitan-galar 等）を直接 raw 化して補う（差分・冪等）。
+  for (const [id, names] of Object.entries(SYNTHETIC_BASE_FORMS)) {
+    const cur = speciesMap[id] ?? {};
+    if (cur.ja && cur.en) continue;
+    writeComposedNames(id, names.ja, names.en);
+    console.log(`[fetch] synthetic-base ${id} (${names.ja} / ${names.en})`);
+  }
   console.log("[fetch] done (names)");
 }
 

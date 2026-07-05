@@ -69,10 +69,13 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
   morpeko はらぺこ / mimikyu ばれた / maushold ３ひき / meowstic メス / keldeo かくご / dudunsparce みつふし / basculin
   あおすじ・しろすじ）は `FORM_INCLUDE`、PokeAPI に ja 無し / 名前衝突する / 独自呼称を与える form（`greninja-battle-bond` /
   `tauros-paldea-*` の breed 別 ja+en / `pumpkaboo-*`・`gourgeist-*` のサイズ ja / `darmanitan-galar-*` のモード ja+en）は
-  `MANUAL_NAME_OVERRIDE`（**短い canonical id をキーに**）で補う（合成結果より優先）。4 リスト（`FORM_INCLUDE` / `FORM_EXCLUDE` /
-  `MANUAL_NAME_OVERRIDE` / `CANONICAL_ID_OVERRIDE`）と除外パターン・`canonicalFormId` の SoT は `fetch-pokeapi.ts` +
-  `canonical-species-id.ts`。決定記録（id / en / ja / decision / distinct 根拠）を manifest（`data/raw/distinct-forms.json`）へ
-  残し `pokeapi-names.yml` が PR レビュー表へ整形する（手順 SoT は `author-static-data` skill）。
+  `MANUAL_NAME_OVERRIDE`（**短い canonical id をキーに**）で補う（合成結果より優先）。加えて **PokeAPI に variety が無い
+  「地方フォルムの base」は `SYNTHETIC_BASE_FORMS` で合成注入**する（`darmanitan-galar` = ヒヒダルマ（ガラルのすがた）。standard /
+  zen サブフォルムを持つ地方フォルムは base が変種として現れないため、Unovan `darmanitan` と対称に bare base + standard + zen を
+  列挙する）。5 リスト（`FORM_INCLUDE` / `FORM_EXCLUDE` / `MANUAL_NAME_OVERRIDE` / `SYNTHETIC_BASE_FORMS` / `CANONICAL_ID_OVERRIDE`）と
+  除外パターン・`canonicalFormId` の SoT は `fetch-pokeapi.ts` + `canonical-species-id.ts`。決定記録（id / en / ja / decision /
+  distinct 根拠）を manifest（`data/raw/distinct-forms.json`）へ残し `pokeapi-names.yml` が PR レビュー表へ整形する（手順 SoT は
+  `author-static-data` skill）。
 - **bare base 名を抑制する種**（`SUPPRESS_BASE_SPECIES`）: bare base id が冗長 / 曖昧になる種は
   `languages/species.yaml` に bare base を出さず**明示 form だけ**を列挙する（転記段 `scripts/materialize.ts` が bare base を
   skip・構造側は `DEFAULT_TO_EXPLICIT` で bare default を明示 id へ写して name/structure の form 集合を一致させる）。対象は
