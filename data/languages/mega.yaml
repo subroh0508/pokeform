@@ -1,0 +1,293 @@
+# data/languages/mega.yaml — メガ形態の日英名（id→{ja,en}）。
+mega:
+  charizard-mega-x:
+    ja: メガリザードンＸ
+    en: Mega Charizard X
+  abomasnow-mega:
+    ja: メガユキノオー
+    en: Mega Abomasnow
+  absol-mega:
+    ja: メガアブソル
+    en: Mega Absol
+  absol-mega-z:
+    ja: メガアブソルZ
+    en: Mega Absol Z
+  aerodactyl-mega:
+    ja: メガプテラ
+    en: Mega Aerodactyl
+  aggron-mega:
+    ja: メガボスゴドラ
+    en: Mega Aggron
+  alakazam-mega:
+    ja: メガフーディン
+    en: Mega Alakazam
+  altaria-mega:
+    ja: メガチルタリス
+    en: Mega Altaria
+  ampharos-mega:
+    ja: メガデンリュウ
+    en: Mega Ampharos
+  audino-mega:
+    ja: メガタブンネ
+    en: Mega Audino
+  banette-mega:
+    ja: メガジュペッタ
+    en: Mega Banette
+  barbaracle-mega:
+    ja: メガガメノデス
+    en: Mega Barbaracle
+  baxcalibur-mega:
+    ja: メガセグレイブ
+    en: Mega Baxcalibur
+  beedrill-mega:
+    ja: メガスピアー
+    en: Mega Beedrill
+  blastoise-mega:
+    ja: メガカメックス
+    en: Mega Blastoise
+  blaziken-mega:
+    ja: メガバシャーモ
+    en: Mega Blaziken
+  camerupt-mega:
+    ja: メガバクーダ
+    en: Mega Camerupt
+  chandelure-mega:
+    ja: メガシャンデラ
+    en: Mega Chandelure
+  charizard-mega-y:
+    ja: メガリザードンＹ
+    en: Mega Charizard Y
+  chesnaught-mega:
+    ja: メガブリガロン
+    en: Mega Chesnaught
+  chimecho-mega:
+    ja: メガチリーン
+    en: Mega Chimecho
+  clefable-mega:
+    ja: メガピクシー
+    en: Mega Clefable
+  crabominable-mega:
+    ja: メガケケンカニ
+    en: Mega Crabominable
+  darkrai-mega:
+    ja: メガダークライ
+    en: Mega Darkrai
+  delphox-mega:
+    ja: メガマフォクシー
+    en: Mega Delphox
+  diancie-mega:
+    ja: メガディアンシー
+    en: Mega Diancie
+  dragalge-mega:
+    ja: メガドラミドロ
+    en: Mega Dragalge
+  dragonite-mega:
+    ja: メガカイリュー
+    en: Mega Dragonite
+  drampa-mega:
+    ja: メガジジーロン
+    en: Mega Drampa
+  eelektross-mega:
+    ja: メガシビルドン
+    en: Mega Eelektross
+  emboar-mega:
+    ja: メガエンブオー
+    en: Mega Emboar
+  excadrill-mega:
+    ja: メガドリュウズ
+    en: Mega Excadrill
+  falinks-mega:
+    ja: メガタイレーツ
+    en: Mega Falinks
+  feraligatr-mega:
+    ja: メガオーダイル
+    en: Mega Feraligatr
+  floette-mega:
+    ja: メガフラエッテ
+    en: Mega Floette
+  froslass-mega:
+    ja: メガユキメノコ
+    en: Mega Froslass
+  gallade-mega:
+    ja: メガエルレイド
+    en: Mega Gallade
+  garchomp-mega:
+    ja: メガガブリアス
+    en: Mega Garchomp
+  garchomp-mega-z:
+    ja: メガガブリアスZ
+    en: Mega Garchomp Z
+  gardevoir-mega:
+    ja: メガサーナイト
+    en: Mega Gardevoir
+  gengar-mega:
+    ja: メガゲンガー
+    en: Mega Gengar
+  glalie-mega:
+    ja: メガオニゴーリ
+    en: Mega Glalie
+  glimmora-mega:
+    ja: メガキラフロル
+    en: Mega Glimmora
+  golisopod-mega:
+    ja: メガグソクムシャ
+    en: Mega Golisopod
+  golurk-mega:
+    ja: メガゴルーグ
+    en: Mega Golurk
+  greninja-mega:
+    ja: メガゲッコウガ
+    en: Mega Greninja
+  gyarados-mega:
+    ja: メガギャラドス
+    en: Mega Gyarados
+  hawlucha-mega:
+    ja: メガルチャブル
+    en: Mega Hawlucha
+  heatran-mega:
+    ja: メガヒードラン
+    en: Mega Heatran
+  heracross-mega:
+    ja: メガヘラクロス
+    en: Mega Heracross
+  houndoom-mega:
+    ja: メガヘルガー
+    en: Mega Houndoom
+  kangaskhan-mega:
+    ja: メガガルーラ
+    en: Mega Kangaskhan
+  latias-mega:
+    ja: メガラティアス
+    en: Mega Latias
+  latios-mega:
+    ja: メガラティオス
+    en: Mega Latios
+  lopunny-mega:
+    ja: メガミミロップ
+    en: Mega Lopunny
+  lucario-mega:
+    ja: メガルカリオ
+    en: Mega Lucario
+  lucario-mega-z:
+    ja: メガルカリオZ
+    en: Mega Lucario Z
+  magearna-mega:
+    ja: メガマギアナ
+    en: Mega Magearna
+  magearna-original-mega:
+    ja: メガマギアナ
+    en: Mega Original Magearna
+  malamar-mega:
+    ja: メガカラマネロ
+    en: Mega Malamar
+  manectric-mega:
+    ja: メガライボルト
+    en: Mega Manectric
+  mawile-mega:
+    ja: メガクチート
+    en: Mega Mawile
+  medicham-mega:
+    ja: メガチャーレム
+    en: Mega Medicham
+  meganium-mega:
+    ja: メガメガニウム
+    en: Mega Meganium
+  meowstic-female-mega:
+    ja: メガニャオニクス
+    en: Mega Meowstic
+  meowstic-male-mega:
+    ja: メガニャオニクス
+    en: Mega Meowstic
+  metagross-mega:
+    ja: メガメタグロス
+    en: Mega Metagross
+  mewtwo-mega-x:
+    ja: メガミュウツーＸ
+    en: Mega Mewtwo X
+  mewtwo-mega-y:
+    ja: メガミュウツーＹ
+    en: Mega Mewtwo Y
+  pidgeot-mega:
+    ja: メガピジョット
+    en: Mega Pidgeot
+  pinsir-mega:
+    ja: メガカイロス
+    en: Mega Pinsir
+  pyroar-mega:
+    ja: メガカエンジシ
+    en: Mega Pyroar
+  raichu-mega-x:
+    ja: メガライチュウX
+    en: Mega Raichu X
+  raichu-mega-y:
+    ja: メガライチュウY
+    en: Mega Raichu Y
+  rayquaza-mega:
+    ja: メガレックウザ
+    en: Mega Rayquaza
+  sableye-mega:
+    ja: メガヤミラミ
+    en: Mega Sableye
+  salamence-mega:
+    ja: メガボーマンダ
+    en: Mega Salamence
+  sceptile-mega:
+    ja: メガジュカイン
+    en: Mega Sceptile
+  scizor-mega:
+    ja: メガハッサム
+    en: Mega Scizor
+  scolipede-mega:
+    ja: メガペンドラー
+    en: Mega Scolipede
+  scovillain-mega:
+    ja: メガスコヴィラン
+    en: Mega Scovillain
+  scrafty-mega:
+    ja: メガズルズキン
+    en: Mega Scrafty
+  sharpedo-mega:
+    ja: メガサメハダー
+    en: Mega Sharpedo
+  skarmory-mega:
+    ja: メガエアームド
+    en: Mega Skarmory
+  slowbro-mega:
+    ja: メガヤドラン
+    en: Mega Slowbro
+  staraptor-mega:
+    ja: メガムクホーク
+    en: Mega Staraptor
+  starmie-mega:
+    ja: メガスターミー
+    en: Mega Starmie
+  steelix-mega:
+    ja: メガハガネール
+    en: Mega Steelix
+  swampert-mega:
+    ja: メガラグラージ
+    en: Mega Swampert
+  tatsugiri-curly-mega:
+    ja: メガシャリタツ
+    en: Mega Curly Tatsugiri
+  tatsugiri-droopy-mega:
+    ja: メガシャリタツ
+    en: Mega Droopy Tatsugiri
+  tatsugiri-stretchy-mega:
+    ja: メガシャリタツ
+    en: Mega Stretchy Tatsugiri
+  tyranitar-mega:
+    ja: メガバンギラス
+    en: Mega Tyranitar
+  venusaur-mega:
+    ja: メガフシギバナ
+    en: Mega Venusaur
+  victreebel-mega:
+    ja: メガウツボット
+    en: Mega Victreebel
+  zeraora-mega:
+    ja: メガゼラオラ
+    en: Mega Zeraora
+  zygarde-mega:
+    ja: メガジガルデ
+    en: Mega Zygarde

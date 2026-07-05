@@ -1,0 +1,65 @@
+# data/languages/types.yaml — タイプの日英名（id→{ja,en}）。
+types:
+  normal:
+    ja: ノーマル
+    en: Normal
+  bug:
+    ja: むし
+    en: Bug
+  dark:
+    ja: あく
+    en: Dark
+  dragon:
+    ja: ドラゴン
+    en: Dragon
+  electric:
+    ja: でんき
+    en: Electric
+  fairy:
+    ja: フェアリー
+    en: Fairy
+  fighting:
+    ja: かくとう
+    en: Fighting
+  fire:
+    ja: ほのお
+    en: Fire
+  flying:
+    ja: ひこう
+    en: Flying
+  ghost:
+    ja: ゴースト
+    en: Ghost
+  grass:
+    ja: くさ
+    en: Grass
+  ground:
+    ja: じめん
+    en: Ground
+  ice:
+    ja: こおり
+    en: Ice
+  poison:
+    ja: どく
+    en: Poison
+  psychic:
+    ja: エスパー
+    en: Psychic
+  rock:
+    ja: いわ
+    en: Rock
+  shadow:
+    ja: ダーク
+    en: Shadow
+  steel:
+    ja: はがね
+    en: Steel
+  stellar:
+    ja: ステラ
+    en: Stellar
+  unknown:
+    ja: ？？？
+    en: ???
+  water:
+    ja: みず
+    en: Water

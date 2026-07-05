@@ -1,0 +1,821 @@
+# data/languages/items.yaml — 持ち物の日英名（id→{ja,en}）。
+items:
+  charizardite-x:
+    ja: リザードナイトＸ
+    en: Charizardite X
+  ability-shield:
+    ja: とくせいガード
+    en: Ability Shield
+  abomasite:
+    ja: ユキノオナイト
+    en: Abomasite
+  absolite:
+    ja: アブソルナイト
+    en: Absolite
+  absorb-bulb:
+    ja: きゅうこん
+    en: Absorb Bulb
+  adamant-orb:
+    ja: こんごうだま
+    en: Adamant Orb
+  adrenaline-orb:
+    ja: ビビリだま
+    en: Adrenaline Orb
+  aerodactylite:
+    ja: プテラナイト
+    en: Aerodactylite
+  aggronite:
+    ja: ボスゴドラナイト
+    en: Aggronite
+  aguav-berry:
+    ja: バンジのみ
+    en: Aguav Berry
+  air-balloon:
+    ja: ふうせん
+    en: Air Balloon
+  alakazite:
+    ja: フーディナイト
+    en: Alakazite
+  altarianite:
+    ja: チルタリスナイト
+    en: Altarianite
+  ampharosite:
+    ja: デンリュウナイト
+    en: Ampharosite
+  apicot-berry:
+    ja: ズアのみ
+    en: Apicot Berry
+  aspear-berry:
+    ja: ナナシのみ
+    en: Aspear Berry
+  assault-vest:
+    ja: とつげきチョッキ
+    en: Assault Vest
+  audinite:
+    ja: タブンネナイト
+    en: Audinite
+  babiri-berry:
+    ja: リリバのみ
+    en: Babiri Berry
+  banettite:
+    ja: ジュペッタナイト
+    en: Banettite
+  beedrillite:
+    ja: スピアナイト
+    en: Beedrillite
+  big-root:
+    ja: おおきなねっこ
+    en: Big Root
+  binding-band:
+    ja: しめつけバンド
+    en: Binding Band
+  black-belt:
+    ja: くろおび
+    en: Black Belt
+  black-glasses:
+    ja: くろいメガネ
+    en: Black Glasses
+  black-sludge:
+    ja: くろいヘドロ
+    en: Black Sludge
+  blank-plate:
+    ja: まっさらプレート
+    en: Blank Plate
+  blastoisinite:
+    ja: カメックスナイト
+    en: Blastoisinite
+  blazikenite:
+    ja: バシャーモナイト
+    en: Blazikenite
+  blunder-policy:
+    ja: からぶりほけん
+    en: Blunder Policy
+  booster-energy:
+    ja: ブーストエナジー
+    en: Booster Energy
+  bright-powder:
+    ja: ひかりのこな
+    en: Bright Powder
+  bug-gem:
+    ja: むしのジュエル
+    en: Bug Gem
+  bug-memory:
+    ja: バグメモリ
+    en: Bug Memory
+  burn-drive:
+    ja: ブレイズカセット
+    en: Burn Drive
+  cameruptite:
+    ja: バクーダナイト
+    en: Cameruptite
+  cell-battery:
+    ja: じゅうでんち
+    en: Cell Battery
+  charcoal:
+    ja: もくたん
+    en: Charcoal
+  charizardite-y:
+    ja: リザードナイトＹ
+    en: Charizardite Y
+  charti-berry:
+    ja: ヨロギのみ
+    en: Charti Berry
+  cheri-berry:
+    ja: クラボのみ
+    en: Cheri Berry
+  chesto-berry:
+    ja: カゴのみ
+    en: Chesto Berry
+  chilan-berry:
+    ja: ホズのみ
+    en: Chilan Berry
+  chill-drive:
+    ja: フリーズカセット
+    en: Chill Drive
+  choice-band:
+    ja: こだわりハチマキ
+    en: Choice Band
+  choice-scarf:
+    ja: こだわりスカーフ
+    en: Choice Scarf
+  choice-specs:
+    ja: こだわりメガネ
+    en: Choice Specs
+  chople-berry:
+    ja: ヨプのみ
+    en: Chople Berry
+  clear-amulet:
+    ja: クリアチャーム
+    en: Clear Amulet
+  coba-berry:
+    ja: バコウのみ
+    en: Coba Berry
+  colbur-berry:
+    ja: ナモのみ
+    en: Colbur Berry
+  cornerstone-mask:
+    ja: いしずえのめん
+    en: Cornerstone Mask
+  covert-cloak:
+    ja: おんみつマント
+    en: Covert Cloak
+  custap-berry:
+    ja: イバンのみ
+    en: Custap Berry
+  damp-rock:
+    ja: しめったいわ
+    en: Damp Rock
+  dark-gem:
+    ja: あくのジュエル
+    en: Dark Gem
+  dark-memory:
+    ja: ダークメモリ
+    en: Dark Memory
+  deep-sea-scale:
+    ja: しんかいのウロコ
+    en: Deep Sea Scale
+  deep-sea-tooth:
+    ja: しんかいのキバ
+    en: Deep Sea Tooth
+  destiny-knot:
+    ja: あかいいと
+    en: Destiny Knot
+  diancite:
+    ja: ディアンシナイト
+    en: Diancite
+  douse-drive:
+    ja: アクアカセット
+    en: Douse Drive
+  draco-plate:
+    ja: りゅうのプレート
+    en: Draco Plate
+  dragon-fang:
+    ja: りゅうのキバ
+    en: Dragon Fang
+  dragon-gem:
+    ja: ドラゴンジュエル
+    en: Dragon Gem
+  dragon-memory:
+    ja: ドラゴンメモリ
+    en: Dragon Memory
+  dread-plate:
+    ja: こわもてプレート
+    en: Dread Plate
+  earth-plate:
+    ja: だいちのプレート
+    en: Earth Plate
+  eject-button:
+    ja: だっしゅつボタン
+    en: Eject Button
+  eject-pack:
+    ja: だっしゅつパック
+    en: Eject Pack
+  electric-gem:
+    ja: でんきのジュエル
+    en: Electric Gem
+  electric-memory:
+    ja: エレクトロメモリ
+    en: Electric Memory
+  electric-seed:
+    ja: エレキシード
+    en: Electric Seed
+  enigma-berry:
+    ja: ナゾのみ
+    en: Enigma Berry
+  eviolite:
+    ja: しんかのきせき
+    en: Eviolite
+  expert-belt:
+    ja: たつじんのおび
+    en: Expert Belt
+  fairy-feather:
+    ja: ようせいのハネ
+    en: Fairy Feather
+  fairy-gem:
+    ja: ようせいジュエル
+    en: Fairy Gem
+  fairy-memory:
+    ja: フェアリーメモリ
+    en: Fairy Memory
+  fighting-gem:
+    ja: かくとうジュエル
+    en: Fighting Gem
+  fighting-memory:
+    ja: ファイトメモリ
+    en: Fighting Memory
+  figy-berry:
+    ja: フィラのみ
+    en: Figy Berry
+  fire-gem:
+    ja: ほのおのジュエル
+    en: Fire Gem
+  fire-memory:
+    ja: ファイヤーメモリ
+    en: Fire Memory
+  fist-plate:
+    ja: こぶしのプレート
+    en: Fist Plate
+  flame-orb:
+    ja: かえんだま
+    en: Flame Orb
+  flame-plate:
+    ja: ひのたまプレート
+    en: Flame Plate
+  float-stone:
+    ja: かるいし
+    en: Float Stone
+  flying-gem:
+    ja: ひこうのジュエル
+    en: Flying Gem
+  flying-memory:
+    ja: フライングメモリ
+    en: Flying Memory
+  focus-band:
+    ja: きあいのハチマキ
+    en: Focus Band
+  focus-sash:
+    ja: きあいのタスキ
+    en: Focus Sash
+  full-incense:
+    ja: まんぷくおこう
+    en: Full Incense
+  galladite:
+    ja: エルレイドナイト
+    en: Galladite
+  ganlon-berry:
+    ja: リュガのみ
+    en: Ganlon Berry
+  garchompite:
+    ja: ガブリアスナイト
+    en: Garchompite
+  gardevoirite:
+    ja: サーナイトナイト
+    en: Gardevoirite
+  gengarite:
+    ja: ゲンガナイト
+    en: Gengarite
+  ghost-gem:
+    ja: ゴーストジュエル
+    en: Ghost Gem
+  ghost-memory:
+    ja: ゴーストメモリ
+    en: Ghost Memory
+  glalitite:
+    ja: オニゴーリナイト
+    en: Glalitite
+  grass-gem:
+    ja: くさのジュエル
+    en: Grass Gem
+  grass-memory:
+    ja: グラスメモリ
+    en: Grass Memory
+  grassy-seed:
+    ja: グラスシード
+    en: Grassy Seed
+  grip-claw:
+    ja: ねばりのかぎづめ
+    en: Grip Claw
+  griseous-orb:
+    ja: はっきんだま
+    en: Griseous Orb
+  ground-gem:
+    ja: じめんのジュエル
+    en: Ground Gem
+  ground-memory:
+    ja: グラウンドメモリ
+    en: Ground Memory
+  gyaradosite:
+    ja: ギャラドスナイト
+    en: Gyaradosite
+  haban-berry:
+    ja: ハバンのみ
+    en: Haban Berry
+  hard-stone:
+    ja: かたいいし
+    en: Hard Stone
+  hearthflame-mask:
+    ja: かまどのめん
+    en: Hearthflame Mask
+  heat-rock:
+    ja: あついいわ
+    en: Heat Rock
+  heavy-duty-boots:
+    ja: あつぞこブーツ
+    en: Heavy-Duty Boots
+  heracronite:
+    ja: ヘラクロスナイト
+    en: Heracronite
+  houndoominite:
+    ja: ヘルガナイト
+    en: Houndoominite
+  iapapa-berry:
+    ja: イアのみ
+    en: Iapapa Berry
+  ice-gem:
+    ja: こおりのジュエル
+    en: Ice Gem
+  ice-memory:
+    ja: アイスメモリ
+    en: Ice Memory
+  icicle-plate:
+    ja: つららのプレート
+    en: Icicle Plate
+  icy-rock:
+    ja: つめたいいわ
+    en: Icy Rock
+  insect-plate:
+    ja: たまむしプレート
+    en: Insect Plate
+  iron-ball:
+    ja: くろいてっきゅう
+    en: Iron Ball
+  iron-plate:
+    ja: こうてつプレート
+    en: Iron Plate
+  jaboca-berry:
+    ja: ジャポのみ
+    en: Jaboca Berry
+  kangaskhanite:
+    ja: ガルーラナイト
+    en: Kangaskhanite
+  kasib-berry:
+    ja: カシブのみ
+    en: Kasib Berry
+  kebia-berry:
+    ja: ビアーのみ
+    en: Kebia Berry
+  kee-berry:
+    ja: アッキのみ
+    en: Kee Berry
+  kings-rock:
+    ja: おうじゃのしるし
+    en: King’s Rock
+  lagging-tail:
+    ja: こうこうのしっぽ
+    en: Lagging Tail
+  lansat-berry:
+    ja: サンのみ
+    en: Lansat Berry
+  latiasite:
+    ja: ラティアスナイト
+    en: Latiasite
+  latiosite:
+    ja: ラティオスナイト
+    en: Latiosite
+  lax-incense:
+    ja: のんきのおこう
+    en: Lax Incense
+  leftovers:
+    ja: たべのこし
+    en: Leftovers
+  legend-plate:
+    ja: レジェンドプレート
+    en: Legend Plate
+  leppa-berry:
+    ja: ヒメリのみ
+    en: Leppa Berry
+  liechi-berry:
+    ja: チイラのみ
+    en: Liechi Berry
+  life-orb:
+    ja: いのちのたま
+    en: Life Orb
+  light-ball:
+    ja: でんきだま
+    en: Light Ball
+  light-clay:
+    ja: ひかりのねんど
+    en: Light Clay
+  loaded-dice:
+    ja: いかさまダイス
+    en: Loaded Dice
+  lopunnite:
+    ja: ミミロップナイト
+    en: Lopunnite
+  lucarionite:
+    ja: ルカリオナイト
+    en: Lucarionite
+  lucky-punch:
+    ja: ラッキーパンチ
+    en: Lucky Punch
+  lum-berry:
+    ja: ラムのみ
+    en: Lum Berry
+  luminous-moss:
+    ja: ひかりごけ
+    en: Luminous Moss
+  lustrous-orb:
+    ja: しらたま
+    en: Lustrous Orb
+  magnet:
+    ja: じしゃく
+    en: Magnet
+  mago-berry:
+    ja: マゴのみ
+    en: Mago Berry
+  manectite:
+    ja: ライボルトナイト
+    en: Manectite
+  maranga-berry:
+    ja: タラプのみ
+    en: Maranga Berry
+  mawilite:
+    ja: クチートナイト
+    en: Mawilite
+  meadow-plate:
+    ja: みどりのプレート
+    en: Meadow Plate
+  medichamite:
+    ja: チャーレムナイト
+    en: Medichamite
+  mental-herb:
+    ja: メンタルハーブ
+    en: Mental Herb
+  metagrossite:
+    ja: メタグロスナイト
+    en: Metagrossite
+  metal-coat:
+    ja: メタルコート
+    en: Metal Coat
+  metal-powder:
+    ja: メタルパウダー
+    en: Metal Powder
+  metronome:
+    ja: メトロノーム
+    en: Metronome
+  mewtwonite-x:
+    ja: ミュウツナイトＸ
+    en: Mewtwonite X
+  mewtwonite-y:
+    ja: ミュウツナイトＹ
+    en: Mewtwonite Y
+  micle-berry:
+    ja: ミクルのみ
+    en: Micle Berry
+  mind-plate:
+    ja: ふしぎのプレート
+    en: Mind Plate
+  miracle-seed:
+    ja: きせきのタネ
+    en: Miracle Seed
+  mirror-herb:
+    ja: ものまねハーブ
+    en: Mirror Herb
+  misty-seed:
+    ja: ミストシード
+    en: Misty Seed
+  muscle-band:
+    ja: ちからのハチマキ
+    en: Muscle Band
+  mystic-water:
+    ja: しんぴのしずく
+    en: Mystic Water
+  never-melt-ice:
+    ja: とけないこおり
+    en: Never-Melt Ice
+  normal-gem:
+    ja: ノーマルジュエル
+    en: Normal Gem
+  occa-berry:
+    ja: オッカのみ
+    en: Occa Berry
+  odd-incense:
+    ja: あやしいおこう
+    en: Odd Incense
+  oran-berry:
+    ja: オレンのみ
+    en: Oran Berry
+  pass-orb:
+    ja: デルダマ
+    en: Pass Orb
+  passho-berry:
+    ja: イトケのみ
+    en: Passho Berry
+  payapa-berry:
+    ja: ウタンのみ
+    en: Payapa Berry
+  pecha-berry:
+    ja: モモンのみ
+    en: Pecha Berry
+  persim-berry:
+    ja: キーのみ
+    en: Persim Berry
+  petaya-berry:
+    ja: ヤタピのみ
+    en: Petaya Berry
+  pidgeotite:
+    ja: ピジョットナイト
+    en: Pidgeotite
+  pink-nectar:
+    ja: うすもものミツ
+    en: Pink Nectar
+  pinsirite:
+    ja: カイロスナイト
+    en: Pinsirite
+  pixie-plate:
+    ja: せいれいプレート
+    en: Pixie Plate
+  poison-barb:
+    ja: どくバリ
+    en: Poison Barb
+  poison-gem:
+    ja: どくのジュエル
+    en: Poison Gem
+  poison-memory:
+    ja: ポイズンメモリ
+    en: Poison Memory
+  power-herb:
+    ja: パワフルハーブ
+    en: Power Herb
+  protective-pads:
+    ja: ぼうごパット
+    en: Protective Pads
+  psychic-gem:
+    ja: エスパージュエル
+    en: Psychic Gem
+  psychic-memory:
+    ja: サイキックメモリ
+    en: Psychic Memory
+  psychic-seed:
+    ja: サイコシード
+    en: Psychic Seed
+  punching-glove:
+    ja: パンチグローブ
+    en: Punching Glove
+  purple-nectar:
+    ja: むらさきのミツ
+    en: Purple Nectar
+  quick-claw:
+    ja: せんせいのツメ
+    en: Quick Claw
+  quick-powder:
+    ja: スピードパウダー
+    en: Quick Powder
+  rawst-berry:
+    ja: チーゴのみ
+    en: Rawst Berry
+  razor-claw:
+    ja: するどいツメ
+    en: Razor Claw
+  razor-fang:
+    ja: するどいキバ
+    en: Razor Fang
+  red-card:
+    ja: レッドカード
+    en: Red Card
+  red-nectar:
+    ja: くれないのミツ
+    en: Red Nectar
+  rindo-berry:
+    ja: リンドのみ
+    en: Rindo Berry
+  ring-target:
+    ja: ねらいのまと
+    en: Ring Target
+  rock-gem:
+    ja: いわのジュエル
+    en: Rock Gem
+  rock-incense:
+    ja: がんせきおこう
+    en: Rock Incense
+  rock-memory:
+    ja: ロックメモリ
+    en: Rock Memory
+  rocky-helmet:
+    ja: ゴツゴツメット
+    en: Rocky Helmet
+  room-service:
+    ja: ルームサービス
+    en: Room Service
+  rose-incense:
+    ja: おはなのおこう
+    en: Rose Incense
+  roseli-berry:
+    ja: ロゼルのみ
+    en: Roseli Berry
+  rowap-berry:
+    ja: レンブのみ
+    en: Rowap Berry
+  rusted-shield:
+    ja: くちたたて
+    en: Rusted Shield
+  rusted-sword:
+    ja: くちたけん
+    en: Rusted Sword
+  sablenite:
+    ja: ヤミラミナイト
+    en: Sablenite
+  safety-goggles:
+    ja: ぼうじんゴーグル
+    en: Safety Goggles
+  salac-berry:
+    ja: カムラのみ
+    en: Salac Berry
+  salamencite:
+    ja: ボーマンダナイト
+    en: Salamencite
+  sceptilite:
+    ja: ジュカインナイト
+    en: Sceptilite
+  scizorite:
+    ja: ハッサムナイト
+    en: Scizorite
+  scope-lens:
+    ja: ピントレンズ
+    en: Scope Lens
+  sea-incense:
+    ja: うしおのおこう
+    en: Sea Incense
+  sharp-beak:
+    ja: するどいくちばし
+    en: Sharp Beak
+  sharpedonite:
+    ja: サメハダナイト
+    en: Sharpedonite
+  shed-shell:
+    ja: きれいなぬけがら
+    en: Shed Shell
+  shell-bell:
+    ja: かいがらのすず
+    en: Shell Bell
+  shock-drive:
+    ja: イナズマカセット
+    en: Shock Drive
+  shuca-berry:
+    ja: シュカのみ
+    en: Shuca Berry
+  silk-scarf:
+    ja: シルクのスカーフ
+    en: Silk Scarf
+  silver-powder:
+    ja: ぎんのこな
+    en: Silver Powder
+  sitrus-berry:
+    ja: オボンのみ
+    en: Sitrus Berry
+  sky-plate:
+    ja: あおぞらプレート
+    en: Sky Plate
+  slowbronite:
+    ja: ヤドランナイト
+    en: Slowbronite
+  smoke-ball:
+    ja: けむりだま
+    en: Smoke Ball
+  smooth-rock:
+    ja: さらさらいわ
+    en: Smooth Rock
+  snowball:
+    ja: ゆきだま
+    en: Snowball
+  soft-sand:
+    ja: やわらかいすな
+    en: Soft Sand
+  soul-dew:
+    ja: こころのしずく
+    en: Soul Dew
+  spell-tag:
+    ja: のろいのおふだ
+    en: Spell Tag
+  splash-plate:
+    ja: しずくプレート
+    en: Splash Plate
+  spooky-plate:
+    ja: もののけプレート
+    en: Spooky Plate
+  starf-berry:
+    ja: スターのみ
+    en: Starf Berry
+  steel-gem:
+    ja: はがねのジュエル
+    en: Steel Gem
+  steel-memory:
+    ja: スチールメモリ
+    en: Steel Memory
+  steelixite:
+    ja: ハガネールナイト
+    en: Steelixite
+  stick:
+    ja: ながねぎ
+    en: Leek
+  sticky-barb:
+    ja: くっつきバリ
+    en: Sticky Barb
+  stone-plate:
+    ja: がんせきプレート
+    en: Stone Plate
+  swampertite:
+    ja: ラグラージナイト
+    en: Swampertite
+  tanga-berry:
+    ja: タンガのみ
+    en: Tanga Berry
+  terrain-extender:
+    ja: グランドコート
+    en: Terrain Extender
+  thick-club:
+    ja: ふといホネ
+    en: Thick Club
+  throat-spray:
+    ja: のどスプレー
+    en: Throat Spray
+  toxic-orb:
+    ja: どくどくだま
+    en: Toxic Orb
+  toxic-plate:
+    ja: もうどくプレート
+    en: Toxic Plate
+  twisted-spoon:
+    ja: まがったスプーン
+    en: Twisted Spoon
+  tyranitarite:
+    ja: バンギラスナイト
+    en: Tyranitarite
+  utility-umbrella:
+    ja: ばんのうがさ
+    en: Utility Umbrella
+  venusaurite:
+    ja: フシギバナイト
+    en: Venusaurite
+  wacan-berry:
+    ja: ソクノのみ
+    en: Wacan Berry
+  water-gem:
+    ja: みずのジュエル
+    en: Water Gem
+  water-memory:
+    ja: ウオーターメモリ
+    en: Water Memory
+  wave-incense:
+    ja: さざなみのおこう
+    en: Wave Incense
+  weakness-policy:
+    ja: じゃくてんほけん
+    en: Weakness Policy
+  wellspring-mask:
+    ja: いどのめん
+    en: Wellspring Mask
+  white-herb:
+    ja: しろいハーブ
+    en: White Herb
+  wide-lens:
+    ja: こうかくレンズ
+    en: Wide Lens
+  wiki-berry:
+    ja: ウイのみ
+    en: Wiki Berry
+  wise-glasses:
+    ja: ものしりメガネ
+    en: Wise Glasses
+  yache-berry:
+    ja: ヤチェのみ
+    en: Yache Berry
+  yellow-nectar:
+    ja: やまぶきのミツ
+    en: Yellow Nectar
+  zap-plate:
+    ja: いかずちプレート
+    en: Zap Plate
+  zoom-lens:
+    ja: フォーカスレンズ
+    en: Zoom Lens
