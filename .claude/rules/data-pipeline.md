@@ -82,11 +82,12 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
   一致させる）。対象は **性別二形**（basculegion / indeedee / meowstic / oinkologne = genderless base を持たずオス／メスのみ →
   `-male` / `-female`）と、**開始フォルムが一意に定まらない種**（複数フォルムのいずれも開始フォルムになりうるため bare が曖昧 =
   zygarde / deoxys / keldeo / hoopa / basculin / urshifu / pumpkaboo / gourgeist / squawkabilly / maushold / dudunsparce /
-  lycanroc / oricorio / wormadam / giratina / shaymin / thundurus / tornadus / landorus / enamorus / gimmighoul）。開始フォルムが
-  一意な種（rotom / tauros / 各リージョンフォルム / aegislash / mimikyu / darmanitan 等）は bare base を残す（ウッウ cramorant は
-  「のみこみ／まるのみ」で技仕様が変わるため base + うのみ / まるのみを `FORM_INCLUDE` で列挙）。集合の SoT は
-  `canonical-species-id.ts` の `SUPPRESS_BASE_SPECIES`。**base を残しつつ名前をデフォルト形態名に差し替える種**（オーガポン =
-  base `ogerpon` を「オーガポン（みどりのめん）」に）は `scripts/materialize.ts` の `BASE_NAME_OVERRIDE`。
+  lycanroc / oricorio / wormadam / giratina / shaymin / thundurus / tornadus / landorus / enamorus / gimmighoul /
+  ogerpon）。開始フォルムが一意な種（rotom / tauros / 各リージョンフォルム / aegislash / mimikyu / darmanitan 等）は bare base を
+  残す（ウッウ cramorant は「のみこみ／まるのみ」で技仕様が変わるため base + うのみ / まるのみを `FORM_INCLUDE` で列挙）。
+  オーガポンは bare base を抑制しつつ default（teal mask）を `CANONICAL_ID_OVERRIDE` で `ogerpon-teal`（オーガポン（みどりのめん））と
+  明示し、他 3 面（wellspring / hearthflame / cornerstone）と対称化する。集合の SoT は `canonical-species-id.ts` の
+  `SUPPRESS_BASE_SPECIES`。
 - **名前の取得元分担**（languages 各ファイルの ja/en をどこから埋めるか）:
 
   | languages ファイル | 取得元 | 担当 |

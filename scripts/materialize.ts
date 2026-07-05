@@ -47,16 +47,6 @@ const HEADERS: Record<string, string> = {
   mega: "# data/languages/mega.yaml — メガ形態の日英名（id→{ja,en}）。",
 };
 
-/**
- * bare base 種族名を PokeAPI の list 由来名から差し替える override（`{ id → { ja, en } }`）。base を残しつつ
- * デフォルト形態名で明示したい種に使う。オーガポン（default variety = teal mask）は base `ogerpon` を
- * 素の「オーガポン」でなく「オーガポン（みどりのめん）」にし、他の面（いどのめん / かまどのめん / いしずえのめん）と
- * 対称に teal mask を表す（[[data-pipeline]]）。合成結果より優先。
- */
-const BASE_NAME_OVERRIDE: Record<string, { ja: string; en: string }> = {
-  ogerpon: { ja: "オーガポン（みどりのめん）", en: "Ogerpon (Teal Mask)" },
-};
-
 /** raw JSON の名前欄。5 種は `names`、mega は `pokemon-form` の `form_names` / `is_mega`（ADR 0043）。 */
 type RawNamed = {
   names?: { name: string; language: { name: string } }[];
@@ -116,7 +106,6 @@ const backfillNames = (
   extract: (r: RawNamed) => { ja?: string; en?: string },
   needs: (e: { ja?: string; en?: string }) => boolean,
   skip: (id: string) => boolean = () => false,
-  nameOverride: (id: string) => { ja?: string; en?: string } | undefined = () => undefined,
 ): number => {
   // from-scratch 復元（`data/languages/*` 完全削除）でも scaffold / seed 無しで動くよう、欠損ファイルは先頭
   // コメントだけの doc を起こし、map ノードは block スタイルで get-or-create する（純関数側・plan 11 P2）。
@@ -136,7 +125,7 @@ const backfillNames = (
       // （Pokémon GO 専用特性 is_main_series:false / LA の未ローカライズ球 / 未ローカライズの新特性 等）は
       // 全件名辞書の「各エントリ ja/en 完備」不変条件（ADR 0041）を満たせないため辞書へ入れず skip する
       // （必要になれば手作業で ja を補って append する・[[data-pipeline]]）。既存値が無いため conflict しない。
-      const names = nameOverride(id) ?? extract(json);
+      const names = extract(json);
       if (names.ja === undefined || names.en === undefined) {
         skippedCount++;
         console.warn(
@@ -151,7 +140,7 @@ const backfillNames = (
     // 既存 id: ja・en 欠落のみ backfill（既存値は上書きしない）。
     const current = node.toJS(doc) as { ja?: string; en?: string };
     if (!needs(current)) continue;
-    filled += apply(doc, node, id, planFields(current, nameOverride(id) ?? extract(json)));
+    filled += apply(doc, node, id, planFields(current, extract(json)));
   }
   if (filled > 0) writeFileSync(join(LANG, file), doc.toString());
   return filled;
@@ -190,8 +179,6 @@ const speciesFilled = backfillNames(
   needsJaEn,
   // bare base 名を出さない種（性別二形 / 開始フォルム非一意）は skip する（[[canonical-species-id]]）。
   (id) => SUPPRESS_BASE_SPECIES.has(id),
-  // base を残すが名前を差し替える種（ogerpon = teal mask）は override を適用する。
-  (id) => BASE_NAME_OVERRIDE[id],
 );
 const itemsFilled = backfillNames("items.yaml", "items", "item", extractNames, needsJaEn);
 const movesFilled = backfillNames("moves.yaml", "moves", "move", extractNames, needsJaEn);

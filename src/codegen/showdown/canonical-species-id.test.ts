@@ -62,6 +62,7 @@ describe("canonicalSpeciesId", () => {
     expect(canonicalSpeciesId("Gimmighoul")).toBe("gimmighoul-chest");
     expect(canonicalSpeciesId("Hoopa")).toBe("hoopa-confined");
     expect(canonicalSpeciesId("Castform")).toBe("castform-normal");
+    expect(canonicalSpeciesId("Ogerpon")).toBe("ogerpon-teal");
   });
 
   it("drops redundant suffixes via canonicalFormId in the passthrough branch", () => {
@@ -99,6 +100,7 @@ describe("SUPPRESS_BASE_SPECIES", () => {
       "lycanroc",
       "maushold",
       "meowstic",
+      "ogerpon",
       "oinkologne",
       "oricorio",
       "pumpkaboo",

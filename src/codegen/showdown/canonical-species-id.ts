@@ -61,7 +61,8 @@ const DEFAULT_TO_EXPLICIT: Record<string, string> = {
  * - **性別二形**（genderless な base を持たずオス／メスのみ）: basculegion / indeedee / meowstic / oinkologne（→ `-male` / `-female`）。
  * - **開始フォルムが一意に定まらない種**（複数フォルムのいずれも開始フォルムになりうるため bare base が曖昧）:
  *   zygarde / deoxys / keldeo / hoopa / basculin / urshifu / pumpkaboo / gourgeist / squawkabilly / maushold /
- *   dudunsparce / lycanroc / oricorio / wormadam / giratina / shaymin / thundurus / tornadus / landorus / enamorus / gimmighoul。
+ *   dudunsparce / lycanroc / oricorio / wormadam / giratina / shaymin / thundurus / tornadus / landorus / enamorus /
+ *   gimmighoul / ogerpon（面を選んで持ち込むため bare は曖昧・default = teal を `ogerpon-teal` へ）。
  *   開始フォルムが一意な種（rotom / tauros / 各リージョンフォルム / aegislash / mimikyu / darmanitan 等）は bare base を残す。
  */
 export const SUPPRESS_BASE_SPECIES: ReadonlySet<string> = new Set([
@@ -90,6 +91,7 @@ export const SUPPRESS_BASE_SPECIES: ReadonlySet<string> = new Set([
   "landorus",
   "enamorus",
   "gimmighoul",
+  "ogerpon",
 ]);
 
 /**
@@ -114,6 +116,9 @@ export const CANONICAL_ID_OVERRIDE: Record<string, string> = {
   gimmighoul: "gimmighoul-chest",
   hoopa: "hoopa-confined",
   castform: "castform-normal",
+  // オーガポンの default（bare = teal mask）を `ogerpon-teal`（みどりのめん）へ。他 3 面（wellspring / hearthflame /
+  // cornerstone）と対称に明示 form 化し、bare base は `SUPPRESS_BASE_SPECIES` で抑制する。
+  ogerpon: "ogerpon-teal",
 };
 
 /**
