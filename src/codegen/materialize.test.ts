@@ -1,11 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { parseDocument } from "yaml";
 import {
+  composeFormName,
+  deriveBaseId,
+  EN_BRACKETS,
   extractEnName,
   extractJaName,
   extractMegaNames,
   extractNames,
   getOrCreateBlockMap,
+  isDistinctForm,
+  JA_BRACKETS,
   megaFormCandidates,
   planFields,
   pruneToKeep,
@@ -116,6 +121,86 @@ describe("megaFormCandidates", () => {
 
   it("returns an empty array when no mega slugs are present", () => {
     expect(megaFormCandidates(["pikachu", "eevee"])).toEqual([]);
+  });
+});
+
+describe("composeFormName", () => {
+  it("passes the form name through when it already contains the base name (改名フォルム)", () => {
+    // ヒートロトム / ウォッシュロトム / サトシゲッコウガ は base 名を内包 → そのまま採用。
+    expect(composeFormName("ロトム", "ヒートロトム", JA_BRACKETS)).toBe("ヒートロトム");
+    expect(composeFormName("ゲッコウガ", "サトシゲッコウガ", JA_BRACKETS)).toBe("サトシゲッコウガ");
+    expect(composeFormName("Rotom", "Wash Rotom", EN_BRACKETS)).toBe("Wash Rotom");
+  });
+
+  it("composes base（form） in full-width brackets for ja", () => {
+    expect(composeFormName("ザシアン", "けんのおう", JA_BRACKETS)).toBe("ザシアン（けんのおう）");
+    expect(composeFormName("ライチュウ", "アローラのすがた", JA_BRACKETS)).toBe(
+      "ライチュウ（アローラのすがた）",
+    );
+    expect(composeFormName("イダイトウ", "メスのすがた", JA_BRACKETS)).toBe(
+      "イダイトウ（メスのすがた）",
+    );
+  });
+
+  it("composes base (form) in half-width brackets with a leading space for en", () => {
+    expect(composeFormName("Raichu", "Alolan Form", EN_BRACKETS)).toBe("Raichu (Alolan Form)");
+    expect(composeFormName("Deoxys", "Normal Forme", EN_BRACKETS)).toBe("Deoxys (Normal Forme)");
+  });
+
+  it("returns the base name alone when the form name is empty (form_names 欠落)", () => {
+    // greninja-battle-bond は form_names 空 → base 名のみ（呼び出し側が MANUAL_NAME_OVERRIDE で最終名を与える）。
+    expect(composeFormName("ゲッコウガ", "", JA_BRACKETS)).toBe("ゲッコウガ");
+    expect(composeFormName("Greninja", "", EN_BRACKETS)).toBe("Greninja");
+  });
+});
+
+describe("isDistinctForm", () => {
+  const base = { types: ["electric", "ghost"], baseStats: [50, 65, 107, 105, 107, 86] };
+
+  it("is distinct when the types differ (rotom-wash 形・type 差)", () => {
+    expect(isDistinctForm(base, { types: ["electric", "water"], baseStats: base.baseStats })).toBe(
+      true,
+    );
+  });
+
+  it("is distinct when the base stats differ (gimmighoul-roaming 形・stat 差)", () => {
+    expect(isDistinctForm(base, { types: base.types, baseStats: [45, 30, 25, 75, 45, 80] })).toBe(
+      true,
+    );
+  });
+
+  it("is not distinct when both types and stats are identical (純装飾フォルム)", () => {
+    // greninja-battle-bond は base と同型・同種族値 → false（FORM_INCLUDE で別途拾う）。
+    expect(isDistinctForm(base, { types: [...base.types], baseStats: [...base.baseStats] })).toBe(
+      false,
+    );
+  });
+
+  it("is distinct when the type count differs (single vs dual type)", () => {
+    expect(isDistinctForm(base, { types: ["electric"], baseStats: base.baseStats })).toBe(true);
+  });
+});
+
+describe("deriveBaseId", () => {
+  const species = ["raichu", "tauros", "mr-mime", "mr-rime", "gimmighoul", "basculegion"];
+
+  it("derives the base id by longest base-slug prefix match", () => {
+    expect(deriveBaseId("raichu-alola", species)).toBe("raichu");
+    expect(deriveBaseId("tauros-paldea-combat-breed", species)).toBe("tauros");
+    expect(deriveBaseId("gimmighoul-chest", species)).toBe("gimmighoul");
+    expect(deriveBaseId("basculegion-male", species)).toBe("basculegion");
+  });
+
+  it("prefers the longest matching prefix (mr-mime over a hypothetical mr)", () => {
+    expect(deriveBaseId("mr-mime-galar", ["mr", "mr-mime"])).toBe("mr-mime");
+  });
+
+  it("matches an exact base id (no suffix)", () => {
+    expect(deriveBaseId("tauros", species)).toBe("tauros");
+  });
+
+  it("returns undefined when no base slug prefixes the form id", () => {
+    expect(deriveBaseId("pikachu-alola", species)).toBeUndefined();
   });
 });
 

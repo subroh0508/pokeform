@@ -3,8 +3,10 @@
 # 目的: PokeAPI の list endpoint で全 species / items / moves / abilities / types を列挙し `names`（ja-Hrkt + en）を、
 #       `pokemon-form` から mega（`is_mega` の form の `form_names`）を取得 → 名前 SoT YAML（data/languages・mega 含む
 #       6 種）へ append/既存尊重で転記、generate + verify を通したうえで `data:names` ラベルの languages 更新 PR を
-#       自動作成する。languages を reg 非依存の全件名辞書にする決定は ADR 0041（ADR 0035 の id 集合一致不変条件を
-#       refine）、mega 名を PokeAPI(pokemon-form form_names) へ一本化する決定は ADR 0043。
+#       自動作成する。**species は varieties を辿って distinct-forms（タイプ / 種族値が base と異なる form）を含有判定
+#       合成で機械生成**して species.yaml へ入れ、決定記録を PR body のレビュー表へ出力する（plan 11 P4）。languages を
+#       reg 非依存の全件名辞書にする決定は ADR 0041（ADR 0035 の id 集合一致不変条件を refine）、mega 名を
+#       PokeAPI(pokemon-form form_names) へ一本化する決定は ADR 0043。
 # トリガー: `workflow_dispatch` 手動のみ（cron なし）。showdown-sync.yml / serebii-bulletin.yml と同型。全件列挙
 #       のため regulation 入力は持たない（名前は reg 非依存）。メガストーン item 名など PokeAPI 非存在の手作業カバー
 #       箇所は PR body の Serebii Champions リンク 5 本で目視差分チェックする（author-static-data skill 手順 3）。
@@ -103,6 +105,23 @@ jobs:
 
           > 名前の取得元分担は [[data-pipeline]] を参照。全件データ投入は author-static-data skill がドライブする。
           BODY
+          # distinct-forms レビュー表を PR body へ追記する（fetch:ja-names が data/raw/distinct-forms.json へ残した決定
+          # 記録 = 各 form の id / en / ja / decision〔passthrough|compose|canonical-override|manual〕/ distinct 根拠を
+          # 表化・plan 11 P4）。type:module ゆえ commonjs で読む。raw は gitignore だが同一 job のディスクに在る。
+          node --input-type=commonjs -e '
+            const fs = require("fs");
+            const p = "data/raw/distinct-forms.json";
+            if (!fs.existsSync(p)) process.exit(0);
+            const rows = JSON.parse(fs.readFileSync(p, "utf8"));
+            if (rows.length === 0) process.exit(0);
+            rows.sort((a, b) => a.id.localeCompare(b.id));
+            let md = "\n### distinct-forms レビュー表（" + rows.length + " 件）\n\n";
+            md += "含有判定合成で機械生成した distinct-forms（タイプ / 種族値が base と異なる form）の一覧です。";
+            md += "各 form の decision と distinct 根拠を目視し、名前の妥当性は pokemon-data-reviewer に委ねてください。\n\n";
+            md += "| id | en | ja | decision | distinct 根拠 |\n|---|---|---|---|---|\n";
+            for (const r of rows) md += "| `" + r.id + "` | " + r.en + " | " + r.ja + " | " + r.decision + " | " + r.basis + " |\n";
+            fs.appendFileSync(process.env.RUNNER_TEMP + "/pr-body.md", md);
+          '
           gh pr create --base main --head "$BRANCH" \
             --title "data(languages): PokeAPI 全件名同期（names）" \
             --label data:names \

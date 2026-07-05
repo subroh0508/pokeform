@@ -43,7 +43,7 @@ const CLASS_C_VOCAB: Record<string, string> = {
  * 例 gimmighoul（PokeAPI default = bare `gimmighoul`（はこ））を `gimmighoul-chest` と明示する
  * （roaming フォルムは PokeAPI が既に明示 slug を持つ）。
  */
-const CANONICAL_ID_OVERRIDE: Record<string, string> = {
+export const CANONICAL_ID_OVERRIDE: Record<string, string> = {
   gimmighoul: "gimmighoul-chest",
 };
 
