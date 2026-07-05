@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout pokeform
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       # Node 版の SoT は .node-version（ADR 0008）。pnpm は corepack を使わず直接入れる（ADR 0005）。
       - name: Setup Node

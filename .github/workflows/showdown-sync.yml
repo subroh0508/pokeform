@@ -35,11 +35,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout pokeform
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       # pokemon-showdown は master 最新 commit のみ shallow clone（ADR 0039 / 軽量化）。
       - name: Checkout pokemon-showdown
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: smogon/pokemon-showdown
           ref: master
