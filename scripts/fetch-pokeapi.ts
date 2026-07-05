@@ -145,6 +145,8 @@ const EXCLUDED_FORM = /-(mega(-[xyz])?|gmax|primal|starter)$|-totem(-|$)/;
  * - `pumpkaboo-*` / `gourgeist-*`: サイズ ja を独自呼称（小さい順 こだま/ちゅうだま/おおだま/ギガだま）で著述（en は合成）。
  * - `darmanitan-galar-*`: form_names.ja がモード名のみ（ガラル文脈欠落）→ ガラル + モードを著述。base
  *   `darmanitan-galar`（ヒヒダルマ（ガラルのすがた））は `SYNTHETIC_BASE_FORMS` で別途注入する。
+ * - `castform-normal`: form_names.ja が base 名「ポワルン」を含む「ポワルンのすがた」で passthrough 短絡が誤発火し
+ *   括弧合成が効かない → 括弧付き ja を著述（en は "Castform (Normal)" が合成で正しく出るため委ねる）。
  */
 const MANUAL_NAME_OVERRIDE: Record<string, { ja?: string; en?: string }> = {
   "greninja-battle-bond": { ja: "ゲッコウガ（きずなへんげ）", en: "Greninja (Battle Bond)" },
@@ -176,6 +178,7 @@ const MANUAL_NAME_OVERRIDE: Record<string, { ja?: string; en?: string }> = {
     ja: "ヒヒダルマ（ガラルのすがた・ダルマモード）",
     en: "Darmanitan (Galarian Form Zen Mode)",
   },
+  "castform-normal": { ja: "ポワルン（ポワルンのすがた）" },
 };
 
 /** languages 名前マップ（id → { ja?, en? }）。 */
