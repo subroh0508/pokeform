@@ -23,7 +23,12 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Document, parseDocument, type YAMLMap } from "yaml";
-import { extractNames, type FieldPlan, planFields } from "../src/codegen/materialize.ts";
+import {
+  extractNames,
+  type FieldPlan,
+  planFields,
+  pruneToKeep,
+} from "../src/codegen/materialize.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const RAW = join(ROOT, "data", "raw");
@@ -116,6 +121,25 @@ const backfillNames = (
   return filled;
 };
 
+/**
+ * items.yaml を item-category whitelist union（`data/raw/item-union.json`）のみへ剪定する（issue #213・ADR 0041 の
+ * items 例外）。network を持つ `fetch:ja-names` が union を manifest に残し、offline の本段が union 外の既存 id を
+ * 除去する。仕分けは純関数 `pruneToKeep`、ノード削除だけ IO で行う。manifest 不在（items 未取得）なら剪定しない
+ * （他 4 種の全件辞書には影響しない）。剪定は backfill の後に走らせ、append した union 内 id は残す。
+ */
+const pruneItemsToUnion = (): number => {
+  const manifest = join(RAW, "item-union.json");
+  if (!existsSync(manifest)) return 0;
+  const keep = JSON.parse(readFileSync(manifest, "utf8")) as string[];
+  const doc = parseDocument(readFileSync(join(LANG, "items.yaml"), "utf8"));
+  const map = doc.get("items") as YAMLMap;
+  const existing = Object.keys(map.toJS(doc) as Record<string, unknown>);
+  const { removed } = pruneToKeep(existing, keep);
+  for (const id of removed) map.delete(id);
+  if (removed.length > 0) writeFileSync(join(LANG, "items.yaml"), doc.toString());
+  return removed.length;
+};
+
 const needsJaEn = (e: { ja?: string; en?: string }): boolean => !e.ja || !e.en;
 
 // 全 5 種とも PokeAPI `names` から ja/en を両取りする（languages を ja/en 完備の全件辞書にする・ADR 0041）。
@@ -138,6 +162,9 @@ const abilitiesFilled = backfillNames(
 );
 const typesFilled = backfillNames("types.yaml", "types", "type", extractNames, needsJaEn);
 
+// items のみ backfill 後に whitelist union で剪定する（issue #213）。
+const itemsPruned = pruneItemsToUnion();
+
 console.log(
-  `[sync:ja-names] filled ${speciesFilled} species / ${itemsFilled} item / ${movesFilled} move / ${abilitiesFilled} ability / ${typesFilled} type name field(s), ${conflictCount} conflict(s), ${skippedCount} skipped (ja/en incomplete)`,
+  `[sync:ja-names] filled ${speciesFilled} species / ${itemsFilled} item / ${movesFilled} move / ${abilitiesFilled} ability / ${typesFilled} type name field(s), pruned ${itemsPruned} item(s) outside whitelist, ${conflictCount} conflict(s), ${skippedCount} skipped (ja/en incomplete)`,
 );

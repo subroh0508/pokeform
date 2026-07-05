@@ -20,10 +20,37 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse as parseYaml } from "yaml";
+import { sortedUnion } from "../src/codegen/materialize.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const RAW = join(ROOT, "data", "raw");
 const API = "https://pokeapi.co/api/v2";
+
+/**
+ * **items だけは全件（`/item` 2176 件）でなく item-category whitelist の union に絞る**（issue #213・ADR 0041 の
+ * items 例外）。languages は reg 非依存の名前辞書だが、items は「持たせて対戦効果があるか」で切る（reg では切らない）。
+ * 属性（`holdable` / `holdable-active`）ベースは PokeAPI の attribute が不完全で assault-vest / booster-energy /
+ * mega-stones を取りこぼすため不採用。category は全 item に必ず付与され `/item-category/{cat}` で列挙できるため堅牢。
+ */
+const ITEM_CATEGORIES = [
+  "held-items",
+  "choice",
+  "bad-held-items",
+  "type-enhancement",
+  "species-specific",
+  "plates",
+  "type-protection",
+  "in-a-pinch",
+  "picky-healing",
+  "jewels",
+  "memories",
+  "mega-stones",
+  // `medicine` は PokeAPI 上「持ち物として持たせる回復・状態異常治しの木の実」10 件（オボンのみ=sitrus-berry /
+  // ラムのみ=lum-berry / オレンのみ=oran-berry / 状態異常回復の木の実）で、ポーション類（`healing` カテゴリ）とは別。
+  // issue #213 の除外リストは概念上の「medicine（薬）」を指しており PokeAPI の `medicine` カテゴリ実体と食い違う。
+  // 受け入れ基準（オボンのみが残る）と既存個体（lum-berry を持つ）を満たすには本カテゴリの木の実を残す必要があるため含める。
+  "medicine",
+] as const;
 
 /** data/languages/<file> の名前マップ（`{ <mapKey>: { id → { ja?, en? } } }`）を読む。 */
 const readLangMap = (
@@ -59,6 +86,39 @@ async function listAllIds(category: string): Promise<string[]> {
 }
 
 /**
+ * item-category whitelist の各 `/item-category/{cat}` を fetch し `items[].name` を集めて union する
+ * （重複排除 + sorted・純関数 `sortedUnion` に委譲）。category endpoint は該当 items を一括返却し、list endpoint の
+ * ような `count`/`limit` ページングを持たないため件数照合はできない。代わりに **各 cat が 404 でないこと + union が
+ * 空でないこと**を fail-fast にする（whitelist の typo・PokeAPI 側のカテゴリ改廃を検知）。issue #213 / [[data-pipeline]]。
+ */
+async function listCategoryUnion(categories: readonly string[]): Promise<string[]> {
+  const lists: string[][] = [];
+  for (const cat of categories) {
+    const url = `${API}/item-category/${cat}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`[fetch] item-category ${cat} failed (${res.status})`);
+    const json = (await res.json()) as { items: { name: string }[] };
+    lists.push(json.items.map((i) => i.name));
+  }
+  const union = sortedUnion(lists);
+  if (union.length === 0) {
+    throw new Error("[fetch] item-category union is empty (whitelist typo or PokeAPI drift)");
+  }
+  return union;
+}
+
+/**
+ * items 剪定の keep 集合（whitelist union）を raw キャッシュに残す。network を持つ本段（`fetch:ja-names`）が
+ * union を決め、offline の転記段（`sync:ja-names` = `scripts/materialize.ts`）がこれを読んで items.yaml を
+ * union のみへ決定論的に剪定する（issue #213）。raw は .gitignore の取得キャッシュ。
+ */
+const writeItemUnionManifest = (ids: string[]): void => {
+  const file = join(RAW, "item-union.json");
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(file, `${JSON.stringify(ids, null, 2)}\n`);
+};
+
+/**
  * `names` 補完のための best-effort 取得（404 / 取得失敗は警告して skip・補完しないだけで失敗させない）。
  * Champions 固有メガストーン等は PokeAPI 非存在（404）になるが、これは正常（ja は Serebii 速報 / 手入力で補う）。
  */
@@ -91,9 +151,17 @@ const DATASETS: {
   mapKey: string;
   list: string;
   category: string;
+  /** items だけ設定。list endpoint 全件でなく item-category whitelist の union で列挙する（issue #213）。 */
+  listCategories?: readonly string[];
 }[] = [
   { file: "species.yaml", mapKey: "species", list: "pokemon-species", category: "pokemon-species" },
-  { file: "items.yaml", mapKey: "items", list: "item", category: "item" },
+  {
+    file: "items.yaml",
+    mapKey: "items",
+    list: "item",
+    category: "item",
+    listCategories: ITEM_CATEGORIES,
+  },
   { file: "moves.yaml", mapKey: "moves", list: "move", category: "move" },
   { file: "abilities.yaml", mapKey: "abilities", list: "ability", category: "ability" },
   { file: "types.yaml", mapKey: "types", list: "type", category: "type" },
@@ -102,9 +170,13 @@ const DATASETS: {
 async function main(): Promise<void> {
   for (const ds of DATASETS) {
     const map = readLangMap(ds.file, ds.mapKey);
-    // list endpoint で全 id を列挙し、既存 languages と差分突き合わせ（ja/en 完備の id はスキップ・未記録 /
-    // 欠落 id のみ best-effort 取得）。既存エントリ走査は「差分」判定として map を引くだけに残る（ADR 0041）。
-    const ids = await listAllIds(ds.list);
+    // items は item-category whitelist の union で列挙し union manifest を残す（sync:ja-names が剪定に使う・issue #213）。
+    // 他 4 種は list endpoint で全 id を列挙する（全件辞書・count 照合の fail-fast は listAllIds 側で維持）。
+    // いずれも既存 languages と差分突き合わせ（ja/en 完備の id はスキップ・未記録 / 欠落 id のみ best-effort 取得・ADR 0041）。
+    const ids = ds.listCategories
+      ? await listCategoryUnion(ds.listCategories)
+      : await listAllIds(ds.list);
+    if (ds.listCategories) writeItemUnionManifest(ids);
     for (const id of ids) {
       if (needsJaEn(map[id] ?? {})) await fetchNamesInto(ds.category, id);
     }

@@ -40,6 +40,34 @@ export function extractNames(raw: RawNamed): { ja?: string; en?: string } {
   return out;
 }
 
+/**
+ * 複数リストの union を重複排除 + 昇順ソートで作る（items の item-category whitelist union 計算・issue #213）。
+ * PokeAPI の `item-category/{cat}` は該当 items をカテゴリごとに返すため、各カテゴリの `items[].name` 群を
+ * 渡して 1 本の決定論的な id 集合へ畳む。全件辞書の items をこの union のみへ絞る keep 集合になる。
+ */
+export function sortedUnion(lists: string[][]): string[] {
+  return [...new Set(lists.flat())].sort();
+}
+
+/**
+ * `existingIds` を `keepIds`（whitelist union）で仕分けし、残す id（`kept`）と除去する id（`removed`）に分ける
+ * 純関数（items.yaml 剪定計画・issue #213）。実際の YAML ノード削除は IO shell（`scripts/materialize.ts`）が
+ * `removed` を使って行う。並びは `existingIds` の順を保つ（decision を呼び出し側の書き出し順に委ねる）。
+ */
+export function pruneToKeep(
+  existingIds: string[],
+  keepIds: string[],
+): { kept: string[]; removed: string[] } {
+  const keep = new Set(keepIds);
+  const kept: string[] = [];
+  const removed: string[] = [];
+  for (const id of existingIds) {
+    if (keep.has(id)) kept.push(id);
+    else removed.push(id);
+  }
+  return { kept, removed };
+}
+
 /** 転記計画: 未設定フィールドは fill・既存と raw が食い違うフィールドは conflict（上書きしない）。 */
 export interface FieldPlan<T> {
   /** 未設定のため raw 由来値で埋めるフィールド。 */
