@@ -21,13 +21,32 @@ import { kebabId } from "./ids.ts";
 /**
  * default→明示: showdown が bare id で持つデフォルトフォルムを **短い canonical** の明示 id へ。
  * 原種が無い対等フォルム（urshifu 一撃・deoxys ノーマル等）は bare だと曖昧になるため明示 id を振る。
- * 値は最終 canonical（既に短い形ゆえ `canonicalFormId` を再適用しない）。
+ * **性別二形（`SUPPRESS_BASE_SPECIES`）は bare default（= オス）を `-male` 明示 id へ写す**（bare base 名を
+ * 名前辞書から抑制するため・構造側 roster と名前側 form 集合を一致させる）。値は最終 canonical（既に短い形ゆえ
+ * `canonicalFormId` を再適用しない）。
  */
 const DEFAULT_TO_EXPLICIT: Record<string, string> = {
   urshifu: "urshifu-single",
   deoxys: "deoxys-normal",
   basculegion: "basculegion-male",
+  indeedee: "indeedee-male",
+  meowstic: "meowstic-male",
+  oinkologne: "oinkologne-male",
 };
+
+/**
+ * **性別二形の種**（genderless な base 形態を持たず、オス／メスの 2 形態のみで構成される種）。名前辞書
+ * （`languages/species.yaml`）から **bare base id（`basculegion` 等）を抑制**し、`-male` / `-female` の 2 form だけを
+ * 列挙するための集合（転記段 `scripts/materialize.ts` が参照）。bare base は PokeAPI `pokemon-species` list に
+ * 抽象種として載るが、実体（対戦個体）はオス／メスの variety であり base 名は冗長になるため出さない。
+ * 構造側は `DEFAULT_TO_EXPLICIT` で bare default（= オス）を `-male` へ写し、name/structure の form 集合を一致させる。
+ */
+export const SUPPRESS_BASE_SPECIES: ReadonlySet<string> = new Set([
+  "basculegion",
+  "indeedee",
+  "meowstic",
+  "oinkologne",
+]);
 
 /**
  * Class C 語彙差: showdown forme 綴りと canonical が体系的に食い違うもの（接尾辞除去では表せない語彙差）。

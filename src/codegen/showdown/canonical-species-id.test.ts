@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { canonicalFormId, canonicalSpeciesId } from "./canonical-species-id.ts";
+import {
+  canonicalFormId,
+  canonicalSpeciesId,
+  SUPPRESS_BASE_SPECIES,
+} from "./canonical-species-id.ts";
 
 describe("canonicalFormId", () => {
   it("drops the redundant PokeAPI variety suffix", () => {
@@ -37,6 +41,12 @@ describe("canonicalSpeciesId", () => {
     expect(canonicalSpeciesId("Basculegion")).toBe("basculegion-male");
   });
 
+  it("maps a gender-dimorphic bare default to its -male canonical (base suppressed)", () => {
+    expect(canonicalSpeciesId("Indeedee")).toBe("indeedee-male");
+    expect(canonicalSpeciesId("Meowstic")).toBe("meowstic-male");
+    expect(canonicalSpeciesId("Oinkologne")).toBe("oinkologne-male");
+  });
+
   it("rewrites a Class C vocabulary difference to the canonical spelling", () => {
     expect(canonicalSpeciesId("Necrozma-Dusk-Mane")).toBe("necrozma-dusk");
     expect(canonicalSpeciesId("Necrozma-Dawn-Wings")).toBe("necrozma-dawn");
@@ -63,5 +73,16 @@ describe("canonicalSpeciesId", () => {
     expect(canonicalSpeciesId("Charizard")).toBe("charizard");
     expect(canonicalSpeciesId("Rotom-Wash")).toBe("rotom-wash");
     expect(canonicalSpeciesId("Greninja")).toBe("greninja");
+  });
+});
+
+describe("SUPPRESS_BASE_SPECIES", () => {
+  it("lists the gender-dimorphic species whose bare base name is suppressed", () => {
+    expect([...SUPPRESS_BASE_SPECIES].sort()).toEqual([
+      "basculegion",
+      "indeedee",
+      "meowstic",
+      "oinkologne",
+    ]);
   });
 });
