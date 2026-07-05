@@ -1,6 +1,7 @@
 /**
  * mega-fields.ts（showdown codegen 純関数）— メガ中間レコードを mega-specs.yaml /
- * species-specs.megaEvolvesTo / <reg>/mega.yaml / languages の転記材料へ写す。
+ * species-specs.megaEvolvesTo / <reg>/mega.yaml の転記材料へ写す（構造 + linking のみ）。
+ * 名前（languages/mega.yaml）は showdown 経路では扱わない（PokeAPI pokemon-form form_names 経路が担う・ADR 0043）。
  *
  * メガは base 種族から分離した独立エンティティ（ADR 0036）。base→mega の membership は
  * baseSpecies で group 化して導出し、species-specs.megaEvolvesTo と <reg>/mega.yaml の双方で使う。
@@ -46,11 +47,6 @@ export function megaStructuralFields(m: MegaInput): MegaStructuralFields {
     ability: kebabId(m.ability),
     baseSpecies: kebabId(m.baseSpecies),
   };
-}
-
-/** languages/mega.yaml の en 名材料。 */
-export function megaEnName(m: MegaInput): { en: string } {
-  return { en: m.name };
 }
 
 /**

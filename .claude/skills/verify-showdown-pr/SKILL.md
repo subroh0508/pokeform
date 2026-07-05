@@ -80,6 +80,8 @@ PR の YAML 値と Serebii 中間 JSON を**機械的に突き合わせ**、差�
   `calculatePP`（8/12/16/20）適用済み**なので、Serebii の基礎値と直接比較せず換算を踏まえて差異判定する（[[data-pipeline]] の PP 注記）。
 - **メガ id 正規化**: 両経路とも `charizard-mega-x` 語順へ収束しているか（Serebii 表示名 `Mega Charizard X` → kebab・ADR 0040）。
 - **ja / en**: `languages/*.yaml` の名前が Serebii 表示名（種族・メガ=カタカナ / 特性・持ち物・技=ひらがな）と整合するか。
+  ただし **`languages/mega.yaml` の名前は showdown PR には現れない**（mega 名は PokeAPI `pokemon-form` 経路 =
+  `pokeapi-names.yml` の別 PR が担う・ADR 0043）。showdown mega PR で照合するのは mega の**構造 + membership** のみ。
 
 各差異に **重大度**（[[code-review]]）を付ける: roster/解禁集合の欠落・余剰や技件数の大きな乖離は `blocking`、軽微な
 名前揺れ・1 件差は `non-blocking` / `nit`。差異が 0 なら一致（承認可）。

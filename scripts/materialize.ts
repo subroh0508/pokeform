@@ -4,9 +4,9 @@
  *
  * **名前専任**（plan 10）: 構造データ（図鑑番号 / タイプ / 種族値 / 特性 id / 持ち物 category）の転記は
  * pokemon-showdown 経路（`scripts/sync-showdown.ts` + `src/codegen/showdown/*`）へ移管した。本スクリプトは
- * `languages/{species,items,moves,abilities,types}.yaml` の名前（ja/en）補完だけを担う。languages は reg 非依存の
- * **全件名辞書**（ADR 0041）で、PokeAPI から ja/en を両取りして満たす。メガ名は PokeAPI のカテゴリに無いため
- * 対象外（en=showdown / ja=手作業・[[data-pipeline]]）。
+ * `languages/{species,items,moves,abilities,types,mega}.yaml` の名前（ja/en）補完だけを担う。languages は reg 非依存の
+ * **全件名辞書**（ADR 0041）で、PokeAPI から ja/en を両取りして満たす。**メガ名も PokeAPI 対象**（`pokemon-form` の
+ * `form_names`・`is_mega` で判別する 6 種目・ADR 0043・[[data-pipeline]]）。
  *
  * **raw 起点の append/backfill**（ADR 0041 の「append/既存尊重転記」）: `fetch:ja-names` が全件列挙で未記録 /
  * ja・en 欠落の id のみ raw を書くため、`data/raw/<category>/*.json` を決定論順（sort）で走査し —
@@ -24,6 +24,7 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Document, parseDocument, type YAMLMap } from "yaml";
 import {
+  extractMegaNames,
   extractNames,
   type FieldPlan,
   planFields,
@@ -34,7 +35,12 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const RAW = join(ROOT, "data", "raw");
 const LANG = join(ROOT, "data", "languages");
 
-type RawNamed = { names?: { name: string; language: { name: string } }[] };
+/** raw JSON の名前欄。5 種は `names`、mega は `pokemon-form` の `form_names` / `is_mega`（ADR 0043）。 */
+type RawNamed = {
+  names?: { name: string; language: { name: string } }[];
+  is_mega?: boolean;
+  form_names?: { name: string; language: { name: string } }[];
+};
 
 /** raw JSON を best-effort で読む（不在なら null）。ja/en 補完は取得が無くても続行する。 */
 const rawOpt = (category: string, name: string): RawNamed | null => {
@@ -161,10 +167,13 @@ const abilitiesFilled = backfillNames(
   needsJaEn,
 );
 const typesFilled = backfillNames("types.yaml", "types", "type", extractNames, needsJaEn);
+// mega は pokemon-form 経路。fetch が mega 候補のみ raw 化するため対象 id は mega に限られるが、extractMegaNames が
+// is_mega で最終判別する（非 mega form は空 = append/backfill しない・ADR 0043）。
+const megaFilled = backfillNames("mega.yaml", "mega", "pokemon-form", extractMegaNames, needsJaEn);
 
 // items のみ backfill 後に whitelist union で剪定する（issue #213）。
 const itemsPruned = pruneItemsToUnion();
 
 console.log(
-  `[sync:ja-names] filled ${speciesFilled} species / ${itemsFilled} item / ${movesFilled} move / ${abilitiesFilled} ability / ${typesFilled} type name field(s), pruned ${itemsPruned} item(s) outside whitelist, ${conflictCount} conflict(s), ${skippedCount} skipped (ja/en incomplete)`,
+  `[sync:ja-names] filled ${speciesFilled} species / ${itemsFilled} item / ${movesFilled} move / ${abilitiesFilled} ability / ${typesFilled} type / ${megaFilled} mega name field(s), pruned ${itemsPruned} item(s) outside whitelist, ${conflictCount} conflict(s), ${skippedCount} skipped (ja/en incomplete)`,
 );

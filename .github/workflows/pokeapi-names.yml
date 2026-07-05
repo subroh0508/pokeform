@@ -1,12 +1,13 @@
 # pokeapi-names — PokeAPI の全件名（ja/en）で名前 SoT languages を満たす自動取得 PR
 #
-# 目的: PokeAPI の list endpoint で全 species / items / moves / abilities / types を列挙し、`names`（ja-Hrkt +
-#       en）を取得 → 名前 SoT YAML（data/languages・mega 除く）へ append/既存尊重で転記、generate + verify を
-#       通したうえで `data:names` ラベルの languages 更新 PR を自動作成する。languages を reg 非依存の全件名辞書に
-#       する決定は ADR 0041（ADR 0035 の id 集合一致不変条件を refine）。
+# 目的: PokeAPI の list endpoint で全 species / items / moves / abilities / types を列挙し `names`（ja-Hrkt + en）を、
+#       `pokemon-form` から mega（`is_mega` の form の `form_names`）を取得 → 名前 SoT YAML（data/languages・mega 含む
+#       6 種）へ append/既存尊重で転記、generate + verify を通したうえで `data:names` ラベルの languages 更新 PR を
+#       自動作成する。languages を reg 非依存の全件名辞書にする決定は ADR 0041（ADR 0035 の id 集合一致不変条件を
+#       refine）、mega 名を PokeAPI(pokemon-form form_names) へ一本化する決定は ADR 0043。
 # トリガー: `workflow_dispatch` 手動のみ（cron なし）。showdown-sync.yml / serebii-bulletin.yml と同型。全件列挙
-#       のため regulation 入力は持たない（名前は reg 非依存）。メガ名は PokeAPI のカテゴリに無く対象外
-#       （en=showdown / ja=手作業・author-static-data skill が PR へ手動 commit）。
+#       のため regulation 入力は持たない（名前は reg 非依存）。メガストーン item 名など PokeAPI 非存在の手作業カバー
+#       箇所は PR body の Serebii Champions リンク 5 本で目視差分チェックする（author-static-data skill 手順 3）。
 name: pokeapi-names
 
 on:
@@ -66,13 +67,24 @@ jobs:
           commit-message: "data(languages): PokeAPI 全件名（ja/en）を languages へ同期"
           title: "data(languages): PokeAPI 全件名同期（names）"
           body: |
-            PokeAPI の全件名（ja/en）を名前 SoT `data/languages/*.yaml`（mega 除く）へ同期した PR です（ADR 0041）。
+            PokeAPI の全件名（ja/en）を名前 SoT `data/languages/*.yaml`（mega 含む 6 種）へ同期した PR です（ADR 0041 / 0043）。
 
-            - **dataset**: species / items / moves / abilities / types（全件列挙・reg 非依存の全件名辞書）
-            - **取得元**: PokeAPI `names`（ja = ja-Hrkt 優先 / en）。append/既存尊重で既存の en（showdown 正 /
-              Serebii 速報）は上書きしない。
-            - **mega は対象外**: PokeAPI のカテゴリに無い（en=showdown / ja=手作業で別途 PR へ追加）。
+            - **dataset**: species / items / moves / abilities / types / **mega**（全件列挙・reg 非依存の全件名辞書）
+            - **取得元**: PokeAPI `names`（ja = ja-Hrkt 優先 / en）。**mega は `pokemon-form` の `form_names`**（`is_mega`
+              で判別・ADR 0043）。append/既存尊重で既存の en（showdown 正 / Serebii 速報）は上書きしない。
             - **検証**: `check:yaml-style` → `generate:data` → `pnpm verify` を通過
             - **workflow run**: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            ### 手作業カバー箇所の差分チェック（Serebii Champions）
+
+            PokeAPI に無い Champions 固有の名前（**メガストーン item 名**等）は本 PR で埋まりません。下記 Serebii
+            ページで目視照合し、抜け / 誤りがあれば該当 languages ファイルへ手作業で追加してください（author-static-data
+            skill 手順 3）:
+
+            - 持ち物・メガストーン: https://www.serebii.net/pokemonchampions/items.shtml
+            - 技: https://www.serebii.net/pokemonchampions/moves.shtml
+            - 種族・メガ: https://www.serebii.net/pokemonchampions/pokemon.shtml
+            - メガ特性: https://www.serebii.net/pokemonchampions/megaabilities.shtml
+            - 新特性: https://www.serebii.net/pokemonchampions/newabilities.shtml
 
             > 名前の取得元分担は [[data-pipeline]] を参照。全件データ投入は author-static-data skill がドライブする。

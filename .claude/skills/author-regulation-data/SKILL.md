@@ -150,8 +150,10 @@ conflict 提示）ゆえ**再実行が安全**で、「存在するレコード�
   のみ。`*-specs.yaml` は append-only の union マスターで、reset すると他 reg の構造・技メタまで失う（[[data-pipeline]]）。
 - **ja gap は原則解消済み**: 名前は全件名辞書（ADR 0041）で事前整備される。per-reg 取得時の ja gap は原則出ず、
   手順 3 は通常空振りする。新規 id を導入した稀なケースのみ `author-static-data`（差分追加）で補う。
-- **メガ en は showdown・ja は手作業**: `languages/mega.yaml` の en は showdown 取得（`.name`）で埋まるが、ja は
-  PokeAPI 非対象ゆえ `author-static-data` の手作業 commit で補う（[[data-pipeline]] の名前取得元分担表）。
+- **メガ名は PokeAPI（本 skill の責務外）**: `languages/mega.yaml` の ja/en は PokeAPI `pokemon-form` の form_names
+  から `author-static-data`（`pokeapi-names.yml`）が全件埋める（ADR 0043）。本 skill（per-reg 取得）は mega の
+  **構造 + linking**（`mega-specs` / `megaEvolvesTo` / `<reg>/mega.yaml`）のみ showdown から取得し、mega 名は書かない
+  （[[data-pipeline]] の名前取得元分担表）。
 - **生成物を手編集しない**: `src/generated/**` は触らず SoT（specs / languages / per-reg）を経路/AI 経由で直して
   再生成する（[[data-pipeline]]）。
 - **cross-agent フォールバック**: 本 skill は `gh workflow run`（GitHub Actions dispatch）を含むため Claude / Codex

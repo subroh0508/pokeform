@@ -30,7 +30,6 @@ import {
 import {
   groupMegaByBase,
   type MegaInput,
-  megaEnName,
   megaId,
   megaStructuralFields,
 } from "../src/codegen/showdown/mega-fields.ts";
@@ -204,8 +203,6 @@ function syncMega(regId: string, json: Record<string, unknown>): string {
   const records = json.mega as MegaInput[];
   const specsDoc = read(join(CH, "mega-specs.yaml"));
   const specsMap = specsDoc.get("mega") as YAMLMap;
-  const langDoc = read(join(LANG, "mega.yaml"));
-  const langMap = langDoc.get("mega") as YAMLMap;
   const speciesDoc = read(join(CH, "species-specs.yaml"));
   const speciesMap = speciesDoc.get("species") as YAMLMap;
   const regDoc = read(join(CH, regId, "mega.yaml"));
@@ -215,8 +212,9 @@ function syncMega(regId: string, json: Record<string, unknown>): string {
   for (const rec of records) {
     const id = megaId(rec);
     filled += applyFill(specsDoc, ensureEntry(specsDoc, specsMap, id), megaStructuralFields(rec));
-    applyFill(langDoc, ensureEntry(langDoc, langMap, id), megaEnName(rec));
   }
+  // 名前（languages/mega.yaml）は showdown 経路では書かない。mega 名は PokeAPI(pokemon-form form_names) 経路が
+  // ja/en とも埋める（author-static-data・ADR 0043）。showdown は構造（mega-specs）+ linking のみを担う。
   // base→[mega id] を species-specs.megaEvolvesTo と <reg>/mega.yaml へ。
   // <reg>/mega.yaml は mega: { <base>: [mega id..] }（species-moves と同型・base キーへ seq 直挿し）。
   const byBase = groupMegaByBase(records);
@@ -226,7 +224,6 @@ function syncMega(regId: string, json: Record<string, unknown>): string {
     unionSeq(regDoc, regMap, base, megaIds);
   }
   write(join(CH, "mega-specs.yaml"), specsDoc);
-  write(join(LANG, "mega.yaml"), langDoc);
   write(join(CH, "species-specs.yaml"), speciesDoc);
   write(join(CH, regId, "mega.yaml"), regDoc);
   return `mega: ${records.length} record(s), ${filled} structural field(s) filled`;

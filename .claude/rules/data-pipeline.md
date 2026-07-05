@@ -55,7 +55,7 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
   |---|---|---|
   | `species` / `moves` / `abilities` / `types`.yaml | **PokeAPI 全件**（list endpoint・ja/en） | `pokeapi-names.yml` / `author-static-data` |
   | `items.yaml` | **PokeAPI item-category whitelist の union**（ja/en・全件でなく対戦持ち物のみ・ADR 0042） | `pokeapi-names.yml` / `author-static-data` |
-  | `mega.yaml` | **en = showdown（`.name`）/ ja = 手作業** | per-reg 取得（`author-regulation-data`）+ 手入力（PokeAPI 非対象） |
+  | `mega.yaml` | **en/ja = PokeAPI（`pokemon-form` の `form_names`・`is_mega` で判別）** | `pokeapi-names.yml` / `author-static-data`（6 種目・ADR 0043） |
   | `regulations.yaml` | **skill 著述**（命名規約・PokeAPI に無い） | `author-regulation-data`（per-reg・ja/en とも著述） |
 
 - **items だけ item-category whitelist で絞る**（ADR [0042](../../docs/adr/0042-items-battle-holdable-whitelist.md)）:
@@ -115,9 +115,9 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
 取得元は経路ごとに異なるが、**SoT レイアウトと検証機構は取得元非依存で不変**（ADR 0039 の安全弁）。入力 SoT を埋める取得元のみが showdown / Serebii / PokeAPI に分かれる。
 
 - **showdown 抽出層** `scripts/showdown/*`（`dex` / `species` / `moves` / `items` / `abilities` / `mega` / `cli`）= showdown ツリーで動く抽出（`../sim/dex` import ゆえ pokeform の `tsconfig.json` `exclude`・typecheck/coverage 非対象）。CI で `pokemon-showdown/tools/` へ copy → `node build` 後に実行し、データセット別の中間 JSON を stdout に出す（`calculatePP` で実 PP=8/12/16/20 を適用済み）。
-- **showdown 転記層** `src/codegen/showdown/*-fields.ts`（純関数 + コロケーション test・カバレッジ 100%）+ `scripts/sync-showdown.ts`（薄い配線・fs/YAML I/O 専任・coverage 除外）= 中間 JSON → `*-specs.yaml` / `<reg>/*` / `languages`(en) へ **append/既存尊重**で転記。`showdown:<dataset> <regId>` で起動。**ja は書かない**（PokeAPI 経路が埋める）。
+- **showdown 転記層** `src/codegen/showdown/*-fields.ts`（純関数 + コロケーション test・カバレッジ 100%）+ `scripts/sync-showdown.ts`（薄い配線・fs/YAML I/O 専任・coverage 除外）= 中間 JSON → `*-specs.yaml` / `<reg>/*` / `languages`(en) へ **append/既存尊重**で転記。`showdown:<dataset> <regId>` で起動。**ja は書かない**（PokeAPI 経路が埋める）。**mega だけは名前（en/ja とも）を書かない**（mega 構造 + linking は書くが名前は PokeAPI `pokemon-form` 経路が担う・ADR 0043）。
 - **Serebii 速報層** `src/codegen/serebii/parse-*`（純関数 + コロケーション test + `__fixtures__`・カバレッジ 100%）+ `scripts/scrape-serebii.ts`（取得 + 配線・健全性 exit code 0/2/3/4）/ `scripts/sync-serebii.ts`（中間 JSON → SoT YAML・**速報ゆえ ja / en を埋める**）。`serebii:<dataset> <regId>` で起動。Serebii は latin-1 + CRLF + 数値文字参照の日本語で、文字コードと健全性 exit code を設計に含む（ADR 0040）。
-- **`scripts/fetch-pokeapi.ts`（取得・`fetch:ja-names`）/ `scripts/materialize.ts`（転記・`sync:ja-names`）** = PokeAPI `names`（ja-Hrkt + en）の **全件名 backfill 専任**（ADR 0041）。各 category の list endpoint で **全 id を列挙**し（**items だけは item-category whitelist の union で列挙 + 剪定**・ADR 0042）、`languages/*.yaml` に ja/en が揃って記録済みの id はスキップ・未記録 / 欠落 id のみ best-effort 取得（404 は skip・差分・冪等）。`materialize` は raw を決定論順（sort）で走査し、**未記録 id は新規エントリとして append**（全件名辞書化）・**既存 id は欠落欄のみ backfill**（**append/既存尊重**＝既存の著述 / 速報値は上書きせず conflict 提示）。**ただし PokeAPI が ja を持たない id（Pokémon GO 専用特性 `is_main_series:false` / LA の未ローカライズ球 / 未ローカライズの新特性 等）は「各エントリ ja/en 完備」不変条件（ADR 0041）を満たせないため append せず skip する**（必要になれば手作業で ja を補い append）。対象は `species` / `items` / `moves` / `abilities` / `types`（`mega` は PokeAPI 非対象）。構造データ取得・転記は廃止（ADR 0039）。raw 必須・fail-fast（自前の存在チェックや取得誘導を持たない・raw 存在の担保は `author-static-data` skill の責務）。
+- **`scripts/fetch-pokeapi.ts`（取得・`fetch:ja-names`）/ `scripts/materialize.ts`（転記・`sync:ja-names`）** = PokeAPI `names`（ja-Hrkt + en）の **全件名 backfill 専任**（ADR 0041）。各 category の list endpoint で **全 id を列挙**し（**items だけは item-category whitelist の union で列挙 + 剪定**・ADR 0042）、`languages/*.yaml` に ja/en が揃って記録済みの id はスキップ・未記録 / 欠落 id のみ best-effort 取得（404 は skip・差分・冪等）。`materialize` は raw を決定論順（sort）で走査し、**未記録 id は新規エントリとして append**（全件名辞書化）・**既存 id は欠落欄のみ backfill**（**append/既存尊重**＝既存の著述 / 速報値は上書きせず conflict 提示）。**ただし PokeAPI が ja を持たない id（Pokémon GO 専用特性 `is_main_series:false` / LA の未ローカライズ球 / 未ローカライズの新特性 等）は「各エントリ ja/en 完備」不変条件（ADR 0041）を満たせないため append せず skip する**（必要になれば手作業で ja を補い append）。対象は `species` / `items` / `moves` / `abilities` / `types` に加え **`mega`（`pokemon-form` の `form_names` を `is_mega` で絞る 6 種目・ADR 0043）**。構造データ取得・転記は廃止（ADR 0039）。raw 必須・fail-fast（自前の存在チェックや取得誘導を持たない・raw 存在の担保は `author-static-data` skill の責務）。
 - **`scripts/generate.ts`（合成段・`generate:data`）** = specs / languages / per-reg YAML のみを変換・合成し `src/generated/` を出力。**raw 非依存**（決定論的・raw 不在でも動く・ADR 0027 の合成方針は不変）。
 
 ## 統一用語: skill-authored（定義 SoT）
@@ -172,14 +172,15 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
 | 技メタ type/damageClass/power/accuracy/pp/priority | showdown `getSpecs().moves`（`calculatePP` 適用） | Serebii 技ページ | `move-specs.yaml`（per-game） |
 | メガ（構造 + linking） | showdown（`isMega`/`isPrimal`/forme + `megaStone`/`megaEvolves`） | Serebii | `mega-specs.yaml` + `species-specs.megaEvolvesTo` + `<reg>/mega.yaml` + `item-specs.megaSpecies` |
 | 持ち物（解禁集合 + megaStoneFor/megaSpecies） | showdown `isUsableItem` | Serebii items.shtml | `item-specs.yaml` + `<reg>/items.yaml` |
-| **日本語名 ja** | **PokeAPI `names`(ja-Hrkt・全件)** | **Serebii 各ページ** | `languages/*.yaml` `ja` |
-| 英語名 en | showdown `.name` / **PokeAPI `names`(en・全件補完)** | Serebii 表示名 | `languages/*.yaml` `en` |
+| **日本語名 ja**（mega 除く） | **PokeAPI `names`(ja-Hrkt・全件)** | **Serebii 各ページ** | `languages/*.yaml` `ja` |
+| 英語名 en（mega 除く） | showdown `.name` / **PokeAPI `names`(en・全件補完)** | Serebii 表示名 | `languages/*.yaml` `en` |
+| **メガ名 ja/en** | **PokeAPI `pokemon-form` の `form_names`（`is_mega` で判別・ADR 0043）** | Serebii pokemon.shtml | `languages/mega.yaml` `ja`/`en` |
 | レギュメタ name/period | skill-authored | — | `<reg>/index.yaml` + `languages/regulations.yaml` |
 | タイプ相性 damageTo | skill-authored（`typechart.ts` 由来・任意） | — | `type-specs.yaml` |
 
 表に表れない補足（安全性・取得経路の要点。「なぜ」の詳細は上記「三段」節と各 ADR を参照）:
 
 - **構造データ + 解禁データの取得元は pokemon-showdown（正）**。mod が機械可読に一括保持し `calculatePP` 等 Champions 固有仕様を内包する。SoT を specs / per-reg YAML へ置く合成方針は不変（ADR 0027/0035）、取得元を PokeAPI から showdown へ差し替えた根拠は ADR 0039。
-- **名前の取得元は PokeAPI `names`（ja-Hrkt 優先 + en・全件）/ Serebii（速報）の二経路**。`materialize`（`sync:ja-names`）が raw `names` から `languages/*.yaml` へ ja/en を転記する（append/既存尊重・初期値補完で名前 SoT は不変・既存の en（showdown 正）等は上書きせず conflict 提示）。**タイプ名も PokeAPI 全件対象**（`type` category）。メガ名は PokeAPI に無いため en=showdown / ja=手作業で補う（上記「名前の取得元分担」表・ADR 0041）。
+- **名前の取得元は PokeAPI `names`（ja-Hrkt 優先 + en・全件）/ Serebii（速報）の二経路**。`materialize`（`sync:ja-names`）が raw `names` から `languages/*.yaml` へ ja/en を転記する（append/既存尊重・初期値補完で名前 SoT は不変・既存の en（showdown 正）等は上書きせず conflict 提示）。**タイプ名も PokeAPI 全件対象**（`type` category）。**メガ名も PokeAPI 対象**で、`pokemon-form` の `form_names`（`is_mega: true` で判別）から ja/en を両取りする（従来の en=showdown / ja=手作業は撤回・上記「名前の取得元分担」表・ADR 0043）。
 - **技メタ（type / power 等）に PokeAPI を使わない**（Champions 非対応）。技メタ SoT は per-game `move-specs.yaml` で、showdown の `calculatePP` 適用済み実 PP を正とする（ADR 0039）。
 - **raw 存在の担保は `author-static-data` skill（名前）の責務**（`materialize.ts` は fail-fast で前提が揃っている前提に動く）。生成型は [[type-conventions]]、検証は [[tsc-verification]]。
