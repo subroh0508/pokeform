@@ -93,7 +93,7 @@ const MANUAL_NAME_OVERRIDE: Record<string, { ja?: string; en?: string }> = {
   "greninja-battle-bond": { ja: "ゲッコウガ（きずなへんげ）", en: "Greninja (Battle Bond)" },
   "tauros-paldea-combat-breed": { ja: "ケンタロス（パルデアのすがた・コンバット種）" },
   "tauros-paldea-blaze-breed": { ja: "ケンタロス（パルデアのすがた・ブレイズ種）" },
-  "tauros-paldea-aqua-breed": { ja: "ケンタロス（パルデアのすがた・アクア種）" },
+  "tauros-paldea-aqua-breed": { ja: "ケンタロス（パルデアのすがた・ウォーター種）" },
 };
 
 /** languages 名前マップ（id → { ja?, en? }）。 */
