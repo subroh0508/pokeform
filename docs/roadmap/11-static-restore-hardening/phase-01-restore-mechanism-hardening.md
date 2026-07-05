@@ -4,7 +4,7 @@
 
 `author-static-data` の from-scratch 復元を阻む 3 前提を機構側で解消し、fixed flow で `data/languages/*.yaml`
 を **scaffold / seed / 手作業無し**に全件復元して main を緑へ戻す。PR 作成の非 third-party 化（P4）は Phase 2、
-全件本投入（reg データ）は Phase 3 でスコープ外。
+全件本投入（reg データ）は Phase 5 でスコープ外。
 
 ## 前提（依存）
 

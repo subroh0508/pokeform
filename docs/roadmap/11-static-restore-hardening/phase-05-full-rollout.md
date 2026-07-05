@@ -1,4 +1,4 @@
-# Phase 3 — M-A・M-B 全データセット本投入（author-regulation-data skill 実行・全件投入）
+# Phase 5 — M-A・M-B 全データセット本投入（author-regulation-data skill 実行・全件投入）
 
 > **plan 10 Phase 9 の cross-plan move 先**（元は plan 09 Phase 4 → plan 10 Phase 9 と移ってきた本投入 phase）。plan 10（showdown-first-data）の取得元転換で確定した新パイプライン（`author-regulation-data` skill で全量投入 + `verify-showdown-pr` で Serebii 照合）を**実運用で回して M-A・M-B を完成させる**。plan 10 は他 phase が全完了ゆえ `completed/` へ集約し、本投入は本計画群（11）の最終フェーズとして実施する。移動・参照追従は [[planning]] の cross-plan move チェックリストに従う。
 
@@ -14,7 +14,7 @@ Phase 1-8 で揃った新パイプライン（showdown 抽出 + 転記 + 全件�
 - **plan 10（showdown-first-data）完了**: showdown 抽出 + 転記 / PokeAPI ja 専任 / `showdown-sync.yml` / Serebii 速報 + 新スクレイパー / `verify-showdown-pr` skill + rules 改訂がすべて揃っている（[completed/10-showdown-first-data](../completed/10-showdown-first-data/README.md)）。
 - **全件名辞書が揃う**: `author-static-data`（`pokeapi-names.yml`）で `languages/*.yaml` が全件揃う（[completed/10-showdown-first-data/phase-06](../completed/10-showdown-first-data/phase-06-author-static-data.md) / [phase-07](../completed/10-showdown-first-data/phase-07-languages-populate.md)）。名前が事前に全件揃うため投入時の ja gap が原則出ない。
 - **`author-regulation-data` skill**: reg ごとの取得オーケストレーション（reset → `showdown-sync.yml` dispatch → 照合 → per-reg 著述・[completed/10-showdown-first-data/phase-08](../completed/10-showdown-first-data/phase-08-author-regulation-data-skill.md)）が新設済み。
-- **本計画群 Phase 1-2 完了**: 復元機構の堅牢化（P1-3）+ languages 復元で main が緑・PR 作成が非 third-party 化済み。
+- **本計画群 Phase 1-4 完了**: 復元機構の堅牢化（P1-3）+ languages 復元で main が緑・PR 作成が非 third-party 化済み（Phase 1-2）、**species id が canonical 明示 slug へ正規化され（Phase 3）、distinct-forms 名辞書が投入済み（Phase 4）**。M-A・M-B の roster が含む form（`rotom-wash` 等）が canonical id + 正しい表示名で解決できる前提が整っている。
 - `rules.yaml` / `type-specs.yaml` がコミット済みで存在（静的コミット・自動化対象外）。
 - 確定済み rule: [[data-pipeline]] / [[cli-and-io]] / [[type-conventions]] / [[testing]]。ADR 0039 / 0040。
 
