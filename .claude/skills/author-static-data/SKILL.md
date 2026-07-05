@@ -53,7 +53,9 @@ en は **showdown**（per-reg 取得 = `author-regulation-data`）・ja は**手
 ### 1. workflow を dispatch する（全件取得 → 転記 → PR）
 
 **`gh workflow run pokeapi-names.yml`**（`workflow_dispatch`・regulation 入力なし＝名前は reg 非依存）で、
-PokeAPI list endpoint の全件列挙 → `fetch:ja-names`（未記録 / 欠落 id のみ best-effort 取得・差分・冪等）→
+PokeAPI list endpoint の全件列挙（**総数 `count` と受信 id 数の一致を fail-fast** し全件受信を保証する = 差分・
+冪等判定の前提。200 応答でも `limit` cap で `results` が不足しうるため件数照合を初版から入れる）→
+`fetch:ja-names`（未記録 / 欠落 id のみ best-effort 取得・差分・冪等）→
 `sync:ja-names`（raw → languages へ ja/en を append/既存尊重転記）→ `check:yaml-style` / `generate:data` /
 `pnpm verify` → `data:names` ラベルの languages 更新 PR 作成、までを CI 上で回す。以降の再実行は**差分**（未記録
 id）だけを追加する。ローカルで確認するなら `pnpm fetch:ja-names` → `pnpm sync:ja-names` を逐次実行する（同一挙動）。
@@ -104,6 +106,14 @@ kebab（`Mega Garchomp` → `garchomp-mega`・[[data-pipeline]] のメガ id 正
   既存値を上書きしない。
 - **mega は PokeAPI 対象外**: `languages/mega.yaml` の名前は workflow では埋まらない（en=showdown / ja=手作業）。
   本 skill が scaffold と手作業 gap commit を担う。
+- **PokeAPI が ja を持たない id は捏造せず skip**: list に含まれても ja 未収録の id（GO 専用特性
+  `is_main_series:false` / Legends Arceus 未ローカライズ球 `la*-ball` / 未ローカライズ新特性 等）は `NameEntry` の
+  ja/en 必須と衝突するため **append せず skip**（推測 ja を発明しない = data 信頼性を守る・`sync:ja-names` は
+  `skippedCount` を warn で可視化する）。spec が参照して ja が要る id だけ手作業 ja で補う。
+- **「全件」の基準は PokeAPI list 列挙**: 全件辞書の母集合は PokeAPI の list endpoint 列挙で、pokeform 固有フォーム
+  （`rotom-wash` 等・PokeAPI `pokemon-species` の外）は対象外。live count（例 species 1025）と languages 件数
+  （1026）が僅差になりうるのは仕様どおりで、「壊れたデータ」ではない（`★XxxNNN` 等の未翻訳カタログコードも
+  PokeAPI の実データで正）。
 - **全件辞書は superset を許容**: languages は spec を持たない未解禁名（orphan）も持つ（reg 非依存の全件辞書・
   ADR 0041）。generate は「spec に名前がある / ja・en 完備」だけを保護し、余剰 languages 名は 0 終了で許容する。
   逆に spec に対応する名前が欠ける / ja・en 欠けは非0終了で弾く。

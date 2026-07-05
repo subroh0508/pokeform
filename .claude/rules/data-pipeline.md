@@ -39,9 +39,16 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
   許容**する。緩和は orphan チェックのみで、spec の名前欠落・ja・en 欠けは従来どおり**非0終了**で弾く（過剰緩和
   しない・ADR 0039 の「検証機構は不変」安全弁に対する限定的な例外・ADR 0041）。実装 SoT は `scripts/generate.ts`。
 - **名前取得 workflow `pokeapi-names.yml`**（`workflow_dispatch`・reg 非依存）= PokeAPI list endpoint で全 id を
-  列挙 → `fetch:ja-names`（未記録 / 欠落 id のみ best-effort 取得・差分・冪等）→ `sync:ja-names`（raw → languages へ
-  ja/en を append/既存尊重転記）→ `check:yaml-style` / `generate:data` / `verify` → `data:names` ラベルの languages
-  更新 PR。`showdown-sync.yml`（正）/ `serebii-bulletin.yml`（速報）と同型。手順は `author-static-data` skill が担う。
+  列挙（**総数 `count` と受信 id 数の一致を fail-fast** し全件受信を保証する = 差分・冪等判定の前提。200 応答でも
+  `limit` cap で `results` が不足しうるため件数照合を初版から入れる）→ `fetch:ja-names`（未記録 / 欠落 id のみ
+  best-effort 取得・差分・冪等）→ `sync:ja-names`（raw → languages へ ja/en を append/既存尊重転記）→
+  `check:yaml-style` / `generate:data` / `verify` → `data:names` ラベルの languages 更新 PR。`showdown-sync.yml`（正）/
+  `serebii-bulletin.yml`（速報）と同型。手順は `author-static-data` skill が担う。
+- **PokeAPI が ja を持たない id は捏造せず skip する**: list に含まれても ja 未収録の id（GO 専用特性
+  `is_main_series:false` / Legends Arceus 未ローカライズ球 `la*-ball` / 未ローカライズ新特性 等）は、`NameEntry` の
+  ja/en 必須と衝突するため **append せず skip**（推測 ja を発明しない = data 信頼性を守る）。spec が参照する id で
+  ja が要るなら手作業 ja で補う。「全件辞書」の**基準は PokeAPI list 列挙**で、pokeform 固有フォーム（`rotom-wash`
+  等・PokeAPI `pokemon-species` の外）は対象外ゆえ live count と languages 件数が僅差になりうる（仕様どおり）。
 - **名前の取得元分担**（languages 各ファイルの ja/en をどこから埋めるか）:
 
   | languages ファイル | 取得元 | 担当 |

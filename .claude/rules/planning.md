@@ -34,6 +34,8 @@ OVERVIEW を実現する作業を洗い出し、次の **6 基準**で評価し�
 
 各 phase は「**単独でマージしても壊れない・レビュー可能・意味的に完結**」を満たすこと（[[code-review]] の健全性の純改善）。
 
+**基盤 phase（新設 skill / script / workflow）を投入 phase から分割するときは、基盤 phase の受け入れ基準に「後続の投入 phase が依存する経路を最低 1 回 end-to-end で実行して緑を確認する（スモーク）」観点を持たせる**。コードレベルの確認だけで「設置 ≠ 稼働」のまま基盤をマージすると、実データで初めて回したときに潜伏バグが顕在化し、投入 phase のレビュー面分離が崩れる（新設 `materialize` の append 欠落が全件投入で初めて露呈した #208 で反復）。ネットワーク等でローカル完結しない経路は CI / 投入 phase に委ねる前提を phase doc に明示する。
+
 ### 3. 書き出し（2 分岐）
 
 - **1 PR 妥当**: `docs/roadmap/NN-{slug}/` は**作らず**、OVERVIEW 相当を本文にした **GitHub issue**（`gh issue create --body-file`）を起票し、そのまま [[implementation-workflow]] をキックする。issue 本文は GitHub への書き出しゆえ**投稿前に [[redaction]] を適用**する。
@@ -55,6 +57,7 @@ OVERVIEW を実現する作業を洗い出し、次の **6 基準**で評価し�
 既存計画に phase を**挿入**して後続を**繰り下げる**（例 旧 Phase N → N+1）ときは、番号参照が複数ファイルに散らばって**追従漏れ**が起きやすい（dangling リンク・散文の素の数字残りが過去 learning で反復・#70 / #76 / #50）。挿入・renumber を含む計画 doc PR は、書き出し後に次を**機械的に**確認する:
 
 - **ファイル rename**: 繰り下げる phase doc を `git mv phase-NN-*.md phase-(N+1)-*.md` し、本体見出し `# Phase N` を更新する。
+- **rename / 廃止 phase の受け入れ基準は「`git grep <old> = 0`」で書かない**: learnings / `completed/` / archive ADR には旧名の歴史言及（リネーム文脈・当時記述）が正当に残るため、全消去型 grep 基準は frozen history の falsify を要求して毎回達成不能になる（#206 で反復）。基準は「**live 参照の dangling ゼロ + learnings / completed / archive は凍結**」で表現する（実 live 参照だけ追従し、歴史記録は不変とする）。
 - **番号整合の全走査（cross-plan 含むリポジトリ全体）**: `git grep -n "Phase N"`（旧番号）を**計画ディレクトリに限定せずリポジトリ全体**に打ち、当該計画内だけでなく他計画 doc・rule・skill・docs/harness からの cross-plan 参照まで拾う。表・mermaid・リンクだけで満足せず、**導入散文・概要 / ゴール段落・bullet 中の素の phase 番号**（「全量投入（N）」等）と**完了済み phase doc の forward 参照**まで全 hit を追従し、新番号が旧テーマを誤指ししていないか逆方向も確認する。
 - **cross-plan move（phase を別計画群へ移す）**: `git mv` で移動し本体見出し `# Phase N` を移動先番号へ更新。**移動元 README / OVERVIEW の索引から除去 + 移動注記**を残し、**移動先 README / OVERVIEW の構造記述（受け入れ基準 / 分割表 / 主鎖 / 総数）を必須更新**する。説明散文・**完了済み phase doc の forward 参照は凍結可**（[[harness-review]] checklist の「完了 phase forward 参照まで全 hit 追従」と整合・learning #90）。**ただし renumber で同一番号が別 phase を誤指しするようになった場合は凍結せず是正する**（凍結は「番号が指すテーマが不変」が前提・誤指しは dangling と同じ扱い）。
 - **移動 / 廃止した phase 番号を別テーマで再利用しない**（予防）: cross-plan move や廃止で空いた番号は**再利用せず末尾連番で採番**する。空き番号に別テーマを充てると、過去の散文・完了 doc・cross-plan 参照が指す「番号 → テーマ」対応が 2 義化し、上記の誤指し是正コストを毎回生む。
