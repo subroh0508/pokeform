@@ -53,18 +53,43 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
   機械生成する**（`fetch-pokeapi.ts` の `fetchDistinctForms`・plan 11 P4 が `SPECIES_FORMS` whitelist を置換）:
   `rotom-wash` / `raichu-alola` / `basculegion-female` 等は `pokemon-species` list に個別 id が無く species 名が空に
   なり `generate` が `no name entry` で fail する。これらは各 species の **varieties を辿り**、base（default variety）と
-  **タイプ or 種族値が異なる** variety を採用（純関数 `isDistinctForm`）、canonical id（PokeAPI slug・bare→explicit の
-  default 再キーは Phase 3 の `CANONICAL_ID_OVERRIDE`）でキーイングし、`pokemon-form` の `form_names` を **含有判定合成**
-  （純関数 `composeFormName`: form 名が base 名を含めばそのまま採用・含まねば `base名（form名）` 合成・ja 全角 / en 半角
-  括弧）した ja/en を **`{ names }` として species raw へ合成**して `materialize` の species 経路（`extractNames`）が透過的に
-  拾う。純装飾フォルム（**base と同型・同種族値**の vivillon 模様 / alcremie 等）と `-mega`/`-gmax`/`-primal`/`-starter`
-  （末尾）/ `-totem`（セグメント・`raticate-totem-alola` 等リージョン接尾辞手前も除く）は除外。加えて **base とは type/stat が
-  違うが兄弟間で同型・同種族値な variety 群（minior の 7 色コア等）は先着 1 代表に畳む**（cosmetic-color 膨張の機械抑制）。
-  同ステータスでも別種族にしたい form（`greninja-battle-bond`）は `FORM_INCLUDE`、PokeAPI に ja 無し /
-  名前衝突する form（`greninja-battle-bond` / `tauros-paldea-*-breed` の breed 別 ja）は `MANUAL_NAME_OVERRIDE` で
-  補う（合成結果より優先）。3 リスト（`FORM_INCLUDE` / `MANUAL_NAME_OVERRIDE` / `CANONICAL_ID_OVERRIDE`）と除外パターンの
-  SoT は `fetch-pokeapi.ts`。決定記録（id / en / ja / decision / distinct 根拠）を manifest（`data/raw/distinct-forms.json`）へ
-  残し `pokeapi-names.yml` が PR レビュー表へ整形する（手順 SoT は `author-static-data` skill）。
+  **タイプ or 種族値が異なる** variety を採用（純関数 `isDistinctForm`）、**短い canonical id** でキーイングし、
+  `pokemon-form` の `form_names` を **含有判定合成**（純関数 `composeFormName`: form 名が base 名を含めばそのまま採用・
+  含まねば `base名（form名）` 合成・ja 全角 / en 半角括弧）した ja/en を **`{ names }` として species raw へ合成**して
+  `materialize` の species 経路（`extractNames`）が透過的に拾う。**canonical id は PokeAPI variety slug 完全準拠でなく、
+  冗長接尾辞（`-strike` / `-breed` / `-mask` / `-plumage` / `-segment` / `-striped` / `-power-construct` / `family-of-`）を
+  落とした pokeform 独自の短い形**（`urshifu-single` / `tauros-paldea-combat` / `minior-meteor` 等）。純関数 `canonicalFormId`
+  （`canonical-species-id.ts`）が PokeAPI slug → canonical へ写し、**構造側（`canonicalSpeciesId`: showdown 名 → canonical）と
+  名前側（PokeAPI slug → canonical）の両経路が同じ `canonicalFormId` を通す**ことで canonical を単一 SoT へ収束させる
+  （bare default の明示分割は `CANONICAL_ID_OVERRIDE`＝gimmighoul-chest / hoopa-confined / castform-normal）。純装飾フォルム
+  （**base と同型・同種族値**の vivillon 模様 / alcremie 等）と `-mega`/`-gmax`/`-primal`/`-starter`（末尾）/ `-totem`（セグメント・
+  `raticate-totem-alola` 等リージョン接尾辞手前も除く）は除外。加えて **base とは type/stat が違うが兄弟間で同型・同種族値な
+  variety 群（minior の 7 色メテオ等）は先着 1 代表に畳み**、**別種族にしない個別 form（メテノの 7 色コア）は `FORM_EXCLUDE` で
+  明示除外**する（cosmetic-color 膨張の機械抑制）。同ステータスでも別種族にしたい form（`greninja-battle-bond` / squawkabilly 各色 /
+  morpeko はらぺこ / mimikyu ばれた / maushold ３ひき / meowstic メス / keldeo かくご / dudunsparce みつふし / basculin
+  あおすじ・しろすじ）は `FORM_INCLUDE`、PokeAPI に ja 無し / 名前衝突する / 独自呼称を与える form（`greninja-battle-bond` /
+  `tauros-paldea-*` の breed 別 ja+en / `pumpkaboo-*`・`gourgeist-*` のサイズ ja / `darmanitan-galar-*` のモード ja+en）は
+  `MANUAL_NAME_OVERRIDE`（**短い canonical id をキーに**）で補う（合成結果より優先）。加えて **PokeAPI に variety が無い
+  「地方フォルムの base」は `SYNTHETIC_BASE_FORMS` で合成注入**する（`darmanitan-galar` = ヒヒダルマ（ガラルのすがた）。standard /
+  zen サブフォルムを持つ地方フォルムは base が変種として現れないため、Unovan `darmanitan` と対称に bare base + standard + zen を
+  列挙する）。5 リスト（`FORM_INCLUDE` / `FORM_EXCLUDE` / `MANUAL_NAME_OVERRIDE` / `SYNTHETIC_BASE_FORMS` / `CANONICAL_ID_OVERRIDE`）と
+  除外パターン・`canonicalFormId` の SoT は `fetch-pokeapi.ts` + `canonical-species-id.ts`。決定記録（id / en / ja / decision /
+  distinct 根拠）を manifest（`data/raw/distinct-forms.json`）へ残し `pokeapi-names.yml` が PR レビュー表へ整形する（手順 SoT は
+  `author-static-data` skill）。
+- **bare base 名を抑制する種**（`SUPPRESS_BASE_SPECIES`）: bare base id が冗長 / 曖昧になる種は
+  `languages/species.yaml` に bare base を出さず**明示 form だけ**を列挙する（転記段 `scripts/materialize.ts` が bare base を
+  skip・構造側は `DEFAULT_TO_EXPLICIT` / `CANONICAL_ID_OVERRIDE` で bare default を明示 id へ写して name/structure の form 集合を
+  一致させる）。集合の SoT は `canonical-species-id.ts` の `SUPPRESS_BASE_SPECIES`。対象:
+
+  | 分類 | 対象種（bare base を抑制し明示 form のみ列挙） |
+  |---|---|
+  | 性別二形（genderless base 無し・オス／メスのみ） | basculegion / indeedee / meowstic / oinkologne（→ `-male` / `-female`） |
+  | 開始フォルムが一意に定まらない（複数フォルムのいずれも開始しうるため bare が曖昧） | zygarde / deoxys / keldeo / hoopa / basculin / urshifu / pumpkaboo / gourgeist / squawkabilly / maushold / dudunsparce / lycanroc / oricorio / wormadam / giratina / shaymin / thundurus / tornadus / landorus / enamorus / gimmighoul / ogerpon |
+
+  開始フォルムが一意な種（rotom / tauros / 各リージョンフォルム / aegislash / mimikyu / darmanitan 等）は bare base を残す
+  （ウッウ cramorant は「のみこみ／まるのみ」で技仕様が変わるため base + うのみ / まるのみを `FORM_INCLUDE` で列挙）。オーガポンは
+  default（teal mask）を `CANONICAL_ID_OVERRIDE` で `ogerpon-teal`（オーガポン（みどりのめん））と明示し、他 3 面
+  （wellspring / hearthflame / cornerstone）と対称化する。
 - **名前の取得元分担**（languages 各ファイルの ja/en をどこから埋めるか）:
 
   | languages ファイル | 取得元 | 担当 |
@@ -136,7 +161,7 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
 取得元は経路ごとに異なるが、**SoT レイアウトと検証機構は取得元非依存で不変**（ADR 0039 の安全弁）。入力 SoT を埋める取得元のみが showdown / Serebii / PokeAPI に分かれる。
 
 - **showdown 抽出層** `scripts/showdown/*`（`dex` / `species` / `moves` / `items` / `abilities` / `mega` / `cli`）= showdown ツリーで動く抽出（`../sim/dex` import ゆえ pokeform の `tsconfig.json` `exclude`・typecheck/coverage 非対象）。CI で `pokemon-showdown/tools/` へ copy → `node build` 後に実行し、データセット別の中間 JSON を stdout に出す（`calculatePP` で実 PP=8/12/16/20 を適用済み）。
-- **showdown 転記層** `src/codegen/showdown/*-fields.ts`（純関数 + コロケーション test・カバレッジ 100%）+ `scripts/sync-showdown.ts`（薄い配線・fs/YAML I/O 専任・coverage 除外）= 中間 JSON → `*-specs.yaml` / `<reg>/*` / `languages`(en) へ **append/既存尊重**で転記。`showdown:<dataset> <regId>` で起動。**ja は書かない**（PokeAPI 経路が埋める）。**mega だけは名前（en/ja とも）を書かない**（mega 構造 + linking は書くが名前は PokeAPI `pokemon-form` 経路が担う・ADR 0043）。**species id は canonical 明示 slug へ正規化**する（`canonical-species-id.ts` の `canonicalSpeciesId`・showdown bare デフォルト → PokeAPI 明示 slug・species 専用層で汎用 `kebabId` と分離・moves/abilities/items の id は `kebabId` のまま不変・ADR 0044）。
+- **showdown 転記層** `src/codegen/showdown/*-fields.ts`（純関数 + コロケーション test・カバレッジ 100%）+ `scripts/sync-showdown.ts`（薄い配線・fs/YAML I/O 専任・coverage 除外）= 中間 JSON → `*-specs.yaml` / `<reg>/*` / `languages`(en) へ **append/既存尊重**で転記。`showdown:<dataset> <regId>` で起動。**ja は書かない**（PokeAPI 経路が埋める）。**mega だけは名前（en/ja とも）を書かない**（mega 構造 + linking は書くが名前は PokeAPI `pokemon-form` 経路が担う・ADR 0043）。**species id は canonical species id へ正規化**する（`canonical-species-id.ts` の `canonicalSpeciesId`・showdown bare デフォルト → 明示 canonical・species 専用層で汎用 `kebabId` と分離・moves/abilities/items の id は `kebabId` のまま不変・ADR 0044）。canonical は PokeAPI variety slug の冗長接尾辞を落とした **pokeform 独自の短い形**で、共通の `canonicalFormId` を構造側・名前側が通して単一 SoT へ収束させる（上記「全件名辞書」節・ADR 0044 の「PokeAPI slug 恒等」consequence を本方針で refine）。
 - **Serebii 速報層** `src/codegen/serebii/parse-*`（純関数 + コロケーション test + `__fixtures__`・カバレッジ 100%）+ `scripts/scrape-serebii.ts`（取得 + 配線・健全性 exit code 0/2/3/4）/ `scripts/sync-serebii.ts`（中間 JSON → SoT YAML・**速報ゆえ ja / en を埋める**）。`serebii:<dataset> <regId>` で起動。Serebii は latin-1 + CRLF + 数値文字参照の日本語で、文字コードと健全性 exit code を設計に含む（ADR 0040）。
 - **`scripts/fetch-pokeapi.ts`（取得・`fetch:ja-names`）/ `scripts/materialize.ts`（転記・`sync:ja-names`）** = PokeAPI `names`（ja-Hrkt + en）の **全件名 backfill 専任**（ADR 0041）。各 category の list endpoint で **全 id を列挙**し（**items だけは item-category whitelist の union で列挙 + 剪定**・ADR 0042）、`languages/*.yaml` に ja/en が揃って記録済みの id はスキップ・未記録 / 欠落 id のみ best-effort 取得（404 は skip・差分・冪等）。`materialize` は raw を決定論順（sort）で走査し、**未記録 id は新規エントリとして append**（全件名辞書化）・**既存 id は欠落欄のみ backfill**（**append/既存尊重**＝既存の著述 / 速報値は上書きせず conflict 提示）。**ただし PokeAPI が ja を持たない id（Pokémon GO 専用特性 `is_main_series:false` / LA の未ローカライズ球 / 未ローカライズの新特性 等）は「各エントリ ja/en 完備」不変条件（ADR 0041）を満たせないため append せず skip する**（必要になれば手作業で ja を補い append）。対象は `species` / `items` / `moves` / `abilities` / `types` に加え **`mega`（`pokemon-form` の `form_names` を `is_mega` で絞る 6 種目・ADR 0043）**。構造データ取得・転記は廃止（ADR 0039）。raw 必須・fail-fast（自前の存在チェックや取得誘導を持たない・raw 存在の担保は `author-static-data` skill の責務）。
 - **`scripts/generate.ts`（合成段・`generate:data`）** = specs / languages / per-reg YAML のみを変換・合成し `src/generated/` を出力。**raw 非依存**（決定論的・raw 不在でも動く・ADR 0027 の合成方針は不変）。

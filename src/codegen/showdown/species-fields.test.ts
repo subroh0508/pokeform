@@ -41,8 +41,8 @@ describe("speciesId", () => {
     expect(speciesId({ ...venusaur, name: "Rotom-Wash" })).toBe("rotom-wash");
   });
 
-  it("normalizes a showdown bare default forme to its canonical explicit slug", () => {
-    expect(speciesId({ ...venusaur, name: "Urshifu" })).toBe("urshifu-single-strike");
+  it("normalizes a showdown bare default forme to its short canonical id", () => {
+    expect(speciesId({ ...venusaur, name: "Urshifu" })).toBe("urshifu-single");
   });
 });
 

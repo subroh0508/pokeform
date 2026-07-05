@@ -31,7 +31,10 @@ import {
   megaFormCandidates,
   sortedUnion,
 } from "../src/codegen/materialize.ts";
-import { CANONICAL_ID_OVERRIDE } from "../src/codegen/showdown/canonical-species-id.ts";
+import {
+  CANONICAL_ID_OVERRIDE,
+  canonicalFormId,
+} from "../src/codegen/showdown/canonical-species-id.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const RAW = join(ROOT, "data", "raw");
@@ -68,11 +71,61 @@ const ITEM_CATEGORIES = [
 ] as const;
 
 /**
- * distinct-forms 列挙（plan 11 P4）で、同型・同種族値でも**別種族にしたい form** を明示追加する `FORM_INCLUDE`。
- * `isDistinctForm`（type/stat 差）で拾えない form をここで拾う。`greninja-battle-bond` は base（ゲッコウガ）と
- * 同型（みず/あく）・同種族値だが、きずなへんげは別種族として扱いたい（[[data-pipeline]]）。
+ * distinct-forms 列挙（plan 11 P4）で、同型・同種族値でも**別種族にしたい form** を明示追加する `FORM_INCLUDE`
+ * （キーは PokeAPI variety slug）。`isDistinctForm`（type/stat 差）で拾えない cosmetic form をここで拾う。
+ * `greninja-battle-bond` は base（ゲッコウガ）と同型・同種族値だが別種族として扱いたい。追加分（form-mapping 調整）は
+ * squawkabilly 3 色 / morpeko はらぺこ / mimikyu ばれた / maushold ３ひき / meowstic メス / keldeo かくご /
+ * dudunsparce みつふし / basculin あおすじ・しろすじ で、いずれも base と同型・同種族値ゆえ明示追加する（[[data-pipeline]]）。
  */
-const FORM_INCLUDE = new Set<string>(["greninja-battle-bond"]);
+const FORM_INCLUDE = new Set<string>([
+  "greninja-battle-bond",
+  "squawkabilly-blue-plumage",
+  "squawkabilly-yellow-plumage",
+  "squawkabilly-white-plumage",
+  "morpeko-hangry",
+  "mimikyu-busted",
+  "maushold-family-of-three",
+  "meowstic-female",
+  "keldeo-resolute",
+  "dudunsparce-three-segment",
+  "basculin-blue-striped",
+  "basculin-white-striped",
+  // ウッウ: うのみ／まるのみで「のみこみ／まるのみ」技の仕様が変わる（同型・同種族値だが別 form として列挙する）。
+  "cramorant-gulping",
+  "cramorant-gorging",
+]);
+
+/**
+ * distinct-forms 列挙から**明示除外**する variety slug（キーは PokeAPI variety slug）。base（default）とは
+ * type/stat が異なる or default が明示 slug を持つが、pokeform では別種族にしない form。`EXCLUDED_FORM` 正規表現で
+ * 表せない個別除外をここに置く:
+ * - メテノの「XXいろのコア」7 色: base(meteor) と種族値が違い `isDistinctForm` で拾われるが対戦上メテノ 1 種へ畳む
+ *   （meteor は `minior-meteor` で残す）。
+ * - パイロール（雌雄）・シャリタツ（3 姿）の **default 明示 slug**（`pyroar-male` / `tatsugiri-curly`）: 姿差のみで
+ *   別種族にしない。default explicit slug は canonical-form として拾われるため、非デフォルト（cosmetic）と併せて base
+ *   （`pyroar` / `tatsugiri`）へ畳むには default 側も明示除外する（[[data-pipeline]]）。
+ */
+const FORM_EXCLUDE = new Set<string>([
+  "minior-red",
+  "minior-orange",
+  "minior-yellow",
+  "minior-green",
+  "minior-blue",
+  "minior-indigo",
+  "minior-violet",
+  "pyroar-male",
+  "tatsugiri-curly",
+]);
+
+/**
+ * PokeAPI に variety が無い「地方フォルムの base」を合成注入する（`{ id → { ja, en } }`）。distinct 列挙は
+ * variety をキーにするため、standard / zen サブフォルムを持つ地方フォルムの base id（Unovan `darmanitan` と対称な
+ * `darmanitan-galar`）は変種として現れず生成されない。ここで base 名を直接 raw 化して補い、`-standard` / `-zen` の
+ * サブフォルムと並べて列挙する（bare base + standard + zen の対称構造・[[data-pipeline]]）。
+ */
+const SYNTHETIC_BASE_FORMS: Record<string, { ja: string; en: string }> = {
+  "darmanitan-galar": { ja: "ヒヒダルマ（ガラルのすがた）", en: "Darmanitan (Galarian Form)" },
+};
 
 /**
  * distinct-forms 列挙から除外する form サフィックス / セグメント。`-mega[-x|-y|-z]` は mega.yaml 経路（ADR 0043）、
@@ -83,17 +136,46 @@ const FORM_INCLUDE = new Set<string>(["greninja-battle-bond"]);
 const EXCLUDED_FORM = /-(mega(-[xyz])?|gmax|primal|starter)$|-totem(-|$)/;
 
 /**
- * PokeAPI に ja が無い / 名前が衝突する form の**手動 override**（合成結果より優先・plan 11 P4）。canonical id で
- * キーイングし、`{ ja?, en? }` を欄ごとに合成名へ上書きする（欄を省けば合成名が残る）。
+ * PokeAPI に ja が無い / 名前が衝突する / 独自呼称を与えたい form の**手動 override**（合成結果より優先・
+ * plan 11 P4 + form-mapping 調整）。**短い canonical id**（`canonicalFormId` 適用後）でキーイングし、`{ ja?, en? }` を
+ * 欄ごとに合成名へ上書きする（欄を省けば合成名が残る）。
  * - `greninja-battle-bond`: form_names 空で合成不能 → ja/en を著述（きずなへんげ）。
- * - `tauros-paldea-*-breed`: form_names.ja が 3 種とも「パルデアのすがた」で衝突 → breed 別 ja を著述（en は form_names
- *   の "Combat/Blaze/Aqua Breed" で自動区別されるため合成に委ねる）。
+ * - `tauros-paldea-*`: form_names.ja が 3 種とも「パルデアのすがた」で衝突 → breed 別 ja + en（`(Paldean Form XXX
+ *   Breed)`）を著述。en も 3 種同綴りゆえ手動で区別する。
+ * - `pumpkaboo-*` / `gourgeist-*`: サイズ ja を独自呼称（小さい順 こだま/ちゅうだま/おおだま/ギガだま）で著述（en は合成）。
+ * - `darmanitan-galar-*`: form_names.ja がモード名のみ（ガラル文脈欠落）→ ガラル + モードを著述。base
+ *   `darmanitan-galar`（ヒヒダルマ（ガラルのすがた））は `SYNTHETIC_BASE_FORMS` で別途注入する。
  */
 const MANUAL_NAME_OVERRIDE: Record<string, { ja?: string; en?: string }> = {
   "greninja-battle-bond": { ja: "ゲッコウガ（きずなへんげ）", en: "Greninja (Battle Bond)" },
-  "tauros-paldea-combat-breed": { ja: "ケンタロス（パルデアのすがた・コンバット種）" },
-  "tauros-paldea-blaze-breed": { ja: "ケンタロス（パルデアのすがた・ブレイズ種）" },
-  "tauros-paldea-aqua-breed": { ja: "ケンタロス（パルデアのすがた・アクア種）" },
+  "tauros-paldea-combat": {
+    ja: "ケンタロス（パルデアのすがた・コンバットしゅ）",
+    en: "Tauros (Paldean Form Combat Breed)",
+  },
+  "tauros-paldea-blaze": {
+    ja: "ケンタロス（パルデアのすがた・ブレイズしゅ）",
+    en: "Tauros (Paldean Form Blaze Breed)",
+  },
+  "tauros-paldea-aqua": {
+    ja: "ケンタロス（パルデアのすがた・ウォーターしゅ）",
+    en: "Tauros (Paldean Form Aqua Breed)",
+  },
+  "pumpkaboo-small": { ja: "バケッチャ（こだましゅ）" },
+  "pumpkaboo-average": { ja: "バケッチャ（ちゅうだましゅ）" },
+  "pumpkaboo-large": { ja: "バケッチャ（おおだましゅ）" },
+  "pumpkaboo-super": { ja: "バケッチャ（ギガだましゅ）" },
+  "gourgeist-small": { ja: "パンプジン（こだましゅ）" },
+  "gourgeist-average": { ja: "パンプジン（ちゅうだましゅ）" },
+  "gourgeist-large": { ja: "パンプジン（おおだましゅ）" },
+  "gourgeist-super": { ja: "パンプジン（ギガだましゅ）" },
+  "darmanitan-galar-standard": {
+    ja: "ヒヒダルマ（ガラルのすがた・ノーマルモード）",
+    en: "Darmanitan (Galarian Form Standard Mode)",
+  },
+  "darmanitan-galar-zen": {
+    ja: "ヒヒダルマ（ガラルのすがた・ダルマモード）",
+    en: "Darmanitan (Galarian Form Zen Mode)",
+  },
 };
 
 /** languages 名前マップ（id → { ja?, en? }）。 */
@@ -269,10 +351,11 @@ const distinctBasis = (base: FormShape, form: FormShape, forced: boolean): strin
 
 /**
  * distinct-forms 列挙（plan 11 P4・`SPECIES_FORMS` whitelist を置換）。各 `pokemon-species` の varieties を辿り、base
- * （default variety）と**タイプ or 種族値が異なる** variety を採用（`isDistinctForm` + `FORM_INCLUDE`）、canonical id
- * （PokeAPI slug・default の bare→explicit 再キーは `CANONICAL_ID_OVERRIDE`）でキーイングして含有合成した ja/en を
- * species raw へ書く。純装飾（同型・同種族値）と `-mega`/`-gmax`/`-primal`/`-totem`/`-starter` は除外。既に ja/en 完備の
- * form は skip（差分・冪等）。決定記録は manifest に残し PR レビュー表へ供する。
+ * （default variety）と**タイプ or 種族値が異なる** variety を採用（`isDistinctForm` + `FORM_INCLUDE`）、**短い canonical id**
+ * （`canonicalFormId` で冗長接尾辞を落とす・bare default の明示分割は `CANONICAL_ID_OVERRIDE`）でキーイングして含有合成した
+ * ja/en を species raw へ書く。純装飾（同型・同種族値）と `-mega`/`-gmax`/`-primal`/`-totem`/`-starter`（`EXCLUDED_FORM`）・
+ * 個別除外（`FORM_EXCLUDE`＝メテノのコア）は除外。既に ja/en 完備の form は skip（差分・冪等）。決定記録は manifest に残し
+ * PR レビュー表へ供する。canonical は構造側（`canonicalSpeciesId`）と同じ `canonicalFormId` を通して単一 SoT へ収束する。
  */
 async function fetchDistinctForms(speciesIds: string[], speciesMap: LangMap): Promise<void> {
   const baseNames = new Map<string, { ja?: string; en?: string }>();
@@ -282,26 +365,26 @@ async function fetchDistinctForms(speciesIds: string[], speciesMap: LangMap): Pr
     const varieties = detail?.varieties ?? [];
     if (varieties.length <= 1) continue; // 単一 variety は form 無し（大多数の種）
     baseNames.set(speciesId, extractNames({ names: detail?.names }));
-    // 採用候補（除外パターン外）を key へ写し、既に ja/en 完備なものを落とす（未処理があるときだけ network を叩く）。
-    const pending: { slug: string; key: string; isDefault: boolean }[] = [];
+    // 採用候補（除外パターン外）を canonical key へ写し、既に ja/en 完備なものを落とす（未処理があるときだけ network を叩く）。
+    const pending: { slug: string; key: string; isDefault: boolean; bareOverride: boolean }[] = [];
     for (const v of varieties) {
       const slug = v.pokemon.name;
       if (EXCLUDED_FORM.test(slug)) continue;
+      if (FORM_EXCLUDE.has(slug)) continue; // 個別除外（メテノのコア等・別種族にしない）
       let key: string;
-      if (v.is_default) {
-        if (slug === speciesId) {
-          const ov = CANONICAL_ID_OVERRIDE[slug];
-          if (ov === undefined) continue; // bare default は base 種族名で足りる
-          key = ov; // gimmighoul → gimmighoul-chest（canonical-override）
-        } else {
-          key = slug; // explicit default slug（basculegion-male / deoxys-normal / urshifu-single-strike）
-        }
+      let bareOverride = false;
+      if (v.is_default && slug === speciesId) {
+        const ov = CANONICAL_ID_OVERRIDE[slug];
+        if (ov === undefined) continue; // bare default は base 種族名で足りる
+        key = ov; // gimmighoul → gimmighoul-chest / hoopa → hoopa-confined（bare→明示分割）
+        bareOverride = true;
       } else {
-        key = slug;
+        // explicit default slug / non-default を短い canonical へ正規化（urshifu-single-strike → urshifu-single 等）。
+        key = canonicalFormId(slug);
       }
       const cur = speciesMap[key] ?? {};
       if (cur.ja && cur.en) continue; // 既に命名済み（差分・冪等）
-      pending.push({ slug, key, isDefault: v.is_default });
+      pending.push({ slug, key, isDefault: v.is_default, bareOverride });
     }
     if (pending.length === 0) continue;
     const defaultV = varieties.find((v) => v.is_default);
@@ -311,7 +394,7 @@ async function fetchDistinctForms(speciesIds: string[], speciesMap: LangMap): Pr
     if (basePoke === null) continue;
     const baseShape = toShape(basePoke);
     // 兄弟間の純装飾（同型・同種族値の色 / 模様違い）を畳む署名集合。base と type/stat が違っても互いに同型・同種族値な
-    // 非デフォルト variety 群（minior の 7 色コア等）は 1 代表だけ採用する（cosmetic-color の膨張を機械的に抑える・P4）。
+    // 非デフォルト variety 群（minior の 7 色メテオ等）は 1 代表だけ採用する（cosmetic-color の膨張を機械的に抑える・P4）。
     const seenShapes = new Set<string>();
     for (const p of pending) {
       // default variety の form / types-stats は base（default poke）から、non-default は自身の詳細から取る。
@@ -348,7 +431,7 @@ async function fetchDistinctForms(speciesIds: string[], speciesMap: LangMap): Pr
       const decision: FormDecision["decision"] =
         p.key in MANUAL_NAME_OVERRIDE
           ? "manual"
-          : p.isDefault && p.key !== p.slug
+          : p.bareOverride
             ? "canonical-override"
             : formJa.length > 0 && bn.ja !== undefined && formJa.includes(bn.ja)
               ? "passthrough"
@@ -422,6 +505,13 @@ async function main(): Promise<void> {
   // 含有合成した ja/en を species raw へ書く（`SPECIES_FORMS` whitelist を廃止・plan 11 P4）。
   const speciesMap = readLangMap("species.yaml", "species");
   await fetchDistinctForms(speciesIds, speciesMap);
+  // PokeAPI に variety が無い地方フォルムの base（darmanitan-galar 等）を直接 raw 化して補う（差分・冪等）。
+  for (const [id, names] of Object.entries(SYNTHETIC_BASE_FORMS)) {
+    const cur = speciesMap[id] ?? {};
+    if (cur.ja && cur.en) continue;
+    writeComposedNames(id, names.ja, names.en);
+    console.log(`[fetch] synthetic-base ${id} (${names.ja} / ${names.en})`);
+  }
   console.log("[fetch] done (names)");
 }
 

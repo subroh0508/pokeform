@@ -31,6 +31,7 @@ import {
   planFields,
   pruneToKeep,
 } from "../src/codegen/materialize.ts";
+import { SUPPRESS_BASE_SPECIES } from "../src/codegen/showdown/canonical-species-id.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const RAW = join(ROOT, "data", "raw");
@@ -104,6 +105,7 @@ const backfillNames = (
   category: string,
   extract: (r: RawNamed) => { ja?: string; en?: string },
   needs: (e: { ja?: string; en?: string }) => boolean,
+  skip: (id: string) => boolean = () => false,
 ): number => {
   // from-scratch 復元（`data/languages/*` 完全削除）でも scaffold / seed 無しで動くよう、欠損ファイルは先頭
   // コメントだけの doc を起こし、map ノードは block スタイルで get-or-create する（純関数側・plan 11 P2）。
@@ -114,6 +116,7 @@ const backfillNames = (
   const map = getOrCreateBlockMap(doc, mapKey);
   let filled = 0;
   for (const id of listRawIds(category)) {
+    if (skip(id)) continue; // 性別二形の bare base 抑制等（male/female form は素通り）
     const json = rawOpt(category, id);
     if (json === null) continue;
     const node = map.get(id) as YAMLMap | undefined;
@@ -174,6 +177,8 @@ const speciesFilled = backfillNames(
   "pokemon-species",
   extractNames,
   needsJaEn,
+  // bare base 名を出さない種（性別二形 / 開始フォルム非一意）は skip する（[[canonical-species-id]]）。
+  (id) => SUPPRESS_BASE_SPECIES.has(id),
 );
 const itemsFilled = backfillNames("items.yaml", "items", "item", extractNames, needsJaEn);
 const movesFilled = backfillNames("moves.yaml", "moves", "move", extractNames, needsJaEn);
