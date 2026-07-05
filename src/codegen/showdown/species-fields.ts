@@ -7,6 +7,7 @@
  * `scripts/sync-showdown.ts` が担い、本モジュールは純変換に専念する。
  */
 
+import { canonicalSpeciesId } from "./canonical-species-id.ts";
 import { kebabId, type ShowdownBaseStats, type StatsTable, toStatsTable, toTypeId } from "./ids.ts";
 
 /** 種族中間レコード（`scripts/showdown/species.ts` の SpeciesRecord 相当・抽出層非依存に再定義）。 */
@@ -42,9 +43,9 @@ export function orderedAbilityIds(abilities: { [slot: string]: string }): string
   return ids;
 }
 
-/** 種族の安定 id（name 由来 kebab）。 */
+/** 種族の canonical id（name 由来・明示 slug へ正規化・[`canonical-species-id`](./canonical-species-id.ts)）。 */
 export function speciesId(s: SpeciesInput): string {
-  return kebabId(s.name);
+  return canonicalSpeciesId(s.name);
 }
 
 /** species-specs.yaml の構造フィールドを組む。 */

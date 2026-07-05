@@ -40,6 +40,10 @@ describe("speciesId", () => {
   it("derives a kebab id from the display name", () => {
     expect(speciesId({ ...venusaur, name: "Rotom-Wash" })).toBe("rotom-wash");
   });
+
+  it("normalizes a showdown bare default forme to its canonical explicit slug", () => {
+    expect(speciesId({ ...venusaur, name: "Urshifu" })).toBe("urshifu-single-strike");
+  });
 });
 
 describe("speciesStructuralFields", () => {
