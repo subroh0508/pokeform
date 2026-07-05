@@ -39,6 +39,8 @@ adr:
 
 **種族値が一意に定まる粒度 = 1 種族**。フォルム / リージョン / メガで種族値が変わるものは別 `SpeciesId`（kebab-case の安定キー。例 `charizard`, `charizard-mega-x`, `rotom-wash`, `tauros-paldea-aqua`）。
 
+**species id 正本 = 明示 slug（PokeAPI variety slug 準拠の canonical）**（ADR 0044）。showdown はデフォルトフォルムを bare id（`urshifu` / `deoxys`）で持つが、canonical は明示 slug（`urshifu-single-strike` / `deoxys-normal`）に定める（対等フォルムの曖昧さ回避 + 名前側の PokeAPI slug 恒等突合）。showdown 抽出 id → canonical の正規化は構造パイプライン 1 箇所（`src/codegen/showdown/canonical-species-id.ts` の純関数・species 専用層で `kebabId` と分離）が担い、移入元の綴りのみを写す（構造 = baseStats / types / legality は showdown=正で不変・[[data-pipeline]]）。
+
 ## 日英名と逆引き
 
 - すべて**英名（kebab-case の安定 ID）を型キー**にする（改名されにくい安定性のため）。

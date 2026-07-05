@@ -75,6 +75,7 @@ pokeform の重要なアーキテクチャ決定を**不変の連番ログ**と�
 | [0041](./0041-languages-full-name-dictionary.md) | languages を reg 非依存の全件名辞書化し generate の名前突き合わせを bijection → superset（specs ⊆ languages）へ緩和・PokeAPI 名前取得 workflow 新設（ADR 0035 の id 集合一致不変条件を refine・中核 3 軸直交は不変） | Accepted |
 | [0042](./0042-items-battle-holdable-whitelist.md) | items だけ PokeAPI item-category whitelist の union で列挙し対戦持ち物 ~270 件へ絞る（属性ベースは不採用・他 4 種は list 全件のまま・ADR 0041 の全件辞書取得方針を items のみ refine・中核は不変） | Accepted |
 | [0043](./0043-mega-names-from-pokeapi-form-names.md) | メガ名（languages/mega.yaml の ja/en）を showdown/手作業から PokeAPI(pokemon-form form_names・is_mega) へ一本化し 6 種目の全件名辞書へ・showdown mega 名ルート（megaEnName）削除（ADR 0041/0040 の mega 名取得元分担を refine・mega 構造 + linking は showdown=正で不変） | Accepted |
+| [0044](./0044-canonical-species-id-explicit-slug.md) | species id 正本を明示 slug（PokeAPI 準拠 canonical）に定め showdown 抽出 id を canonical へ正規化する（kebabId を species 専用層から分離・3 種マップ default→明示 / Class C 語彙差 / CANONICAL_ID_OVERRIDE・ADR 0041 の form 扱いを refine / ADR 0035・0039 の id 正本を明確化） | Accepted |
 
 > 一覧は ADR 追加・Status 変更のたびに更新します。`adr-new` は新規 ADR をこの表に追記します。
 
