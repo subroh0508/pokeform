@@ -22,8 +22,9 @@ describe("canonicalFormId", () => {
     expect(canonicalFormId("maushold-family-of-three")).toBe("maushold-three");
   });
 
-  it("applies an explicit rename (minior meteor color drop)", () => {
+  it("applies explicit renames (minior meteor color drop / galar darmanitan base)", () => {
     expect(canonicalFormId("minior-red-meteor")).toBe("minior-meteor");
+    expect(canonicalFormId("darmanitan-galar-standard")).toBe("darmanitan-galar");
   });
 
   it("passes a slug with no redundant suffix through unchanged (idempotent)", () => {

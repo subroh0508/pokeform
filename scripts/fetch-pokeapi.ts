@@ -115,6 +115,9 @@ const FORM_EXCLUDE = new Set<string>([
   "minior-violet",
   "pyroar-male",
   "tatsugiri-curly",
+  // ガラルヒヒダルマは galar-standard を base `darmanitan-galar` へリネームする（FORM_SLUG_RENAME）。Unovan の
+  // standard は base `darmanitan`（species list）と冗長ゆえ除外し、各系統 base + ダルマモード（zen）の対称にする。
+  "darmanitan-standard",
 ]);
 
 /**
@@ -133,7 +136,8 @@ const EXCLUDED_FORM = /-(mega(-[xyz])?|gmax|primal|starter)$|-totem(-|$)/;
  * - `tauros-paldea-*`: form_names.ja が 3 種とも「パルデアのすがた」で衝突 → breed 別 ja + en（`(Paldean Form XXX
  *   Breed)`）を著述。en も 3 種同綴りゆえ手動で区別する。
  * - `pumpkaboo-*` / `gourgeist-*`: サイズ ja を独自呼称（小さい順 こだま/ちゅうだま/おおだま/ギガだま）で著述（en は合成）。
- * - `darmanitan-galar-*`: form_names.ja がモード名のみ（ガラル文脈欠落）→ ガラル + モードを著述。
+ * - `darmanitan-galar-zen`: form_names.ja が「ダルマモード」のみ（ガラル文脈欠落）→ ガラル + モードを著述。
+ *   galar-standard は base `darmanitan-galar` へリネーム（FORM_SLUG_RENAME）され ヒヒダルマ（ガラルのすがた）に合成されるため override 不要。
  */
 const MANUAL_NAME_OVERRIDE: Record<string, { ja?: string; en?: string }> = {
   "greninja-battle-bond": { ja: "ゲッコウガ（きずなへんげ）", en: "Greninja (Battle Bond)" },
@@ -157,10 +161,6 @@ const MANUAL_NAME_OVERRIDE: Record<string, { ja?: string; en?: string }> = {
   "gourgeist-average": { ja: "パンプジン（ちゅうだましゅ）" },
   "gourgeist-large": { ja: "パンプジン（おおだましゅ）" },
   "gourgeist-super": { ja: "パンプジン（ギガだましゅ）" },
-  "darmanitan-galar-standard": {
-    ja: "ヒヒダルマ（ガラルのすがた・ノーマルモード）",
-    en: "Darmanitan (Galarian Form Standard Mode)",
-  },
   "darmanitan-galar-zen": {
     ja: "ヒヒダルマ（ガラルのすがた・ダルマモード）",
     en: "Darmanitan (Galarian Form Zen Mode)",

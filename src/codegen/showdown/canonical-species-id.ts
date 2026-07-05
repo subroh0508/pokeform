@@ -77,11 +77,14 @@ export const CANONICAL_ID_OVERRIDE: Record<string, string> = {
 };
 
 /**
- * 接尾辞除去では表せない個別リネーム（PokeAPI slug → 短い canonical）。メテノの代表 meteor フォルムを
- * `minior-red-meteor`（色付き）から色を落とした `minior-meteor` に畳む（7 色メテオは同型・代表 1 件のみ残す）。
+ * 接尾辞除去では表せない個別リネーム（PokeAPI slug → 短い canonical）。
+ * - メテノの代表 meteor フォルムを `minior-red-meteor`（色付き）から色を落とした `minior-meteor` に畳む（7 色メテオは同型）。
+ * - ガラルヒヒダルマの standard（= ガラル系統の base / 開始形態）を `darmanitan-galar` に写す。PokeAPI に galar 種は無く
+ *   galar-standard が実質の base ゆえ、これを Unovan `darmanitan` と対称な base id にする（zen は `darmanitan-galar-zen`）。
  */
 const FORM_SLUG_RENAME: Record<string, string> = {
   "minior-red-meteor": "minior-meteor",
+  "darmanitan-galar-standard": "darmanitan-galar",
 };
 
 /**
