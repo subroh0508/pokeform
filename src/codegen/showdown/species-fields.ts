@@ -14,6 +14,8 @@ import { kebabId, type ShowdownBaseStats, type StatsTable, toStatsTable, toTypeI
 export interface SpeciesInput {
   num: number;
   name: string;
+  /** base 種族の showdown 表示名（cosmetic 模様フォルムを name SoT へ畳むため）。 */
+  baseSpecies: string;
   types: string[];
   baseStats: ShowdownBaseStats;
   abilities: { [slot: string]: string };
@@ -46,6 +48,25 @@ export function orderedAbilityIds(abilities: { [slot: string]: string }): string
 /** 種族の canonical id（name 由来・明示 slug へ正規化・[`canonical-species-id`](./canonical-species-id.ts)）。 */
 export function speciesId(s: SpeciesInput): string {
   return canonicalSpeciesId(s.name);
+}
+
+/**
+ * 名前 SoT（languages/species.yaml）が **cosmetic 模様フォルムを base へ畳んでいる結果を流用**して roster/specs id を
+ * 決める。showdown は vivillon の模様（`vivillon-archipelago` 等）を個別 species として emit するが、languages は
+ * PokeAPI の含有判定合成（`isDistinctForm`）で純装飾を除外し base（`vivillon`）だけを持つ。よって:
+ * - `canonicalSpeciesId(name)` が languages に**在れば**そのまま採用（distinct forme = rotom-wash / FORM_INCLUDE の
+ *   squawkabilly 各色 / floette-eternal 等は languages に在るので畳まれない）。
+ * - **無ければ** languages が畳んだ cosmetic ゆえ base（`canonicalSpeciesId(baseSpecies)`）へ畳む（base は languages に
+ *   在る）。これで構造側の id 集合が名前側（languages）に一致する。
+ * - base も languages に無ければ **新規 distinct 種**（手順3・cosmetic と区別）ゆえ畳まず forme id を返し generate で
+ *   名前欠落として顕在化させる（推測で base へ潰さない）。
+ * `inLanguages` は languages/species.yaml の id 集合メンバシップ（呼び出し側 `sync-showdown.ts` が langMap から渡す）。
+ */
+export function resolveSpeciesId(s: SpeciesInput, inLanguages: (id: string) => boolean): string {
+  const id = speciesId(s);
+  if (inLanguages(id)) return id;
+  const baseId = canonicalSpeciesId(s.baseSpecies);
+  return inLanguages(baseId) ? baseId : id;
 }
 
 /** species-specs.yaml の構造フィールドを組む。 */

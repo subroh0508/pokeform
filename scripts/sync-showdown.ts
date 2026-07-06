@@ -40,9 +40,9 @@ import {
   moveStatsFields,
 } from "../src/codegen/showdown/moves-fields.ts";
 import {
+  resolveSpeciesId,
   type SpeciesInput,
   speciesEnName,
-  speciesId,
   speciesMoveIds,
   speciesStructuralFields,
 } from "../src/codegen/showdown/species-fields.ts";
@@ -126,9 +126,13 @@ function syncSpecies(regId: string, json: Record<string, unknown>): string {
   const movesDoc = read(join(CH, regId, "species-moves.yaml"));
   const movesMap = movesDoc.get("moves") as YAMLMap;
 
+  // cosmetic 模様フォルム（`vivillon-archipelago` 等）を name SoT（languages）の畳み結果へ揃えて base へ潰す。
+  // languages メンバシップを流用（`resolveSpeciesId`・[[data-pipeline]]）。
+  const idOf = (rec: SpeciesInput): string => resolveSpeciesId(rec, (id) => langMap.has(id));
+
   let filled = 0;
   for (const rec of records) {
-    const id = speciesId(rec);
+    const id = idOf(rec);
     filled += applyFill(
       specsDoc,
       ensureEntry(specsDoc, specsMap, id),
@@ -139,7 +143,7 @@ function syncSpecies(regId: string, json: Record<string, unknown>): string {
     unionSeq(movesDoc, movesMap, id, speciesMoveIds(rec));
   }
   // roster は species id の sorted union。
-  unionSeq(rosterDoc, rosterDoc.contents as YAMLMap, "species", records.map(speciesId));
+  unionSeq(rosterDoc, rosterDoc.contents as YAMLMap, "species", records.map(idOf));
 
   write(join(CH, "species-specs.yaml"), specsDoc);
   write(join(LANG, "species.yaml"), langDoc);
