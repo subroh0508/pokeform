@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   orderedAbilityIds,
+  resolveSpeciesId,
   type SpeciesInput,
   speciesEnName,
   speciesId,
@@ -11,6 +12,7 @@ import {
 const venusaur: SpeciesInput = {
   num: 3,
   name: "Venusaur",
+  baseSpecies: "Venusaur",
   types: ["Grass", "Poison"],
   baseStats: { hp: 80, atk: 82, def: 83, spa: 100, spd: 100, spe: 80 },
   abilities: { 0: "Overgrow", H: "Chlorophyll" },
@@ -43,6 +45,34 @@ describe("speciesId", () => {
 
   it("normalizes a showdown bare default forme to its short canonical id", () => {
     expect(speciesId({ ...venusaur, name: "Urshifu" })).toBe("urshifu-single");
+  });
+});
+
+describe("resolveSpeciesId", () => {
+  it("keeps the canonical id when it exists in languages (distinct forme)", () => {
+    // rotom-wash は languages に在る distinct forme ゆえ畳まない。
+    const inLanguages = (id: string): boolean => id === "rotom-wash";
+    expect(
+      resolveSpeciesId({ ...venusaur, name: "Rotom-Wash", baseSpecies: "Rotom" }, inLanguages),
+    ).toBe("rotom-wash");
+  });
+
+  it("folds a cosmetic forme absent from languages down to its base", () => {
+    // languages が純装飾（vivillon 模様）を除外し base だけ持つ結果を流用して base へ畳む。
+    const inLanguages = (id: string): boolean => id === "vivillon";
+    expect(
+      resolveSpeciesId(
+        { ...venusaur, name: "Vivillon-Archipelago", baseSpecies: "Vivillon" },
+        inLanguages,
+      ),
+    ).toBe("vivillon");
+  });
+
+  it("returns the forme id unfolded when neither it nor its base is in languages (new id)", () => {
+    // 新規 distinct 種は base も languages に無く、cosmetic と区別して畳まず generate へ顕在化させる。
+    expect(
+      resolveSpeciesId({ ...venusaur, name: "Newmon", baseSpecies: "Newmon" }, () => false),
+    ).toBe("newmon");
   });
 });
 

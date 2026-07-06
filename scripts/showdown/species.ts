@@ -14,6 +14,8 @@ export interface SpeciesRecord {
   id: string;
   num: number;
   name: string;
+  /** base 種族の showdown 表示名（cosmetic 模様フォルムを name SoT へ揃えて畳むため・codegen が使う）。 */
+  baseSpecies: string;
   types: string[];
   baseStats: { hp: number; atk: number; def: number; spa: number; spd: number; spe: number };
   abilities: { [slot: string]: string };
@@ -29,6 +31,7 @@ export function extractSpecies(dex: ModdedDex): SpeciesRecord[] {
       id: species.id,
       num: species.num,
       name: species.name,
+      baseSpecies: species.baseSpecies,
       types: species.types,
       baseStats: species.baseStats,
       abilities: { ...species.abilities },
