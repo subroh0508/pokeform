@@ -122,11 +122,24 @@ export const CANONICAL_ID_OVERRIDE: Record<string, string> = {
 };
 
 /**
- * 接尾辞除去では表せない個別リネーム（PokeAPI slug → 短い canonical）。メテノの代表 meteor フォルムを
- * `minior-red-meteor`（色付き）から色を落とした `minior-meteor` に畳む（7 色メテオは同型・代表 1 件のみ残す）。
+ * 接尾辞除去では表せない個別リネーム（slug → 短い canonical）。両経路（構造側 `canonicalSpeciesId` の
+ * passthrough / 名前側 PokeAPI slug / mega 側 `megaId`）が通る `canonicalFormId` の curated マップ。
+ * - メテノの代表 meteor フォルムを `minior-red-meteor`（色付き）から色を落とした `minior-meteor` に畳む
+ *   （7 色メテオは同型・代表 1 件のみ残す）。
+ * - **性別二形**（showdown の女 forme id `<種>-f`）を languages（PokeAPI 由来）の `-female` へ揃える。男は
+ *   bare→`-male` を `DEFAULT_TO_EXPLICIT` が処理済みゆえ女のみ。gender **メガ**（`meowstic-f-mega` /
+ *   `meowstic-m-mega`）も同じ curated 経路で `languages/mega.yaml`（`-female-mega` / `-male-mega`）へ揃える。
+ *   PokeAPI 名前側は `-female` / `-female-mega` を直接 emit するため本マップのキー（`-f` / `-f-mega`）とは
+ *   衝突せず、showdown 経路だけを写す。
  */
 const FORM_SLUG_RENAME: Record<string, string> = {
   "minior-red-meteor": "minior-meteor",
+  "basculegion-f": "basculegion-female",
+  "meowstic-f": "meowstic-female",
+  "indeedee-f": "indeedee-female",
+  "oinkologne-f": "oinkologne-female",
+  "meowstic-f-mega": "meowstic-female-mega",
+  "meowstic-m-mega": "meowstic-male-mega",
 };
 
 /**

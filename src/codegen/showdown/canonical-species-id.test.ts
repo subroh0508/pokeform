@@ -26,6 +26,18 @@ describe("canonicalFormId", () => {
     expect(canonicalFormId("minior-red-meteor")).toBe("minior-meteor");
   });
 
+  it("normalizes the showdown gender forme suffix to the languages -female id", () => {
+    expect(canonicalFormId("basculegion-f")).toBe("basculegion-female");
+    expect(canonicalFormId("meowstic-f")).toBe("meowstic-female");
+    expect(canonicalFormId("indeedee-f")).toBe("indeedee-female");
+    expect(canonicalFormId("oinkologne-f")).toBe("oinkologne-female");
+  });
+
+  it("normalizes the showdown gender mega forme suffix to the languages id", () => {
+    expect(canonicalFormId("meowstic-f-mega")).toBe("meowstic-female-mega");
+    expect(canonicalFormId("meowstic-m-mega")).toBe("meowstic-male-mega");
+  });
+
   it("passes a slug with no redundant suffix through unchanged (idempotent)", () => {
     expect(canonicalFormId("raichu-alola")).toBe("raichu-alola");
     expect(canonicalFormId("rotom-wash")).toBe("rotom-wash");
@@ -50,6 +62,13 @@ describe("canonicalSpeciesId", () => {
     expect(canonicalSpeciesId("Giratina")).toBe("giratina-altered");
     expect(canonicalSpeciesId("Keldeo")).toBe("keldeo-ordinary");
     expect(canonicalSpeciesId("Basculin")).toBe("basculin-red");
+  });
+
+  it("maps the showdown female gender forme to its -female languages id", () => {
+    expect(canonicalSpeciesId("Basculegion-F")).toBe("basculegion-female");
+    expect(canonicalSpeciesId("Meowstic-F")).toBe("meowstic-female");
+    expect(canonicalSpeciesId("Indeedee-F")).toBe("indeedee-female");
+    expect(canonicalSpeciesId("Oinkologne-F")).toBe("oinkologne-female");
   });
 
   it("rewrites a Class C vocabulary difference to the canonical spelling", () => {

@@ -34,10 +34,40 @@ const garchompMega: MegaInput = {
   ability: "Sand Force",
 };
 
+// gender メガ。showdown は baseSpecies を bare `Meowstic`（= 男）で持ち、name に性別 forme を含む。
+const meowsticFemaleMega: MegaInput = {
+  num: 678,
+  name: "Meowstic-F-Mega",
+  baseSpecies: "Meowstic",
+  types: ["Psychic", "Fairy"],
+  baseStats: { hp: 74, atk: 48, def: 76, spa: 103, spd: 106, spe: 124 },
+  ability: "Competitive",
+};
+
+const meowsticMaleMega: MegaInput = {
+  num: 678,
+  name: "Meowstic-M-Mega",
+  baseSpecies: "Meowstic",
+  types: ["Psychic", "Fairy"],
+  baseStats: { hp: 74, atk: 48, def: 76, spa: 103, spd: 106, spe: 124 },
+  ability: "Prankster",
+};
+
 describe("megaId / megaBaseSpeciesId", () => {
   it("derive kebab ids from names", () => {
     expect(megaId(charizardMegaX)).toBe("charizard-mega-x");
     expect(megaBaseSpeciesId(charizardMegaX)).toBe("charizard");
+  });
+
+  it("normalizes gender mega ids to the languages -female / -male canonical", () => {
+    expect(megaId(meowsticFemaleMega)).toBe("meowstic-female-mega");
+    expect(megaId(meowsticMaleMega)).toBe("meowstic-male-mega");
+  });
+
+  it("routes the bare gender base species through canonicalSpeciesId (= -male)", () => {
+    // showdown の baseSpecies は両性とも bare `Meowstic`（= 男）ゆえ base linking は `meowstic-male` に揃う。
+    expect(megaBaseSpeciesId(meowsticFemaleMega)).toBe("meowstic-male");
+    expect(megaBaseSpeciesId(meowsticMaleMega)).toBe("meowstic-male");
   });
 });
 
@@ -50,6 +80,10 @@ describe("megaStructuralFields", () => {
       ability: "tough-claws",
       baseSpecies: "charizard",
     });
+  });
+
+  it("writes the canonical base species id for a gender mega", () => {
+    expect(megaStructuralFields(meowsticFemaleMega).baseSpecies).toBe("meowstic-male");
   });
 });
 
@@ -64,6 +98,12 @@ describe("groupMegaByBase", () => {
   it("dedupes a repeated mega forme under the same base", () => {
     expect(groupMegaByBase([garchompMega, garchompMega])).toEqual({
       garchomp: ["garchomp-mega"],
+    });
+  });
+
+  it("groups both gender megas under the canonical -male base", () => {
+    expect(groupMegaByBase([meowsticMaleMega, meowsticFemaleMega])).toEqual({
+      "meowstic-male": ["meowstic-female-mega", "meowstic-male-mega"],
     });
   });
 });
