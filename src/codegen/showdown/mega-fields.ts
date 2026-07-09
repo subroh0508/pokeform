@@ -7,6 +7,7 @@
  * baseSpecies で group 化して導出し、species-specs.megaEvolvesTo と <reg>/mega.yaml の双方で使う。
  */
 
+import { canonicalFormId, canonicalSpeciesId } from "./canonical-species-id.ts";
 import { kebabId, type ShowdownBaseStats, type StatsTable, toStatsTable, toTypeId } from "./ids.ts";
 
 /** メガ中間レコード（`scripts/showdown/mega.ts` の MegaRecord 相当・抽出層非依存に再定義）。 */
@@ -28,14 +29,21 @@ export interface MegaStructuralFields {
   baseSpecies: string;
 }
 
-/** メガ形態の安定 id（name 由来 kebab）。 */
+/**
+ * メガ形態の安定 id。name kebab を canonical form へ写す（gender メガ `meowstic-f-mega` →
+ * `meowstic-female-mega` 等を languages/mega.yaml へ揃える）。通常メガ（`charizard-mega-x` 等）は no-op。
+ */
 export function megaId(m: MegaInput): string {
-  return kebabId(m.name);
+  return canonicalFormId(kebabId(m.name));
 }
 
-/** base 種族の安定 id（name 由来 kebab）。 */
+/**
+ * base 種族の安定 id。roster / megaEvolvesTo と同じ canonical species id へ写す（gender メガの
+ * baseSpecies は showdown が bare `Meowstic`（=男）で持つため `meowstic-male` に揃い roster と一致する）。
+ * 通常メガ（`Charizard` → `charizard` 等）は no-op。
+ */
 export function megaBaseSpeciesId(m: MegaInput): string {
-  return kebabId(m.baseSpecies);
+  return canonicalSpeciesId(m.baseSpecies);
 }
 
 /** mega-specs.yaml の構造フィールドを組む。 */
@@ -45,7 +53,7 @@ export function megaStructuralFields(m: MegaInput): MegaStructuralFields {
     types: m.types.map(toTypeId),
     stats: toStatsTable(m.baseStats),
     ability: kebabId(m.ability),
-    baseSpecies: kebabId(m.baseSpecies),
+    baseSpecies: megaBaseSpeciesId(m),
   };
 }
 
@@ -56,8 +64,8 @@ export function megaStructuralFields(m: MegaInput): MegaStructuralFields {
 export function groupMegaByBase(megas: MegaInput[]): Record<string, string[]> {
   const out: Record<string, string[]> = {};
   for (const m of megas) {
-    const base = kebabId(m.baseSpecies);
-    const id = kebabId(m.name);
+    const base = megaBaseSpeciesId(m);
+    const id = megaId(m);
     const list = out[base] ?? [];
     if (!list.includes(id)) list.push(id);
     out[base] = list;
