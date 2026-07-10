@@ -59,6 +59,7 @@ items:
     ja: ジュペッタナイト
     en: Banettite
   barbaracite:
+    ja: ガメノデスナイト
     en: Barbaracite
   beedrillite:
     ja: スピアナイト
@@ -112,6 +113,7 @@ items:
     ja: じゅうでんち
     en: Cell Battery
   chandelurite:
+    ja: シャンデラナイト
     en: Chandelurite
   charcoal:
     ja: もくたん
@@ -129,6 +131,7 @@ items:
     ja: クラボのみ
     en: Cheri Berry
   chesnaughtite:
+    ja: ブリガロナイト
     en: Chesnaughtite
   chesto-berry:
     ja: カゴのみ
@@ -140,6 +143,7 @@ items:
     ja: フリーズカセット
     en: Chill Drive
   chimechite:
+    ja: チリーンナイト
     en: Chimechite
   choice-band:
     ja: こだわりハチマキ
@@ -157,6 +161,7 @@ items:
     ja: クリアチャーム
     en: Clear Amulet
   clefablite:
+    ja: ピクシナイト
     en: Clefablite
   coba-berry:
     ja: バコウのみ
@@ -171,6 +176,7 @@ items:
     ja: おんみつマント
     en: Covert Cloak
   crabominite:
+    ja: ケケンカニナイト
     en: Crabominite
   custap-berry:
     ja: イバンのみ
@@ -191,6 +197,7 @@ items:
     ja: しんかいのキバ
     en: Deep Sea Tooth
   delphoxite:
+    ja: マフォクシナイト
     en: Delphoxite
   destiny-knot:
     ja: あかいいと
@@ -205,6 +212,7 @@ items:
     ja: りゅうのプレート
     en: Draco Plate
   dragalgite:
+    ja: ドラミドロナイト
     en: Dragalgite
   dragon-fang:
     ja: りゅうのキバ
@@ -216,8 +224,10 @@ items:
     ja: ドラゴンメモリ
     en: Dragon Memory
   dragoninite:
+    ja: カイリュナイト
     en: Dragoninite
   drampanite:
+    ja: ジジーロナイト
     en: Drampanite
   dread-plate:
     ja: こわもてプレート
@@ -226,6 +236,7 @@ items:
     ja: だいちのプレート
     en: Earth Plate
   eelektrossite:
+    ja: シビルドナイト
     en: Eelektrossite
   eject-button:
     ja: だっしゅつボタン
@@ -243,6 +254,7 @@ items:
     ja: エレキシード
     en: Electric Seed
   emboarite:
+    ja: エンブオナイト
     en: Emboarite
   enigma-berry:
     ja: ナゾのみ
@@ -251,6 +263,7 @@ items:
     ja: しんかのきせき
     en: Eviolite
   excadrite:
+    ja: ドリュウズナイト
     en: Excadrite
   expert-belt:
     ja: たつじんのおび
@@ -265,8 +278,10 @@ items:
     ja: フェアリーメモリ
     en: Fairy Memory
   falinksite:
+    ja: タイレーツナイト
     en: Falinksite
   feraligite:
+    ja: オーダイルナイト
     en: Feraligite
   fighting-gem:
     ja: かくとうジュエル
@@ -296,6 +311,7 @@ items:
     ja: かるいし
     en: Float Stone
   floettite:
+    ja: フラエッテナイト
     en: Floettite
   flying-gem:
     ja: ひこうのジュエル
@@ -310,6 +326,7 @@ items:
     ja: きあいのタスキ
     en: Focus Sash
   froslassite:
+    ja: ユキメノコナイト
     en: Froslassite
   full-incense:
     ja: まんぷくおこう
@@ -339,8 +356,10 @@ items:
     ja: オニゴーリナイト
     en: Glalitite
   glimmoranite:
+    ja: キラフロルナイト
     en: Glimmoranite
   golurkite:
+    ja: ゴルーグナイト
     en: Golurkite
   grass-gem:
     ja: くさのジュエル
@@ -352,6 +371,7 @@ items:
     ja: グラスシード
     en: Grassy Seed
   greninjite:
+    ja: ゲッコウガナイト
     en: Greninjite
   grip-claw:
     ja: ねばりのかぎづめ
@@ -375,6 +395,7 @@ items:
     ja: かたいいし
     en: Hard Stone
   hawluchanite:
+    ja: ルチャブルナイト
     en: Hawluchanite
   hearthflame-mask:
     ja: かまどのめん
@@ -497,6 +518,7 @@ items:
     ja: マゴのみ
     en: Mago Berry
   malamarite:
+    ja: カラマネロナイト
     en: Malamarite
   manectite:
     ja: ライボルトナイト
@@ -514,11 +536,13 @@ items:
     ja: チャーレムナイト
     en: Medichamite
   meganiumite:
+    ja: メガニウムナイト
     en: Meganiumite
   mental-herb:
     ja: メンタルハーブ
     en: Mental Herb
   meowsticite:
+    ja: ニャオニクスナイト
     en: Meowsticite
   metagrossite:
     ja: メタグロスナイト
@@ -635,6 +659,7 @@ items:
     ja: むらさきのミツ
     en: Purple Nectar
   pyroarite:
+    ja: カエンジシナイト
     en: Pyroarite
   quick-claw:
     ja: せんせいのツメ
@@ -643,8 +668,10 @@ items:
     ja: スピードパウダー
     en: Quick Powder
   raichunite-x:
+    ja: ライチュウナイトＸ
     en: Raichunite X
   raichunite-y:
+    ja: ライチュウナイトＹ
     en: Raichunite Y
   rawst-berry:
     ja: チーゴのみ
@@ -716,13 +743,16 @@ items:
     ja: ハッサムナイト
     en: Scizorite
   scolipite:
+    ja: ペンドラナイト
     en: Scolipite
   scope-lens:
     ja: ピントレンズ
     en: Scope Lens
   scovillainite:
+    ja: スコヴィラナイト
     en: Scovillainite
   scraftinite:
+    ja: ズルズキナイト
     en: Scraftinite
   sea-incense:
     ja: うしおのおこう
@@ -755,6 +785,7 @@ items:
     ja: オボンのみ
     en: Sitrus Berry
   skarmorite:
+    ja: エアームドナイト
     en: Skarmorite
   sky-plate:
     ja: あおぞらプレート
@@ -787,11 +818,13 @@ items:
     ja: もののけプレート
     en: Spooky Plate
   staraptite:
+    ja: ムクホークナイト
     en: Staraptite
   starf-berry:
     ja: スターのみ
     en: Starf Berry
   starminite:
+    ja: スターミナイト
     en: Starminite
   steel-gem:
     ja: はがねのジュエル
@@ -845,6 +878,7 @@ items:
     ja: フシギバナイト
     en: Venusaurite
   victreebelite:
+    ja: ウツボットナイト
     en: Victreebelite
   wacan-berry:
     ja: ソクノのみ
