@@ -1,13 +1,3 @@
 # data/champions/m-a/mega.yaml — per-species 解禁メガ（species→mega id 配列）。
+# フル再取得のため reset（showdown-sync が authoritative で全量投入する）。
 mega:
-  charizard:
-    - charizard-mega-x
-    - charizard-mega-y
-  gengar:
-    - gengar-mega
-  garchomp:
-    - garchomp-mega
-  tyranitar:
-    - tyranitar-mega
-  lucario:
-    - lucario-mega

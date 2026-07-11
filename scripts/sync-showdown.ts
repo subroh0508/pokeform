@@ -19,7 +19,7 @@ import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Document, parseDocument, type YAMLMap, type YAMLSeq } from "yaml";
-import { planFields } from "../src/codegen/materialize.ts";
+import { getOrCreateBlockMap, planFields } from "../src/codegen/materialize.ts";
 import { abilityEnName, abilityId } from "../src/codegen/showdown/abilities-fields.ts";
 import {
   type ItemInput,
@@ -124,7 +124,9 @@ function syncSpecies(regId: string, json: Record<string, unknown>): string {
   const langMap = langDoc.get("species") as YAMLMap;
   const rosterDoc = read(join(CH, regId, "species.yaml"));
   const movesDoc = read(join(CH, regId, "species-moves.yaml"));
-  const movesMap = movesDoc.get("moves") as YAMLMap;
+  // per-reg reset（空スタブ `moves:` = null）でも block map を確保して append を block で載せる（getOrCreateBlockMap・
+  // null map は crash / flow `{}` は check:yaml-style 落ち・materialize P2 と同根の耐性化）。
+  const movesMap = getOrCreateBlockMap(movesDoc, "moves");
 
   // cosmetic 模様フォルム（`vivillon-archipelago` 等）を name SoT（languages）の畳み結果へ揃えて base へ潰す。
   // languages メンバシップを流用（`resolveSpeciesId`・[[data-pipeline]]）。
@@ -210,7 +212,8 @@ function syncMega(regId: string, json: Record<string, unknown>): string {
   const speciesDoc = read(join(CH, "species-specs.yaml"));
   const speciesMap = speciesDoc.get("species") as YAMLMap;
   const regDoc = read(join(CH, regId, "mega.yaml"));
-  const regMap = regDoc.get("mega") as YAMLMap;
+  // per-reg reset（空スタブ `mega:` = null）耐性化（species-moves と同根・getOrCreateBlockMap）。
+  const regMap = getOrCreateBlockMap(regDoc, "mega");
 
   let filled = 0;
   for (const rec of records) {
