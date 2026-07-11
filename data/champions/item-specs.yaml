@@ -206,3 +206,269 @@ items:
     megaSpecies:
       - swampert-mega
     category: mega-stones
+  abomasite:
+    megaStoneFor: abomasnow
+    megaSpecies:
+      - abomasnow-mega
+    category: mega-stones
+  absolite:
+    megaStoneFor: absol
+    megaSpecies:
+      - absol-mega
+    category: mega-stones
+  aerodactylite:
+    megaStoneFor: aerodactyl
+    megaSpecies:
+      - aerodactyl-mega
+    category: mega-stones
+  aggronite:
+    megaStoneFor: aggron
+    megaSpecies:
+      - aggron-mega
+    category: mega-stones
+  alakazite:
+    megaStoneFor: alakazam
+    megaSpecies:
+      - alakazam-mega
+    category: mega-stones
+  altarianite:
+    megaStoneFor: altaria
+    megaSpecies:
+      - altaria-mega
+    category: mega-stones
+  ampharosite:
+    megaStoneFor: ampharos
+    megaSpecies:
+      - ampharos-mega
+    category: mega-stones
+  audinite:
+    megaStoneFor: audino
+    megaSpecies:
+      - audino-mega
+    category: mega-stones
+  banettite:
+    megaStoneFor: banette
+    megaSpecies:
+      - banette-mega
+    category: mega-stones
+  beedrillite:
+    megaStoneFor: beedrill
+    megaSpecies:
+      - beedrill-mega
+    category: mega-stones
+  blastoisinite:
+    megaStoneFor: blastoise
+    megaSpecies:
+      - blastoise-mega
+    category: mega-stones
+  cameruptite:
+    megaStoneFor: camerupt
+    megaSpecies:
+      - camerupt-mega
+    category: mega-stones
+  chandelurite:
+    megaStoneFor: chandelure
+    megaSpecies:
+      - chandelure-mega
+    category: mega-stones
+  chesnaughtite:
+    megaStoneFor: chesnaught
+    megaSpecies:
+      - chesnaught-mega
+    category: mega-stones
+  chimechite:
+    megaStoneFor: chimecho
+    megaSpecies:
+      - chimecho-mega
+    category: mega-stones
+  clefablite:
+    megaStoneFor: clefable
+    megaSpecies:
+      - clefable-mega
+    category: mega-stones
+  crabominite:
+    megaStoneFor: crabominable
+    megaSpecies:
+      - crabominable-mega
+    category: mega-stones
+  delphoxite:
+    megaStoneFor: delphox
+    megaSpecies:
+      - delphox-mega
+    category: mega-stones
+  dragoninite:
+    megaStoneFor: dragonite
+    megaSpecies:
+      - dragonite-mega
+    category: mega-stones
+  drampanite:
+    megaStoneFor: drampa
+    megaSpecies:
+      - drampa-mega
+    category: mega-stones
+  emboarite:
+    megaStoneFor: emboar
+    megaSpecies:
+      - emboar-mega
+    category: mega-stones
+  excadrite:
+    megaStoneFor: excadrill
+    megaSpecies:
+      - excadrill-mega
+    category: mega-stones
+  feraligite:
+    megaStoneFor: feraligatr
+    megaSpecies:
+      - feraligatr-mega
+    category: mega-stones
+  floettite:
+    megaStoneFor: floette-eternal
+    megaSpecies:
+      - floette-mega
+    category: mega-stones
+  froslassite:
+    megaStoneFor: froslass
+    megaSpecies:
+      - froslass-mega
+    category: mega-stones
+  galladite:
+    megaStoneFor: gallade
+    megaSpecies:
+      - gallade-mega
+    category: mega-stones
+  gardevoirite:
+    megaStoneFor: gardevoir
+    megaSpecies:
+      - gardevoir-mega
+    category: mega-stones
+  glalitite:
+    megaStoneFor: glalie
+    megaSpecies:
+      - glalie-mega
+    category: mega-stones
+  glimmoranite:
+    megaStoneFor: glimmora
+    megaSpecies:
+      - glimmora-mega
+    category: mega-stones
+  golurkite:
+    megaStoneFor: golurk
+    megaSpecies:
+      - golurk-mega
+    category: mega-stones
+  greninjite:
+    megaStoneFor: greninja
+    megaSpecies:
+      - greninja-mega
+    category: mega-stones
+  gyaradosite:
+    megaStoneFor: gyarados
+    megaSpecies:
+      - gyarados-mega
+    category: mega-stones
+  hawluchanite:
+    megaStoneFor: hawlucha
+    megaSpecies:
+      - hawlucha-mega
+    category: mega-stones
+  heracronite:
+    megaStoneFor: heracross
+    megaSpecies:
+      - heracross-mega
+    category: mega-stones
+  houndoominite:
+    megaStoneFor: houndoom
+    megaSpecies:
+      - houndoom-mega
+    category: mega-stones
+  kangaskhanite:
+    megaStoneFor: kangaskhan
+    megaSpecies:
+      - kangaskhan-mega
+    category: mega-stones
+  lopunnite:
+    megaStoneFor: lopunny
+    megaSpecies:
+      - lopunny-mega
+    category: mega-stones
+  manectite:
+    megaStoneFor: manectric
+    megaSpecies:
+      - manectric-mega
+    category: mega-stones
+  medichamite:
+    megaStoneFor: medicham
+    megaSpecies:
+      - medicham-mega
+    category: mega-stones
+  meganiumite:
+    megaStoneFor: meganium
+    megaSpecies:
+      - meganium-mega
+    category: mega-stones
+  meowsticite:
+    megaStoneFor: meowstic-male
+    megaSpecies:
+      - meowstic-female-mega
+      - meowstic-male-mega
+    category: mega-stones
+  pidgeotite:
+    megaStoneFor: pidgeot
+    megaSpecies:
+      - pidgeot-mega
+    category: mega-stones
+  pinsirite:
+    megaStoneFor: pinsir
+    megaSpecies:
+      - pinsir-mega
+    category: mega-stones
+  sablenite:
+    megaStoneFor: sableye
+    megaSpecies:
+      - sableye-mega
+    category: mega-stones
+  scizorite:
+    megaStoneFor: scizor
+    megaSpecies:
+      - scizor-mega
+    category: mega-stones
+  scovillainite:
+    megaStoneFor: scovillain
+    megaSpecies:
+      - scovillain-mega
+    category: mega-stones
+  sharpedonite:
+    megaStoneFor: sharpedo
+    megaSpecies:
+      - sharpedo-mega
+    category: mega-stones
+  skarmorite:
+    megaStoneFor: skarmory
+    megaSpecies:
+      - skarmory-mega
+    category: mega-stones
+  slowbronite:
+    megaStoneFor: slowbro
+    megaSpecies:
+      - slowbro-mega
+    category: mega-stones
+  starminite:
+    megaStoneFor: starmie
+    megaSpecies:
+      - starmie-mega
+    category: mega-stones
+  steelixite:
+    megaStoneFor: steelix
+    megaSpecies:
+      - steelix-mega
+    category: mega-stones
+  venusaurite:
+    megaStoneFor: venusaur
+    megaSpecies:
+      - venusaur-mega
+    category: mega-stones
+  victreebelite:
+    megaStoneFor: victreebel
+    megaSpecies:
+      - victreebel-mega
+    category: mega-stones
