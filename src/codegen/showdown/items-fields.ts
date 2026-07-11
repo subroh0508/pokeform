@@ -10,6 +10,7 @@
  */
 
 import { kebabId } from "./ids.ts";
+import { megaFormId } from "./mega-fields.ts";
 
 /** 持ち物中間レコード（`scripts/showdown/items.ts` の ItemRecord 相当・抽出層非依存に再定義）。 */
 export interface ItemInput {
@@ -60,7 +61,9 @@ export function itemStructuralFields(i: ItemInput): ItemStructuralFields {
   if (link) {
     return {
       megaStoneFor: kebabId(link.baseSpecies),
-      megaSpecies: kebabId(link.megaSpecies),
+      // megaSpecies は mega レコードの `megaId` と同じ id へ収束させる（gender メガは単一 `<base>-mega` へ
+      // 畳むため `megaFormId` を通す・ADR 0045。`kebabId` 直だと `meowstic-m-mega` になり mega-specs と不一致）。
+      megaSpecies: megaFormId(link.megaSpecies),
       category: CATEGORY_MAP[i.category],
     };
   }

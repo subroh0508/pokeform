@@ -30,11 +30,27 @@ export interface MegaStructuralFields {
 }
 
 /**
- * メガ形態の安定 id。name kebab を canonical form へ写す（gender メガ `meowstic-f-mega` →
- * `meowstic-female-mega` 等を languages/mega.yaml へ揃える）。通常メガ（`charizard-mega-x` 等）は no-op。
+ * gender メガの showdown forme id（`<base>-f-mega` / `<base>-m-mega`）。♂♀の2形態はステータス/タイプ/
+ * 特性が完全一致するため単一メガ形態へ統合する（ADR 0045）。base 種族の gender 分割は維持し、メガ形態のみ畳む。
+ */
+const GENDER_MEGA_SUFFIX = /-(f|m)-mega$/;
+
+/**
+ * メガ形態名 → 安定 mega id。gender メガ（`Meowstic-F-Mega` / `Meowstic-M-Mega`）は単一 `<base>-mega`
+ * （`meowstic-mega`）へ畳み、それ以外は `canonicalFormId` で正規化する（`charizard-mega-x` 等は no-op）。
+ * `megaId`（mega レコード）と items 経路の `megaSpecies` リンクが同じ id へ収束する単一 SoT。
+ */
+export function megaFormId(name: string): string {
+  const kebab = kebabId(name);
+  if (GENDER_MEGA_SUFFIX.test(kebab)) return kebab.replace(GENDER_MEGA_SUFFIX, "-mega");
+  return canonicalFormId(kebab);
+}
+
+/**
+ * メガ形態の安定 id。gender メガは単一 `<base>-mega` へ統合、通常メガ（`charizard-mega-x` 等）は no-op。
  */
 export function megaId(m: MegaInput): string {
-  return canonicalFormId(kebabId(m.name));
+  return megaFormId(m.name);
 }
 
 /**
@@ -60,6 +76,18 @@ export function megaBaseSpeciesId(m: MegaInput): string {
   return MEGA_BASE_OVERRIDE[canonical] ?? canonical;
 }
 
+/**
+ * メガが「どの base 種族から進化するか」（megaEvolvesTo / <reg>/mega.yaml の base キー）。gender メガは
+ * showdown が baseSpecies を bare（`Meowstic`=男）でしか持たないため、mega 名の gender から gender 別 base
+ * （F→`<base>-female` / M→`<base>-male`）を導出し、♂♀両 base を単一メガへ紐付ける（ADR 0045）。非 gender メガは
+ * `megaBaseSpeciesId`（roster / megaEvolvesTo と同じ canonical・floette 等の override も込み）に一致する。
+ */
+export function megaEvolveBaseId(m: MegaInput): string {
+  const gender = kebabId(m.name).match(GENDER_MEGA_SUFFIX)?.[1];
+  if (gender) return `${kebabId(m.baseSpecies)}-${gender === "f" ? "female" : "male"}`;
+  return megaBaseSpeciesId(m);
+}
+
 /** mega-specs.yaml の構造フィールドを組む。 */
 export function megaStructuralFields(m: MegaInput): MegaStructuralFields {
   return {
@@ -78,7 +106,7 @@ export function megaStructuralFields(m: MegaInput): MegaStructuralFields {
 export function groupMegaByBase(megas: MegaInput[]): Record<string, string[]> {
   const out: Record<string, string[]> = {};
   for (const m of megas) {
-    const base = megaBaseSpeciesId(m);
+    const base = megaEvolveBaseId(m);
     const id = megaId(m);
     const list = out[base] ?? [];
     if (!list.includes(id)) list.push(id);
