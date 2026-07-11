@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  genderMegaSiblingId,
   groupMegaByBase,
   type MegaInput,
   megaBaseSpeciesId,
@@ -72,23 +73,29 @@ describe("megaId / megaBaseSpeciesId", () => {
     expect(megaBaseSpeciesId(charizardMegaX)).toBe("charizard");
   });
 
-  it("unifies both gender megas into a single meowstic-mega id (ADR 0045)", () => {
-    // ♂♀の2形態はステータス一致ゆえ単一メガ形態へ統合する。
-    expect(megaId(meowsticFemaleMega)).toBe("meowstic-mega");
-    expect(megaId(meowsticMaleMega)).toBe("meowstic-mega");
-    expect(megaFormId("Meowstic-F-Mega")).toBe("meowstic-mega");
+  it("keeps gender megas per-gender (extraction is faithful; collapse is generate's job・ADR 0046)", () => {
+    // 抽出は ♀♂を per-gender で忠実に写す。畳むかは generate が stats/types/ability/learnset 一致で判定する。
+    expect(megaId(meowsticFemaleMega)).toBe("meowstic-female-mega");
+    expect(megaId(meowsticMaleMega)).toBe("meowstic-male-mega");
+    expect(megaFormId("Meowstic-F-Mega")).toBe("meowstic-female-mega");
     // 非 gender メガは canonicalFormId 素通り。
     expect(megaFormId("Charizard-Mega-X")).toBe("charizard-mega-x");
   });
 
-  it("keeps the canonical (male) base as the mega-specs reverse pointer", () => {
-    // mega-specs.baseSpecies は単一の逆参照ゆえ canonical（`meowstic-male`）に揃える。
-    expect(megaBaseSpeciesId(meowsticFemaleMega)).toBe("meowstic-male");
-    expect(megaBaseSpeciesId(meowsticMaleMega)).toBe("meowstic-male");
+  it("finds the gender mega sibling id for stone linking (1 stone -> ♀♂)", () => {
+    expect(genderMegaSiblingId("meowstic-female-mega")).toBe("meowstic-male-mega");
+    expect(genderMegaSiblingId("meowstic-male-mega")).toBe("meowstic-female-mega");
+    // 非 gender メガは兄弟なし。
+    expect(genderMegaSiblingId("charizard-mega-x")).toBeNull();
+  });
+
+  it("resolves the non-gender base canonical (charizard / floette-eternal override)", () => {
+    expect(megaBaseSpeciesId(charizardMegaX)).toBe("charizard");
+    expect(megaBaseSpeciesId(floetteMega)).toBe("floette-eternal");
   });
 
   it("derives the gender-specific base for mega linking (F -> -female / M -> -male)", () => {
-    // megaEvolvesTo / <reg>/mega.yaml は mega 名の gender から gender 別 base を導出し ♂♀両 base を紐付ける。
+    // per-gender メガは mega 名の gender から自分の gender base を導出する（ADR 0046）。
     expect(megaEvolveBaseId(meowsticFemaleMega)).toBe("meowstic-female");
     expect(megaEvolveBaseId(meowsticMaleMega)).toBe("meowstic-male");
     // 非 gender メガは megaBaseSpeciesId に一致（charizard）。
@@ -114,8 +121,9 @@ describe("megaStructuralFields", () => {
     });
   });
 
-  it("writes the canonical base species id for a gender mega", () => {
-    expect(megaStructuralFields(meowsticFemaleMega).baseSpecies).toBe("meowstic-male");
+  it("writes the gender-specific base species id for a gender mega (ADR 0046)", () => {
+    expect(megaStructuralFields(meowsticFemaleMega).baseSpecies).toBe("meowstic-female");
+    expect(megaStructuralFields(meowsticMaleMega).baseSpecies).toBe("meowstic-male");
   });
 });
 
@@ -133,11 +141,11 @@ describe("groupMegaByBase", () => {
     });
   });
 
-  it("links the single unified mega under both gender bases (ADR 0045)", () => {
-    // ♂♀両 base が単一 `meowstic-mega` へ紐付く（gender 別 base 導出・dedup）。
+  it("links each per-gender mega under its own gender base (ADR 0046)", () => {
+    // per-gender メガは各 gender base に自分の gender メガが紐付く（畳み込みは generate の判定）。
     expect(groupMegaByBase([meowsticMaleMega, meowsticFemaleMega])).toEqual({
-      "meowstic-male": ["meowstic-mega"],
-      "meowstic-female": ["meowstic-mega"],
+      "meowstic-male": ["meowstic-male-mega"],
+      "meowstic-female": ["meowstic-female-mega"],
     });
   });
 });

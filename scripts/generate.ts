@@ -59,7 +59,7 @@ interface MegaSpecYaml {
 interface ItemSpecYaml {
   category?: string;
   megaStoneFor?: string;
-  megaSpecies?: string;
+  megaSpecies?: readonly string[];
 }
 interface MoveStatsYaml {
   type: string;
@@ -259,10 +259,12 @@ const regs: RegData[] = REG_GAMES.map((reg) => {
     game: GAME,
     reg,
     meta: rd<RegIndexYaml>(join(dir, "index.yaml")),
-    species: rd<{ species: string[] }>(join(dir, "species.yaml")).species,
-    items: rd<{ items: string[] }>(join(dir, "items.yaml")).items,
-    mega: rd<{ mega: Record<string, string[]> }>(join(dir, "mega.yaml")).mega ?? {},
-    speciesMoves: rd<{ moves: Record<string, string[]> }>(join(dir, "species-moves.yaml")).moves,
+    // per-reg reset（`species:`/`items:`/`moves:` が null の空スタブ）でも空集合として扱う（mega は既に `?? {}`）。
+    species: rd<{ species: string[] | null }>(join(dir, "species.yaml")).species ?? [],
+    items: rd<{ items: string[] | null }>(join(dir, "items.yaml")).items ?? [],
+    mega: rd<{ mega: Record<string, string[]> | null }>(join(dir, "mega.yaml")).mega ?? {},
+    speciesMoves:
+      rd<{ moves: Record<string, string[]> | null }>(join(dir, "species-moves.yaml")).moves ?? {},
   };
 });
 
@@ -377,10 +379,11 @@ for (const [file, name, map] of langFiles) {
 // （item-specs の megaSpecies リンク）。メガ形態種族の items は対応ストーンのタプルに型制約する。
 const stonesByMegaSpecies = new Map<string, string[]>();
 for (const [iid, meta] of Object.entries(itemSpecs)) {
-  if (meta.megaSpecies) {
-    const arr = stonesByMegaSpecies.get(meta.megaSpecies) ?? [];
+  // megaSpecies は配列（gender メガのストーンは ♀♂両形態に対応・ADR 0046）。各形態へ逆引きを張る。
+  for (const mid of meta.megaSpecies ?? []) {
+    const arr = stonesByMegaSpecies.get(mid) ?? [];
     arr.push(iid);
-    stonesByMegaSpecies.set(meta.megaSpecies, arr);
+    stonesByMegaSpecies.set(mid, arr);
   }
 }
 // メガ形態 `mid` に対応するストーン群を引く。欠落は fail-fast（空タプル＝「どの持ち物も不可」の不正状態を
@@ -425,9 +428,10 @@ for (const r of regs) {
     // 専有はメガ形態種族側に課す（下の megaLines が対応ストーンタプルを emit する）。
     return `  ${k}: { id: ${sp}.id, dex: ${sp}.dex, types: ${sp}.types, baseStats: ${sp}.baseStats, abilities: ${sp}.abilities, moves: ${acc("speciesMoves", sid)}, items: "any"${megaPart} },`;
   });
-  // メガ形態 id → その形態へ進化する base 種族群。gender メガ（ADR 0045）は ♀♂両 base が単一メガへ
-  // 進化するため 1 メガに複数 base が対応する。メガ形態エントリは **id ごとに 1 度だけ** emit する
-  // （重複キーで tsc TS1117 になるのを防ぐ）。
+  // メガ形態 id → その形態へ進化する base 種族群。gender メガは per-gender（`<base>-female-mega` /
+  // `<base>-male-mega`）で、各々自分の gender base 1 つに対応する（ADR 0046・meowstic は ♀♂で movepool 差）。
+  // メガ形態エントリは **id ごとに 1 度だけ** emit する（同一メガに複数 base がぶら下がる将来の畳み込み
+  // ケースでも重複キー tsc TS1117 を防ぐ）。
   const basesByMega = new Map<string, string[]>();
   for (const [sid, ms] of Object.entries(r.mega)) {
     for (const mid of ms) {
@@ -443,8 +447,8 @@ for (const r of regs) {
     // メガ形態（メガシンカ後）種族の items は対応メガストーンのタプルに型制約する（個体が他持ち物を
     // 持つと ItemNotHoldableBy ブランドエラー・HoldableItems の Extract 分岐で絞る）。
     const itemsLit = lit(megaFormStones(r, mid));
-    // moves: 単一 base は base の movepool を参照。複数 base（gender メガ）は全 base の movepool の union を
-    // 採り、どの gender から進化しても legal moveset を弾かない（ADR 0045・movepool は gender で差異あり）。
+    // moves: 単一 base は base の movepool を参照（per-gender メガは自分の gender base の技）。複数 base が
+    // 同一メガへ進化する場合（畳み込み・ADR 0046）は全 base の movepool の union を採り legal moveset を弾かない。
     const movesLit =
       sids.length === 1
         ? acc("speciesMoves", sids[0] as string)

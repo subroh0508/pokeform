@@ -29,25 +29,32 @@ export interface MegaStructuralFields {
   baseSpecies: string;
 }
 
-/**
- * gender メガの showdown forme id（`<base>-f-mega` / `<base>-m-mega`）。♂♀の2形態はステータス/タイプ/
- * 特性が完全一致するため単一メガ形態へ統合する（ADR 0045）。base 種族の gender 分割は維持し、メガ形態のみ畳む。
- */
+/** gender メガの showdown forme id（`<base>-f-mega` / `<base>-m-mega`）を識別する。 */
 const GENDER_MEGA_SUFFIX = /-(f|m)-mega$/;
 
 /**
- * メガ形態名 → 安定 mega id。gender メガ（`Meowstic-F-Mega` / `Meowstic-M-Mega`）は単一 `<base>-mega`
- * （`meowstic-mega`）へ畳み、それ以外は `canonicalFormId` で正規化する（`charizard-mega-x` 等は no-op）。
+ * メガ形態名 → 安定 mega id。`canonicalFormId` で正規化する（gender メガは per-gender の
+ * `<base>-female-mega` / `<base>-male-mega`、通常メガ `charizard-mega-x` 等は no-op）。gender メガを
+ * 単一へ畳むかは **generate 側**が stats/types/ability/learnset の一致で判定する（ADR 0046・抽出は per-gender で忠実）。
  * `megaId`（mega レコード）と items 経路の `megaSpecies` リンクが同じ id へ収束する単一 SoT。
  */
 export function megaFormId(name: string): string {
-  const kebab = kebabId(name);
-  if (GENDER_MEGA_SUFFIX.test(kebab)) return kebab.replace(GENDER_MEGA_SUFFIX, "-mega");
-  return canonicalFormId(kebab);
+  return canonicalFormId(kebabId(name));
 }
 
 /**
- * メガ形態の安定 id。gender メガは単一 `<base>-mega` へ統合、通常メガ（`charizard-mega-x` 等）は no-op。
+ * gender メガの兄弟形態 id（`<base>-female-mega` ↔ `<base>-male-mega`）を返す。gender メガでなければ null。
+ * 1 ストーンが ♀♂両形態に対応する（meowsticite）ため、items 経路が megaSpecies を両形態へ広げるのに使う。
+ */
+export function genderMegaSiblingId(megaFormId0: string): string | null {
+  if (megaFormId0.endsWith("-female-mega"))
+    return megaFormId0.replace(/-female-mega$/, "-male-mega");
+  if (megaFormId0.endsWith("-male-mega")) return megaFormId0.replace(/-male-mega$/, "-female-mega");
+  return null;
+}
+
+/**
+ * メガ形態の安定 id。gender メガは per-gender（`<base>-female-mega` / `<base>-male-mega`）、通常メガは no-op。
  */
 export function megaId(m: MegaInput): string {
   return megaFormId(m.name);
@@ -66,10 +73,9 @@ const MEGA_BASE_OVERRIDE: Record<string, string> = {
 };
 
 /**
- * base 種族の安定 id。roster / megaEvolvesTo と同じ canonical species id へ写す（gender メガの
- * baseSpecies は showdown が bare `Meowstic`（=男）で持つため `meowstic-male` に揃い roster と一致する）。
- * 通常メガ（`Charizard` → `charizard` 等）は no-op。`floette` 等 bare base が roster form と食い違う
- * ケースだけ `MEGA_BASE_OVERRIDE` で roster 側へ揃える。
+ * base 種族の canonical id（roster と同じ）。通常メガ（`Charizard` → `charizard` 等）は no-op、`floette` 等
+ * bare base が roster form と食い違うケースだけ `MEGA_BASE_OVERRIDE` で roster 側へ揃える。gender メガの
+ * gender 別 base 解決は `megaEvolveBaseId` が担う（本関数はその非 gender 経路で使う）。
  */
 export function megaBaseSpeciesId(m: MegaInput): string {
   const canonical = canonicalSpeciesId(m.baseSpecies);
@@ -77,10 +83,11 @@ export function megaBaseSpeciesId(m: MegaInput): string {
 }
 
 /**
- * メガが「どの base 種族から進化するか」（megaEvolvesTo / <reg>/mega.yaml の base キー）。gender メガは
- * showdown が baseSpecies を bare（`Meowstic`=男）でしか持たないため、mega 名の gender から gender 別 base
- * （F→`<base>-female` / M→`<base>-male`）を導出し、♂♀両 base を単一メガへ紐付ける（ADR 0045）。非 gender メガは
- * `megaBaseSpeciesId`（roster / megaEvolvesTo と同じ canonical・floette 等の override も込み）に一致する。
+ * メガが「どの base 種族から進化するか」（mega-specs.baseSpecies / megaEvolvesTo / <reg>/mega.yaml の base キー）。
+ * gender メガは showdown が baseSpecies を bare（`Meowstic`=男）でしか持たないため、mega 名の gender から
+ * gender 別 base（F→`<base>-female` / M→`<base>-male`）を導出し、per-gender メガを正しい gender base へ紐付ける
+ * （ADR 0046・meowstic-female-mega ← meowstic-female）。非 gender メガは `megaBaseSpeciesId`（roster と同じ
+ * canonical・floette 等の override も込み）に一致する。
  */
 export function megaEvolveBaseId(m: MegaInput): string {
   const gender = kebabId(m.name).match(GENDER_MEGA_SUFFIX)?.[1];
@@ -88,14 +95,14 @@ export function megaEvolveBaseId(m: MegaInput): string {
   return megaBaseSpeciesId(m);
 }
 
-/** mega-specs.yaml の構造フィールドを組む。 */
+/** mega-specs.yaml の構造フィールドを組む（baseSpecies は gender 別 = `megaEvolveBaseId`・ADR 0046）。 */
 export function megaStructuralFields(m: MegaInput): MegaStructuralFields {
   return {
     dex: m.num,
     types: m.types.map(toTypeId),
     stats: toStatsTable(m.baseStats),
     ability: kebabId(m.ability),
-    baseSpecies: megaBaseSpeciesId(m),
+    baseSpecies: megaEvolveBaseId(m),
   };
 }
 

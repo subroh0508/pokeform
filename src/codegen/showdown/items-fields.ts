@@ -9,8 +9,9 @@
  * （`{"Charizard":"Charizard-Mega-X"}`）。
  */
 
+import { canonicalSpeciesId } from "./canonical-species-id.ts";
 import { kebabId } from "./ids.ts";
-import { megaFormId } from "./mega-fields.ts";
+import { genderMegaSiblingId, megaFormId } from "./mega-fields.ts";
 
 /** 持ち物中間レコード（`scripts/showdown/items.ts` の ItemRecord 相当・抽出層非依存に再定義）。 */
 export interface ItemInput {
@@ -24,7 +25,9 @@ export interface ItemInput {
 export interface ItemStructuralFields {
   category: string;
   megaStoneFor?: string;
-  megaSpecies?: string;
+  /** メガストーンが生む**メガ形態** id 群。gender メガのストーン（meowsticite）は 1 個で ♀♂両形態に
+   *  対応するため配列（`[<base>-female-mega, <base>-male-mega]`）・通常は 1 要素（ADR 0046）。 */
+  megaSpecies?: readonly string[];
 }
 
 /** showdown の粗い category を SoT の category 語彙へ写す（未登録持ち物向けの既定値）。 */
@@ -59,11 +62,15 @@ export function parseMegaLink(i: ItemInput): { baseSpecies: string; megaSpecies:
 export function itemStructuralFields(i: ItemInput): ItemStructuralFields {
   const link = parseMegaLink(i);
   if (link) {
+    // megaStoneFor は base 種族 id を canonical へ（bare `Meowstic`→`meowstic-male` / `Floette-Eternal`→
+    // `floette-eternal`）。`kebabId` 直だと bare `meowstic`（SUPPRESS_BASE_SPECIES 抑制種で roster 不在）になる。
+    // megaSpecies は mega レコードの `megaId` と同じ per-gender id へ（`megaFormId`）。gender メガのストーンは
+    // 1 個で ♀♂両形態に対応するため兄弟形態も含めた配列にする（ADR 0046）。
+    const mid = megaFormId(link.megaSpecies);
+    const sibling = genderMegaSiblingId(mid);
     return {
-      megaStoneFor: kebabId(link.baseSpecies),
-      // megaSpecies は mega レコードの `megaId` と同じ id へ収束させる（gender メガは単一 `<base>-mega` へ
-      // 畳むため `megaFormId` を通す・ADR 0045。`kebabId` 直だと `meowstic-m-mega` になり mega-specs と不一致）。
-      megaSpecies: megaFormId(link.megaSpecies),
+      megaStoneFor: canonicalSpeciesId(link.baseSpecies),
+      megaSpecies: sibling ? [mid, sibling].sort() : [mid],
       category: CATEGORY_MAP[i.category],
     };
   }

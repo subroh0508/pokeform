@@ -3,7 +3,8 @@
 items:
   charizardite-x:
     megaStoneFor: charizard
-    megaSpecies: charizard-mega-x
+    megaSpecies:
+      - charizard-mega-x
     category: mega-stones
   rocky-helmet:
     category: held-items
@@ -129,23 +130,28 @@ items:
     category: type-protection
   charizardite-y:
     megaStoneFor: charizard
-    megaSpecies: charizard-mega-y
+    megaSpecies:
+      - charizard-mega-y
     category: mega-stones
   garchompite:
     megaStoneFor: garchomp
-    megaSpecies: garchomp-mega
+    megaSpecies:
+      - garchomp-mega
     category: mega-stones
   gengarite:
     megaStoneFor: gengar
-    megaSpecies: gengar-mega
+    megaSpecies:
+      - gengar-mega
     category: mega-stones
   lucarionite:
     megaStoneFor: lucario
-    megaSpecies: lucario-mega
+    megaSpecies:
+      - lucario-mega
     category: mega-stones
   tyranitarite:
     megaStoneFor: tyranitar
-    megaSpecies: tyranitar-mega
+    megaSpecies:
+      - tyranitar-mega
     category: mega-stones
   big-root:
     category: held-items
@@ -177,21 +183,26 @@ items:
     category: held-items
   blazikenite:
     megaStoneFor: blaziken
-    megaSpecies: blaziken-mega
+    megaSpecies:
+      - blaziken-mega
     category: mega-stones
   mawilite:
     megaStoneFor: mawile
-    megaSpecies: mawile-mega
+    megaSpecies:
+      - mawile-mega
     category: mega-stones
   metagrossite:
     megaStoneFor: metagross
-    megaSpecies: metagross-mega
+    megaSpecies:
+      - metagross-mega
     category: mega-stones
   sceptilite:
     megaStoneFor: sceptile
-    megaSpecies: sceptile-mega
+    megaSpecies:
+      - sceptile-mega
     category: mega-stones
   swampertite:
     megaStoneFor: swampert
-    megaSpecies: swampert-mega
+    megaSpecies:
+      - swampert-mega
     category: mega-stones
