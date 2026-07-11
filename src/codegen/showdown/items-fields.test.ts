@@ -64,17 +64,17 @@ describe("parseMegaLink", () => {
 });
 
 describe("itemStructuralFields", () => {
-  it("builds mega linking + mega-stones category for a megastone", () => {
+  it("builds mega linking + mega-stones category for a megastone (megaSpecies is an array)", () => {
     expect(itemStructuralFields(charizarditeX)).toEqual({
       megaStoneFor: "charizard",
-      megaSpecies: "charizard-mega-x",
+      megaSpecies: ["charizard-mega-x"],
       category: "mega-stones",
     });
   });
 
-  it("collapses a gender mega stone's megaSpecies to the unified <base>-mega (ADR 0045)", () => {
-    // meowsticite は showdown で `Meowstic-M-Mega` へリンクするが、統合後の単一 `meowstic-mega` へ揃える
-    // （mega レコードの megaId と一致させ `megaFormStones` の逆引きを成立させる）。
+  it("links a gender mega stone to both ♀♂ formes and canonicalizes megaStoneFor (ADR 0046)", () => {
+    // meowsticite は 1 個で ♀♂両形態に対応するため megaSpecies は両形態の配列。megaStoneFor は bare
+    // `Meowstic` を canonical `meowstic-male` へ（bare `meowstic` は SUPPRESS_BASE_SPECIES で roster 不在）。
     expect(
       itemStructuralFields({
         name: "Meowsticite",
@@ -83,8 +83,8 @@ describe("itemStructuralFields", () => {
         megaEvolves: "Meowstic",
       }),
     ).toEqual({
-      megaStoneFor: "meowstic",
-      megaSpecies: "meowstic-mega",
+      megaStoneFor: "meowstic-male",
+      megaSpecies: ["meowstic-female-mega", "meowstic-male-mega"],
       category: "mega-stones",
     });
   });

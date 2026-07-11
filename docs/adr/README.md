@@ -76,7 +76,7 @@ pokeform の重要なアーキテクチャ決定を**不変の連番ログ**と�
 | [0042](./0042-items-battle-holdable-whitelist.md) | items だけ PokeAPI item-category whitelist の union で列挙し対戦持ち物 ~270 件へ絞る（属性ベースは不採用・他 4 種は list 全件のまま・ADR 0041 の全件辞書取得方針を items のみ refine・中核は不変） | Accepted |
 | [0043](./0043-mega-names-from-pokeapi-form-names.md) | メガ名（languages/mega.yaml の ja/en）を showdown/手作業から PokeAPI(pokemon-form form_names・is_mega) へ一本化し 6 種目の全件名辞書へ・showdown mega 名ルート（megaEnName）削除（ADR 0041/0040 の mega 名取得元分担を refine・mega 構造 + linking は showdown=正で不変） | Accepted |
 | [0044](./0044-canonical-species-id-explicit-slug.md) | species id 正本を明示 slug（PokeAPI 準拠 canonical）に定め showdown 抽出 id を canonical へ正規化する（kebabId を species 専用層から分離・3 種マップ default→明示 / Class C 語彙差 / CANONICAL_ID_OVERRIDE・ADR 0041 の form 扱いを refine / ADR 0035・0039 の id 正本を明確化） | Accepted |
-| [0045](./0045-gender-mega-unified-form.md) | Champions の gender メガ（♀♂で同種族値）を単一メガ形態 `<base>-mega` へ統合し ♀♂両 base を単一メガへ megaEvolvesTo する（1 ストーン→単一メガで item-specs.megaSpecies 単数を維持・base の gender 分割は維持・ADR 0044 の gender メガ forme 正規化を refine・統合名は ADR 0043 の PokeAPI backfill 例外） | Accepted |
+| [0046](./0046-gender-mega-conditional-collapse.md) | gender メガの畳み込みを条件付き（種族値/タイプ/特性/learnset がすべて一致するときのみ）にし、非畳み込み時は per-gender（`<base>-female-mega` / `<base>-male-mega`）で保つ。1 ストーン→複数形態を `item-specs.megaSpecies` 配列化で表現・megaStoneFor を canonical 化・空 reg 耐性化（ADR 0045 supersede・meowstic は技差で per-gender） | Accepted |
 
 > 一覧は ADR 追加・Status 変更のたびに更新します。`adr-new` は新規 ADR をこの表に追記します。
 
@@ -87,6 +87,7 @@ pokeform の重要なアーキテクチャ決定を**不変の連番ログ**と�
 | # | タイトル | Status |
 |---|---|---|
 | [0002](./archive/0002-pin-toolchain-and-dockerize.md) | ツールチェーンのバージョンをピン留めし、dev/CI 用に Docker 化する | Superseded by ADR-0003〜0009 |
+| [0045](./archive/0045-gender-mega-unified-form.md) | Champions の gender メガ（♀♂で同種族値）を単一メガ形態へ無条件統合する | Superseded by ADR-0046 |
 | [0012](./archive/0012-vendor-pokeapi-data.md) | PokeAPI データは vendor 方式で生成・コミットする | Superseded by ADR-0039 |
 | [0027](./archive/0027-structural-data-catalog-sot.md) | 構造データ（種族値 / タイプ / 特性 / 図鑑番号 / category）の SoT を catalog YAML へ移し generate を raw 非依存にする（materialize 新設・overrides 廃止・取得元 PokeAPI 維持） | Superseded by ADR-0039 |
 | [0026](./archive/0026-pokeapi-not-champions-legality-source.md) | PokeAPI を Champions レギュレーション情報・技威力の信頼源にしない | Superseded by ADR-0034 |

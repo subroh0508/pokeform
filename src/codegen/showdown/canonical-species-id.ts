@@ -129,8 +129,8 @@ export const CANONICAL_ID_OVERRIDE: Record<string, string> = {
  * - **性別二形**（showdown の女 forme id `<種>-f`）を languages（PokeAPI 由来）の `-female` へ揃える。男は
  *   bare→`-male` を `DEFAULT_TO_EXPLICIT` が処理済みゆえ女のみ。PokeAPI 名前側は `-female` を直接 emit する
  *   ため本マップのキー（`-f`）とは衝突せず、showdown 経路だけを写す。gender **メガ**（`meowstic-f-mega` /
- *   `meowstic-m-mega`）は base の gender 分割と別に**単一メガ形態 `<base>-mega` へ統合**するため（ADR 0045）、
- *   本マップでなく `mega-fields.ts` の `megaFormId` が畳む（`canonicalFormId` は base 種族 form 専任に戻す）。
+ *   `meowstic-m-mega`）も同じ curated 経路で `languages/mega.yaml`（`-female-mega` / `-male-mega`）へ揃える
+ *   （per-gender で忠実に写す・♂♀を単一へ畳むかは generate が stats/types/ability/learnset 一致で判定・ADR 0046）。
  */
 const FORM_SLUG_RENAME: Record<string, string> = {
   "minior-red-meteor": "minior-meteor",
@@ -138,6 +138,8 @@ const FORM_SLUG_RENAME: Record<string, string> = {
   "meowstic-f": "meowstic-female",
   "indeedee-f": "indeedee-female",
   "oinkologne-f": "oinkologne-female",
+  "meowstic-f-mega": "meowstic-female-mega",
+  "meowstic-m-mega": "meowstic-male-mega",
 };
 
 /**

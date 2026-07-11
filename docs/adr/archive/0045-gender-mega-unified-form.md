@@ -1,6 +1,6 @@
 ---
 id: 0045
-status: Accepted
+status: Superseded by ADR-0046
 date: 2026-07-11
 ---
 
@@ -10,7 +10,7 @@ date: 2026-07-11
 
 Champions（Legends Z-A）は性別二形の種にメガを与える。pokemon-showdown はこれを **♀♂で別々の forme**
 （`Meowstic-F-Mega` / `Meowstic-M-Mega`）として持つが、両者は**種族値・タイプ・特性が完全一致**する（gender ラベル
-だけが違う）。ADR [0044](./0044-canonical-species-id-explicit-slug.md) の canonical 化で forme id を
+だけが違う）。ADR [0044](../0044-canonical-species-id-explicit-slug.md) の canonical 化で forme id を
 `meowstic-female-mega` / `meowstic-male-mega` に正規化したが、これを 2 つのメガ形態として扱うと 2 つの問題が出る:
 
 1. **1 ストーン → 2 形態のリンクを表現できない**。メガストーンは 1 種（`meowsticite`）で、これが両 gender メガを
@@ -33,7 +33,7 @@ M-A フル rollout でこの gap が顕在化した（gender メガは M-A で m
 - `megaEvolveBaseId` が mega 名の gender から gender 別 base（F→`-female` / M→`-male`）を導出し、`groupMegaByBase`
   が ♀♂両 base に単一メガを紐付ける。`mega-specs.baseSpecies`（単一逆参照）は canonical（♂）に揃える。
 - メガ名（`languages/mega.yaml`）は統合 id `meowstic-mega` を skill 著述で持つ（PokeAPI `pokemon-form` は
-  gender 別しか持たず統合 id を backfill できないため・ADR [0043](./0043-mega-names-from-pokeapi-form-names.md) の
+  gender 別しか持たず統合 id を backfill できないため・ADR [0043](../0043-mega-names-from-pokeapi-form-names.md) の
   例外）。
 
 ## Consequences

@@ -33,6 +33,12 @@ describe("canonicalFormId", () => {
     expect(canonicalFormId("oinkologne-f")).toBe("oinkologne-female");
   });
 
+  it("normalizes the per-gender mega forme suffix to the languages -female-mega / -male-mega id", () => {
+    // gender メガは per-gender で忠実に写す（畳み込みは generate の判定・ADR 0046）。
+    expect(canonicalFormId("meowstic-f-mega")).toBe("meowstic-female-mega");
+    expect(canonicalFormId("meowstic-m-mega")).toBe("meowstic-male-mega");
+  });
+
   it("passes a slug with no redundant suffix through unchanged (idempotent)", () => {
     expect(canonicalFormId("raichu-alola")).toBe("raichu-alola");
     expect(canonicalFormId("rotom-wash")).toBe("rotom-wash");
