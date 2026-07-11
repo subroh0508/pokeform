@@ -155,3 +155,748 @@ mega:
       S: 110
     ability: tough-claws
     baseSpecies: metagross
+  venusaur-mega:
+    dex: 3
+    types:
+      - grass
+      - poison
+    stats:
+      H: 80
+      A: 100
+      B: 123
+      C: 122
+      D: 120
+      S: 80
+    ability: thick-fat
+    baseSpecies: venusaur
+  blastoise-mega:
+    dex: 9
+    types:
+      - water
+    stats:
+      H: 79
+      A: 103
+      B: 120
+      C: 135
+      D: 115
+      S: 78
+    ability: mega-launcher
+    baseSpecies: blastoise
+  beedrill-mega:
+    dex: 15
+    types:
+      - bug
+      - poison
+    stats:
+      H: 65
+      A: 150
+      B: 40
+      C: 15
+      D: 80
+      S: 145
+    ability: adaptability
+    baseSpecies: beedrill
+  pidgeot-mega:
+    dex: 18
+    types:
+      - normal
+      - flying
+    stats:
+      H: 83
+      A: 80
+      B: 80
+      C: 135
+      D: 80
+      S: 121
+    ability: no-guard
+    baseSpecies: pidgeot
+  clefable-mega:
+    dex: 36
+    types:
+      - fairy
+      - flying
+    stats:
+      H: 95
+      A: 80
+      B: 93
+      C: 135
+      D: 110
+      S: 70
+    ability: magic-bounce
+    baseSpecies: clefable
+  alakazam-mega:
+    dex: 65
+    types:
+      - psychic
+    stats:
+      H: 55
+      A: 50
+      B: 65
+      C: 175
+      D: 105
+      S: 150
+    ability: trace
+    baseSpecies: alakazam
+  victreebel-mega:
+    dex: 71
+    types:
+      - grass
+      - poison
+    stats:
+      H: 80
+      A: 125
+      B: 85
+      C: 135
+      D: 95
+      S: 70
+    ability: innards-out
+    baseSpecies: victreebel
+  slowbro-mega:
+    dex: 80
+    types:
+      - water
+      - psychic
+    stats:
+      H: 95
+      A: 75
+      B: 180
+      C: 130
+      D: 80
+      S: 30
+    ability: shell-armor
+    baseSpecies: slowbro
+  kangaskhan-mega:
+    dex: 115
+    types:
+      - normal
+    stats:
+      H: 105
+      A: 125
+      B: 100
+      C: 60
+      D: 100
+      S: 100
+    ability: parental-bond
+    baseSpecies: kangaskhan
+  starmie-mega:
+    dex: 121
+    types:
+      - water
+      - psychic
+    stats:
+      H: 60
+      A: 100
+      B: 105
+      C: 130
+      D: 105
+      S: 120
+    ability: huge-power
+    baseSpecies: starmie
+  pinsir-mega:
+    dex: 127
+    types:
+      - bug
+      - flying
+    stats:
+      H: 65
+      A: 155
+      B: 120
+      C: 65
+      D: 90
+      S: 105
+    ability: aerilate
+    baseSpecies: pinsir
+  gyarados-mega:
+    dex: 130
+    types:
+      - water
+      - dark
+    stats:
+      H: 95
+      A: 155
+      B: 109
+      C: 70
+      D: 130
+      S: 81
+    ability: mold-breaker
+    baseSpecies: gyarados
+  aerodactyl-mega:
+    dex: 142
+    types:
+      - rock
+      - flying
+    stats:
+      H: 80
+      A: 135
+      B: 85
+      C: 70
+      D: 95
+      S: 150
+    ability: tough-claws
+    baseSpecies: aerodactyl
+  dragonite-mega:
+    dex: 149
+    types:
+      - dragon
+      - flying
+    stats:
+      H: 91
+      A: 124
+      B: 115
+      C: 145
+      D: 125
+      S: 100
+    ability: multiscale
+    baseSpecies: dragonite
+  meganium-mega:
+    dex: 154
+    types:
+      - grass
+      - fairy
+    stats:
+      H: 80
+      A: 92
+      B: 115
+      C: 143
+      D: 115
+      S: 80
+    ability: mega-sol
+    baseSpecies: meganium
+  feraligatr-mega:
+    dex: 160
+    types:
+      - water
+      - dragon
+    stats:
+      H: 85
+      A: 160
+      B: 125
+      C: 89
+      D: 93
+      S: 78
+    ability: dragonize
+    baseSpecies: feraligatr
+  ampharos-mega:
+    dex: 181
+    types:
+      - electric
+      - dragon
+    stats:
+      H: 90
+      A: 95
+      B: 105
+      C: 165
+      D: 110
+      S: 45
+    ability: mold-breaker
+    baseSpecies: ampharos
+  steelix-mega:
+    dex: 208
+    types:
+      - steel
+      - ground
+    stats:
+      H: 75
+      A: 125
+      B: 230
+      C: 55
+      D: 95
+      S: 30
+    ability: sand-force
+    baseSpecies: steelix
+  scizor-mega:
+    dex: 212
+    types:
+      - bug
+      - steel
+    stats:
+      H: 70
+      A: 150
+      B: 140
+      C: 65
+      D: 100
+      S: 75
+    ability: technician
+    baseSpecies: scizor
+  heracross-mega:
+    dex: 214
+    types:
+      - bug
+      - fighting
+    stats:
+      H: 80
+      A: 185
+      B: 115
+      C: 40
+      D: 105
+      S: 75
+    ability: skill-link
+    baseSpecies: heracross
+  skarmory-mega:
+    dex: 227
+    types:
+      - steel
+      - flying
+    stats:
+      H: 65
+      A: 140
+      B: 110
+      C: 40
+      D: 100
+      S: 110
+    ability: stalwart
+    baseSpecies: skarmory
+  houndoom-mega:
+    dex: 229
+    types:
+      - dark
+      - fire
+    stats:
+      H: 75
+      A: 90
+      B: 90
+      C: 140
+      D: 90
+      S: 115
+    ability: solar-power
+    baseSpecies: houndoom
+  gardevoir-mega:
+    dex: 282
+    types:
+      - psychic
+      - fairy
+    stats:
+      H: 68
+      A: 85
+      B: 65
+      C: 165
+      D: 135
+      S: 100
+    ability: pixilate
+    baseSpecies: gardevoir
+  sableye-mega:
+    dex: 302
+    types:
+      - dark
+      - ghost
+    stats:
+      H: 50
+      A: 85
+      B: 125
+      C: 85
+      D: 115
+      S: 20
+    ability: magic-bounce
+    baseSpecies: sableye
+  aggron-mega:
+    dex: 306
+    types:
+      - steel
+    stats:
+      H: 70
+      A: 140
+      B: 230
+      C: 60
+      D: 80
+      S: 50
+    ability: filter
+    baseSpecies: aggron
+  medicham-mega:
+    dex: 308
+    types:
+      - fighting
+      - psychic
+    stats:
+      H: 60
+      A: 100
+      B: 85
+      C: 80
+      D: 85
+      S: 100
+    ability: pure-power
+    baseSpecies: medicham
+  manectric-mega:
+    dex: 310
+    types:
+      - electric
+    stats:
+      H: 70
+      A: 75
+      B: 80
+      C: 135
+      D: 80
+      S: 135
+    ability: intimidate
+    baseSpecies: manectric
+  sharpedo-mega:
+    dex: 319
+    types:
+      - water
+      - dark
+    stats:
+      H: 70
+      A: 140
+      B: 70
+      C: 110
+      D: 65
+      S: 105
+    ability: strong-jaw
+    baseSpecies: sharpedo
+  camerupt-mega:
+    dex: 323
+    types:
+      - fire
+      - ground
+    stats:
+      H: 70
+      A: 120
+      B: 100
+      C: 145
+      D: 105
+      S: 20
+    ability: sheer-force
+    baseSpecies: camerupt
+  altaria-mega:
+    dex: 334
+    types:
+      - dragon
+      - fairy
+    stats:
+      H: 75
+      A: 110
+      B: 110
+      C: 110
+      D: 105
+      S: 80
+    ability: pixilate
+    baseSpecies: altaria
+  banette-mega:
+    dex: 354
+    types:
+      - ghost
+    stats:
+      H: 64
+      A: 165
+      B: 75
+      C: 93
+      D: 83
+      S: 75
+    ability: prankster
+    baseSpecies: banette
+  chimecho-mega:
+    dex: 358
+    types:
+      - psychic
+      - steel
+    stats:
+      H: 75
+      A: 50
+      B: 110
+      C: 135
+      D: 120
+      S: 65
+    ability: levitate
+    baseSpecies: chimecho
+  absol-mega:
+    dex: 359
+    types:
+      - dark
+    stats:
+      H: 65
+      A: 150
+      B: 60
+      C: 115
+      D: 60
+      S: 115
+    ability: magic-bounce
+    baseSpecies: absol
+  glalie-mega:
+    dex: 362
+    types:
+      - ice
+    stats:
+      H: 80
+      A: 120
+      B: 80
+      C: 120
+      D: 80
+      S: 100
+    ability: refrigerate
+    baseSpecies: glalie
+  lopunny-mega:
+    dex: 428
+    types:
+      - normal
+      - fighting
+    stats:
+      H: 65
+      A: 136
+      B: 94
+      C: 54
+      D: 96
+      S: 135
+    ability: scrappy
+    baseSpecies: lopunny
+  abomasnow-mega:
+    dex: 460
+    types:
+      - grass
+      - ice
+    stats:
+      H: 90
+      A: 132
+      B: 105
+      C: 132
+      D: 105
+      S: 30
+    ability: snow-warning
+    baseSpecies: abomasnow
+  gallade-mega:
+    dex: 475
+    types:
+      - psychic
+      - fighting
+    stats:
+      H: 68
+      A: 165
+      B: 95
+      C: 65
+      D: 115
+      S: 110
+    ability: inner-focus
+    baseSpecies: gallade
+  froslass-mega:
+    dex: 478
+    types:
+      - ice
+      - ghost
+    stats:
+      H: 70
+      A: 80
+      B: 70
+      C: 140
+      D: 100
+      S: 120
+    ability: snow-warning
+    baseSpecies: froslass
+  emboar-mega:
+    dex: 500
+    types:
+      - fire
+      - fighting
+    stats:
+      H: 110
+      A: 148
+      B: 75
+      C: 110
+      D: 110
+      S: 75
+    ability: mold-breaker
+    baseSpecies: emboar
+  excadrill-mega:
+    dex: 530
+    types:
+      - ground
+      - steel
+    stats:
+      H: 110
+      A: 165
+      B: 100
+      C: 65
+      D: 65
+      S: 103
+    ability: piercing-drill
+    baseSpecies: excadrill
+  audino-mega:
+    dex: 531
+    types:
+      - normal
+      - fairy
+    stats:
+      H: 103
+      A: 60
+      B: 126
+      C: 80
+      D: 126
+      S: 50
+    ability: healer
+    baseSpecies: audino
+  chandelure-mega:
+    dex: 609
+    types:
+      - ghost
+      - fire
+    stats:
+      H: 60
+      A: 75
+      B: 110
+      C: 175
+      D: 110
+      S: 90
+    ability: infiltrator
+    baseSpecies: chandelure
+  golurk-mega:
+    dex: 623
+    types:
+      - ground
+      - ghost
+    stats:
+      H: 89
+      A: 159
+      B: 105
+      C: 70
+      D: 105
+      S: 55
+    ability: unseen-fist
+    baseSpecies: golurk
+  chesnaught-mega:
+    dex: 652
+    types:
+      - grass
+      - fighting
+    stats:
+      H: 88
+      A: 137
+      B: 172
+      C: 74
+      D: 115
+      S: 44
+    ability: bulletproof
+    baseSpecies: chesnaught
+  delphox-mega:
+    dex: 655
+    types:
+      - fire
+      - psychic
+    stats:
+      H: 75
+      A: 69
+      B: 72
+      C: 159
+      D: 125
+      S: 134
+    ability: levitate
+    baseSpecies: delphox
+  greninja-mega:
+    dex: 658
+    types:
+      - water
+      - dark
+    stats:
+      H: 72
+      A: 125
+      B: 77
+      C: 133
+      D: 81
+      S: 142
+    ability: protean
+    baseSpecies: greninja
+  floette-mega:
+    dex: 670
+    types:
+      - fairy
+    stats:
+      H: 74
+      A: 85
+      B: 87
+      C: 155
+      D: 148
+      S: 102
+    ability: fairy-aura
+    baseSpecies: floette-eternal
+  meowstic-female-mega:
+    dex: 678
+    types:
+      - psychic
+    stats:
+      H: 74
+      A: 48
+      B: 76
+      C: 143
+      D: 101
+      S: 124
+    ability: trace
+    baseSpecies: meowstic-female
+  meowstic-male-mega:
+    dex: 678
+    types:
+      - psychic
+    stats:
+      H: 74
+      A: 48
+      B: 76
+      C: 143
+      D: 101
+      S: 124
+    ability: trace
+    baseSpecies: meowstic-male
+  hawlucha-mega:
+    dex: 701
+    types:
+      - fighting
+      - flying
+    stats:
+      H: 78
+      A: 137
+      B: 100
+      C: 74
+      D: 93
+      S: 118
+    ability: no-guard
+    baseSpecies: hawlucha
+  crabominable-mega:
+    dex: 740
+    types:
+      - fighting
+      - ice
+    stats:
+      H: 97
+      A: 157
+      B: 122
+      C: 62
+      D: 107
+      S: 33
+    ability: iron-fist
+    baseSpecies: crabominable
+  drampa-mega:
+    dex: 780
+    types:
+      - normal
+      - dragon
+    stats:
+      H: 78
+      A: 85
+      B: 110
+      C: 160
+      D: 116
+      S: 36
+    ability: berserk
+    baseSpecies: drampa
+  scovillain-mega:
+    dex: 952
+    types:
+      - grass
+      - fire
+    stats:
+      H: 65
+      A: 138
+      B: 85
+      C: 138
+      D: 85
+      S: 75
+    ability: spicy-spray
+    baseSpecies: scovillain
+  glimmora-mega:
+    dex: 970
+    types:
+      - rock
+      - poison
+    stats:
+      H: 83
+      A: 90
+      B: 105
+      C: 150
+      D: 96
+      S: 101
+    ability: adaptability
+    baseSpecies: glimmora
