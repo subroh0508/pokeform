@@ -425,18 +425,33 @@ for (const r of regs) {
     // 専有はメガ形態種族側に課す（下の megaLines が対応ストーンタプルを emit する）。
     return `  ${k}: { id: ${sp}.id, dex: ${sp}.dex, types: ${sp}.types, baseStats: ${sp}.baseStats, abilities: ${sp}.abilities, moves: ${acc("speciesMoves", sid)}, items: "any"${megaPart} },`;
   });
-  const megaLines: string[] = [];
+  // メガ形態 id → その形態へ進化する base 種族群。gender メガ（ADR 0045）は ♀♂両 base が単一メガへ
+  // 進化するため 1 メガに複数 base が対応する。メガ形態エントリは **id ごとに 1 度だけ** emit する
+  // （重複キーで tsc TS1117 になるのを防ぐ）。
+  const basesByMega = new Map<string, string[]>();
   for (const [sid, ms] of Object.entries(r.mega)) {
     for (const mid of ms) {
-      const k = JSON.stringify(mid);
-      const mp = acc("megaSpecsDex", mid);
-      // メガ形態（メガシンカ後）種族の items は対応メガストーンのタプルに型制約する（個体が他持ち物を
-      // 持つと ItemNotHoldableBy ブランドエラー・HoldableItems の Extract 分岐で絞る）。
-      const itemsLit = lit(megaFormStones(r, mid));
-      megaLines.push(
-        `  ${k}: { id: ${mp}.id, dex: ${mp}.dex, types: ${mp}.types, baseStats: ${mp}.baseStats, abilities: [${mp}.ability], moves: ${acc("speciesMoves", sid)}, items: ${itemsLit} },`,
-      );
+      const list = basesByMega.get(mid) ?? [];
+      list.push(sid);
+      basesByMega.set(mid, list);
     }
+  }
+  const megaLines: string[] = [];
+  for (const [mid, sids] of basesByMega) {
+    const k = JSON.stringify(mid);
+    const mp = acc("megaSpecsDex", mid);
+    // メガ形態（メガシンカ後）種族の items は対応メガストーンのタプルに型制約する（個体が他持ち物を
+    // 持つと ItemNotHoldableBy ブランドエラー・HoldableItems の Extract 分岐で絞る）。
+    const itemsLit = lit(megaFormStones(r, mid));
+    // moves: 単一 base は base の movepool を参照。複数 base（gender メガ）は全 base の movepool の union を
+    // 採り、どの gender から進化しても legal moveset を弾かない（ADR 0045・movepool は gender で差異あり）。
+    const movesLit =
+      sids.length === 1
+        ? acc("speciesMoves", sids[0] as string)
+        : lit([...new Set(sids.flatMap((s) => r.speciesMoves[s] ?? []))].sort());
+    megaLines.push(
+      `  ${k}: { id: ${mp}.id, dex: ${mp}.dex, types: ${mp}.types, baseStats: ${mp}.baseStats, abilities: [${mp}.ability], moves: ${movesLit}, items: ${itemsLit} },`,
+    );
   }
   const speciesDexBody = `{\n${[...baseLines, ...megaLines].join("\n")}\n}`;
   // レギュ名は languages（regulationNames）由来で合成（名前 SoT は languages・ADR 0035）。
