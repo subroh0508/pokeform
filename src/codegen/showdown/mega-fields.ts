@@ -38,12 +38,26 @@ export function megaId(m: MegaInput): string {
 }
 
 /**
+ * mega base 限定の canonical 上書き。showdown が mega の baseSpecies を bare で持つが、実際に
+ * メガ可能かつ roster に載る形態が特定 form のケースを補正する。`floette-mega` の base は showdown で
+ * bare `Floette` だが、Champions でメガ可能かつ roster に載るのは AZ の `floette-eternal` のみ。
+ * bare `floette` は別種として languages/species.yaml に実在するため `canonicalSpeciesId`（全域）では
+ * 写せず、mega base 解決に限定して上書きする（gender メガの bare `Meowstic`→`meowstic-male` は
+ * 別種を持たず全域 `DEFAULT_TO_EXPLICIT` で済むのと対照的なケース）。
+ */
+const MEGA_BASE_OVERRIDE: Record<string, string> = {
+  floette: "floette-eternal",
+};
+
+/**
  * base 種族の安定 id。roster / megaEvolvesTo と同じ canonical species id へ写す（gender メガの
  * baseSpecies は showdown が bare `Meowstic`（=男）で持つため `meowstic-male` に揃い roster と一致する）。
- * 通常メガ（`Charizard` → `charizard` 等）は no-op。
+ * 通常メガ（`Charizard` → `charizard` 等）は no-op。`floette` 等 bare base が roster form と食い違う
+ * ケースだけ `MEGA_BASE_OVERRIDE` で roster 側へ揃える。
  */
 export function megaBaseSpeciesId(m: MegaInput): string {
-  return canonicalSpeciesId(m.baseSpecies);
+  const canonical = canonicalSpeciesId(m.baseSpecies);
+  return MEGA_BASE_OVERRIDE[canonical] ?? canonical;
 }
 
 /** mega-specs.yaml の構造フィールドを組む。 */
