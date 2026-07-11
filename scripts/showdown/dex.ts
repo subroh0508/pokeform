@@ -79,7 +79,13 @@ export function isUsableSpecies(species: Species): boolean {
     species.isNonstandard !== "Past" &&
     species.isNonstandard !== "Future" &&
     species.tier !== "Illegal" &&
-    species.tier !== "Unreleased"
+    species.tier !== "Unreleased" &&
+    // battleOnly フォルム（castform 天候 / aegislash-blade / mimikyu-busted / morpeko-hangry / palafin-hero /
+    // darmanitan-zen 等）は戦闘中に自動変化するだけで単体構築できないため roster から除外する。構築可能な
+    // base フォルム（castform / aegislash-shield 等）は残る。size 等の非 battleOnly フォルム（gourgeist-large 等）は含む。
+    // **メガフォルムも battleOnly だが**、メガは base + ストーンで構築でき別経路（mega.ts の isMegaForme）で
+    // 抽出するため除外しない（isMegaForme は残す）。
+    (!species.battleOnly || isMegaForme(species))
   );
 }
 
@@ -105,8 +111,21 @@ export function usableSpecies(dex: ModdedDex): Species[] {
 
 /** 種族が覚えられる技の **showdown 表示名**（アルファベット順）。 */
 export function learnsetNames(dex: ModdedDex, species: Species): string[] {
-  const learnsetData = dex.species.getLearnsetData(species.id).learnset || {};
-  return Object.keys(learnsetData)
+  // 独自 learnset を持たないフォルム（gourgeist のサイズ違い等）は base フォルムの learnset を継承する。
+  // getLearnsetData が空なら baseSpecies へ遡って非空の learnset を探す（空 movepool → flow `[]` になり
+  // check:yaml-style が落ちるのを防ぎ、フォルムに正しい techn(base 継承) を与える）。
+  let current: Species | null = species;
+  let learnset: Record<string, unknown> = {};
+  while (current) {
+    const data = dex.species.getLearnsetData(current.id).learnset;
+    if (data && Object.keys(data).length > 0) {
+      learnset = data;
+      break;
+    }
+    const base = current.baseSpecies;
+    current = base && base !== current.name ? dex.species.get(base) : null;
+  }
+  return Object.keys(learnset)
     .map((id) => dex.moves.get(id).name)
     .sort((a, b) => a.localeCompare(b));
 }
