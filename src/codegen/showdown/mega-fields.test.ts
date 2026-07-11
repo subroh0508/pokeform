@@ -53,6 +53,17 @@ const meowsticMaleMega: MegaInput = {
   ability: "Prankster",
 };
 
+// showdown は floette-mega の baseSpecies を bare `Floette` で持つが、Champions でメガ可能かつ
+// roster に載るのは AZ の `floette-eternal`。MEGA_BASE_OVERRIDE で roster 側へ揃える。
+const floetteMega: MegaInput = {
+  num: 670,
+  name: "Floette-Mega",
+  baseSpecies: "Floette",
+  types: ["Fairy"],
+  baseStats: { hp: 74, atk: 65, def: 67, spa: 125, spd: 128, spe: 92 },
+  ability: "Flower Veil",
+};
+
 describe("megaId / megaBaseSpeciesId", () => {
   it("derive kebab ids from names", () => {
     expect(megaId(charizardMegaX)).toBe("charizard-mega-x");
@@ -68,6 +79,13 @@ describe("megaId / megaBaseSpeciesId", () => {
     // showdown の baseSpecies は両性とも bare `Meowstic`（= 男）ゆえ base linking は `meowstic-male` に揃う。
     expect(megaBaseSpeciesId(meowsticFemaleMega)).toBe("meowstic-male");
     expect(megaBaseSpeciesId(meowsticMaleMega)).toBe("meowstic-male");
+  });
+
+  it("overrides the bare floette base to the roster form floette-eternal", () => {
+    // bare `floette` は別種として実在するため全域では写せず、mega base 解決に限定して上書きする。
+    expect(megaBaseSpeciesId(floetteMega)).toBe("floette-eternal");
+    expect(megaStructuralFields(floetteMega).baseSpecies).toBe("floette-eternal");
+    expect(groupMegaByBase([floetteMega])).toEqual({ "floette-eternal": ["floette-mega"] });
   });
 });
 
