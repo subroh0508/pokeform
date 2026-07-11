@@ -464,6 +464,13 @@ export const megaNames = {
       ja: "メガニャオニクス",
     },
   },
+  "meowstic-mega": {
+    id: "meowstic-mega",
+    name: {
+      en: "Mega Meowstic",
+      ja: "メガニャオニクス",
+    },
+  },
   "metagross-mega": {
     id: "metagross-mega",
     name: {

@@ -33,11 +33,6 @@ describe("canonicalFormId", () => {
     expect(canonicalFormId("oinkologne-f")).toBe("oinkologne-female");
   });
 
-  it("normalizes the showdown gender mega forme suffix to the languages id", () => {
-    expect(canonicalFormId("meowstic-f-mega")).toBe("meowstic-female-mega");
-    expect(canonicalFormId("meowstic-m-mega")).toBe("meowstic-male-mega");
-  });
-
   it("passes a slug with no redundant suffix through unchanged (idempotent)", () => {
     expect(canonicalFormId("raichu-alola")).toBe("raichu-alola");
     expect(canonicalFormId("rotom-wash")).toBe("rotom-wash");

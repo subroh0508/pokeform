@@ -72,6 +72,23 @@ describe("itemStructuralFields", () => {
     });
   });
 
+  it("collapses a gender mega stone's megaSpecies to the unified <base>-mega (ADR 0045)", () => {
+    // meowsticite は showdown で `Meowstic-M-Mega` へリンクするが、統合後の単一 `meowstic-mega` へ揃える
+    // （mega レコードの megaId と一致させ `megaFormStones` の逆引きを成立させる）。
+    expect(
+      itemStructuralFields({
+        name: "Meowsticite",
+        category: "megastone",
+        megaStone: { Meowstic: "Meowstic-M-Mega" },
+        megaEvolves: "Meowstic",
+      }),
+    ).toEqual({
+      megaStoneFor: "meowstic",
+      megaSpecies: "meowstic-mega",
+      category: "mega-stones",
+    });
+  });
+
   it("maps berry → berries and other → held-items without linking", () => {
     expect(itemStructuralFields({ ...leftovers, category: "berry" })).toEqual({
       category: "berries",

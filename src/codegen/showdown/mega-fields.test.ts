@@ -3,6 +3,8 @@ import {
   groupMegaByBase,
   type MegaInput,
   megaBaseSpeciesId,
+  megaEvolveBaseId,
+  megaFormId,
   megaId,
   megaStructuralFields,
 } from "./mega-fields.ts";
@@ -70,15 +72,27 @@ describe("megaId / megaBaseSpeciesId", () => {
     expect(megaBaseSpeciesId(charizardMegaX)).toBe("charizard");
   });
 
-  it("normalizes gender mega ids to the languages -female / -male canonical", () => {
-    expect(megaId(meowsticFemaleMega)).toBe("meowstic-female-mega");
-    expect(megaId(meowsticMaleMega)).toBe("meowstic-male-mega");
+  it("unifies both gender megas into a single meowstic-mega id (ADR 0045)", () => {
+    // ♂♀の2形態はステータス一致ゆえ単一メガ形態へ統合する。
+    expect(megaId(meowsticFemaleMega)).toBe("meowstic-mega");
+    expect(megaId(meowsticMaleMega)).toBe("meowstic-mega");
+    expect(megaFormId("Meowstic-F-Mega")).toBe("meowstic-mega");
+    // 非 gender メガは canonicalFormId 素通り。
+    expect(megaFormId("Charizard-Mega-X")).toBe("charizard-mega-x");
   });
 
-  it("routes the bare gender base species through canonicalSpeciesId (= -male)", () => {
-    // showdown の baseSpecies は両性とも bare `Meowstic`（= 男）ゆえ base linking は `meowstic-male` に揃う。
+  it("keeps the canonical (male) base as the mega-specs reverse pointer", () => {
+    // mega-specs.baseSpecies は単一の逆参照ゆえ canonical（`meowstic-male`）に揃える。
     expect(megaBaseSpeciesId(meowsticFemaleMega)).toBe("meowstic-male");
     expect(megaBaseSpeciesId(meowsticMaleMega)).toBe("meowstic-male");
+  });
+
+  it("derives the gender-specific base for mega linking (F -> -female / M -> -male)", () => {
+    // megaEvolvesTo / <reg>/mega.yaml は mega 名の gender から gender 別 base を導出し ♂♀両 base を紐付ける。
+    expect(megaEvolveBaseId(meowsticFemaleMega)).toBe("meowstic-female");
+    expect(megaEvolveBaseId(meowsticMaleMega)).toBe("meowstic-male");
+    // 非 gender メガは megaBaseSpeciesId に一致（charizard）。
+    expect(megaEvolveBaseId(charizardMegaX)).toBe("charizard");
   });
 
   it("overrides the bare floette base to the roster form floette-eternal", () => {
@@ -119,9 +133,11 @@ describe("groupMegaByBase", () => {
     });
   });
 
-  it("groups both gender megas under the canonical -male base", () => {
+  it("links the single unified mega under both gender bases (ADR 0045)", () => {
+    // ♂♀両 base が単一 `meowstic-mega` へ紐付く（gender 別 base 導出・dedup）。
     expect(groupMegaByBase([meowsticMaleMega, meowsticFemaleMega])).toEqual({
-      "meowstic-male": ["meowstic-female-mega", "meowstic-male-mega"],
+      "meowstic-male": ["meowstic-mega"],
+      "meowstic-female": ["meowstic-mega"],
     });
   });
 });

@@ -135,6 +135,13 @@ export const itemNames = {
       ja: "ジュペッタナイト",
     },
   },
+  barbaracite: {
+    id: "barbaracite",
+    name: {
+      en: "Barbaracite",
+      ja: "ガメノデスナイト",
+    },
+  },
   beedrillite: {
     id: "beedrillite",
     name: {
@@ -254,6 +261,13 @@ export const itemNames = {
       ja: "じゅうでんち",
     },
   },
+  chandelurite: {
+    id: "chandelurite",
+    name: {
+      en: "Chandelurite",
+      ja: "シャンデラナイト",
+    },
+  },
   charcoal: {
     id: "charcoal",
     name: {
@@ -289,6 +303,13 @@ export const itemNames = {
       ja: "クラボのみ",
     },
   },
+  chesnaughtite: {
+    id: "chesnaughtite",
+    name: {
+      en: "Chesnaughtite",
+      ja: "ブリガロナイト",
+    },
+  },
   "chesto-berry": {
     id: "chesto-berry",
     name: {
@@ -308,6 +329,13 @@ export const itemNames = {
     name: {
       en: "Chill Drive",
       ja: "フリーズカセット",
+    },
+  },
+  chimechite: {
+    id: "chimechite",
+    name: {
+      en: "Chimechite",
+      ja: "チリーンナイト",
     },
   },
   "choice-band": {
@@ -345,6 +373,13 @@ export const itemNames = {
       ja: "クリアチャーム",
     },
   },
+  clefablite: {
+    id: "clefablite",
+    name: {
+      en: "Clefablite",
+      ja: "ピクシナイト",
+    },
+  },
   "coba-berry": {
     id: "coba-berry",
     name: {
@@ -371,6 +406,13 @@ export const itemNames = {
     name: {
       en: "Covert Cloak",
       ja: "おんみつマント",
+    },
+  },
+  crabominite: {
+    id: "crabominite",
+    name: {
+      en: "Crabominite",
+      ja: "ケケンカニナイト",
     },
   },
   "custap-berry": {
@@ -415,6 +457,13 @@ export const itemNames = {
       ja: "しんかいのキバ",
     },
   },
+  delphoxite: {
+    id: "delphoxite",
+    name: {
+      en: "Delphoxite",
+      ja: "マフォクシナイト",
+    },
+  },
   "destiny-knot": {
     id: "destiny-knot",
     name: {
@@ -443,6 +492,13 @@ export const itemNames = {
       ja: "りゅうのプレート",
     },
   },
+  dragalgite: {
+    id: "dragalgite",
+    name: {
+      en: "Dragalgite",
+      ja: "ドラミドロナイト",
+    },
+  },
   "dragon-fang": {
     id: "dragon-fang",
     name: {
@@ -464,6 +520,20 @@ export const itemNames = {
       ja: "ドラゴンメモリ",
     },
   },
+  dragoninite: {
+    id: "dragoninite",
+    name: {
+      en: "Dragoninite",
+      ja: "カイリュナイト",
+    },
+  },
+  drampanite: {
+    id: "drampanite",
+    name: {
+      en: "Drampanite",
+      ja: "ジジーロナイト",
+    },
+  },
   "dread-plate": {
     id: "dread-plate",
     name: {
@@ -476,6 +546,13 @@ export const itemNames = {
     name: {
       en: "Earth Plate",
       ja: "だいちのプレート",
+    },
+  },
+  eelektrossite: {
+    id: "eelektrossite",
+    name: {
+      en: "Eelektrossite",
+      ja: "シビルドナイト",
     },
   },
   "eject-button": {
@@ -513,6 +590,13 @@ export const itemNames = {
       ja: "エレキシード",
     },
   },
+  emboarite: {
+    id: "emboarite",
+    name: {
+      en: "Emboarite",
+      ja: "エンブオナイト",
+    },
+  },
   "enigma-berry": {
     id: "enigma-berry",
     name: {
@@ -525,6 +609,13 @@ export const itemNames = {
     name: {
       en: "Eviolite",
       ja: "しんかのきせき",
+    },
+  },
+  excadrite: {
+    id: "excadrite",
+    name: {
+      en: "Excadrite",
+      ja: "ドリュウズナイト",
     },
   },
   "expert-belt": {
@@ -553,6 +644,20 @@ export const itemNames = {
     name: {
       en: "Fairy Memory",
       ja: "フェアリーメモリ",
+    },
+  },
+  falinksite: {
+    id: "falinksite",
+    name: {
+      en: "Falinksite",
+      ja: "タイレーツナイト",
+    },
+  },
+  feraligite: {
+    id: "feraligite",
+    name: {
+      en: "Feraligite",
+      ja: "オーダイルナイト",
     },
   },
   "fighting-gem": {
@@ -618,6 +723,13 @@ export const itemNames = {
       ja: "かるいし",
     },
   },
+  floettite: {
+    id: "floettite",
+    name: {
+      en: "Floettite",
+      ja: "フラエッテナイト",
+    },
+  },
   "flying-gem": {
     id: "flying-gem",
     name: {
@@ -644,6 +756,13 @@ export const itemNames = {
     name: {
       en: "Focus Sash",
       ja: "きあいのタスキ",
+    },
+  },
+  froslassite: {
+    id: "froslassite",
+    name: {
+      en: "Froslassite",
+      ja: "ユキメノコナイト",
     },
   },
   "full-incense": {
@@ -709,6 +828,20 @@ export const itemNames = {
       ja: "オニゴーリナイト",
     },
   },
+  glimmoranite: {
+    id: "glimmoranite",
+    name: {
+      en: "Glimmoranite",
+      ja: "キラフロルナイト",
+    },
+  },
+  golurkite: {
+    id: "golurkite",
+    name: {
+      en: "Golurkite",
+      ja: "ゴルーグナイト",
+    },
+  },
   "grass-gem": {
     id: "grass-gem",
     name: {
@@ -728,6 +861,13 @@ export const itemNames = {
     name: {
       en: "Grassy Seed",
       ja: "グラスシード",
+    },
+  },
+  greninjite: {
+    id: "greninjite",
+    name: {
+      en: "Greninjite",
+      ja: "ゲッコウガナイト",
     },
   },
   "grip-claw": {
@@ -777,6 +917,13 @@ export const itemNames = {
     name: {
       en: "Hard Stone",
       ja: "かたいいし",
+    },
+  },
+  hawluchanite: {
+    id: "hawluchanite",
+    name: {
+      en: "Hawluchanite",
+      ja: "ルチャブルナイト",
     },
   },
   "hearthflame-mask": {
@@ -1059,6 +1206,13 @@ export const itemNames = {
       ja: "マゴのみ",
     },
   },
+  malamarite: {
+    id: "malamarite",
+    name: {
+      en: "Malamarite",
+      ja: "カラマネロナイト",
+    },
+  },
   manectite: {
     id: "manectite",
     name: {
@@ -1094,11 +1248,25 @@ export const itemNames = {
       ja: "チャーレムナイト",
     },
   },
+  meganiumite: {
+    id: "meganiumite",
+    name: {
+      en: "Meganiumite",
+      ja: "メガニウムナイト",
+    },
+  },
   "mental-herb": {
     id: "mental-herb",
     name: {
       en: "Mental Herb",
       ja: "メンタルハーブ",
+    },
+  },
+  meowsticite: {
+    id: "meowsticite",
+    name: {
+      en: "Meowsticite",
+      ja: "ニャオニクスナイト",
     },
   },
   metagrossite: {
@@ -1367,6 +1535,13 @@ export const itemNames = {
       ja: "むらさきのミツ",
     },
   },
+  pyroarite: {
+    id: "pyroarite",
+    name: {
+      en: "Pyroarite",
+      ja: "カエンジシナイト",
+    },
+  },
   "quick-claw": {
     id: "quick-claw",
     name: {
@@ -1379,6 +1554,20 @@ export const itemNames = {
     name: {
       en: "Quick Powder",
       ja: "スピードパウダー",
+    },
+  },
+  "raichunite-x": {
+    id: "raichunite-x",
+    name: {
+      en: "Raichunite X",
+      ja: "ライチュウナイトＸ",
+    },
+  },
+  "raichunite-y": {
+    id: "raichunite-y",
+    name: {
+      en: "Raichunite Y",
+      ja: "ライチュウナイトＹ",
     },
   },
   "rawst-berry": {
@@ -1542,11 +1731,32 @@ export const itemNames = {
       ja: "ハッサムナイト",
     },
   },
+  scolipite: {
+    id: "scolipite",
+    name: {
+      en: "Scolipite",
+      ja: "ペンドラナイト",
+    },
+  },
   "scope-lens": {
     id: "scope-lens",
     name: {
       en: "Scope Lens",
       ja: "ピントレンズ",
+    },
+  },
+  scovillainite: {
+    id: "scovillainite",
+    name: {
+      en: "Scovillainite",
+      ja: "スコヴィラナイト",
+    },
+  },
+  scraftinite: {
+    id: "scraftinite",
+    name: {
+      en: "Scraftinite",
+      ja: "ズルズキナイト",
     },
   },
   "sea-incense": {
@@ -1619,6 +1829,13 @@ export const itemNames = {
       ja: "オボンのみ",
     },
   },
+  skarmorite: {
+    id: "skarmorite",
+    name: {
+      en: "Skarmorite",
+      ja: "エアームドナイト",
+    },
+  },
   "sky-plate": {
     id: "sky-plate",
     name: {
@@ -1689,11 +1906,25 @@ export const itemNames = {
       ja: "もののけプレート",
     },
   },
+  staraptite: {
+    id: "staraptite",
+    name: {
+      en: "Staraptite",
+      ja: "ムクホークナイト",
+    },
+  },
   "starf-berry": {
     id: "starf-berry",
     name: {
       en: "Starf Berry",
       ja: "スターのみ",
+    },
+  },
+  starminite: {
+    id: "starminite",
+    name: {
+      en: "Starminite",
+      ja: "スターミナイト",
     },
   },
   "steel-gem": {
@@ -1813,6 +2044,13 @@ export const itemNames = {
     name: {
       en: "Venusaurite",
       ja: "フシギバナイト",
+    },
+  },
+  victreebelite: {
+    id: "victreebelite",
+    name: {
+      en: "Victreebelite",
+      ja: "ウツボットナイト",
     },
   },
   "wacan-berry": {
