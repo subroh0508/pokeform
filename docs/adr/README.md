@@ -77,6 +77,7 @@ pokeform の重要なアーキテクチャ決定を**不変の連番ログ**と�
 | [0043](./0043-mega-names-from-pokeapi-form-names.md) | メガ名（languages/mega.yaml の ja/en）を showdown/手作業から PokeAPI(pokemon-form form_names・is_mega) へ一本化し 6 種目の全件名辞書へ・showdown mega 名ルート（megaEnName）削除（ADR 0041/0040 の mega 名取得元分担を refine・mega 構造 + linking は showdown=正で不変） | Accepted |
 | [0044](./0044-canonical-species-id-explicit-slug.md) | species id 正本を明示 slug（PokeAPI 準拠 canonical）に定め showdown 抽出 id を canonical へ正規化する（kebabId を species 専用層から分離・3 種マップ default→明示 / Class C 語彙差 / CANONICAL_ID_OVERRIDE・ADR 0041 の form 扱いを refine / ADR 0035・0039 の id 正本を明確化） | Accepted |
 | [0046](./0046-gender-mega-conditional-collapse.md) | gender メガの畳み込みを条件付き（種族値/タイプ/特性/learnset がすべて一致するときのみ）にし、非畳み込み時は per-gender（`<base>-female-mega` / `<base>-male-mega`）で保つ。1 ストーン→複数形態を `item-specs.megaSpecies` 配列化で表現・megaStoneFor を canonical 化・空 reg 耐性化（ADR 0045 supersede・meowstic は技差で per-gender） | Accepted |
+| [0047](./0047-mega-cosmetic-forme-id-collapse.md) | メガの装飾フォルム（`magearna-original-mega` / `tatsugiri-{curly,droopy,stretchy}-mega`）を単一 canonical `<base>-mega` id へ畳む・剪定 + 名前 override を冪等に適用（species 側 FORM_EXCLUDE の mega 版・ADR 0043 の mega slug=id 恒等前提を装飾 forme に限り refine・gender メガ ADR 0046 は不変） | Accepted |
 
 > 一覧は ADR 追加・Status 変更のたびに更新します。`adr-new` は新規 ADR をこの表に追記します。
 

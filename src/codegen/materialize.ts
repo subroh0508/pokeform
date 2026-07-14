@@ -92,6 +92,65 @@ export function megaFormCandidates(slugs: string[]): string[] {
 }
 
 /**
+ * 装飾フォルム（姿差・色差のみで別種族にしない form）に PokeAPI が付ける mega slug を、単一の canonical
+ * `<baseSpecies>-mega` へ畳む curated マップ。ADR 0043 の「mega slug = id 恒等」前提の refine で、species 側の
+ * `FORM_EXCLUDE`（`tatsugiri-curly` / `pyroar-male` 等）と対をなす mega 版。対象は PokeAPI `pokemon-form` が
+ * `is_mega: true` で返す未実装・データマインド由来の orphan（構造 `mega-specs.yaml` には存在しない）:
+ * - `magearna-original-mega`（オリジナルカラー）→ `magearna-mega`
+ * - `tatsugiri-{curly,droopy,stretchy}-mega`（3 姿）→ `tatsugiri-mega`
+ * gender メガ（`meowstic-*-mega`）は畳まない — 構造メガが実在し ADR 0046 で learnset 差により per-gender 保持が
+ * 確定しているため（本マップは装飾 forme 専用で gender には触れない）。
+ */
+export const MEGA_ID_COLLAPSE: Record<string, string> = {
+  "magearna-original-mega": "magearna-mega",
+  "tatsugiri-curly-mega": "tatsugiri-mega",
+  "tatsugiri-droopy-mega": "tatsugiri-mega",
+  "tatsugiri-stretchy-mega": "tatsugiri-mega",
+};
+
+/**
+ * 畳んだ canonical mega id の名前 override。装飾 forme を単一 id へ畳むと PokeAPI `form_names` の en が姿別
+ * （"Mega Curly Tatsugiri" 等）で canonical に合わないため、ここで正しい単一名を与える（抽出名より優先）。
+ * `magearna-mega` は既存の raw（"Mega Magearna"）が正しいので override 不要。ja は 3 姿とも「メガシャリタツ」で
+ * 差が無いが決定論のため明示する。
+ */
+export const MEGA_NAME_OVERRIDE: Record<string, { ja?: string; en?: string }> = {
+  "tatsugiri-mega": { ja: "メガシャリタツ", en: "Mega Tatsugiri" },
+};
+
+/** mega slug → canonical mega id。装飾 forme の姿別 slug を `<base>-mega` へ畳み、それ以外は恒等（冪等）。 */
+export function canonicalMegaId(slug: string): string {
+  return MEGA_ID_COLLAPSE[slug] ?? slug;
+}
+
+/**
+ * mega の raw slug + 抽出名から、languages へ書く canonical エントリ（id + names）を解決する純関数。id を
+ * `canonicalMegaId` で畳み、`MEGA_NAME_OVERRIDE` があれば欄ごとに上書きする（override 欄のみ差し替え・
+ * 抽出名を温存）。`scripts/materialize.ts`（IO）の mega backfill が転記前の transform として通す。
+ */
+export function resolveMegaEntry(
+  slug: string,
+  names: { ja?: string; en?: string },
+): { id: string; names: { ja?: string; en?: string } } {
+  const id = canonicalMegaId(slug);
+  const override = MEGA_NAME_OVERRIDE[id];
+  return { id, names: override ? { ...names, ...override } : names };
+}
+
+/**
+ * languages/mega.yaml の既存 id 集合から、畳み込みで不要になった姿別 source id（`MEGA_ID_COLLAPSE` のキー）を
+ * 剪定対象として返す純関数。**canonical target が既存に在るものだけ**を返し（名前の消失を防ぐ）、IO 側
+ * （`scripts/materialize.ts`）が該当ノードを削除する。剪定は mega backfill の後（canonical id 追加後）に走らせる。
+ */
+export function megaIdsToPrune(existingIds: string[]): string[] {
+  const present = new Set(existingIds);
+  return existingIds.filter((id) => {
+    const target = MEGA_ID_COLLAPSE[id];
+    return target !== undefined && present.has(target);
+  });
+}
+
+/**
  * 複数リストの union を重複排除 + 昇順ソートで作る（items の item-category whitelist union 計算・issue #213）。
  * PokeAPI の `item-category/{cat}` は該当 items をカテゴリごとに返すため、各カテゴリの `items[].name` 群を
  * 渡して 1 本の決定論的な id 集合へ畳む。全件辞書の items をこの union のみへ絞る keep 集合になる。

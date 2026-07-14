@@ -175,9 +175,6 @@ mega:
   magearna-mega:
     ja: メガマギアナ
     en: Mega Magearna
-  magearna-original-mega:
-    ja: メガマギアナ
-    en: Mega Original Magearna
   malamar-mega:
     ja: メガカラマネロ
     en: Mega Malamar
@@ -268,15 +265,6 @@ mega:
   swampert-mega:
     ja: メガラグラージ
     en: Mega Swampert
-  tatsugiri-curly-mega:
-    ja: メガシャリタツ
-    en: Mega Curly Tatsugiri
-  tatsugiri-droopy-mega:
-    ja: メガシャリタツ
-    en: Mega Droopy Tatsugiri
-  tatsugiri-stretchy-mega:
-    ja: メガシャリタツ
-    en: Mega Stretchy Tatsugiri
   tyranitar-mega:
     ja: メガバンギラス
     en: Mega Tyranitar
@@ -292,3 +280,6 @@ mega:
   zygarde-mega:
     ja: メガジガルデ
     en: Mega Zygarde
+  tatsugiri-mega:
+    ja: メガシャリタツ
+    en: Mega Tatsugiri
