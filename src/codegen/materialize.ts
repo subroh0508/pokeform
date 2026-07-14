@@ -68,7 +68,9 @@ export function extractNames(raw: RawNamed): { ja?: string; en?: string } {
  * `pokemon-form` 詳細から mega の ja/en を取り出す。**`is_mega: true` の form だけ**を対象にし（それ以外は空 =
  * 呼び出し側が append/backfill しない）、`form_names` から ja（ja-Hrkt 優先）と en を両取りする。PokeAPI slug
  * （`charizard-mega-x` / `staraptor-mega`）は pokeform の mega id 規約（`<base>-mega[-x|-y]`・ADR 0040）と一致する
- * ため id 正規化は不要（呼び出し側は slug をそのまま id に使う）。
+ * ため大多数は id 正規化不要（slug をそのまま id に使う）。**ただし装飾フォルム × メガ（`tatsugiri-curly-mega` 等）
+ * だけは例外**で、呼び出し側が `resolveMegaEntry` / `canonicalMegaId` で単一 canonical `<base>-mega` へ畳む（ADR 0047・
+ * ADR 0043 の slug=id 恒等前提の refine）。本関数自身は名前抽出のみで id 正規化は行わない。
  */
 export function extractMegaNames(raw: RawForm): { ja?: string; en?: string } {
   if (raw.is_mega !== true) return {};
