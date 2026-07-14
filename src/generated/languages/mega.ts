@@ -408,13 +408,6 @@ export const megaNames = {
       ja: "メガマギアナ",
     },
   },
-  "magearna-original-mega": {
-    id: "magearna-original-mega",
-    name: {
-      en: "Mega Original Magearna",
-      ja: "メガマギアナ",
-    },
-  },
   "malamar-mega": {
     id: "malamar-mega",
     name: {
@@ -625,27 +618,6 @@ export const megaNames = {
       ja: "メガラグラージ",
     },
   },
-  "tatsugiri-curly-mega": {
-    id: "tatsugiri-curly-mega",
-    name: {
-      en: "Mega Curly Tatsugiri",
-      ja: "メガシャリタツ",
-    },
-  },
-  "tatsugiri-droopy-mega": {
-    id: "tatsugiri-droopy-mega",
-    name: {
-      en: "Mega Droopy Tatsugiri",
-      ja: "メガシャリタツ",
-    },
-  },
-  "tatsugiri-stretchy-mega": {
-    id: "tatsugiri-stretchy-mega",
-    name: {
-      en: "Mega Stretchy Tatsugiri",
-      ja: "メガシャリタツ",
-    },
-  },
   "tyranitar-mega": {
     id: "tyranitar-mega",
     name: {
@@ -679,6 +651,13 @@ export const megaNames = {
     name: {
       en: "Mega Zygarde",
       ja: "メガジガルデ",
+    },
+  },
+  "tatsugiri-mega": {
+    id: "tatsugiri-mega",
+    name: {
+      en: "Mega Tatsugiri",
+      ja: "メガシャリタツ",
     },
   },
 } as const satisfies Record<string, NameEntry>;

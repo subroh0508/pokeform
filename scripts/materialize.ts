@@ -28,8 +28,10 @@ import {
   extractNames,
   type FieldPlan,
   getOrCreateBlockMap,
+  megaIdsToPrune,
   planFields,
   pruneToKeep,
+  resolveMegaEntry,
 } from "../src/codegen/materialize.ts";
 import { SUPPRESS_BASE_SPECIES } from "../src/codegen/showdown/canonical-species-id.ts";
 
@@ -106,6 +108,15 @@ const backfillNames = (
   extract: (r: RawNamed) => { ja?: string; en?: string },
   needs: (e: { ja?: string; en?: string }) => boolean,
   skip: (id: string) => boolean = () => false,
+  // raw slug + 抽出名 → 転記先 id + 名前へ写す変換（既定は恒等）。mega だけ `resolveMegaEntry` で装飾 forme の
+  // 姿別 slug を canonical `<base>-mega` へ畳み名前 override を適用する（純関数側でテスト・[[data-pipeline]]）。
+  transform: (
+    slug: string,
+    names: { ja?: string; en?: string },
+  ) => { id: string; names: { ja?: string; en?: string } } = (slug, names) => ({
+    id: slug,
+    names,
+  }),
 ): number => {
   // from-scratch 復元（`data/languages/*` 完全削除）でも scaffold / seed 無しで動くよう、欠損ファイルは先頭
   // コメントだけの doc を起こし、map ノードは block スタイルで get-or-create する（純関数側・plan 11 P2）。
@@ -115,17 +126,18 @@ const backfillNames = (
     : parseDocument(`${HEADERS[mapKey] ?? `# data/languages/${file}`}\n`);
   const map = getOrCreateBlockMap(doc, mapKey);
   let filled = 0;
-  for (const id of listRawIds(category)) {
-    if (skip(id)) continue; // 性別二形の bare base 抑制等（male/female form は素通り）
-    const json = rawOpt(category, id);
+  for (const slug of listRawIds(category)) {
+    if (skip(slug)) continue; // 性別二形の bare base 抑制等（male/female form は素通り）
+    const json = rawOpt(category, slug);
     if (json === null) continue;
+    // 転記先 id と名前を transform で解決（mega は装飾 forme の姿別 slug を canonical `<base>-mega` へ畳む）。
+    const { id, names } = transform(slug, extract(json));
     const node = map.get(id) as YAMLMap | undefined;
     if (node === undefined) {
       // 未記録 id: ja/en を両取りできたものだけ新規エントリとして append する。PokeAPI が ja を持たない id
       // （Pokémon GO 専用特性 is_main_series:false / LA の未ローカライズ球 / 未ローカライズの新特性 等）は
       // 全件名辞書の「各エントリ ja/en 完備」不変条件（ADR 0041）を満たせないため辞書へ入れず skip する
       // （必要になれば手作業で ja を補って append する・[[data-pipeline]]）。既存値が無いため conflict しない。
-      const names = extract(json);
       if (names.ja === undefined || names.en === undefined) {
         skippedCount++;
         console.warn(
@@ -140,7 +152,7 @@ const backfillNames = (
     // 既存 id: ja・en 欠落のみ backfill（既存値は上書きしない）。
     const current = node.toJS(doc) as { ja?: string; en?: string };
     if (!needs(current)) continue;
-    filled += apply(doc, node, id, planFields(current, extract(json)));
+    filled += apply(doc, node, id, planFields(current, names));
   }
   if (filled > 0) writeFileSync(join(LANG, file), doc.toString());
   return filled;
@@ -164,6 +176,22 @@ const pruneItemsToUnion = (): number => {
   const { removed } = pruneToKeep(existing, keep);
   for (const id of removed) map.delete(id);
   if (removed.length > 0) writeFileSync(join(LANG, "items.yaml"), doc.toString());
+  return removed.length;
+};
+
+/**
+ * mega.yaml から、canonical へ畳んだ後に不要となった姿別 source id（`MEGA_ID_COLLAPSE` のキー）を剪定する。
+ * 仕分けは純関数 `megaIdsToPrune`（canonical target 存在分のみ）、ノード削除だけ IO で行う（pruneItemsToUnion と対）。
+ */
+const pruneMegaCollapsed = (): number => {
+  const megaPath = join(LANG, "mega.yaml");
+  if (!existsSync(megaPath)) return 0;
+  const doc = parseDocument(readFileSync(megaPath, "utf8"));
+  const map = getOrCreateBlockMap(doc, "mega");
+  const existing = Object.keys(map.toJS(doc) as Record<string, unknown>);
+  const removed = megaIdsToPrune(existing);
+  for (const id of removed) map.delete(id);
+  if (removed.length > 0) writeFileSync(megaPath, doc.toString());
   return removed.length;
 };
 
@@ -191,12 +219,24 @@ const abilitiesFilled = backfillNames(
 );
 const typesFilled = backfillNames("types.yaml", "types", "type", extractNames, needsJaEn);
 // mega は pokemon-form 経路。fetch が mega 候補のみ raw 化するため対象 id は mega に限られるが、extractMegaNames が
-// is_mega で最終判別する（非 mega form は空 = append/backfill しない・ADR 0043）。
-const megaFilled = backfillNames("mega.yaml", "mega", "pokemon-form", extractMegaNames, needsJaEn);
+// is_mega で最終判別する（非 mega form は空 = append/backfill しない・ADR 0043）。装飾 forme の姿別 slug
+// （magearna-original / tatsugiri-{curly,droopy,stretchy}）は resolveMegaEntry が canonical `<base>-mega` へ畳む。
+const megaFilled = backfillNames(
+  "mega.yaml",
+  "mega",
+  "pokemon-form",
+  extractMegaNames,
+  needsJaEn,
+  undefined,
+  resolveMegaEntry,
+);
 
 // items のみ backfill 後に whitelist union で剪定する（issue #213）。
 const itemsPruned = pruneItemsToUnion();
+// mega は canonical へ畳んだ後、残った姿別 source id（MEGA_ID_COLLAPSE のキー）を剪定する（冪等・名前は
+// canonical id へ移設済み）。剪定は canonical target が存在する source のみ（純関数 megaIdsToPrune）。
+const megaPruned = pruneMegaCollapsed();
 
 console.log(
-  `[sync:ja-names] filled ${speciesFilled} species / ${itemsFilled} item / ${movesFilled} move / ${abilitiesFilled} ability / ${typesFilled} type / ${megaFilled} mega name field(s), pruned ${itemsPruned} item(s) outside whitelist, ${conflictCount} conflict(s), ${skippedCount} skipped (ja/en incomplete)`,
+  `[sync:ja-names] filled ${speciesFilled} species / ${itemsFilled} item / ${movesFilled} move / ${abilitiesFilled} ability / ${typesFilled} type / ${megaFilled} mega name field(s), pruned ${itemsPruned} item(s) outside whitelist, ${megaPruned} collapsed mega form id(s), ${conflictCount} conflict(s), ${skippedCount} skipped (ja/en incomplete)`,
 );

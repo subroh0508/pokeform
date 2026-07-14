@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { parseDocument } from "yaml";
 import {
+  canonicalMegaId,
   composeFormName,
   deriveBaseId,
   EN_BRACKETS,
@@ -12,8 +13,10 @@ import {
   isDistinctForm,
   JA_BRACKETS,
   megaFormCandidates,
+  megaIdsToPrune,
   planFields,
   pruneToKeep,
+  resolveMegaEntry,
   sortedUnion,
 } from "./materialize.ts";
 
@@ -121,6 +124,78 @@ describe("megaFormCandidates", () => {
 
   it("returns an empty array when no mega slugs are present", () => {
     expect(megaFormCandidates(["pikachu", "eevee"])).toEqual([]);
+  });
+});
+
+describe("canonicalMegaId", () => {
+  it("collapses cosmetic-forme mega slugs to <base>-mega", () => {
+    expect(canonicalMegaId("magearna-original-mega")).toBe("magearna-mega");
+    expect(canonicalMegaId("tatsugiri-curly-mega")).toBe("tatsugiri-mega");
+    expect(canonicalMegaId("tatsugiri-droopy-mega")).toBe("tatsugiri-mega");
+    expect(canonicalMegaId("tatsugiri-stretchy-mega")).toBe("tatsugiri-mega");
+  });
+
+  it("is identity for non-collapse mega slugs and idempotent on collapsed ids", () => {
+    expect(canonicalMegaId("charizard-mega-x")).toBe("charizard-mega-x");
+    expect(canonicalMegaId("meowstic-female-mega")).toBe("meowstic-female-mega");
+    expect(canonicalMegaId("tatsugiri-mega")).toBe("tatsugiri-mega");
+    expect(canonicalMegaId("magearna-mega")).toBe("magearna-mega");
+  });
+});
+
+describe("resolveMegaEntry", () => {
+  it("canonicalizes id and overrides the name for collapsed tatsugiri megas", () => {
+    expect(
+      resolveMegaEntry("tatsugiri-curly-mega", {
+        ja: "メガシャリタツ",
+        en: "Mega Curly Tatsugiri",
+      }),
+    ).toEqual({ id: "tatsugiri-mega", names: { ja: "メガシャリタツ", en: "Mega Tatsugiri" } });
+  });
+
+  it("canonicalizes magearna-original to magearna-mega without a name override", () => {
+    expect(
+      resolveMegaEntry("magearna-original-mega", {
+        ja: "メガマギアナ",
+        en: "Mega Original Magearna",
+      }),
+    ).toEqual({ id: "magearna-mega", names: { ja: "メガマギアナ", en: "Mega Original Magearna" } });
+  });
+
+  it("passes through non-collapse slugs and their names unchanged", () => {
+    expect(
+      resolveMegaEntry("charizard-mega-x", { ja: "メガリザードンX", en: "Mega Charizard X" }),
+    ).toEqual({ id: "charizard-mega-x", names: { ja: "メガリザードンX", en: "Mega Charizard X" } });
+    expect(resolveMegaEntry("gengar-mega", {})).toEqual({ id: "gengar-mega", names: {} });
+  });
+});
+
+describe("megaIdsToPrune", () => {
+  it("returns collapse-source ids whose canonical target is present", () => {
+    expect(
+      megaIdsToPrune([
+        "magearna-mega",
+        "magearna-original-mega",
+        "tatsugiri-mega",
+        "tatsugiri-curly-mega",
+        "tatsugiri-droopy-mega",
+        "tatsugiri-stretchy-mega",
+        "charizard-mega-x",
+      ]),
+    ).toEqual([
+      "magearna-original-mega",
+      "tatsugiri-curly-mega",
+      "tatsugiri-droopy-mega",
+      "tatsugiri-stretchy-mega",
+    ]);
+  });
+
+  it("keeps a collapse-source id when its canonical target is absent (prevents name loss)", () => {
+    expect(megaIdsToPrune(["tatsugiri-curly-mega"])).toEqual([]);
+  });
+
+  it("returns an empty array when no collapse-source ids exist", () => {
+    expect(megaIdsToPrune(["charizard-mega-x", "gengar-mega"])).toEqual([]);
   });
 });
 
