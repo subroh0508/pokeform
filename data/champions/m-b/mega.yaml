@@ -1,23 +1,152 @@
 # data/champions/m-b/mega.yaml — per-species 解禁メガ（species→mega id 配列）。
 mega:
+  venusaur:
+    - venusaur-mega
+  charizard:
+    - charizard-mega-x
+    - charizard-mega-y
+  blastoise:
+    - blastoise-mega
+  beedrill:
+    - beedrill-mega
+  pidgeot:
+    - pidgeot-mega
+  raichu:
+    - raichu-mega-x
+    - raichu-mega-y
+  clefable:
+    - clefable-mega
+  alakazam:
+    - alakazam-mega
+  victreebel:
+    - victreebel-mega
+  slowbro:
+    - slowbro-mega
+  gengar:
+    - gengar-mega
+  kangaskhan:
+    - kangaskhan-mega
+  starmie:
+    - starmie-mega
+  pinsir:
+    - pinsir-mega
+  gyarados:
+    - gyarados-mega
+  aerodactyl:
+    - aerodactyl-mega
+  dragonite:
+    - dragonite-mega
+  meganium:
+    - meganium-mega
+  feraligatr:
+    - feraligatr-mega
+  ampharos:
+    - ampharos-mega
+  steelix:
+    - steelix-mega
+  scizor:
+    - scizor-mega
+  heracross:
+    - heracross-mega
+  skarmory:
+    - skarmory-mega
+  houndoom:
+    - houndoom-mega
+  tyranitar:
+    - tyranitar-mega
   sceptile:
     - sceptile-mega
   blaziken:
     - blaziken-mega
   swampert:
     - swampert-mega
+  gardevoir:
+    - gardevoir-mega
+  sableye:
+    - sableye-mega
   mawile:
     - mawile-mega
+  aggron:
+    - aggron-mega
+  medicham:
+    - medicham-mega
+  manectric:
+    - manectric-mega
+  sharpedo:
+    - sharpedo-mega
+  camerupt:
+    - camerupt-mega
+  altaria:
+    - altaria-mega
+  banette:
+    - banette-mega
+  chimecho:
+    - chimecho-mega
+  absol:
+    - absol-mega
+  glalie:
+    - glalie-mega
   metagross:
     - metagross-mega
-  charizard:
-    - charizard-mega-x
-    - charizard-mega-y
-  gengar:
-    - gengar-mega
+  staraptor:
+    - staraptor-mega
+  lopunny:
+    - lopunny-mega
   garchomp:
     - garchomp-mega
-  tyranitar:
-    - tyranitar-mega
   lucario:
     - lucario-mega
+  abomasnow:
+    - abomasnow-mega
+  gallade:
+    - gallade-mega
+  froslass:
+    - froslass-mega
+  emboar:
+    - emboar-mega
+  excadrill:
+    - excadrill-mega
+  audino:
+    - audino-mega
+  scolipede:
+    - scolipede-mega
+  scrafty:
+    - scrafty-mega
+  eelektross:
+    - eelektross-mega
+  chandelure:
+    - chandelure-mega
+  golurk:
+    - golurk-mega
+  chesnaught:
+    - chesnaught-mega
+  delphox:
+    - delphox-mega
+  greninja:
+    - greninja-mega
+  pyroar:
+    - pyroar-mega
+  floette-eternal:
+    - floette-mega
+  meowstic-female:
+    - meowstic-female-mega
+  meowstic-male:
+    - meowstic-male-mega
+  malamar:
+    - malamar-mega
+  barbaracle:
+    - barbaracle-mega
+  dragalge:
+    - dragalge-mega
+  hawlucha:
+    - hawlucha-mega
+  crabominable:
+    - crabominable-mega
+  drampa:
+    - drampa-mega
+  falinks:
+    - falinks-mega
+  scovillain:
+    - scovillain-mega
+  glimmora:
+    - glimmora-mega

@@ -600,6 +600,8 @@ species:
     abilities:
       - intimidate
       - reckless
+    megaEvolvesTo:
+      - staraptor-mega
   musharna:
     dex: 518
     types:
@@ -631,6 +633,8 @@ species:
       - poison-point
       - swarm
       - speed-boost
+    megaEvolvesTo:
+      - scolipede-mega
   scrafty:
     dex: 560
     types:
@@ -647,6 +651,8 @@ species:
       - shed-skin
       - moxie
       - intimidate
+    megaEvolvesTo:
+      - scrafty-mega
   eelektross:
     dex: 604
     types:
@@ -660,6 +666,8 @@ species:
       S: 50
     abilities:
       - levitate
+    megaEvolvesTo:
+      - eelektross-mega
   pyroar:
     dex: 668
     types:
@@ -676,6 +684,8 @@ species:
       - rivalry
       - unnerve
       - moxie
+    megaEvolvesTo:
+      - pyroar-mega
   malamar:
     dex: 687
     types:
@@ -692,6 +702,8 @@ species:
       - contrary
       - suction-cups
       - infiltrator
+    megaEvolvesTo:
+      - malamar-mega
   barbaracle:
     dex: 689
     types:
@@ -708,6 +720,8 @@ species:
       - tough-claws
       - sniper
       - pickpocket
+    megaEvolvesTo:
+      - barbaracle-mega
   dragalge:
     dex: 691
     types:
@@ -724,6 +738,8 @@ species:
       - poison-point
       - poison-touch
       - adaptability
+    megaEvolvesTo:
+      - dragalge-mega
   grimmsnarl:
     dex: 861
     types:
@@ -754,6 +770,8 @@ species:
     abilities:
       - battle-armor
       - defiant
+    megaEvolvesTo:
+      - falinks-mega
   overqwil:
     dex: 904
     types:
@@ -909,6 +927,9 @@ species:
     abilities:
       - static
       - lightning-rod
+    megaEvolvesTo:
+      - raichu-mega-x
+      - raichu-mega-y
   raichu-alola:
     dex: 26
     types:

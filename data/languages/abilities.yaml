@@ -184,6 +184,9 @@ abilities:
   earth-eater:
     ja: どしょく
     en: Earth Eater
+  eelevate:
+    ja: うなぎのぼり
+    en: Eelevate
   effect-spore:
     ja: ほうし
     en: Effect Spore
@@ -205,6 +208,9 @@ abilities:
   filter:
     ja: フィルター
     en: Filter
+  fire-mane:
+    ja: ほのおのたてがみ
+    en: Fire Mane
   flame-body:
     ja: ほのおのからだ
     en: Flame Body

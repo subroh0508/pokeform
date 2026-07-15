@@ -687,6 +687,72 @@ export const itemSpecsDex = {
     megaStoneFor: "victreebel",
     megaSpecies: ["victreebel-mega"],
   },
+  barbaracite: {
+    id: "barbaracite",
+    category: "mega-stones",
+    megaStoneFor: "barbaracle",
+    megaSpecies: ["barbaracle-mega"],
+  },
+  dragalgite: {
+    id: "dragalgite",
+    category: "mega-stones",
+    megaStoneFor: "dragalge",
+    megaSpecies: ["dragalge-mega"],
+  },
+  eelektrossite: {
+    id: "eelektrossite",
+    category: "mega-stones",
+    megaStoneFor: "eelektross",
+    megaSpecies: ["eelektross-mega"],
+  },
+  falinksite: {
+    id: "falinksite",
+    category: "mega-stones",
+    megaStoneFor: "falinks",
+    megaSpecies: ["falinks-mega"],
+  },
+  malamarite: {
+    id: "malamarite",
+    category: "mega-stones",
+    megaStoneFor: "malamar",
+    megaSpecies: ["malamar-mega"],
+  },
+  pyroarite: {
+    id: "pyroarite",
+    category: "mega-stones",
+    megaStoneFor: "pyroar",
+    megaSpecies: ["pyroar-mega"],
+  },
+  "raichunite-x": {
+    id: "raichunite-x",
+    category: "mega-stones",
+    megaStoneFor: "raichu",
+    megaSpecies: ["raichu-mega-x"],
+  },
+  "raichunite-y": {
+    id: "raichunite-y",
+    category: "mega-stones",
+    megaStoneFor: "raichu",
+    megaSpecies: ["raichu-mega-y"],
+  },
+  scolipite: {
+    id: "scolipite",
+    category: "mega-stones",
+    megaStoneFor: "scolipede",
+    megaSpecies: ["scolipede-mega"],
+  },
+  scraftinite: {
+    id: "scraftinite",
+    category: "mega-stones",
+    megaStoneFor: "scrafty",
+    megaSpecies: ["scrafty-mega"],
+  },
+  staraptite: {
+    id: "staraptite",
+    category: "mega-stones",
+    megaStoneFor: "staraptor",
+    megaSpecies: ["staraptor-mega"],
+  },
 } as const;
 
 export type ItemSpecsDex = typeof itemSpecsDex;
