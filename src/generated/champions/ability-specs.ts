@@ -107,8 +107,14 @@ export const abilitySpecsDex = {
   "earth-eater": {
     id: "earth-eater",
   },
+  eelevate: {
+    id: "eelevate",
+  },
   "effect-spore": {
     id: "effect-spore",
+  },
+  "electric-surge": {
+    id: "electric-surge",
   },
   electromorphosis: {
     id: "electromorphosis",
@@ -118,6 +124,9 @@ export const abilitySpecsDex = {
   },
   filter: {
     id: "filter",
+  },
+  "fire-mane": {
+    id: "fire-mane",
   },
   "flame-body": {
     id: "flame-body",

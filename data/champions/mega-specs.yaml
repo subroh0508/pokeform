@@ -900,3 +900,153 @@ mega:
       S: 101
     ability: adaptability
     baseSpecies: glimmora
+  raichu-mega-x:
+    dex: 26
+    types:
+      - electric
+    stats:
+      H: 60
+      A: 135
+      B: 95
+      C: 90
+      D: 95
+      S: 110
+    ability: electric-surge
+    baseSpecies: raichu
+  raichu-mega-y:
+    dex: 26
+    types:
+      - electric
+    stats:
+      H: 60
+      A: 100
+      B: 55
+      C: 160
+      D: 80
+      S: 130
+    ability: no-guard
+    baseSpecies: raichu
+  staraptor-mega:
+    dex: 398
+    types:
+      - fighting
+      - flying
+    stats:
+      H: 85
+      A: 140
+      B: 100
+      C: 60
+      D: 90
+      S: 110
+    ability: contrary
+    baseSpecies: staraptor
+  scolipede-mega:
+    dex: 545
+    types:
+      - bug
+      - poison
+    stats:
+      H: 60
+      A: 140
+      B: 149
+      C: 75
+      D: 99
+      S: 62
+    ability: shell-armor
+    baseSpecies: scolipede
+  scrafty-mega:
+    dex: 560
+    types:
+      - dark
+      - fighting
+    stats:
+      H: 65
+      A: 130
+      B: 135
+      C: 55
+      D: 135
+      S: 68
+    ability: intimidate
+    baseSpecies: scrafty
+  eelektross-mega:
+    dex: 604
+    types:
+      - electric
+    stats:
+      H: 85
+      A: 145
+      B: 80
+      C: 135
+      D: 90
+      S: 80
+    ability: eelevate
+    baseSpecies: eelektross
+  pyroar-mega:
+    dex: 668
+    types:
+      - fire
+      - normal
+    stats:
+      H: 86
+      A: 88
+      B: 92
+      C: 129
+      D: 86
+      S: 126
+    ability: fire-mane
+    baseSpecies: pyroar
+  malamar-mega:
+    dex: 687
+    types:
+      - dark
+      - psychic
+    stats:
+      H: 86
+      A: 102
+      B: 88
+      C: 98
+      D: 120
+      S: 88
+    ability: contrary
+    baseSpecies: malamar
+  barbaracle-mega:
+    dex: 689
+    types:
+      - rock
+      - fighting
+    stats:
+      H: 72
+      A: 140
+      B: 130
+      C: 64
+      D: 106
+      S: 88
+    ability: tough-claws
+    baseSpecies: barbaracle
+  dragalge-mega:
+    dex: 691
+    types:
+      - poison
+      - dragon
+    stats:
+      H: 65
+      A: 85
+      B: 105
+      C: 132
+      D: 163
+      S: 44
+    ability: regenerator
+    baseSpecies: dragalge
+  falinks-mega:
+    dex: 870
+    types:
+      - fighting
+    stats:
+      H: 65
+      A: 135
+      B: 135
+      C: 70
+      D: 65
+      S: 100
+    ability: defiant
+    baseSpecies: falinks

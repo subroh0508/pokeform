@@ -538,6 +538,7 @@ export const speciesSpecsDex = {
       speed: 100,
     },
     abilities: ["intimidate", "reckless"],
+    megaEvolvesTo: ["staraptor-mega"],
   },
   musharna: {
     dex: 518,
@@ -566,6 +567,7 @@ export const speciesSpecsDex = {
       speed: 112,
     },
     abilities: ["poison-point", "swarm", "speed-boost"],
+    megaEvolvesTo: ["scolipede-mega"],
   },
   scrafty: {
     dex: 560,
@@ -580,6 +582,7 @@ export const speciesSpecsDex = {
       speed: 58,
     },
     abilities: ["shed-skin", "moxie", "intimidate"],
+    megaEvolvesTo: ["scrafty-mega"],
   },
   eelektross: {
     dex: 604,
@@ -594,6 +597,7 @@ export const speciesSpecsDex = {
       speed: 50,
     },
     abilities: ["levitate"],
+    megaEvolvesTo: ["eelektross-mega"],
   },
   pyroar: {
     dex: 668,
@@ -608,6 +612,7 @@ export const speciesSpecsDex = {
       speed: 106,
     },
     abilities: ["rivalry", "unnerve", "moxie"],
+    megaEvolvesTo: ["pyroar-mega"],
   },
   malamar: {
     dex: 687,
@@ -622,6 +627,7 @@ export const speciesSpecsDex = {
       speed: 73,
     },
     abilities: ["contrary", "suction-cups", "infiltrator"],
+    megaEvolvesTo: ["malamar-mega"],
   },
   barbaracle: {
     dex: 689,
@@ -636,6 +642,7 @@ export const speciesSpecsDex = {
       speed: 68,
     },
     abilities: ["tough-claws", "sniper", "pickpocket"],
+    megaEvolvesTo: ["barbaracle-mega"],
   },
   dragalge: {
     dex: 691,
@@ -650,6 +657,7 @@ export const speciesSpecsDex = {
       speed: 44,
     },
     abilities: ["poison-point", "poison-touch", "adaptability"],
+    megaEvolvesTo: ["dragalge-mega"],
   },
   grimmsnarl: {
     dex: 861,
@@ -678,6 +686,7 @@ export const speciesSpecsDex = {
       speed: 75,
     },
     abilities: ["battle-armor", "defiant"],
+    megaEvolvesTo: ["falinks-mega"],
   },
   overqwil: {
     dex: 904,
@@ -821,6 +830,7 @@ export const speciesSpecsDex = {
       speed: 110,
     },
     abilities: ["static", "lightning-rod"],
+    megaEvolvesTo: ["raichu-mega-x", "raichu-mega-y"],
   },
   "raichu-alola": {
     dex: 26,

@@ -429,6 +429,13 @@ export const abilityNames = {
       ja: "どしょく",
     },
   },
+  eelevate: {
+    id: "eelevate",
+    name: {
+      en: "Eelevate",
+      ja: "うなぎのぼり",
+    },
+  },
   "effect-spore": {
     id: "effect-spore",
     name: {
@@ -476,6 +483,13 @@ export const abilityNames = {
     name: {
       en: "Filter",
       ja: "フィルター",
+    },
+  },
+  "fire-mane": {
+    id: "fire-mane",
+    name: {
+      en: "Fire Mane",
+      ja: "ほのおのたてがみ",
     },
   },
   "flame-body": {

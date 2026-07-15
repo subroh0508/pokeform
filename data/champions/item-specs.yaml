@@ -472,3 +472,58 @@ items:
     megaSpecies:
       - victreebel-mega
     category: mega-stones
+  barbaracite:
+    megaStoneFor: barbaracle
+    megaSpecies:
+      - barbaracle-mega
+    category: mega-stones
+  dragalgite:
+    megaStoneFor: dragalge
+    megaSpecies:
+      - dragalge-mega
+    category: mega-stones
+  eelektrossite:
+    megaStoneFor: eelektross
+    megaSpecies:
+      - eelektross-mega
+    category: mega-stones
+  falinksite:
+    megaStoneFor: falinks
+    megaSpecies:
+      - falinks-mega
+    category: mega-stones
+  malamarite:
+    megaStoneFor: malamar
+    megaSpecies:
+      - malamar-mega
+    category: mega-stones
+  pyroarite:
+    megaStoneFor: pyroar
+    megaSpecies:
+      - pyroar-mega
+    category: mega-stones
+  raichunite-x:
+    megaStoneFor: raichu
+    megaSpecies:
+      - raichu-mega-x
+    category: mega-stones
+  raichunite-y:
+    megaStoneFor: raichu
+    megaSpecies:
+      - raichu-mega-y
+    category: mega-stones
+  scolipite:
+    megaStoneFor: scolipede
+    megaSpecies:
+      - scolipede-mega
+    category: mega-stones
+  scraftinite:
+    megaStoneFor: scrafty
+    megaSpecies:
+      - scrafty-mega
+    category: mega-stones
+  staraptite:
+    megaStoneFor: staraptor
+    megaSpecies:
+      - staraptor-mega
+    category: mega-stones
