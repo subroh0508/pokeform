@@ -7,7 +7,8 @@ description: >-
   「languages の空骨格を scaffold して」「メガ名を PokeAPI で埋めて」「author-static-data <id...>」と言われた
   とき、または showdown 経路で解禁データを入れた後に名前が空のエントリを補うときに使う。取得 + 整形 + 書き込み +
   PR は **GitHub Actions `pokeapi-names.yml`**（全件列挙）が行い、本 skill はその dispatch → 生成 PR のドライブ →
-  PokeAPI 非存在分（メガストーン名等）の Serebii 差分チェック → verify → merge をドライブする。メガ名は PokeAPI
+  PokeAPI 非存在分の手作業著述（メガストーン名は命名慣例 / **Champions オリジナル特性・技名は Bulbapedia** 出典）→
+  verify → merge をドライブする。メガ名は PokeAPI
   `pokemon-form` の form_names（is_mega 判別）から取る 6 種目（ADR 0043）。構造データ（種族値 / タイプ /
   特性 id / 図鑑番号 / category）の取得は pokemon-showdown 経路（`showdown:*`）、Champions 解禁データ（roster / 技 /
   メガ構造）の取得は Serebii 速報 / showdown 経路の責務で、こちらは **reg 非依存の名前辞書**のみを担う。生成 / 検証は
@@ -47,8 +48,8 @@ union で列挙し対戦持ち物 ~270 件に絞る**（ADR 0042・詳細は [[d
 - **出力**:
   - `data/languages/{species,items,moves,abilities,types,mega}.yaml` への PokeAPI 由来**全件名（ja/en）**の
     append/既存尊重転記（`pokeapi-names.yml` が実行・`mega` は `pokemon-form` form_names 経路・ADR 0043）。
-  - PokeAPI 非存在の**手作業カバー箇所**（メガストーン item 名等）の Serebii Champions ページとの差分チェック
-    （`pokeapi-names.yml` の PR body に提示された 5 リンクで目視照合）。
+  - PokeAPI 非存在の**手作業カバー箇所**の著述: メガストーン item 名（命名慣例 + Serebii Champions ページで en 照合）と
+    **Champions オリジナル特性/技名**（`isNonstandard: "Future"`・Bulbapedia を ja/en 出典に著述・手順 3）。
   - `data/languages/*.yaml` の**空骨格 scaffold**（`data/` 完全削除からの復元時・`mega.yaml` 含む 6 ファイル）。
   - `pnpm generate:data` / `pnpm verify` が緑（生成段 tsc が spec の名前欠落・ja/en 欠けを弾く・余剰名は許容・ADR 0041）。
 
@@ -73,21 +74,38 @@ id）だけを追加する。ローカルで確認するなら `pnpm fetch:ja-na
 する。生成データの妥当性（名前の正しさ）は `pokemon-data-reviewer` agent に委ねる（本 skill は機械ゲートを再実装
 しない・[[skill-authoring]]）。
 
-### 3. PokeAPI 非存在の手作業カバー箇所を Serebii で差分チェックする（gap 照合）
+### 3. PokeAPI 非存在の手作業カバー箇所を出典から著述する（gap 照合）
 
 メガ名（ja/en）は **PokeAPI `pokemon-form` の form_names** から全件埋まる（手順 1・手作業不要・ADR 0043）。一方
-**メガストーン item 名など PokeAPI に無い Champions 固有の名前**は全件取得の対象外で、抜けや誤りを目視で照合する
-導線が要る。`pokeapi-names.yml` の生成 PR body には照合先の **Serebii Champions ページ 5 本**が提示される:
+**PokeAPI に無い Champions 固有の名前**（メガストーン item 名 / Champions オリジナル特性・技名）は全件取得の対象外で、
+出典から手作業で著述する導線が要る。**取得元は category で分かれる**（下表）。いずれも **ja を発明せず出典で裏取り**し
+（推測 ja は data 信頼性を壊す・[[data-pipeline]]）、該当 languages ファイルへ **block スタイル**（`check:yaml-style`
+通過・flow 禁止）・**ソート位置**・append/既存尊重（既存値は上書きしない）で書き足す。
 
-- https://www.serebii.net/pokemonchampions/items.shtml（持ち物・メガストーン）
-- https://www.serebii.net/pokemonchampions/moves.shtml（技）
-- https://www.serebii.net/pokemonchampions/pokemon.shtml（種族・メガ）
-- https://www.serebii.net/pokemonchampions/megaabilities.shtml（メガ特性）
-- https://www.serebii.net/pokemonchampions/newabilities.shtml（新特性）
+| category | PokeAPI | Serebii ja | 出典（手作業著述） |
+|---|---|---|---|
+| メガストーン item 名 | item スタブのみ・`names` 空 | itemdex Japanese Name 欄も空 | **命名慣例**（ベース種族カタカナ + ナイト・末尾長音ー/撥音ンは1字落とし・X/Y は全角Ｘ／Ｙ・例外 チリーン→チリーンナイト） |
+| **Champions オリジナル特性/技名** | 非存在（`isNonstandard: "Future"`） | newabilities/megaabilities/moves ページは **en のみで ja 空** | **Bulbapedia**（`<Name> (Ability)` / `<Name> (Move)` ページが en + 日本語名を両取り可） |
 
-PokeAPI 由来で埋まらなかった手作業カバー箇所（メガストーン名等）を上記で照合し、必要なら該当 languages ファイルへ
-**block スタイル**（`check:yaml-style` 通過・flow 禁止・[[data-pipeline]]）で ja/en を書き足して commit する（既存値は
-上書きしない＝ append/既存尊重を手作業でも守る）。追加後 `pnpm generate:data` → `pnpm verify` で緑を確認する。
+**欠落の一括把握**（`generate:data` は最初の欠落名で throw するため diff で一括する）: specs の id 集合と languages の
+id 集合を直接 diff する。例（特性）= `ability-specs.yaml`（**seq**）の各値 vs `languages/abilities.yaml`（**map**）の
+キー集合。技は `move-specs.yaml`（map）vs `languages/moves.yaml`。差集合が手作業著述の対象 id。
+
+**Champions オリジナル特性/技名の手順**:
+
+1. **欠落 id を把握**（上記 diff）。Champions オリジナル特性は base showdown の `isNonstandard: "Future"` 群
+   （現状 6 件 = `eelevate` / `fire-mane` / `dragonize` / `mega-sol` / `piercing-drill` / `spicy-spray`・すべて著述済）。
+2. **出典 = Bulbapedia** の `<Name> (Ability)` / `<Name> (Move)` ページで en + 日本語名を確認する（Serebii の Champions
+   特性ページは en のみで ja が空ゆえ ja 源にしない）。en は showdown の `.name` と一致するはず。
+3. **id 導出** = `kebabId(name)`（showdown 表示名 → 小文字 kebab・`src/codegen/showdown/ids.ts`。例
+   `Fire Mane` → `fire-mane` / `Eelevate` → `eelevate`）。この id で languages に無ければ新規著述する。
+4. **著述例**: `eelevate` = うなぎのぼり（メガエレキブル）/ `fire-mane` = ほのおのたてがみ（メガピロオル）。
+
+**メガストーン item 名**の照合先として `pokeapi-names.yml` の生成 PR body に **Serebii Champions ページ 5 本**が提示される
+（`items` / `moves` / `pokemon` / `megaabilities` / `newabilities`.shtml）。ストーン名の en 照合や解禁の目視確認に使う
+（ストーン ja は上表のとおり命名慣例で著述）。
+
+いずれも追加後 `pnpm generate:data` → `pnpm verify` で緑（欠落解消）を確認する。
 
 ### 4. `data/` 完全削除からの復元（scaffold 不要・plan 11 P2/P4）
 
