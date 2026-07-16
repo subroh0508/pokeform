@@ -93,9 +93,15 @@ ja backfill → `check:regulation` → `generate:data` → `pnpm verify` → `da
 ### 3. 新規 id の名前欠落のみ差分補完（`author-static-data` 委譲）
 
 showdown が**全件名辞書に無い新規 id**（新登場ポケモン・新技等）を導入した場合**だけ**、その名前を
-[`author-static-data`](../author-static-data/SKILL.md)（差分追加）で補完する。メガ ja 等 PokeAPI 未存在分も同経路
-（手作業 commit）。全件辞書化（ADR 0041）済みゆえ**通常はここが空振り**する（名前 gap は原則出ない）。空振りなら
-このステップは skip してよい。
+[`author-static-data`](../author-static-data/SKILL.md)（差分追加）で補完する。全件辞書化（ADR 0041）済みゆえ
+**通常はここが空振り**する（名前 gap は原則出ない）。空振りならこのステップは skip してよい。
+
+- **PokeAPI で埋まる新規 id**（PokeAPI に存在する種族/技/持ち物/特性）は `author-static-data` の PokeAPI 経路
+  （`fetch:ja-names` → `sync:ja-names`）が差分追加する。
+- **PokeAPI 非存在の Champions オリジナル名**（`isNonstandard: "Future"` の**特性/技**・メガストーン item 名）は
+  PokeAPI 差分では埋まらない。`author-static-data` の**手作業著述パス（手順 3）**へ委譲する（Champions オリジナル
+  特性/技名は **Bulbapedia** 出典・メガストーン名は命名慣例）。`generate:data` が `languages/<kind>: '<id>' missing ja/en`
+  で停止したら、欠落 id 集合を specs vs languages の直接 diff で一括把握してから著述する（whack-a-mole 回避）。
 
 ### 4. 照合 → 検証 → 生成 → データレビュー依頼
 
