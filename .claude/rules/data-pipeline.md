@@ -47,8 +47,8 @@ legality に専念できる（決定の「なぜ」は ADR 0041）。
 - **PokeAPI が ja を持たない id は捏造せず skip する**: list に含まれても ja 未収録の id（GO 専用特性
   `is_main_series:false` / Legends Arceus 未ローカライズ球 `la*-ball` / 未ローカライズ新特性 等）は、`NameEntry` の
   ja/en 必須と衝突するため **append せず skip**（推測 ja を発明しない = data 信頼性を守る）。spec が参照する id で
-  ja が要るなら手作業 ja で補う（**Champions オリジナル特性/技名**（`isNonstandard: "Future"`）は Serebii も ja 空
-  ゆえ **Bulbapedia** を出典に著述・メガストーン名は命名慣例。手順は [`author-static-data`](../skills/author-static-data/SKILL.md) 手順 3）。
+  ja が要るなら手作業 ja で補う（**Champions オリジナル特性/技名**（`isNonstandard: "Future"`）等の出典・手順は
+  [`author-static-data`](../skills/author-static-data/SKILL.md) 手順 3 が SoT）。
   「全件辞書」の**基準は PokeAPI list 列挙**で、live count と languages 件数が僅差になりうる（仕様どおり）。
 - **distinct-forms（`pokemon-species` の非デフォルト variety・タイプ / 種族値が base と異なる form）は含有判定合成で
   機械生成する**（`fetch-pokeapi.ts` の `fetchDistinctForms`・plan 11 P4 が `SPECIES_FORMS` whitelist を置換）:

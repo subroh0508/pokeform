@@ -94,7 +94,7 @@ id 集合を直接 diff する。例（特性）= `ability-specs.yaml`（**seq**
 **Champions オリジナル特性/技名の手順**:
 
 1. **欠落 id を把握**（上記 diff）。Champions オリジナル特性は base showdown の `isNonstandard: "Future"` 群
-   （現状 6 件 = `eelevate` / `fire-mane` / `dragonize` / `mega-sol` / `piercing-drill` / `spicy-spray`・すべて著述済）。
+   （例: `eelevate` / `fire-mane` / `dragonize` / `mega-sol` 等。集合は showdown 更新で増減しうるので diff で都度確認）。
 2. **出典 = Bulbapedia** の `<Name> (Ability)` / `<Name> (Move)` ページで en + 日本語名を確認する（Serebii の Champions
    特性ページは en のみで ja が空ゆえ ja 源にしない）。en は showdown の `.name` と一致するはず。
 3. **id 導出** = `kebabId(name)`（showdown 表示名 → 小文字 kebab・`src/codegen/showdown/ids.ts`。例
