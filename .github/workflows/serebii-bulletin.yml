@@ -39,7 +39,7 @@ jobs:
 
       # Node 版の SoT は .node-version（ADR 0008）。pnpm は corepack を使わず直接入れる（ADR 0005）。
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version-file: .node-version
 
